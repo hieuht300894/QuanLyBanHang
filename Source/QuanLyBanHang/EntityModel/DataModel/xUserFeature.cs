@@ -10,22 +10,19 @@ namespace EntityModel.DataModel
     {
         [Key]
         public int KeyID { get; set; }
-
         public int IDUserRole { get; set; }
-
         [StringLength(255)]
         public string IDFeature { get; set; }
-
         public bool IsAdd { get; set; }
-
         public bool IsEdit { get; set; }
-
         public bool IsDelete { get; set; }
-
+        public bool IsPrintPreview { get; set; }
+        public bool IsExportExcel { get; set; }
+        public bool IsSave { get; set; }
+        public bool IsSaveAndAdd { get; set; }
+        public bool IsCancel { get; set; }
         public bool IsEnable { get; set; }
-
         public virtual xFeature xFeature { get; set; }
-
         public virtual xPermission xPermission { get; set; }
     }
 }
