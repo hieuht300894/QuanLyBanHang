@@ -9,6 +9,18 @@ namespace QuanLyBanHang
 {
     public partial class frmBaseGrid : DevExpress.XtraEditors.XtraForm
     {
+        #region Variables
+        #endregion
+
+        #region Form
+        #endregion
+
+        #region Methods
+        #endregion
+
+        #region Events
+        #endregion
+
         public eFormType fType;
         public bool isEnable = true;
 

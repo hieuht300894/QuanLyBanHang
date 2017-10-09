@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.lctPersonnel = new DevExpress.XtraLayout.LayoutControl();
-            this.chkIsEnable = new DevExpress.XtraEditors.CheckEdit();
             this.mmeDescription = new DevExpress.XtraEditors.MemoEdit();
             this.txtEmail = new DevExpress.XtraEditors.TextEdit();
             this.txtPhone = new DevExpress.XtraEditors.TextEdit();
@@ -43,11 +42,9 @@
             this.lciPhone = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciEmail = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciDescription = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
             this.lctPersonnel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mmeDescription.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtEmail.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPhone.Properties)).BeginInit();
@@ -61,12 +58,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPhone)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciEmail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciDescription)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
             this.SuspendLayout();
             // 
             // lctPersonnel
             // 
-            this.lctPersonnel.Controls.Add(this.chkIsEnable);
             this.lctPersonnel.Controls.Add(this.mmeDescription);
             this.lctPersonnel.Controls.Add(this.txtEmail);
             this.lctPersonnel.Controls.Add(this.txtPhone);
@@ -74,28 +69,19 @@
             this.lctPersonnel.Controls.Add(this.txtFullName);
             this.lctPersonnel.Controls.Add(this.txtCode);
             this.lctPersonnel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lctPersonnel.Location = new System.Drawing.Point(0, 26);
+            this.lctPersonnel.Location = new System.Drawing.Point(0, 24);
             this.lctPersonnel.Name = "lctPersonnel";
             this.lctPersonnel.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(539, 44, 250, 350);
             this.lctPersonnel.Root = this.layoutControlGroup1;
-            this.lctPersonnel.Size = new System.Drawing.Size(584, 246);
+            this.lctPersonnel.Size = new System.Drawing.Size(584, 214);
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
-            // 
-            // chkIsEnable
-            // 
-            this.chkIsEnable.Location = new System.Drawing.Point(12, 212);
-            this.chkIsEnable.Name = "chkIsEnable";
-            this.chkIsEnable.Properties.Caption = "Kích hoạt";
-            this.chkIsEnable.Size = new System.Drawing.Size(560, 19);
-            this.chkIsEnable.StyleController = this.lctPersonnel;
-            this.chkIsEnable.TabIndex = 10;
             // 
             // mmeDescription
             // 
             this.mmeDescription.Location = new System.Drawing.Point(79, 132);
             this.mmeDescription.Name = "mmeDescription";
-            this.mmeDescription.Size = new System.Drawing.Size(493, 76);
+            this.mmeDescription.Size = new System.Drawing.Size(493, 70);
             this.mmeDescription.StyleController = this.lctPersonnel;
             this.mmeDescription.TabIndex = 9;
             // 
@@ -149,11 +135,10 @@
             this.lciAddress,
             this.lciPhone,
             this.lciEmail,
-            this.lciDescription,
-            this.layoutControlItem7});
+            this.lciDescription});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 246);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 214);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // lciPersonnelCode
@@ -205,28 +190,16 @@
             // 
             this.lciDescription.Control = this.mmeDescription;
             this.lciDescription.Location = new System.Drawing.Point(0, 120);
-            this.lciDescription.MaxSize = new System.Drawing.Size(0, 80);
-            this.lciDescription.MinSize = new System.Drawing.Size(86, 80);
             this.lciDescription.Name = "lciDescription";
-            this.lciDescription.Size = new System.Drawing.Size(564, 80);
-            this.lciDescription.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
+            this.lciDescription.Size = new System.Drawing.Size(564, 74);
             this.lciDescription.Text = "Ghi chú";
             this.lciDescription.TextSize = new System.Drawing.Size(64, 13);
-            // 
-            // layoutControlItem7
-            // 
-            this.layoutControlItem7.Control = this.chkIsEnable;
-            this.layoutControlItem7.Location = new System.Drawing.Point(0, 200);
-            this.layoutControlItem7.Name = "layoutControlItem7";
-            this.layoutControlItem7.Size = new System.Drawing.Size(564, 26);
-            this.layoutControlItem7.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem7.TextVisible = false;
             // 
             // frmPersonnel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 291);
+            this.ClientSize = new System.Drawing.Size(584, 261);
             this.Controls.Add(this.lctPersonnel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -238,7 +211,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).EndInit();
             this.lctPersonnel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mmeDescription.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtEmail.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPhone.Properties)).EndInit();
@@ -252,15 +224,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPhone)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciEmail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciDescription)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private DevExpress.XtraLayout.LayoutControl lctPersonnel;
-        private DevExpress.XtraEditors.CheckEdit chkIsEnable;
         private DevExpress.XtraEditors.MemoEdit mmeDescription;
         private DevExpress.XtraEditors.TextEdit txtEmail;
         private DevExpress.XtraEditors.TextEdit txtPhone;
@@ -274,7 +245,6 @@
         private DevExpress.XtraLayout.LayoutControlItem lciPhone;
         private DevExpress.XtraLayout.LayoutControlItem lciEmail;
         private DevExpress.XtraLayout.LayoutControlItem lciDescription;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem7;
 
     }
 }

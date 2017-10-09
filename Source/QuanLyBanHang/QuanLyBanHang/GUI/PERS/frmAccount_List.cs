@@ -71,11 +71,6 @@ namespace QuanLyBanHang.GUI.PER
             deleteEntry();
         }
 
-        protected override void btsIsEnable_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            refreshEntry();
-        }
-
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             insertEntry();
@@ -108,7 +103,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadData(int KeyID)
         {
             loadRepositoryAccount();
-            gctAccountList.DataSource = clsAccount.Instance.searchAccount(base.isEnable);
+            gctAccountList.DataSource = clsAccount.Instance.searchAccount(true);
             if (KeyID > 0)
                 grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }

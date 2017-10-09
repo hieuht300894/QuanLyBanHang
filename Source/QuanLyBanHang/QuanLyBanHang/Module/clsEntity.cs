@@ -60,8 +60,25 @@ namespace QuanLyBanHang
 
         public static void InitMasterAdmin()
         {
-            clsGeneral.curAccount = new xAccount() { UserName = "Master", IsServer = true, IDAgency = clsGeneral.curAgency.KeyID, IDPermission = 0 };
-            clsGeneral.curUserFeature = new xUserFeature() { IDUserRole = 0, IsAdd = true, IsEdit = true, IsDelete = true, IsEnable = true };
+            clsGeneral.curAccount = new xAccount()
+            {
+                UserName = "Master",
+                IDAgency = clsGeneral.curAgency.KeyID,
+                IDPermission = 0
+            };
+            clsGeneral.curUserFeature = new xUserFeature()
+            {
+                IDUserRole = 0,
+                IsEnable = true,
+                IsAdd = true,
+                IsEdit = true,
+                IsDelete = true,
+                IsSave = true,
+                IsSaveAndAdd = true,
+                IsCancel = true,
+                IsPrintPreview = true,
+                IsExportExcel = true
+            };
             clsGeneral.curPersonnel = new xPersonnel()
             {
                 IDAgency = clsGeneral.curAgency.KeyID,
@@ -74,21 +91,6 @@ namespace QuanLyBanHang
             };
         }
 
-        //public static ePersonnel CheckUser_Login(string _UserName, string _Password)
-        //{
-        //    try
-        //    {
-        //        db = new aModel();
-        //        if (db.eAccounts.Any(n => n.IsEnable && n.ePersonnel.IsEnable && n.UserName.Equals(_UserName) && n.Password.Equals(_Password)))
-        //        {
-        //            return db.eAccounts.Single(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password)).ePersonnel;
-        //        }
-        //        else
-        //            return null;
-        //    }
-        //    catch { return null; }
-        //}
-
         public static xPersonnel CheckUser_Login(string _UserName, string _Password)
         {
             try
@@ -98,7 +100,19 @@ namespace QuanLyBanHang
                 {
                     xAccount account = db.eAccounts.Single(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
                     clsGeneral.curAccount = account;
-                    clsGeneral.curUserFeature = new xUserFeature() { IDUserRole = 0, IsAdd = false, IsEdit = false, IsDelete = false, IsEnable = true };
+                    clsGeneral.curUserFeature = new xUserFeature()
+                    {
+                        IDUserRole = 0,
+                        IsEnable = true,
+                        IsAdd = false,
+                        IsEdit = false,
+                        IsDelete = false,
+                        IsSave = false,
+                        IsSaveAndAdd = false,
+                        IsCancel = false,
+                        IsPrintPreview = false,
+                        IsExportExcel = false
+                    };
                     return account.ePersonnel;
                 }
                 else
@@ -149,9 +163,6 @@ namespace QuanLyBanHang
 
         static bool setCurrentAgency()
         {
-            //if (clsGeneral.curAgency.KeyID == 0)
-            //    clsGeneral.curAgency = db.eAgencies.FirstOrDefault<eAgency>(cn => cn.KeyID == clsGeneral.curPersonnel.IDAgency);
-
             if (Properties.Settings.Default.IDAgency == 0)
             {
                 clsGeneral.CloseWaitForm();

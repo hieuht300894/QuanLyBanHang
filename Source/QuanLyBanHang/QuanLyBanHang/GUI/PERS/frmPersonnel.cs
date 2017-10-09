@@ -75,7 +75,6 @@ namespace QuanLyBanHang.GUI.PER
             txtAddress.Text = _acEntry.Address;
             txtEmail.Text = _acEntry.Email;
             mmeDescription.Text = _acEntry.Description;
-            chkIsEnable.Checked = _acEntry.IsEnable;
             if (_acEntry.KeyID == 0)
             {
                 txtCode.TabStop = true;
@@ -140,7 +139,6 @@ namespace QuanLyBanHang.GUI.PER
             _acEntry.Address = txtAddress.Text.Trim();
             _acEntry.Email = txtEmail.Text.Trim();
             _acEntry.Description = mmeDescription.Text.Trim();
-            _acEntry.IsEnable = chkIsEnable.Checked;
 
             if (_acEntry.KeyID == 0)
             {
@@ -168,7 +166,6 @@ namespace QuanLyBanHang.GUI.PER
             txtCode.NotUnicode(true, true);
             txtFullName.IsPersonName();
             txtPhone.PhoneOnly();
-            chkIsEnable.Text = "Kích hoạt".Translation("capEnable");
             //lctPersonnel.BesFitFormHeight();
             this.CenterToScreen();
 

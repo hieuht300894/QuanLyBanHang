@@ -101,7 +101,6 @@ namespace QuanLyBanHang.GUI.PER
             txtUserName.NotUnicode(true, false);
             lokPersonnel.Format();
             lokPermission.Format();
-            chkIsEnable.Text = "Kích hoạt".Translation("capEnable");
             //lctAccount.BesFitFormHeight();
             this.CenterToScreen();
 
@@ -156,8 +155,6 @@ namespace QuanLyBanHang.GUI.PER
             txtUserName.Text = _acEntry.UserName;
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
             loadPermission(_acEntry.IDPermission.HasValue ? _acEntry.IDPermission.Value : 0);
-            chkIsEnable.Checked = _acEntry.IsEnable;
-            chkServer.Checked = _acEntry.IsServer;
         }
 
         public bool validationForm()
@@ -213,8 +210,6 @@ namespace QuanLyBanHang.GUI.PER
             _acEntry.IDPersonnel = lokPersonnel.ToInt();
             _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
             _acEntry.IDPermission = lokPermission.ToInt();
-            _acEntry.IsEnable = chkIsEnable.Checked;
-            _acEntry.IsServer = chkServer.Checked;
 
             if (fType == eFormType.Add)
             {

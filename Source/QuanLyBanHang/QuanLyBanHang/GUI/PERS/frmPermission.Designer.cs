@@ -50,7 +50,6 @@
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.lctRole = new DevExpress.XtraLayout.LayoutControl();
             this.lblMessage = new DevExpress.XtraEditors.LabelControl();
-            this.chkIsEnable = new DevExpress.XtraEditors.CheckEdit();
             this.btnrCancel = new DevExpress.XtraEditors.SimpleButton();
             this.btnrSave = new DevExpress.XtraEditors.SimpleButton();
             this.trlFeature = new DevExpress.XtraTreeList.TreeList();
@@ -70,7 +69,6 @@
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciCancel = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciSave = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciEmtySpace = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
@@ -86,7 +84,6 @@
             this.dockPanel1_Container.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lctRole)).BeginInit();
             this.lctRole.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trlFeature)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rchkChecked)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -98,7 +95,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciSave)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciEmtySpace)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             this.SuspendLayout();
@@ -107,7 +103,7 @@
             // 
             this.lctPermission.Controls.Add(this.gctPermission);
             this.lctPermission.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lctPermission.Location = new System.Drawing.Point(450, 26);
+            this.lctPermission.Location = new System.Drawing.Point(450, 24);
             this.lctPermission.Name = "lctPermission";
             this.lctPermission.Root = this.layoutControlGroup1;
             this.lctPermission.Size = new System.Drawing.Size(550, 363);
@@ -273,7 +269,7 @@
             this.dkpPermission.Controls.Add(this.dockPanel1_Container);
             this.dkpPermission.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.dkpPermission.ID = new System.Guid("cde2e7b0-53b7-45c5-ad36-2028da17e497");
-            this.dkpPermission.Location = new System.Drawing.Point(0, 26);
+            this.dkpPermission.Location = new System.Drawing.Point(0, 24);
             this.dkpPermission.Name = "dkpPermission";
             this.dkpPermission.Options.AllowDockBottom = false;
             this.dkpPermission.Options.AllowDockFill = false;
@@ -291,15 +287,14 @@
             // dockPanel1_Container
             // 
             this.dockPanel1_Container.Controls.Add(this.lctRole);
-            this.dockPanel1_Container.Location = new System.Drawing.Point(4, 25);
+            this.dockPanel1_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel1_Container.Name = "dockPanel1_Container";
-            this.dockPanel1_Container.Size = new System.Drawing.Size(442, 334);
+            this.dockPanel1_Container.Size = new System.Drawing.Size(441, 336);
             this.dockPanel1_Container.TabIndex = 0;
             // 
             // lctRole
             // 
             this.lctRole.Controls.Add(this.lblMessage);
-            this.lctRole.Controls.Add(this.chkIsEnable);
             this.lctRole.Controls.Add(this.btnrCancel);
             this.lctRole.Controls.Add(this.btnrSave);
             this.lctRole.Controls.Add(this.trlFeature);
@@ -309,7 +304,7 @@
             this.lctRole.Location = new System.Drawing.Point(0, 0);
             this.lctRole.Name = "lctRole";
             this.lctRole.Root = this.layoutControlGroup2;
-            this.lctRole.Size = new System.Drawing.Size(442, 334);
+            this.lctRole.Size = new System.Drawing.Size(441, 336);
             this.lctRole.TabIndex = 0;
             this.lctRole.Text = "layoutControl1";
             // 
@@ -318,28 +313,22 @@
             this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMessage.Appearance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.lblMessage.Appearance.ForeColor = System.Drawing.Color.Maroon;
+            this.lblMessage.Appearance.Options.UseFont = true;
+            this.lblMessage.Appearance.Options.UseForeColor = true;
+            this.lblMessage.Appearance.Options.UseTextOptions = true;
             this.lblMessage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.lblMessage.Location = new System.Drawing.Point(380, 277);
+            this.lblMessage.Location = new System.Drawing.Point(12, 280);
             this.lblMessage.MinimumSize = new System.Drawing.Size(0, 18);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(50, 18);
+            this.lblMessage.Size = new System.Drawing.Size(417, 18);
             this.lblMessage.StyleController = this.lctRole;
             this.lblMessage.TabIndex = 11;
             this.lblMessage.TextChanged += new System.EventHandler(this.lblMessage_TextChanged);
             // 
-            // chkIsEnable
-            // 
-            this.chkIsEnable.Location = new System.Drawing.Point(12, 277);
-            this.chkIsEnable.Name = "chkIsEnable";
-            this.chkIsEnable.Properties.Caption = "Kích hoạt";
-            this.chkIsEnable.Size = new System.Drawing.Size(364, 19);
-            this.chkIsEnable.StyleController = this.lctRole;
-            this.chkIsEnable.TabIndex = 10;
-            // 
             // btnrCancel
             // 
             this.btnrCancel.Image = global::QuanLyBanHang.Properties.Resources.Cancel_16x16;
-            this.btnrCancel.Location = new System.Drawing.Point(366, 300);
+            this.btnrCancel.Location = new System.Drawing.Point(365, 302);
             this.btnrCancel.Name = "btnrCancel";
             this.btnrCancel.Size = new System.Drawing.Size(64, 22);
             this.btnrCancel.StyleController = this.lctRole;
@@ -352,7 +341,7 @@
             this.btnrSave.Image = global::QuanLyBanHang.Properties.Resources.SaveTo_16x16;
             this.btnrSave.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
             this.btnrSave.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.LeftTop;
-            this.btnrSave.Location = new System.Drawing.Point(301, 300);
+            this.btnrSave.Location = new System.Drawing.Point(300, 302);
             this.btnrSave.Name = "btnrSave";
             this.btnrSave.Size = new System.Drawing.Size(61, 22);
             this.btnrSave.StyleController = this.lctRole;
@@ -376,7 +365,7 @@
             this.trlFeature.ParentFieldName = "IDGroup";
             this.trlFeature.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rchkChecked});
-            this.trlFeature.Size = new System.Drawing.Size(418, 187);
+            this.trlFeature.Size = new System.Drawing.Size(417, 190);
             this.trlFeature.TabIndex = 6;
             this.trlFeature.BeforeCheckNode += new DevExpress.XtraTreeList.CheckNodeEventHandler(this.trlFeature_BeforeCheckNode);
             this.trlFeature.CellValueChanging += new DevExpress.XtraTreeList.CellValueChangedEventHandler(this.trlFeature_CellValueChanging);
@@ -441,7 +430,7 @@
             // 
             this.mmeDescription.Location = new System.Drawing.Point(54, 36);
             this.mmeDescription.Name = "mmeDescription";
-            this.mmeDescription.Size = new System.Drawing.Size(376, 46);
+            this.mmeDescription.Size = new System.Drawing.Size(375, 46);
             this.mmeDescription.StyleController = this.lctRole;
             this.mmeDescription.TabIndex = 5;
             // 
@@ -449,7 +438,7 @@
             // 
             this.txtName.Location = new System.Drawing.Point(54, 12);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(376, 20);
+            this.txtName.Size = new System.Drawing.Size(375, 20);
             this.txtName.StyleController = this.lctRole;
             this.txtName.TabIndex = 4;
             // 
@@ -463,12 +452,11 @@
             this.layoutControlItem4,
             this.lciCancel,
             this.lciSave,
-            this.layoutControlItem2,
             this.lciEmtySpace,
             this.layoutControlItem3});
             this.layoutControlGroup2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup2.Name = "layoutControlGroup2";
-            this.layoutControlGroup2.Size = new System.Drawing.Size(442, 334);
+            this.layoutControlGroup2.Size = new System.Drawing.Size(441, 336);
             this.layoutControlGroup2.TextVisible = false;
             // 
             // lciName
@@ -476,7 +464,7 @@
             this.lciName.Control = this.txtName;
             this.lciName.Location = new System.Drawing.Point(0, 0);
             this.lciName.Name = "lciName";
-            this.lciName.Size = new System.Drawing.Size(422, 24);
+            this.lciName.Size = new System.Drawing.Size(421, 24);
             this.lciName.Text = "Tên:";
             this.lciName.TextSize = new System.Drawing.Size(39, 13);
             // 
@@ -485,7 +473,7 @@
             this.lciDescription.Control = this.mmeDescription;
             this.lciDescription.Location = new System.Drawing.Point(0, 24);
             this.lciDescription.Name = "lciDescription";
-            this.lciDescription.Size = new System.Drawing.Size(422, 50);
+            this.lciDescription.Size = new System.Drawing.Size(421, 50);
             this.lciDescription.Text = "Ghi chú:";
             this.lciDescription.TextSize = new System.Drawing.Size(39, 13);
             // 
@@ -494,14 +482,14 @@
             this.layoutControlItem4.Control = this.trlFeature;
             this.layoutControlItem4.Location = new System.Drawing.Point(0, 74);
             this.layoutControlItem4.Name = "layoutControlItem4";
-            this.layoutControlItem4.Size = new System.Drawing.Size(422, 191);
+            this.layoutControlItem4.Size = new System.Drawing.Size(421, 194);
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
             // 
             // lciCancel
             // 
             this.lciCancel.Control = this.btnrCancel;
-            this.lciCancel.Location = new System.Drawing.Point(354, 288);
+            this.lciCancel.Location = new System.Drawing.Point(353, 290);
             this.lciCancel.Name = "lciCancel";
             this.lciCancel.Size = new System.Drawing.Size(68, 26);
             this.lciCancel.Text = "Lưu";
@@ -511,36 +499,27 @@
             // lciSave
             // 
             this.lciSave.Control = this.btnrSave;
-            this.lciSave.Location = new System.Drawing.Point(289, 288);
+            this.lciSave.Location = new System.Drawing.Point(288, 290);
             this.lciSave.Name = "lciSave";
             this.lciSave.Size = new System.Drawing.Size(65, 26);
             this.lciSave.Text = "Lưu";
             this.lciSave.TextSize = new System.Drawing.Size(0, 0);
             this.lciSave.TextVisible = false;
             // 
-            // layoutControlItem2
-            // 
-            this.layoutControlItem2.Control = this.chkIsEnable;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 265);
-            this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(368, 23);
-            this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem2.TextVisible = false;
-            // 
             // lciEmtySpace
             // 
             this.lciEmtySpace.AllowHotTrack = false;
-            this.lciEmtySpace.Location = new System.Drawing.Point(0, 288);
+            this.lciEmtySpace.Location = new System.Drawing.Point(0, 290);
             this.lciEmtySpace.Name = "lciEmtySpace";
-            this.lciEmtySpace.Size = new System.Drawing.Size(289, 26);
+            this.lciEmtySpace.Size = new System.Drawing.Size(288, 26);
             this.lciEmtySpace.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem3
             // 
             this.layoutControlItem3.Control = this.lblMessage;
-            this.layoutControlItem3.Location = new System.Drawing.Point(368, 265);
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 268);
             this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(54, 23);
+            this.layoutControlItem3.Size = new System.Drawing.Size(421, 22);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             // 
@@ -569,7 +548,6 @@
             this.dockPanel1_Container.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lctRole)).EndInit();
             this.lctRole.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trlFeature)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rchkChecked)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
@@ -581,10 +559,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciCancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciSave)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciEmtySpace)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -609,10 +587,8 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
         private DevExpress.XtraLayout.LayoutControlItem lciSave;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit rlokPersonnel;
-        private DevExpress.XtraEditors.CheckEdit chkIsEnable;
         private DevExpress.XtraEditors.SimpleButton btnrCancel;
         private DevExpress.XtraLayout.LayoutControlItem lciCancel;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private DevExpress.XtraLayout.EmptySpaceItem lciEmtySpace;
         private DevExpress.XtraEditors.LabelControl lblMessage;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;

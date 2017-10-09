@@ -62,11 +62,6 @@ namespace QuanLyBanHang.GUI.PER
             deleteEntry();
         }
 
-        protected override void btsIsEnable_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            refreshEntry();
-        }
-
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             insertEntry();
@@ -89,7 +84,7 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void loadRepositoryPersonnel()
+        private void loadPersonnel()
         {
             rlokPersonnel.DataSource = clsPersonnel.Instance.getAllPersonnel();
             rlokPersonnel.ValueMember = "KeyID";
@@ -98,8 +93,8 @@ namespace QuanLyBanHang.GUI.PER
 
         private void loadData(int KeyID)
         {
-            loadRepositoryPersonnel();
-            gctPersonnelList.DataSource = clsPersonnel.Instance.searchPersonnel(base.isEnable);
+            loadPersonnel();
+            gctPersonnelList.DataSource = clsPersonnel.Instance.searchPersonnel(true);
             if (KeyID > 0)
                 grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
         }

@@ -31,8 +31,6 @@
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
             this.lctAccount = new DevExpress.XtraLayout.LayoutControl();
-            this.chkServer = new DevExpress.XtraEditors.CheckEdit();
-            this.chkIsEnable = new DevExpress.XtraEditors.CheckEdit();
             this.lokPermission = new DevExpress.XtraEditors.LookUpEdit();
             this.lokPersonnel = new DevExpress.XtraEditors.LookUpEdit();
             this.txtUserName = new DevExpress.XtraEditors.TextEdit();
@@ -42,13 +40,9 @@
             this.lciPassword = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPersonnel = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPermission = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).BeginInit();
             this.lctAccount.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chkServer.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lokPermission.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lokPersonnel.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtUserName.Properties)).BeginInit();
@@ -58,43 +52,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPassword)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPermission)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
             // 
             // lctAccount
             // 
-            this.lctAccount.Controls.Add(this.chkServer);
-            this.lctAccount.Controls.Add(this.chkIsEnable);
             this.lctAccount.Controls.Add(this.lokPermission);
             this.lctAccount.Controls.Add(this.lokPersonnel);
             this.lctAccount.Controls.Add(this.txtUserName);
             this.lctAccount.Controls.Add(this.btePassword);
             this.lctAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lctAccount.Location = new System.Drawing.Point(0, 26);
+            this.lctAccount.Location = new System.Drawing.Point(0, 24);
             this.lctAccount.Name = "lctAccount";
             this.lctAccount.Root = this.layoutControlGroup1;
-            this.lctAccount.Size = new System.Drawing.Size(584, 146);
+            this.lctAccount.Size = new System.Drawing.Size(584, 120);
             this.lctAccount.TabIndex = 4;
             this.lctAccount.Text = "layoutControl1";
-            // 
-            // chkServer
-            // 
-            this.chkServer.Location = new System.Drawing.Point(295, 112);
-            this.chkServer.Name = "chkServer";
-            this.chkServer.Properties.Caption = "Máy chủ";
-            this.chkServer.Size = new System.Drawing.Size(277, 19);
-            this.chkServer.StyleController = this.lctAccount;
-            this.chkServer.TabIndex = 9;
-            // 
-            // chkIsEnable
-            // 
-            this.chkIsEnable.Location = new System.Drawing.Point(12, 112);
-            this.chkIsEnable.Name = "chkIsEnable";
-            this.chkIsEnable.Properties.Caption = "Kích hoạt";
-            this.chkIsEnable.Size = new System.Drawing.Size(279, 19);
-            this.chkIsEnable.StyleController = this.lctAccount;
-            this.chkIsEnable.TabIndex = 8;
             // 
             // lokPermission
             // 
@@ -157,12 +129,10 @@
             this.lciUserName,
             this.lciPassword,
             this.lciPersonnel,
-            this.lciPermission,
-            this.layoutControlItem2,
-            this.layoutControlItem1});
+            this.lciPermission});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 146);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 120);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // lciUserName
@@ -201,29 +171,11 @@
             this.lciPermission.Text = "Phân quyền";
             this.lciPermission.TextSize = new System.Drawing.Size(72, 13);
             // 
-            // layoutControlItem2
-            // 
-            this.layoutControlItem2.Control = this.chkIsEnable;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 100);
-            this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(283, 26);
-            this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem2.TextVisible = false;
-            // 
-            // layoutControlItem1
-            // 
-            this.layoutControlItem1.Control = this.chkServer;
-            this.layoutControlItem1.Location = new System.Drawing.Point(283, 100);
-            this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(281, 26);
-            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem1.TextVisible = false;
-            // 
             // frmAccount
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 191);
+            this.ClientSize = new System.Drawing.Size(584, 167);
             this.Controls.Add(this.lctAccount);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmAccount";
@@ -233,8 +185,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).EndInit();
             this.lctAccount.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chkServer.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chkIsEnable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lokPermission.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lokPersonnel.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtUserName.Properties)).EndInit();
@@ -244,9 +194,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPassword)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPersonnel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPermission)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -259,12 +208,8 @@
         private DevExpress.XtraLayout.LayoutControlItem lciUserName;
         private DevExpress.XtraLayout.LayoutControlItem lciPassword;
         private DevExpress.XtraLayout.LayoutControlItem lciPersonnel;
-        private DevExpress.XtraEditors.CheckEdit chkIsEnable;
         private DevExpress.XtraEditors.LookUpEdit lokPermission;
         private DevExpress.XtraLayout.LayoutControlItem lciPermission;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private DevExpress.XtraEditors.ButtonEdit btePassword;
-        private DevExpress.XtraEditors.CheckEdit chkServer;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
     }
 }

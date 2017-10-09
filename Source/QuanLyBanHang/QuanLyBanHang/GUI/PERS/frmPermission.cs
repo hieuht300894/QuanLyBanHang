@@ -64,7 +64,6 @@ namespace QuanLyBanHang.GUI.PER
             _acEntry.Name = txtName.Text.Trim();
             _acEntry.Description = mmeDescription.Text.Trim();
             _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
-            _acEntry.IsEnable = chkIsEnable.Checked;
             if (_acEntry.KeyID == 0)
             {
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
@@ -173,7 +172,7 @@ namespace QuanLyBanHang.GUI.PER
 
         private void grvUserRoleList_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
-            
+
         }
 
         private void grvPermission_Click(object sender, EventArgs e)
@@ -203,10 +202,6 @@ namespace QuanLyBanHang.GUI.PER
             deleteEntry();
         }
 
-        protected override void btsIsEnable_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            refreshEntry();
-        }
 
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -283,7 +278,7 @@ namespace QuanLyBanHang.GUI.PER
             else
                 dkpPermission.Text = "CẬP NHẬT QUYỀN".Translation("capUpdatePermission", this.Name);
 
-            txtName.ReadOnly = mmeDescription.ReadOnly = chkIsEnable.ReadOnly = false;
+            txtName.ReadOnly = mmeDescription.ReadOnly = false;
             txtName.Properties.AllowFocused = mmeDescription.Properties.AllowFocused = false;
             txtName.TabStop = mmeDescription.TabStop = false;
             lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
@@ -294,7 +289,7 @@ namespace QuanLyBanHang.GUI.PER
         private void disableEdit()
         {
             dkpPermission.Text = "PHÂN QUYỀN".Translation("capPermission", this.Name);
-            txtName.ReadOnly = mmeDescription.ReadOnly = chkIsEnable.ReadOnly = true;
+            txtName.ReadOnly = mmeDescription.ReadOnly  = true;
             txtName.Properties.AllowFocused = mmeDescription.Properties.AllowFocused = true;
             txtName.TabStop = mmeDescription.TabStop = true;
             lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
@@ -302,7 +297,7 @@ namespace QuanLyBanHang.GUI.PER
             lciEmtySpace.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
         }
 
-        private void loadRepositoryNhanVien()
+        private void loadNhanVien()
         {
             rlokPersonnel.DataSource = clsPermission.Instance.getAllPersonnel();
             rlokPersonnel.ValueMember = "KeyID";
@@ -341,8 +336,8 @@ namespace QuanLyBanHang.GUI.PER
 
         private void loadData(int KeyID)
         {
-            loadRepositoryNhanVien();
-            gctPermission.DataSource = clsPermission.Instance.searchUserRole(base.isEnable);
+            loadNhanVien();
+            gctPermission.DataSource = clsPermission.Instance.searchUserRole(true);
             if (KeyID > 0)
                 grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
         }
@@ -361,7 +356,6 @@ namespace QuanLyBanHang.GUI.PER
         {
             txtName.Text = _acEntry.Name;
             mmeDescription.Text = _acEntry.Description;
-            chkIsEnable.Checked = _acEntry.IsEnable;
             loadFeature();
             //if (_acEntry.xUserFeatures != null && _acEntry.xUserFeatures.Count() > 0)
             // _acEntry.xUserFeatures.Where(n => n.IsEnable && !string.IsNullOrEmpty(n.IDFeature)).ToList().ForEach(n => trlFeature.SetNodeCheckState(trlFeature.FindNodeByKeyID(n.IDFeature), CheckState.Checked, true));
@@ -416,7 +410,6 @@ namespace QuanLyBanHang.GUI.PER
             trlFeature.OptionsView.ShowCaption = true;
 
             lctPermission.Translation();
-            chkIsEnable.Text = "Kích hoạt".Translation("capEnable");
             btnrSave.Text = "Lưu lại".Translation("capSave");
             btnrCancel.Text = "Hủy bỏ".Translation("capCancel");
 
