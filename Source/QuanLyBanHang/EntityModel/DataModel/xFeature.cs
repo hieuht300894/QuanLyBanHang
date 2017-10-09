@@ -31,10 +31,15 @@ namespace EntityModel.DataModel
         public string EN { get; set; }
 
         public bool IsAdd { get; set; }
-
         public bool IsEdit { get; set; }
-
         public bool IsDelete { get; set; }
+        public bool IsPrintPreview { get; set; }
+        public bool IsExportExcel { get; set; }
+        public bool IsSave { get; set; }
+        public bool IsSaveAndAdd { get; set; }
+        public bool IsCancel { get; set; }
+
+        public bool IsEnable { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<xUserFeature> xUserFeatures { get; set; }
