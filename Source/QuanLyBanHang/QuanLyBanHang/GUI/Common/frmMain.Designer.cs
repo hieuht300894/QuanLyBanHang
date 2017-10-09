@@ -38,7 +38,7 @@
             this.bsiPCName = new DevExpress.XtraBars.BarStaticItem();
             this.bsiComputerName = new DevExpress.XtraBars.BarStaticItem();
             this.bsiDatabaseName = new DevExpress.XtraBars.BarStaticItem();
-            this.frmPermission = new DevExpress.XtraBars.BarButtonItem();
+            this.frmPermission_List = new DevExpress.XtraBars.BarButtonItem();
             this.bsiDBName = new DevExpress.XtraBars.BarStaticItem();
             this.bbiChangePassword = new DevExpress.XtraBars.BarButtonItem();
             this.bbiSkin = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
@@ -71,7 +71,7 @@
             this.bsiPCName,
             this.bsiComputerName,
             this.bsiDatabaseName,
-            this.frmPermission,
+            this.frmPermission_List,
             this.bsiDBName,
             this.bbiChangePassword,
             this.bbiSkin,
@@ -142,12 +142,12 @@
             this.bsiDatabaseName.Name = "bsiDatabaseName";
             this.bsiDatabaseName.TextAlignment = System.Drawing.StringAlignment.Near;
             // 
-            // frmPermission
+            // frmPermission_List
             // 
-            this.frmPermission.Caption = "Phân quyền";
-            this.frmPermission.Id = 120;
-            this.frmPermission.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.CheckButtons_32x32;
-            this.frmPermission.Name = "frmPermission";
+            this.frmPermission_List.Caption = "Phân quyền";
+            this.frmPermission_List.Id = 120;
+            this.frmPermission_List.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.CheckButtons_32x32;
+            this.frmPermission_List.Name = "frmPermission_List";
             // 
             // bsiDBName
             // 
@@ -187,7 +187,7 @@
             // 
             this.rbgStaff.ItemLinks.Add(this.frmPersonnel_List);
             this.rbgStaff.ItemLinks.Add(this.frmAccount_List);
-            this.rbgStaff.ItemLinks.Add(this.frmPermission);
+            this.rbgStaff.ItemLinks.Add(this.frmPermission_List);
             this.rbgStaff.ItemLinks.Add(this.bbiChangePassword);
             this.rbgStaff.Name = "rbgStaff";
             this.rbgStaff.Text = "Nhân viên";
@@ -275,7 +275,7 @@
         private DevExpress.XtraBars.BarStaticItem bsiPCName;
         private DevExpress.XtraBars.BarStaticItem bsiComputerName;
         private DevExpress.XtraBars.BarStaticItem bsiDatabaseName;
-        private DevExpress.XtraBars.BarButtonItem frmPermission;
+        private DevExpress.XtraBars.BarButtonItem frmPermission_List;
         private DevExpress.XtraBars.BarStaticItem bsiDBName;
         private DevExpress.XtraBars.BarButtonItem bbiChangePassword;
         private DevExpress.XtraBars.SkinRibbonGalleryBarItem bbiSkin;

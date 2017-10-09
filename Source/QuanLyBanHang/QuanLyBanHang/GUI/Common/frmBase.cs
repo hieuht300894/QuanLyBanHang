@@ -5,6 +5,7 @@ using QuanLyBanHang.BLL.PERS;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using DevExpress.XtraEditors.Repository;
 
 namespace QuanLyBanHang
 {
@@ -12,17 +13,13 @@ namespace QuanLyBanHang
     {
         #region Variables
         public eFormType fType;
+        public RepositoryItemDateEdit rDateEdit = new RepositoryItemDateEdit();
         #endregion
 
         #region Form
         public frmBase()
         {
             InitializeComponent();
-
-            loadAccessForm();
-            BarItemVisibility();
-            SetCaptionButton();
-            InitEvents();
         }
         #endregion
 
@@ -112,6 +109,10 @@ namespace QuanLyBanHang
             bbpPrintPreview.ItemClick += bbpPrintPreview_ItemClick;
             bbpExportExcel.ItemClick += bbpExportExcel_ItemClick;
         }
+        private void CustomForm()
+        {
+            rDateEdit.Format();
+        }
         protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
             bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
             bool IsSave = false, bool IsSaveAndAdd = false, bool IsCancel = false,
@@ -182,6 +183,11 @@ namespace QuanLyBanHang
         #region Events
         protected virtual void frmBase_Load(object sender, EventArgs e)
         {
+            loadAccessForm();
+            BarItemVisibility();
+            SetCaptionButton();
+            InitEvents();
+            CustomForm();
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

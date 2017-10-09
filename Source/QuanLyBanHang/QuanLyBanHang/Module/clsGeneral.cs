@@ -442,7 +442,7 @@ namespace QuanLyBanHang
             xml.LoadXml(oSource);
             return xml;
         }
-        public static string Serialize<T>(this List<T> oSource)
+        public static string SerializeXML<T>(this List<T> oSource)
         {
             if (oSource == null) return string.Empty;
 
@@ -454,7 +454,7 @@ namespace QuanLyBanHang
             }
 
         }
-        public static List<T> Deserialize<T>(this string strXML) where T : class, new()
+        public static List<T> DeserializeXML<T>(this string strXML) where T : class, new()
         {
             if (string.IsNullOrEmpty(strXML)) return new List<T>();
 

@@ -127,7 +127,7 @@ namespace QuanLyBanHang
             {
                 if (db.xFeatures.Any(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper())))
                 {
-                    xFeature f = db.xFeatures.FirstOrDefault<xFeature>(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
+                    xFeature f = db.xFeatures.FirstOrDefault(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
                     if (!f.GetStringByName(Properties.Settings.Default.CurrentCulture).Equals(iCaption))
                     {
                         f.VN = iCaption;
@@ -139,7 +139,7 @@ namespace QuanLyBanHang
                 }
                 else
                 {
-                    xFeature nCN = new xFeature() { KeyID = iName, IDGroup = pName };
+                    xFeature nCN = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
                     nCN.VN = iCaption;
                     nCN.EN = iName.NoSign().Replace("_List", "").AutoSpace();
                     db.xFeatures.Add(nCN);

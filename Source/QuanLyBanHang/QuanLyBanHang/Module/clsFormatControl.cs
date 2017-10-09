@@ -24,6 +24,7 @@ using DevExpress.XtraEditors.Popup;
 using DevExpress.Utils.Win;
 using DevExpress.LookAndFeel;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace QuanLyBanHang
 {
@@ -41,7 +42,7 @@ namespace QuanLyBanHang
     public static class clsFormatControl
     {
         #region Variables
-        static aModel db = new aModel();
+        //static aModel db = new aModel();
 
         public static string curDecimalFormat
         {
@@ -155,6 +156,13 @@ namespace QuanLyBanHang
             if (oSource == null) return 0;
             var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
             return oRe != null ? Convert.ToInt32(oRe) : 0;
+        }
+
+        public static bool GetBooleanByName(this object oSource, string pName)
+        {
+            if (oSource == null) return false;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ToBoolean(oRe) : false;
         }
 
         public static decimal GetDecimalByName(this object oSource, string pName)
@@ -434,540 +442,6 @@ namespace QuanLyBanHang
         }
         #endregion
 
-        //#region Format GridControl
-        //public static void SaveLayout(this GridControl gctMain)
-        //{
-        //    //if (gctMain != null)
-        //    //{
-        //    //    string fName = gctMain.FindForm().Name;
-        //    //    if (string.IsNullOrEmpty(fName)) return;
-        //    //    try
-        //    //    {
-        //    //        foreach (var cView in gctMain.ViewCollection)
-        //    //        {
-        //    //            GridView grvMain = (GridView)cView;
-        //    //            string GridLayoutPath = @"Layout\GridLayout";
-        //    //            if (!System.IO.Directory.Exists(GridLayoutPath))
-        //    //                System.IO.Directory.CreateDirectory(GridLayoutPath);
-
-        //    //            string path;
-        //    //            path = GridLayoutPath + @"\" + gctMain.FindForm().Name + "_" + grvMain.Name + ".xml";
-        //    //            if (System.IO.File.Exists(path))
-        //    //                System.IO.File.Delete(path);
-        //    //            grvMain.SaveLayoutToXml(path);
-        //    //        }
-        //    //    }
-        //    //    catch { }
-        //    //}
-        //}
-
-        //public static void Format(this GridControl gctMain, bool allowNewRow = false, bool showIndicator = true, bool ColumnAuto = true, bool ShowLines = false)
-        //{
-        //    if (gctMain != null)
-        //    {
-        //        try
-        //        {
-        //            foreach (var cView in gctMain.ViewCollection)
-        //            {
-        //                if (cView is GridView)
-        //                {
-        //                    GridView grvMain = (GridView)cView;
-        //                    //string path;
-        //                    //path = @"Layout\GridLayout" + @"\" + gctMain.FindForm().Name + "_" + grvMain.Name + ".xml";
-        //                    //if (System.IO.File.Exists(path))
-        //                    //    grvMain.RestoreLayoutFromXml(path);
-        //                    //if (grvMain.Columns.Count > 0 && grvMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
-        //                    //    grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
-        //                    //if (ColumnAuto)
-        //                    //{
-        //                    //    grvMain.RowCountChanged -= grvMain_RowCountChanged;
-        //                    //    grvMain.RowCountChanged += grvMain_RowCountChanged;
-        //                    //}
-
-        //                    if (grvMain.Columns.Count > 0)
-        //                        grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
-        //                    if (ColumnAuto)
-        //                    {
-        //                        grvMain.RowCountChanged -= grvMain_RowCountChanged;
-        //                        grvMain.RowCountChanged += grvMain_RowCountChanged;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        catch { }
-        //    }
-        //}
-
-        //private static void grvMain_RowCountChanged(object sender, EventArgs e)
-        //{
-        //    //GridView grvMain = sender as GridView;
-        //    //if (grvMain != null && grvMain.Columns.Count > 0 && grvMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
-        //    //    grvMain.FormatColmnsGridView();
-        //}
-
-        //public static void Format(this GridView grvMain, bool allowNewRow, bool showIndicator, bool ColumnAuto, bool ShowLines = false)
-        //{
-        //    grvMain.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
-        //    grvMain.OptionsView.ShowGroupPanel = false;
-        //    grvMain.OptionsBehavior.Editable = true;
-        //    grvMain.OptionsMenu.EnableColumnMenu = false;
-        //    grvMain.OptionsCustomization.AllowFilter = true;
-        //    grvMain.OptionsCustomization.AllowSort = false;
-
-        //    grvMain.OptionsView.ShowIndicator = showIndicator;
-        //    if (showIndicator)
-        //    {
-        //        grvMain.IndicatorWidth = 35;
-        //        grvMain.CustomDrawRowIndicator -= CustomDrawRowIndicator;
-        //        grvMain.CustomDrawRowIndicator += CustomDrawRowIndicator;
-        //    }
-
-        //    grvMain.OptionsSelection.EnableAppearanceFocusedCell = false;
-        //    //grvMain.ColumnPanelRowHeight = 25;
-        //    grvMain.OptionsView.RowAutoHeight = true;
-        //    grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridDefaultRow;
-        //    grvMain.Appearance.SelectedRow.BackColor = grvMain.Appearance.SelectedRow.BackColor2 = MyColor.GridDefaultRow;
-        //    grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridDefaultRow;
-        //    grvMain.Appearance.FocusedRow.ForeColor = grvMain.Appearance.HideSelectionRow.ForeColor = grvMain.Appearance.SelectedRow.ForeColor = MyColor.GridForeRow;
-        //    grvMain.OptionsView.ColumnAutoWidth = ColumnAuto;
-
-        //    grvMain.LeftCoord = 0;
-
-        //    if (allowNewRow)
-        //    {
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Append.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.CancelEdit.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Edit.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.EndEdit.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.First.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Last.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Next.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.NextPage.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Prev.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.PrevPage.Visible = false;
-        //        grvMain.GridControl.EmbeddedNavigator.Buttons.Remove.Hint = "Xóa".Translation("FormatControl", "gctHintRemoveButton");
-        //        grvMain.GridControl.EmbeddedNavigator.TextStringFormat = "";
-        //        grvMain.GridControl.UseEmbeddedNavigator = true;
-
-        //        grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
-        //        grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridEditRow;
-        //        grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridEditRow;
-        //        grvMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
-
-
-        //        grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
-        //        grvMain.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.CellFocus;
-        //        grvMain.Appearance.FocusedCell.BackColor = MyColor.BackColorEditing;
-        //        grvMain.Appearance.FocusedCell.ForeColor = MyColor.ForeColorEditing;
-        //        grvMain.Appearance.FocusedCell.Font = new Font(grvMain.Appearance.FocusedCell.Font, FontStyle.Bold);
-
-        //        grvMain.ShowingEditor -= grvMain_ShowingEditor;
-        //        grvMain.ShowingEditor += grvMain_ShowingEditor;
-
-        //        foreach (GridColumn col in grvMain.VisibleColumns)
-        //        {
-        //            col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        grvMain.InvalidRowException -= grvMain_InvalidRowException;
-        //        grvMain.InvalidRowException += grvMain_InvalidRowException;
-        //    }
-        //    if (ShowLines)
-        //    {
-        //        grvMain.OptionsView.ShowHorizontalLines = DefaultBoolean.True;
-        //        grvMain.OptionsView.ShowVerticalLines = DefaultBoolean.True;
-        //        grvMain.Appearance.HorzLine.BackColor = Color.Black;
-        //        grvMain.Appearance.HorzLine.BackColor2 = Color.Black;
-        //        grvMain.Appearance.HorzLine.Options.UseBackColor = true;
-        //        grvMain.Appearance.VertLine.BackColor = Color.Black;
-        //        grvMain.Appearance.VertLine.BackColor2 = Color.Black;
-        //        grvMain.Appearance.VertLine.Options.UseBackColor = true;
-        //    }
-        //    else
-        //    {
-        //        grvMain.OptionsView.EnableAppearanceOddRow = true;
-        //        grvMain.Appearance.OddRow.BackColor = Color.AliceBlue;
-        //        grvMain.Appearance.OddRow.BackColor2 = Color.AliceBlue;
-        //        grvMain.Appearance.OddRow.BorderColor = Color.AliceBlue;
-        //        grvMain.Appearance.OddRow.ForeColor = Color.Black;
-        //        grvMain.Appearance.OddRow.Options.UseBackColor = true;
-        //        grvMain.Appearance.OddRow.Options.UseBorderColor = true;
-        //        grvMain.Appearance.OddRow.Options.UseForeColor = true;
-        //        grvMain.Appearance.EvenRow.BackColor = Color.AliceBlue;
-        //        grvMain.Appearance.EvenRow.BackColor2 = Color.AliceBlue;
-        //        grvMain.Appearance.EvenRow.BorderColor = Color.AliceBlue;
-        //        grvMain.Appearance.EvenRow.ForeColor = Color.Black;
-        //        grvMain.Appearance.EvenRow.Options.UseBackColor = true;
-        //        grvMain.Appearance.EvenRow.Options.UseBorderColor = true;
-        //    }
-        //    //grvMain.Translation();
-        //    grvMain.FormatColmnsGridView();
-        //    grvMain.BestFitColumns();
-
-        //    //New
-        //    grvMain.OptionsView.ShowAutoFilterRow = true;
-
-        //    //16/3/2017
-        //    grvMain.NewItemRowText = string.Empty;
-        //    grvMain.OptionsSelection.MultiSelect = true;
-        //    grvMain.KeyDown += grvMain_KeyDown;
-        //    grvMain.RowCellStyle += grvMain_RowCellStyle;
-        //    grvMain.OptionsView.ShowFooter = true;
-        //    grvMain.SumResult();
-        //}
-
-        //static void grvMain_RowCellStyle(object sender, RowCellStyleEventArgs e)
-        //{
-        //    GridView view = sender as GridView;
-        //    if (view.Columns.Any(x => x.FieldName.Equals("Status")) && !view.IsFilterRow(e.RowHandle) && e.RowHandle >= 0)
-        //    {
-        //        int id = Convert.ToInt32(view.GetRowCellValue(e.RowHandle, view.Columns["Status"]));
-        //        if (id > 0)
-        //        {
-        //            e.Appearance.Options.UseBackColor = true;
-        //            if (id == 1)
-        //            {
-        //                e.Appearance.BackColor = Color.FromArgb(85, 255, 95);
-        //                e.Appearance.BackColor2 = Color.FromArgb(85, 255, 95);
-        //            }
-        //            if (id == 2)
-        //            {
-        //                e.Appearance.BackColor = Color.FromArgb(255, 200, 50);
-        //                e.Appearance.BackColor2 = Color.FromArgb(255, 200, 50);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public static void SumResult(this GridView grvMain)
-        //{
-        //    grvMain.BeginSummaryUpdate();
-        //    try
-        //    {
-        //        foreach (GridColumn col in grvMain.VisibleColumns)
-        //        {
-        //            if (col.ColumnEdit is RepositoryItemSpinEdit)
-        //            {
-        //                col.SummaryItem.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-        //                col.SummaryItem.DisplayFormat = "{0:N2}";
-        //            }
-        //        }
-        //    }
-        //    catch { }
-        //    finally { grvMain.EndSummaryUpdate(); }
-
-        //}
-
-        //private static void grvMain_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    GridView view = sender as GridView;
-        //    if (view != null && e.KeyCode == Keys.Delete)
-        //    {
-        //        if (view.IsFilterRow(view.FocusedRowHandle))
-        //            view.ActiveFilter.Clear();
-        //        else
-        //            view.SetRowCellValue(view.FocusedRowHandle, view.FocusedColumn, 0);
-        //    }
-        //}
-
-        //private static void realColumnEdit_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Delete)
-        //    {
-        //        BaseEdit editor = null;
-
-        //        if (sender is LookUpEdit)
-        //            editor = (LookUpEdit)sender;
-        //        if (sender is DateEdit)
-        //            editor = (DateEdit)sender;
-        //        if (sender is SpinEdit)
-        //            editor = (SpinEdit)sender;
-
-        //        if (editor == null)
-        //            return;
-
-        //        GridControl grid = editor.Parent as GridControl;
-        //        if (grid == null)
-        //            return;
-
-        //        GridView view = grid.FocusedView as GridView;
-
-        //        if (view != null && view.IsEditing)
-        //        {
-        //            view.CloseEditor();
-        //            if (e.KeyCode == Keys.Delete && view.IsFilterRow(view.FocusedRowHandle))
-        //                view.ActiveFilter.Clear();
-        //        }
-        //    }
-        //}
-
-        //static void grvMain_ShowingEditor(object sender, CancelEventArgs e)
-        //{
-        //    GridView grvMain = (GridView)sender;
-        //    grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
-        //    grvMain.OptionsSelection.EnableAppearanceFocusedRow = true;
-        //    grvMain.OptionsSelection.EnableAppearanceHideSelection = true;
-
-        //    if (!grvMain.IsFilterRow(grvMain.FocusedRowHandle))
-        //    {
-        //        if (grvMain.IsNewItemRow(grvMain.FocusedRowHandle))
-        //        {
-        //            //Thêm mới
-        //            e.Cancel = !clsGeneral.curUserFeature.IsAdd;
-        //        }
-        //        else
-        //        {
-        //            var idTemp = grvMain.GetRowCellValue(grvMain.FocusedRowHandle, "KeyID");
-        //            int id = idTemp != null ? (int)idTemp : 0;
-
-        //            if (id > 0)
-        //                e.Cancel = !clsGeneral.curUserFeature.IsEdit;//Chỉnh sửa
-        //            else
-        //                e.Cancel = !clsGeneral.curUserFeature.IsAdd;//Thêm mới và được chỉnh sửa
-        //        }
-        //    }
-
-        //}
-
-        //public static void FormatColmnsGridView(this GridView grvMain, string fName)
-        //{
-        //    if (grvMain == null || grvMain.Columns.Count == 0 || grvMain.Columns[0].AppearanceHeader.ForeColor == MyColor.GridForeHeader) return;
-        //    if (string.IsNullOrEmpty(fName))
-        //    {
-        //        try
-        //        {
-        //            fName = grvMain.GridControl.FindForm().Name;
-        //            if (string.IsNullOrEmpty(fName)) return;
-        //        }
-        //        catch { return; }
-        //    }
-        //    List<xDisplay> lstAdd = new List<xDisplay>();
-        //    grvMain.BeginInit();
-        //    foreach (GridColumn col in grvMain.Columns)
-        //    {
-        //        col.OptionsFilter.AutoFilterCondition = DevExpress.XtraGrid.Columns.AutoFilterCondition.Contains;//new
-
-        //        bool addCol = !db.xDisplays.Any(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(grvMain.Name) && hts.ColumnName.Equals(col.Name));
-        //        xDisplay myDisplay = null;
-
-        //        if (addCol && grvMain.DataSource != null && grvMain.RowCount > 0)
-        //        {
-        //            myDisplay = new xDisplay();
-        //            myDisplay.ParentName = fName;
-        //            myDisplay.Group = grvMain.Name;
-        //            myDisplay.ColumnName = col.Name;
-        //            myDisplay.FieldName = col.FieldName;
-        //            myDisplay.Showing = col.Visible;
-
-        //            string cType = "None";
-        //            string cAlign = "Default";
-        //            if (col.ColumnType == typeof(Nullable<DateTime>) || col.ColumnType == typeof(DateTime) || col.UnboundType == DevExpress.Data.UnboundColumnType.DateTime)
-        //            {
-        //                cType = "DateTime"; cAlign = "Center";
-        //            }
-        //            else if (col.ColumnType == typeof(Nullable<Decimal>) || col.ColumnType == typeof(Decimal) || col.ColumnType == typeof(Nullable<int>) || col.ColumnType == typeof(int) || col.ColumnType == typeof(Nullable<Double>) || col.ColumnType == typeof(Double) || col.ColumnType == typeof(Nullable<long>) || col.ColumnType == typeof(long) || col.ColumnType == typeof(Nullable<float>) || col.ColumnType == typeof(float) || col.UnboundType == DevExpress.Data.UnboundColumnType.Decimal || col.UnboundType == DevExpress.Data.UnboundColumnType.Integer)
-        //            {
-        //                cType = "Numeric"; cAlign = "Far";
-        //                if (col.ColumnEdit != null)
-        //                    cAlign = "Near";
-        //            }
-        //            else if (col.DisplayFormat.FormatType == FormatType.Custom)
-        //            {
-        //                cType = "Custom"; cAlign = "Near";
-        //            }
-
-        //            myDisplay.Type = cType;
-        //            myDisplay.TextAlign = cAlign;
-        //            myDisplay.EnableEdit = col.OptionsColumn.AllowEdit;
-        //            lstAdd.Add(myDisplay);
-        //        }
-        //        else if (myDisplay == null)
-        //            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(grvMain.Name) && hts.ColumnName.Equals(col.Name));
-
-        //        if (myDisplay != null)
-        //        {
-        //            col.Visible = myDisplay.Showing;
-        //            col.FieldName = myDisplay.FieldName;
-        //            if (myDisplay.Type != null)
-        //            {
-        //                if (col.ColumnEdit == null)
-        //                    col.AppearanceCell.TextOptions.HAlignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
-
-        //                if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.DisplayFormat.FormatString))
-        //                {
-        //                    col.DisplayFormat.FormatType = FormatType.Numeric;
-        //                    col.DisplayFormat.FormatString = curDecimalFormat;
-        //                    if (col.ColumnEdit != null)
-        //                    {
-        //                        col.ColumnEdit.EditFormat.FormatType = FormatType.Numeric;
-        //                        col.ColumnEdit.EditFormat.FormatString = curDecimalFormat;
-        //                    }
-        //                }
-        //                else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.DisplayFormat.FormatString))
-        //                {
-        //                    col.DisplayFormat.FormatType = FormatType.DateTime;
-        //                    col.DisplayFormat.FormatString = curDateFormat;
-        //                    if (col.ColumnEdit != null)
-        //                    {
-        //                        col.ColumnEdit.EditFormat.FormatType = FormatType.DateTime;
-        //                        col.ColumnEdit.EditFormat.FormatString = curDateFormat;
-        //                    }
-        //                }
-        //            }
-        //            grvMain.OptionsNavigation.EnterMoveNextColumn = col.OptionsColumn.AllowFocus = col.OptionsColumn.AllowEdit = myDisplay.EnableEdit;
-        //        }
-        //    }
-        //    grvMain.EndInit();
-        //    if (lstAdd != null && lstAdd.Count() > 0)
-        //    {
-        //        try
-        //        {
-        //            db.xDisplays.AddRange(lstAdd);
-        //            db.SaveChanges();
-        //        }
-        //        catch { }
-        //    }
-        //}
-
-        //public static void FormatColmnsGridView(this GridView grvMain)
-        //{
-        //    grvMain.BeginInit();
-        //    foreach (GridColumn col in grvMain.Columns)
-        //    {
-        //        col.OptionsFilter.FilterPopupMode = DevExpress.XtraGrid.Columns.FilterPopupMode.CheckedList;
-        //        col.OptionsFilter.AutoFilterCondition = DevExpress.XtraGrid.Columns.AutoFilterCondition.Contains;//new
-
-        //        col.AppearanceHeader.TextOptions.HAlignment = HorzAlignment.Center;
-        //        col.AppearanceCell.TextOptions.HAlignment = HorzAlignment.Default;
-        //        if (col.ColumnEdit != null)
-        //        {
-        //            if (col.ColumnEdit is RepositoryItemSpinEdit)
-        //            {
-        //                col.AppearanceCell.TextOptions.HAlignment = HorzAlignment.Far;
-        //                col.DisplayFormat.FormatType = FormatType.Numeric;
-        //            }
-        //            if (col.ColumnEdit is RepositoryItemDateEdit)
-        //            {
-        //                col.AppearanceCell.TextOptions.HAlignment = HorzAlignment.Center;
-        //                col.DisplayFormat.FormatType = FormatType.DateTime;
-        //                RepositoryItemDateEdit rItem = col.ColumnEdit as RepositoryItemDateEdit;
-        //                rItem.EditMask = "dd/MM/yyyy";
-        //                rItem.ShowClear = false;
-        //            }
-        //        }
-        //    }
-        //    grvMain.OptionsNavigation.EnterMoveNextColumn = true;
-        //    grvMain.EndInit();
-        //}
-
-        //public static void Translation(this GridView grvMain)
-        //{
-        //    string fName = "";
-        //    try
-        //    {
-        //        fName = grvMain.GridControl.FindForm().Name;
-        //    }
-        //    catch { }
-        //    if (!string.IsNullOrEmpty(fName) && grvMain != null && grvMain.Columns.Count > 0)
-        //    {
-        //        db = new aModel();
-        //        List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
-        //        foreach (GridColumn col in grvMain.Columns)
-        //        {
-        //            string mName = string.Format("{0}_{1}", grvMain.Name, col.Name);
-        //            var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
-        //            if (myTrans == null)
-        //            {
-        //                lstAdd.Add(myTrans = new xMsgDictionary()
-        //                {
-        //                    FormName = fName,
-        //                    MsgName = mName,
-        //                    VN = col.GetCaption(),
-        //                    EN = col.Name.AutoSpace()
-        //                });
-
-        //            }
-        //            col.Caption = myTrans.GetStringByName(curCulture);
-        //            col.AppearanceHeader.TextOptions.HAlignment = HorzAlignment.Center;
-        //        }
-        //        if (lstAdd != null && lstAdd.Count() > 0)
-        //        {
-        //            try
-        //            {
-        //                db.xMsgDictionaries.AddRange(lstAdd);
-        //                db.SaveChanges();
-        //            }
-        //            catch { }
-        //        }
-        //    }
-        //}
-
-        //private static void CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
-        //{
-        //    if (!string.IsNullOrEmpty(e.Info.DisplayText)) return;
-        //    bool indicatorIcon = false;
-        //    DevExpress.XtraGrid.Views.Grid.GridView view = (DevExpress.XtraGrid.Views.Grid.GridView)sender;
-
-        //    if (e.Info.IsRowIndicator && e.RowHandle >= 0)
-        //    {
-        //        e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
-        //        e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
-        //        e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), e.Bounds);
-        //        //e.Info.DisplayText = Convert.ToString(int.Parse(e.RowHandle.ToString()) + 1);
-        //        e.Info.DisplayText = (Convert.ToInt16(e.RowHandle + 1)).ToString();
-        //        //e.Appearance.Font = new Font("Arial", 9.75F);
-        //        if (!indicatorIcon)
-        //            e.Info.ImageIndex = -1;
-        //    }
-        //    if (e.RowHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle)
-        //    {
-        //        e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
-        //        e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
-
-        //        e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), e.Bounds);
-        //        e.Info.DisplayText = "";
-        //    }
-        //    e.Appearance.ForeColor = MyColor.GridForeHeader;
-        //    e.Painter.DrawObject(e.Info);
-        //    e.Handled = true;
-        //}
-
-        //private static void grvMain_InvalidRowException(object sender, DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventArgs e)
-        //{
-        //    e.ExceptionMode = ExceptionMode.Ignore;
-        //}
-
-        //public static List<int> DeleteItem<T>(this GridView grvMain) where T : class
-        //{
-        //    GridControl gctMain = grvMain.GridControl;
-
-        //    List<int> lstID = new List<int>();
-
-        //    int[] id = grvMain.GetSelectedRows();
-        //    for (int i = grvMain.SelectedRowsCount - 1; i >= 0; i--)
-        //    {
-        //        T item = grvMain.GetRow(id[i]) as T;
-        //        if (item != null && item.GetInt32ByName("KeyID") > 0)
-        //            lstID.Add(item.GetInt32ByName("KeyID"));
-        //    }
-
-        //    gctMain.BeginUpdate();
-        //    if (gctMain.DataSource != null)
-        //    {
-        //        IList<T> lst = (gctMain.DataSource as IEnumerable<T>).ToList();
-        //        for (int i = grvMain.SelectedRowsCount - 1; i >= 0; i--)
-        //        {
-        //            lst.RemoveAt(id[i]);
-        //        }
-        //        gctMain.DataSource = lst;
-        //    }
-        //    gctMain.EndUpdate();
-        //    return lstID;
-        //}
-        //#endregion
-
         #region Format GridControl
         public static void Format(this GridControl gctMain, bool allowNewRow = false, bool showIndicator = true, bool ColumnAuto = true, bool ShowLines = false)
         {
@@ -1145,7 +619,7 @@ namespace QuanLyBanHang
                 }
 
                 StreamWriter sw = new StreamWriter(path);
-                sw.Write(lstDisplays.Serialize());
+                sw.Write(lstDisplays.SerializeXML());
                 sw.Close();
             }
             catch { }
@@ -1163,7 +637,7 @@ namespace QuanLyBanHang
                     using (StreamReader sr = new StreamReader(path))
                     {
                         grvMain.BeginUpdate();
-                        List<xDisplay> lstDisplays = sr.ReadToEnd().Deserialize<xDisplay>();
+                        List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>();
 
                         foreach (GridColumn col in grvMain.Columns)
                         {
@@ -1501,26 +975,14 @@ namespace QuanLyBanHang
 
         public static void Format(this TreeList trlMain, bool Autowidth = true, bool ShowColumnHeader = true)
         {
-            //Dictionary<string, string> dicCaption = new Dictionary<string, string>();
-            //foreach (TreeListColumn col in trlMain.Columns)
-            //{
-            //    dicCaption.Add(col.Name, col.GetCaption());
-            //}
-            //var options = new DevExpress.XtraLayout.LayoutSerializationOptions();
-            //options.RestoreLayoutItemText = false;
-            //trlMain.OptionsLayout.Assign(options);
-            //string TreeLayoutPath = @"Layout\TreeLayout";
-            //string path;
-            //path = TreeLayoutPath + @"\" + trlMain.FindForm().Name + "_" + trlMain.Name + ".xml";
-            //if (File.Exists(path))
-            //    trlMain.RestoreLayoutFromXml(path);
-            //foreach (TreeListColumn col in trlMain.Columns)
-            //{
-            //    col.Caption = dicCaption[col.Name];
-            //}
-
+            trlMain.OptionsView.ShowCheckBoxes = true;
+            trlMain.OptionsView.ShowColumns = ShowColumnHeader;
+            trlMain.OptionsBehavior.AllowIndeterminateCheckState = false;
+            trlMain.OptionsBehavior.AllowRecursiveNodeChecking = true;
+            trlMain.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
+            trlMain.OptionsSelection.MultiSelect = false;
+            trlMain.OptionsView.ShowCaption = true;
             trlMain.ImeMode = ImeMode.NoControl;
-            //trlMain.OptionsBehavior.Editable = false;
             trlMain.OptionsView.EnableAppearanceOddRow = true;
             trlMain.OptionsView.ShowIndicator = false;
             trlMain.OptionsSelection.EnableAppearanceFocusedCell = false;
@@ -1529,7 +991,6 @@ namespace QuanLyBanHang
             trlMain.Appearance.HideSelectionRow.BackColor = trlMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridDefaultRow;
             trlMain.Appearance.HideSelectionRow.ForeColor = MyColor.GridForeRow;
 
-            trlMain.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
             trlMain.OptionsBehavior.AutoPopulateColumns = false;
             trlMain.OptionsBehavior.PopulateServiceColumns = true;
             trlMain.OptionsView.AutoWidth = Autowidth;
@@ -1541,14 +1002,10 @@ namespace QuanLyBanHang
                 trlMain.NodesReloaded += trlMain_NodesReloaded;
             }
             trlMain.ColumnPanelRowHeight = 25;
-            trlMain.OptionsView.ShowCheckBoxes = true;
-            trlMain.OptionsView.ShowColumns = ShowColumnHeader;
-            trlMain.OptionsBehavior.AllowIndeterminateCheckState = false;
-            trlMain.OptionsBehavior.AllowRecursiveNodeChecking = true;
-            trlMain.OptionsView.ShowCaption = true;
-            trlMain.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
+           
             trlMain.Translation();
             trlMain.FormatColumnTreeList();
+            trlMain.BestFitColumns();
 
             trlMain.NodeChanged -= trlMain_NodeChanged;
             trlMain.NodeChanged += trlMain_NodeChanged;
@@ -1619,154 +1076,154 @@ namespace QuanLyBanHang
 
         public static void Translation(this TreeList trlMain)
         {
-            string fName = "";
-            try
-            {
-                fName = trlMain.FindForm().Name;
-            }
-            catch { }
-            if (!string.IsNullOrEmpty(fName) && trlMain != null && trlMain.Columns.Count > 0)
-            {
-                db = new aModel();
-                List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
-                foreach (TreeListColumn col in trlMain.Columns)
-                {
-                    string mName = string.Format("{0}_{1}", trlMain.Name, col.Name);
-                    var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
-                    if (myTrans == null)
-                    {
-                        var k = col.GetTextCaption();
-                        lstAdd.Add(myTrans = new xMsgDictionary()
-                        {
-                            FormName = fName,
-                            MsgName = mName,
-                            VN = !string.IsNullOrEmpty(col.Caption) ? col.Caption : col.GetCaption(),
-                            EN = col.Name.AutoSpace()
-                        });
+            //string fName = "";
+            //try
+            //{
+            //    fName = trlMain.FindForm().Name;
+            //}
+            //catch { }
+            //if (!string.IsNullOrEmpty(fName) && trlMain != null && trlMain.Columns.Count > 0)
+            //{
+            //    db = new aModel();
+            //    List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
+            //    foreach (TreeListColumn col in trlMain.Columns)
+            //    {
+            //        string mName = string.Format("{0}_{1}", trlMain.Name, col.Name);
+            //        var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
+            //        if (myTrans == null)
+            //        {
+            //            var k = col.GetTextCaption();
+            //            lstAdd.Add(myTrans = new xMsgDictionary()
+            //            {
+            //                FormName = fName,
+            //                MsgName = mName,
+            //                VN = !string.IsNullOrEmpty(col.Caption) ? col.Caption : col.GetCaption(),
+            //                EN = col.Name.AutoSpace()
+            //            });
 
-                    }
-                    col.Caption = myTrans.GetStringByName(curCulture);
-                    col.AppearanceHeader.TextOptions.HAlignment = HorzAlignment.Center;
-                }
-                //if (lstAdd != null && lstAdd.Count() > 0)
-                //{
-                //    try
-                //    {
-                //        db.xMsgDictionaries.AddRange(lstAdd);
-                //        db.SaveChanges();
-                //    }
-                //    catch { }
-                //}
-            }
+            //        }
+            //        col.Caption = myTrans.GetStringByName(curCulture);
+            //        col.AppearanceHeader.TextOptions.HAlignment = HorzAlignment.Center;
+            //    }
+            //    //if (lstAdd != null && lstAdd.Count() > 0)
+            //    //{
+            //    //    try
+            //    //    {
+            //    //        db.xMsgDictionaries.AddRange(lstAdd);
+            //    //        db.SaveChanges();
+            //    //    }
+            //    //    catch { }
+            //    //}
+            //}
         }
 
         public static void FormatColumnTreeList(this TreeList trlMain, string fName = "")
         {
-            if (trlMain.Columns.Count > 0 && trlMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
-            {
-                if (string.IsNullOrEmpty(fName))
-                {
-                    try { fName = trlMain.FindForm().Name; }
-                    catch { return; }
-                }
-                if (string.IsNullOrEmpty(fName)) return;
-                List<xDisplay> lstAdd = new List<xDisplay>();
-                trlMain.BeginInit();
-                bool addCol = false;
-                foreach (TreeListColumn col in trlMain.Columns)
-                {
-                    addCol = false;
-                    xDisplay myDisplay = null;
-                    try
-                    {
-                        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(trlMain.Name) && hts.ColumnName.Equals(col.Name));
+            //if (trlMain.Columns.Count > 0 && trlMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
+            //{
+            //    if (string.IsNullOrEmpty(fName))
+            //    {
+            //        try { fName = trlMain.FindForm().Name; }
+            //        catch { return; }
+            //    }
+            //    if (string.IsNullOrEmpty(fName)) return;
+            //    List<xDisplay> lstAdd = new List<xDisplay>();
+            //    trlMain.BeginInit();
+            //    bool addCol = false;
+            //    foreach (TreeListColumn col in trlMain.Columns)
+            //    {
+            //        addCol = false;
+            //        xDisplay myDisplay = null;
+            //        try
+            //        {
+            //            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(trlMain.Name) && hts.ColumnName.Equals(col.Name));
 
-                        addCol = (myDisplay == null);
-                    }
-                    catch { addCol = true; }
-                    finally
-                    {
-                        if (addCol && trlMain.DataSource != null)
-                        {
-                            myDisplay = new xDisplay();
-                            myDisplay.ParentName = fName;
-                            myDisplay.Group = trlMain.Name;
-                            myDisplay.ColumnName = col.Name;
-                            myDisplay.FieldName = col.FieldName;
-                            myDisplay.Showing = col.Visible;
+            //            addCol = (myDisplay == null);
+            //        }
+            //        catch { addCol = true; }
+            //        finally
+            //        {
+            //            if (addCol && trlMain.DataSource != null)
+            //            {
+            //                myDisplay = new xDisplay();
+            //                myDisplay.ParentName = fName;
+            //                myDisplay.Group = trlMain.Name;
+            //                myDisplay.ColumnName = col.Name;
+            //                myDisplay.FieldName = col.FieldName;
+            //                myDisplay.Showing = col.Visible;
 
-                            string cType = "None";
-                            string cAlign = "Default";
-                            if (col.Format.FormatType == FormatType.DateTime || col.ColumnType == typeof(Nullable<DateTime>) || col.ColumnType == typeof(DateTime))
-                            {
-                                cType = "DateTime"; cAlign = "Center";
-                            }
-                            else if (col.Format.FormatType == FormatType.Numeric || col.ColumnType == typeof(Nullable<Decimal>) || col.ColumnType == typeof(Decimal) || col.ColumnType == typeof(Nullable<int>) || col.ColumnType == typeof(int) || col.ColumnType == typeof(Nullable<Double>) || col.ColumnType == typeof(Double) || col.ColumnType == typeof(Nullable<long>) || col.ColumnType == typeof(long) || col.ColumnType == typeof(Nullable<float>) || col.ColumnType == typeof(float))
-                            {
-                                cType = "Numeric"; cAlign = "Far";
-                                if (col.ColumnEdit != null)
-                                    cAlign = "Near";
-                            }
-                            else if (col.Format.FormatType == FormatType.Custom)
-                            {
-                                cType = "Custom"; cAlign = "Near";
-                            }
+            //                string cType = "None";
+            //                string cAlign = "Default";
+            //                if (col.Format.FormatType == FormatType.DateTime || col.ColumnType == typeof(Nullable<DateTime>) || col.ColumnType == typeof(DateTime))
+            //                {
+            //                    cType = "DateTime"; cAlign = "Center";
+            //                }
+            //                else if (col.Format.FormatType == FormatType.Numeric || col.ColumnType == typeof(Nullable<Decimal>) || col.ColumnType == typeof(Decimal) || col.ColumnType == typeof(Nullable<int>) || col.ColumnType == typeof(int) || col.ColumnType == typeof(Nullable<Double>) || col.ColumnType == typeof(Double) || col.ColumnType == typeof(Nullable<long>) || col.ColumnType == typeof(long) || col.ColumnType == typeof(Nullable<float>) || col.ColumnType == typeof(float))
+            //                {
+            //                    cType = "Numeric"; cAlign = "Far";
+            //                    if (col.ColumnEdit != null)
+            //                        cAlign = "Near";
+            //                }
+            //                else if (col.Format.FormatType == FormatType.Custom)
+            //                {
+            //                    cType = "Custom"; cAlign = "Near";
+            //                }
 
-                            myDisplay.Type = cType;
-                            myDisplay.TextAlign = cAlign;
-                            myDisplay.EnableEdit = col.OptionsColumn.AllowEdit;
-                            lstAdd.Add(myDisplay);
-                        }
-                        else if (myDisplay == null)
-                            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(trlMain.Name) && hts.ColumnName.Equals(col.Name));
+            //                myDisplay.Type = cType;
+            //                myDisplay.TextAlign = cAlign;
+            //                myDisplay.EnableEdit = col.OptionsColumn.AllowEdit;
+            //                lstAdd.Add(myDisplay);
+            //            }
+            //            else if (myDisplay == null)
+            //                myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(trlMain.Name) && hts.ColumnName.Equals(col.Name));
 
-                        if (myDisplay != null)
-                        {
-                            col.Visible = myDisplay.Showing;
-                            col.FieldName = myDisplay.FieldName;
-                            if (myDisplay.Type != null)
-                            {
-                                col.Format.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
-                                col.AppearanceCell.TextOptions.HAlignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
+            //            if (myDisplay != null)
+            //            {
+            //                col.Visible = myDisplay.Showing;
+            //                col.FieldName = myDisplay.FieldName;
+            //                if (myDisplay.Type != null)
+            //                {
+            //                    col.Format.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
+            //                    col.AppearanceCell.TextOptions.HAlignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
 
-                                if (myDisplay.Type.Equals("Numeric") && !string.IsNullOrEmpty(curDecimalFormat) && string.IsNullOrEmpty(col.Format.FormatString))
-                                {
-                                    col.Format.FormatType = FormatType.Numeric;
-                                    col.Format.FormatString = curDecimalFormat;
-                                    if (col.ColumnEdit != null)
-                                    {
-                                        col.ColumnEdit.EditFormat.FormatType = col.ColumnEdit.DisplayFormat.FormatType = FormatType.Numeric;
-                                        col.ColumnEdit.EditFormat.FormatString = col.ColumnEdit.DisplayFormat.FormatString = curDecimalFormat;
-                                    }
+            //                    if (myDisplay.Type.Equals("Numeric") && !string.IsNullOrEmpty(curDecimalFormat) && string.IsNullOrEmpty(col.Format.FormatString))
+            //                    {
+            //                        col.Format.FormatType = FormatType.Numeric;
+            //                        col.Format.FormatString = curDecimalFormat;
+            //                        if (col.ColumnEdit != null)
+            //                        {
+            //                            col.ColumnEdit.EditFormat.FormatType = col.ColumnEdit.DisplayFormat.FormatType = FormatType.Numeric;
+            //                            col.ColumnEdit.EditFormat.FormatString = col.ColumnEdit.DisplayFormat.FormatString = curDecimalFormat;
+            //                        }
 
-                                }
-                                else if (myDisplay.Type.Equals("DateTime") && curDecimalFormat != null && string.IsNullOrEmpty(col.Format.FormatString))
-                                {
-                                    col.Format.FormatType = FormatType.DateTime;
-                                    col.Format.FormatString = curDateFormat;
-                                    if (col.ColumnEdit != null)
-                                    {
-                                        col.ColumnEdit.EditFormat.FormatType = col.ColumnEdit.DisplayFormat.FormatType = FormatType.DateTime;
-                                        col.ColumnEdit.EditFormat.FormatString = col.ColumnEdit.DisplayFormat.FormatString = curDecimalFormat;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                trlMain.EndInit();
-                //if (lstAdd != null && lstAdd.Count > 0)
-                //{
-                //    try
-                //    {
-                //        db = new aModel();
-                //        db.xDisplays.AddRange(lstAdd);
-                //        db.SaveChanges();
-                //    }
-                //    catch { }
-                //}
-            }
-            trlMain.ExpandAll();
+            //                    }
+            //                    else if (myDisplay.Type.Equals("DateTime") && curDecimalFormat != null && string.IsNullOrEmpty(col.Format.FormatString))
+            //                    {
+            //                        col.Format.FormatType = FormatType.DateTime;
+            //                        col.Format.FormatString = curDateFormat;
+            //                        if (col.ColumnEdit != null)
+            //                        {
+            //                            col.ColumnEdit.EditFormat.FormatType = col.ColumnEdit.DisplayFormat.FormatType = FormatType.DateTime;
+            //                            col.ColumnEdit.EditFormat.FormatString = col.ColumnEdit.DisplayFormat.FormatString = curDecimalFormat;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    trlMain.EndInit();
+            //    //if (lstAdd != null && lstAdd.Count > 0)
+            //    //{
+            //    //    try
+            //    //    {
+            //    //        db = new aModel();
+            //    //        db.xDisplays.AddRange(lstAdd);
+            //    //        db.SaveChanges();
+            //    //    }
+            //    //    catch { }
+            //    //}
+            //}
+            //trlMain.ExpandAll();
         }
 
         static void trlMain_NodesReloaded(object sender, EventArgs e)
@@ -1879,81 +1336,6 @@ namespace QuanLyBanHang
         #endregion
         #endregion
 
-        //#region Format GridLookUpEdit
-        //public static void Format(this GridLookUpEdit glkMain, bool showHeader = true)
-        //{
-        //    string fName = "";
-        //    try { fName = glkMain.FindForm().Name; }
-        //    catch { }
-
-        //    glkMain.Properties.AutoComplete = false;
-        //    glkMain.Properties.AllowNullInput = DefaultBoolean.True;
-        //    glkMain.Properties.NullText = string.Empty;
-        //    glkMain.Properties.ShowFooter = false;
-        //    glkMain.Properties.PopupFormMinSize = new Size(glkMain.Width, 100);
-        //    glkMain.Properties.PopupFormSize = new Size(glkMain.Width, 100);
-        //    glkMain.Properties.PopupResizeMode = DevExpress.XtraEditors.Controls.ResizeMode.LiveResize;
-        //    glkMain.Properties.View.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFullFocus;
-        //    glkMain.Properties.TextEditStyle = TextEditStyles.Standard;
-        //    GridView grvMain = (GridView)glkMain.Properties.View;
-        //    grvMain.Format(false, false, true);
-        //    grvMain.OptionsView.ShowColumnHeaders = showHeader;
-        //    if (showHeader && !string.IsNullOrEmpty(fName))
-        //    {
-        //        FormatColmnsGridView(grvMain, fName);
-        //        glkMain.Popup -= glkMain_Popup;
-        //        glkMain.Popup += glkMain_Popup;
-        //    }
-        //    grvMain.OptionsView.ColumnAutoWidth = true;
-
-        //}
-
-        //static void glkMain_Popup(object sender, EventArgs e)
-        //{
-        //    GridLookUpEdit glkMain = (GridLookUpEdit)sender;
-        //    if (glkMain != null)
-        //    {
-        //        GridView grvMain = (GridView)glkMain.Properties.View;
-        //        if (grvMain.Columns.Count > 0 && grvMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
-        //        {
-        //            try
-        //            {
-        //                grvMain.FormatColmnsGridView(glkMain.FindForm().Name);
-        //            }
-        //            catch { }
-        //        }
-        //    }
-        //}
-
-        //public static int ToInt16(this GridLookUpEdit glkMain)
-        //{
-        //    try
-        //    {
-        //        return Convert.ToInt16(glkMain.EditValue);
-        //    }
-        //    catch { return 0; }
-        //}
-
-        //public static int ToInt32(this GridLookUpEdit glkMain)
-        //{
-        //    try
-        //    {
-        //        return Convert.ToInt32(glkMain.EditValue);
-        //    }
-        //    catch { return 0; }
-        //}
-
-        //public static decimal ToDecimal(this GridLookUpEdit glkMain)
-        //{
-        //    try
-        //    {
-        //        return Convert.ToDecimal(glkMain.EditValue);
-        //    }
-        //    catch { return 0; }
-        //}
-
-        //#endregion
-
         #region Format LookUpEdit
         public static void Format(this LookUpEdit lokMain, bool showHeader = true)
         {
@@ -1992,131 +1374,131 @@ namespace QuanLyBanHang
 
         public static void Translation(this LookUpEdit lokMain)
         {
-            string fName = "";
-            try { fName = lokMain.FindForm().Name; }
-            catch { }
-            if (!string.IsNullOrEmpty(fName) && lokMain != null && lokMain.Properties.Columns.Count > 0)
-            {
-                db = new aModel();
-                List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
-                foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
-                {
-                    string mName = string.Format("{0}_{1}", lokMain.Name, col.FieldName);
-                    var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
-                    if (myTrans == null)
-                    {
-                        lstAdd.Add(myTrans = new xMsgDictionary()
-                        {
-                            FormName = fName,
-                            MsgName = mName,
-                            VN = col.Caption,
-                            EN = col.FieldName.AutoSpace()
-                        });
+            //string fName = "";
+            //try { fName = lokMain.FindForm().Name; }
+            //catch { }
+            //if (!string.IsNullOrEmpty(fName) && lokMain != null && lokMain.Properties.Columns.Count > 0)
+            //{
+            //    db = new aModel();
+            //    List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
+            //    foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
+            //    {
+            //        string mName = string.Format("{0}_{1}", lokMain.Name, col.FieldName);
+            //        var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
+            //        if (myTrans == null)
+            //        {
+            //            lstAdd.Add(myTrans = new xMsgDictionary()
+            //            {
+            //                FormName = fName,
+            //                MsgName = mName,
+            //                VN = col.Caption,
+            //                EN = col.FieldName.AutoSpace()
+            //            });
 
-                    }
-                    col.Caption = myTrans.GetStringByName(curCulture);
-                }
-                if (lstAdd != null && lstAdd.Count() > 0)
-                {
-                    try
-                    {
-                        db.xMsgDictionaries.AddRange(lstAdd);
-                        db.SaveChanges();
-                    }
-                    catch { }
-                }
-            }
+            //        }
+            //        col.Caption = myTrans.GetStringByName(curCulture);
+            //    }
+            //    if (lstAdd != null && lstAdd.Count() > 0)
+            //    {
+            //        try
+            //        {
+            //            db.xMsgDictionaries.AddRange(lstAdd);
+            //            db.SaveChanges();
+            //        }
+            //        catch { }
+            //    }
+            //}
         }
 
         public static void FormatColumnLookUpEdit(this LookUpEdit lokMain, string fName = "")
         {
-            if (string.IsNullOrEmpty(fName))
-            {
-                try { fName = lokMain.FindForm().Name; }
-                catch { }
-            }
-            if (string.IsNullOrEmpty(fName) || lokMain.Properties.Columns.Count == 0 || !lokMain.Properties.ShowHeader) return;
+            //if (string.IsNullOrEmpty(fName))
+            //{
+            //    try { fName = lokMain.FindForm().Name; }
+            //    catch { }
+            //}
+            //if (string.IsNullOrEmpty(fName) || lokMain.Properties.Columns.Count == 0 || !lokMain.Properties.ShowHeader) return;
 
-            db = new aModel();
-            List<xDisplay> lstAdd = new List<xDisplay>();
+            //db = new aModel();
+            //List<xDisplay> lstAdd = new List<xDisplay>();
 
-            bool addCol = false;
-            foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
-            {
-                addCol = false;
-                xDisplay myDisplay = null;
-                try
-                {
-                    myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(n => n.ParentName.Equals(fName) && n.Group.Equals(lokMain.Name) && n.ColumnName.Equals(col.FieldName));
+            //bool addCol = false;
+            //foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
+            //{
+            //    addCol = false;
+            //    xDisplay myDisplay = null;
+            //    try
+            //    {
+            //        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(n => n.ParentName.Equals(fName) && n.Group.Equals(lokMain.Name) && n.ColumnName.Equals(col.FieldName));
 
-                    addCol = (myDisplay == null);
-                }
-                catch { addCol = true; }
-                finally
-                {
-                    if (addCol && lokMain.Properties.DataSource != null)
-                    {
-                        myDisplay = new xDisplay();
-                        myDisplay.ParentName = fName;
-                        myDisplay.Group = lokMain.Name;
-                        myDisplay.ColumnName = col.FieldName;
-                        myDisplay.FieldName = col.FieldName;
-                        myDisplay.Showing = col.Visible;
+            //        addCol = (myDisplay == null);
+            //    }
+            //    catch { addCol = true; }
+            //    finally
+            //    {
+            //        if (addCol && lokMain.Properties.DataSource != null)
+            //        {
+            //            myDisplay = new xDisplay();
+            //            myDisplay.ParentName = fName;
+            //            myDisplay.Group = lokMain.Name;
+            //            myDisplay.ColumnName = col.FieldName;
+            //            myDisplay.FieldName = col.FieldName;
+            //            myDisplay.Showing = col.Visible;
 
-                        string cType = "None";
-                        string cAlign = "Default";
-                        if (col.FormatType == FormatType.DateTime)
-                        {
-                            cType = "DateTime"; cAlign = "Center";
-                        }
-                        else if (col.FormatType == FormatType.Numeric)
-                        {
-                            cType = "Numeric"; cAlign = "Far";
-                        }
-                        else
-                        {
-                            cType = "Custom"; cAlign = "Near";
-                        }
+            //            string cType = "None";
+            //            string cAlign = "Default";
+            //            if (col.FormatType == FormatType.DateTime)
+            //            {
+            //                cType = "DateTime"; cAlign = "Center";
+            //            }
+            //            else if (col.FormatType == FormatType.Numeric)
+            //            {
+            //                cType = "Numeric"; cAlign = "Far";
+            //            }
+            //            else
+            //            {
+            //                cType = "Custom"; cAlign = "Near";
+            //            }
 
-                        myDisplay.Type = cType;
-                        myDisplay.TextAlign = cAlign;
-                        myDisplay.EnableEdit = false;
-                        lstAdd.Add(myDisplay);
-                    }
-                    else if (myDisplay == null)
-                        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(lokMain.Name) && hts.ColumnName.Equals(col.FieldName));
+            //            myDisplay.Type = cType;
+            //            myDisplay.TextAlign = cAlign;
+            //            myDisplay.EnableEdit = false;
+            //            lstAdd.Add(myDisplay);
+            //        }
+            //        else if (myDisplay == null)
+            //            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(lokMain.Name) && hts.ColumnName.Equals(col.FieldName));
 
-                    if (myDisplay != null)
-                    {
-                        col.Visible = myDisplay.Showing;
-                        col.FieldName = myDisplay.FieldName;
-                        if (myDisplay.Type != null)
-                        {
-                            if (lokMain.Properties.DataSource != null)
-                                lokMain.Properties.AppearanceDropDownHeader.ForeColor = MyColor.GridForeHeader;
+            //        if (myDisplay != null)
+            //        {
+            //            col.Visible = myDisplay.Showing;
+            //            col.FieldName = myDisplay.FieldName;
+            //            if (myDisplay.Type != null)
+            //            {
+            //                if (lokMain.Properties.DataSource != null)
+            //                    lokMain.Properties.AppearanceDropDownHeader.ForeColor = MyColor.GridForeHeader;
 
-                            col.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
-                            col.Alignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
+            //                col.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
+            //                col.Alignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
 
-                            if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.FormatString))
-                                col.FormatString = curDecimalFormat;
-                            else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.FormatString))
-                                col.FormatString = curDateFormat;
-                        }
-                    }
-                }
-            }
+            //                if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.FormatString))
+            //                    col.FormatString = curDecimalFormat;
+            //                else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.FormatString))
+            //                    col.FormatString = curDateFormat;
+            //            }
+            //        }
+            //    }
+            //}
 
-            if (lstAdd != null && lstAdd.Count > 0)
-            {
-                try
-                {
-                    db = new aModel();
-                    db.xDisplays.AddRange(lstAdd);
-                    db.SaveChanges();
-                }
-                catch { }
-            }
+            //if (lstAdd != null && lstAdd.Count > 0)
+            //{
+            //    try
+            //    {
+            //        db = new aModel();
+            //        db.xDisplays.AddRange(lstAdd);
+            //        db.SaveChanges();
+            //    }
+            //    catch { }
+            //}
         }
 
         public static int ToInt(this LookUpEdit lokMain)
@@ -2217,125 +1599,192 @@ namespace QuanLyBanHang
 
         public static void Translation(this RepositoryItemLookUpEdit rlokMain, string fName)
         {
-            if (!string.IsNullOrEmpty(fName) && rlokMain != null && rlokMain.Columns.Count > 0)
-            {
-                db = new aModel();
-                List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
-                foreach (LookUpColumnInfo col in rlokMain.Columns)
-                {
-                    string mName = string.Format("{0}_{1}", rlokMain.Name, col.FieldName);
-                    var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
-                    if (myTrans == null)
-                    {
-                        lstAdd.Add(myTrans = new xMsgDictionary()
-                        {
-                            FormName = fName,
-                            MsgName = mName,
-                            VN = col.Caption,
-                            EN = col.FieldName.AutoSpace()
-                        });
+            //if (!string.IsNullOrEmpty(fName) && rlokMain != null && rlokMain.Columns.Count > 0)
+            //{
+            //    db = new aModel();
+            //    List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
+            //    foreach (LookUpColumnInfo col in rlokMain.Columns)
+            //    {
+            //        string mName = string.Format("{0}_{1}", rlokMain.Name, col.FieldName);
+            //        var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
+            //        if (myTrans == null)
+            //        {
+            //            lstAdd.Add(myTrans = new xMsgDictionary()
+            //            {
+            //                FormName = fName,
+            //                MsgName = mName,
+            //                VN = col.Caption,
+            //                EN = col.FieldName.AutoSpace()
+            //            });
 
-                    }
-                    col.Caption = myTrans.GetStringByName(curCulture);
-                }
-                if (lstAdd != null && lstAdd.Count() > 0)
-                {
-                    try
-                    {
-                        db.xMsgDictionaries.AddRange(lstAdd);
-                        db.SaveChanges();
-                    }
-                    catch { }
-                }
-            }
+            //        }
+            //        col.Caption = myTrans.GetStringByName(curCulture);
+            //    }
+            //    if (lstAdd != null && lstAdd.Count() > 0)
+            //    {
+            //        try
+            //        {
+            //            db.xMsgDictionaries.AddRange(lstAdd);
+            //            db.SaveChanges();
+            //        }
+            //        catch { }
+            //    }
+            //}
         }
 
         public static void FormatColumnRepositoryLookUpEdit(this RepositoryItemLookUpEdit rlokMain, string fName)
         {
-            db = new aModel();
-            List<xDisplay> lstAdd = new List<xDisplay>();
+            //db = new aModel();
+            //List<xDisplay> lstAdd = new List<xDisplay>();
 
-            bool addCol = false;
-            foreach (LookUpColumnInfo col in rlokMain.Columns)
-            {
-                addCol = false;
-                xDisplay myDisplay = null;
-                try
-                {
-                    myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(rlokMain.Name) && hts.ColumnName.Equals(col.FieldName));
+            //bool addCol = false;
+            //foreach (LookUpColumnInfo col in rlokMain.Columns)
+            //{
+            //    addCol = false;
+            //    xDisplay myDisplay = null;
+            //    try
+            //    {
+            //        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(rlokMain.Name) && hts.ColumnName.Equals(col.FieldName));
 
-                    if (myDisplay == null)
-                        addCol = true;
-                }
-                catch { addCol = true; }
-                finally
-                {
-                    if (addCol && rlokMain.DataSource != null)
-                    {
-                        myDisplay = new xDisplay();
-                        myDisplay.ParentName = fName;
-                        myDisplay.Group = rlokMain.Name;
-                        myDisplay.ColumnName = col.FieldName;
-                        myDisplay.FieldName = col.FieldName;
-                        myDisplay.Showing = col.Visible;
+            //        if (myDisplay == null)
+            //            addCol = true;
+            //    }
+            //    catch { addCol = true; }
+            //    finally
+            //    {
+            //        if (addCol && rlokMain.DataSource != null)
+            //        {
+            //            myDisplay = new xDisplay();
+            //            myDisplay.ParentName = fName;
+            //            myDisplay.Group = rlokMain.Name;
+            //            myDisplay.ColumnName = col.FieldName;
+            //            myDisplay.FieldName = col.FieldName;
+            //            myDisplay.Showing = col.Visible;
 
-                        string cType = "None";
-                        string cAlign = "Default";
-                        if (col.FormatType == FormatType.DateTime)
-                        {
-                            cType = "DateTime"; cAlign = "Center";
-                        }
-                        else if (col.FormatType == FormatType.Numeric)
-                        {
-                            cType = "Numeric"; cAlign = "Far";
-                        }
-                        else
-                        {
-                            cType = "Custom"; cAlign = "Near";
-                        }
+            //            string cType = "None";
+            //            string cAlign = "Default";
+            //            if (col.FormatType == FormatType.DateTime)
+            //            {
+            //                cType = "DateTime"; cAlign = "Center";
+            //            }
+            //            else if (col.FormatType == FormatType.Numeric)
+            //            {
+            //                cType = "Numeric"; cAlign = "Far";
+            //            }
+            //            else
+            //            {
+            //                cType = "Custom"; cAlign = "Near";
+            //            }
 
-                        myDisplay.Type = cType;
-                        myDisplay.TextAlign = cAlign;
-                        myDisplay.EnableEdit = false;
-                        lstAdd.Add(myDisplay);
-                    }
-                    else if (myDisplay == null)
-                        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(rlokMain.Name) && hts.ColumnName.Equals(col.FieldName));
+            //            myDisplay.Type = cType;
+            //            myDisplay.TextAlign = cAlign;
+            //            myDisplay.EnableEdit = false;
+            //            lstAdd.Add(myDisplay);
+            //        }
+            //        else if (myDisplay == null)
+            //            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(rlokMain.Name) && hts.ColumnName.Equals(col.FieldName));
 
 
-                    if (myDisplay != null)
-                    {
-                        col.Visible = myDisplay.Showing;
-                        col.FieldName = myDisplay.FieldName;
-                        if (myDisplay.Type != null)
-                        {
-                            if (rlokMain.DataSource != null)
-                                rlokMain.AppearanceDropDownHeader.ForeColor = MyColor.GridForeHeader;
+            //        if (myDisplay != null)
+            //        {
+            //            col.Visible = myDisplay.Showing;
+            //            col.FieldName = myDisplay.FieldName;
+            //            if (myDisplay.Type != null)
+            //            {
+            //                if (rlokMain.DataSource != null)
+            //                    rlokMain.AppearanceDropDownHeader.ForeColor = MyColor.GridForeHeader;
 
-                            col.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
-                            col.Alignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
+            //                col.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
+            //                col.Alignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
 
-                            if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.FormatString))
-                                col.FormatString = curDecimalFormat;
-                            else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.FormatString))
-                                col.FormatString = curDateFormat;
-                        }
-                    }
-                }
-            }
+            //                if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.FormatString))
+            //                    col.FormatString = curDecimalFormat;
+            //                else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.FormatString))
+            //                    col.FormatString = curDateFormat;
+            //            }
+            //        }
+            //    }
+            //}
 
-            if (lstAdd != null && lstAdd.Count() > 0)
-            {
-                try
-                {
-                    db = new aModel();
-                    db.xDisplays.AddRange(lstAdd);
-                    db.SaveChanges();
-                }
-                catch { }
-            }
+            //if (lstAdd != null && lstAdd.Count() > 0)
+            //{
+            //    try
+            //    {
+            //        db = new aModel();
+            //        db.xDisplays.AddRange(lstAdd);
+            //        db.SaveChanges();
+            //    }
+            //    catch { }
+            //}
+        }
+        #endregion
+
+        #region DateEdit
+        public static void Format(this DateEdit dateEdit, string fText = "dd/MM/yyyy", bool IsCurrentDate = false)
+        {
+            if (IsCurrentDate)
+                dateEdit.DateTime = DateTime.Now.ServerNow();
+            dateEdit.Properties.EditMask = fText;
+        }
+        #endregion
+
+        #region RepositoryDateEdit
+        public static void Format(this RepositoryItemDateEdit dateEdit, string fText = "dd/MM/yyyy")
+        {
+            dateEdit.EditMask = fText;
         }
         #endregion
         #endregion
+    }
+
+    public static class ObjectCopier
+    {
+        /// <summary>
+        /// Perform a deep Copy of the object.
+        /// </summary>
+        /// <typeparam name="T">The type of object being copied.</typeparam>
+        /// <param name="source">The object instance to copy.</param>
+        /// <returns>The copied object.</returns>
+        public static T Clone<T>(this T source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return JsonConvert.DeserializeObject<T>(serialized);
+        }
+
+        public static List<T> Clone<T>(this List<T> source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return JsonConvert.DeserializeObject<List<T>>(serialized);
+        }
+
+        public static string Serialize<T>(this T source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return serialized;
+        }
+
+        public static T Deserialize<T>(this string source) where T : new()
+        {
+            try { return JsonConvert.DeserializeObject<T>(source); }
+            catch { return new T(); }
+        }
     }
 }
