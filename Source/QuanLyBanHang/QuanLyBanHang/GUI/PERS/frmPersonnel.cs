@@ -63,7 +63,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry = clsPersonnel.Instance.getEntry(iEntry.KeyID);
+            _acEntry = clsPersonnel.Instance.GetEntry(iEntry.KeyID);
             setControlValue();
         }
 
@@ -117,11 +117,11 @@ namespace QuanLyBanHang.GUI.PER
                 txtCode.ErrorText = "Vui lòng nhập mã nhân viên".Translation("msgCodeIsEmpty", this.Name);
                 bRe = false; setFocusControl = txtCode.Name;
             }
-            else if (clsPersonnel.Instance.checkExist(txtCode.Text, _acEntry.KeyID))
-            {
-                txtCode.ErrorText = "Mã nhân viên đã tồn tại.".Translation("msgDuplicatedCode", this.Name);
-                bRe = false; setFocusControl = txtCode.Name;
-            }
+            //else if (clsPersonnel.Instance.checkExist(txtCode.Text, _acEntry.KeyID))
+            //{
+            //    txtCode.ErrorText = "Mã nhân viên đã tồn tại.".Translation("msgDuplicatedCode", this.Name);
+            //    bRe = false; setFocusControl = txtCode.Name;
+            //}
 
             if (!string.IsNullOrEmpty(setFocusControl))
             {
@@ -142,6 +142,7 @@ namespace QuanLyBanHang.GUI.PER
 
             if (_acEntry.KeyID == 0)
             {
+                _acEntry.IsEnable = true;
                 _acEntry.IDAgency = clsGeneral.curAgency.KeyID;
                 _acEntry.Code = txtCode.Text.Trim().ToUpper();
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
@@ -153,7 +154,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = clsPersonnel.Instance.accessEntry(_acEntry);
+            bRe = _acEntry.KeyID > 0 ? clsPersonnel.Instance.UpdateEntry(_acEntry) : clsPersonnel.Instance.InsertEntry(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.KeyID);

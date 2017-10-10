@@ -76,6 +76,20 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
+        public virtual IList<T> Search(bool IsEnable, int KeyID)
+        {
+            try
+            {
+                db = new aModel();
+                IEnumerable<T> lstTemp = db.Set<T>().AsEnumerable().Where(x => x.GetBooleanByName("IsEnable") == IsEnable || x.GetInt32ByName("KeyID") == KeyID);
+                return lstTemp.ToList();
+            }
+            catch
+            {
+                return new List<T>();
+            }
+        }
+
         public virtual IList<T> Search(int IDAgency, bool IsEnable)
         {
             try
@@ -104,7 +118,7 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new T(); }
         }
 
-        public virtual bool AddEntry(T entry)
+        public virtual bool InsertEntry(T entry)
         {
             try
             {

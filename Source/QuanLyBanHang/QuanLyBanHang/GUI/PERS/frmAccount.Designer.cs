@@ -30,6 +30,7 @@
         {
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
             this.lctAccount = new DevExpress.XtraLayout.LayoutControl();
             this.lokPermission = new DevExpress.XtraEditors.LookUpEdit();
             this.lokPersonnel = new DevExpress.XtraEditors.LookUpEdit();
@@ -40,6 +41,8 @@
             this.lciPassword = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPersonnel = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPermission = new DevExpress.XtraLayout.LayoutControlItem();
+            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).BeginInit();
             this.lctAccount.SuspendLayout();
@@ -54,6 +57,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPermission)).BeginInit();
             this.SuspendLayout();
             // 
+            // rDateEdit
+            // 
+            this.rDateEdit.Mask.EditMask = "dd/MM/yyyy";
+            // 
             // lctAccount
             // 
             this.lctAccount.Controls.Add(this.lokPermission);
@@ -64,7 +71,7 @@
             this.lctAccount.Location = new System.Drawing.Point(0, 24);
             this.lctAccount.Name = "lctAccount";
             this.lctAccount.Root = this.layoutControlGroup1;
-            this.lctAccount.Size = new System.Drawing.Size(584, 120);
+            this.lctAccount.Size = new System.Drawing.Size(584, 124);
             this.lctAccount.TabIndex = 4;
             this.lctAccount.Text = "layoutControl1";
             // 
@@ -73,12 +80,13 @@
             this.lokPermission.Location = new System.Drawing.Point(87, 88);
             this.lokPermission.Name = "lokPermission";
             this.lokPermission.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Add_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
             this.lokPermission.Properties.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
             new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Name", "Tên"),
             new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Description", "Ghi Chú")});
             this.lokPermission.Properties.NullText = "";
-            this.lokPermission.Size = new System.Drawing.Size(485, 20);
+            this.lokPermission.Size = new System.Drawing.Size(485, 22);
             this.lokPermission.StyleController = this.lctAccount;
             this.lokPermission.TabIndex = 7;
             // 
@@ -88,7 +96,7 @@
             this.lokPersonnel.Name = "lokPersonnel";
             this.lokPersonnel.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Add_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Add_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
             this.lokPersonnel.Properties.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
             new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Code", "Mã"),
             new DevExpress.XtraEditors.Controls.LookUpColumnInfo("FullName", "Họ Tên"),
@@ -97,7 +105,7 @@
             this.lokPersonnel.Size = new System.Drawing.Size(485, 22);
             this.lokPersonnel.StyleController = this.lctAccount;
             this.lokPersonnel.TabIndex = 6;
-            this.lokPersonnel.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.lokPersonnel_ButtonClick);
+          
             // 
             // txtUserName
             // 
@@ -113,10 +121,8 @@
             this.btePassword.Location = new System.Drawing.Point(87, 62);
             this.btePassword.Name = "btePassword";
             this.btePassword.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Show_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Show_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject3, "", null, null, true)});
             this.btePassword.Properties.UseSystemPasswordChar = true;
-            this.btePassword.Properties.MouseHover += new System.EventHandler(this.txtPassword_Properties_MouseHover);
-            this.btePassword.Properties.MouseLeave += new System.EventHandler(this.txtPassword_Properties_MouseLeave);
             this.btePassword.Size = new System.Drawing.Size(485, 22);
             this.btePassword.StyleController = this.lctAccount;
             this.btePassword.TabIndex = 5;
@@ -132,7 +138,7 @@
             this.lciPermission});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 120);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 124);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // lciUserName
@@ -167,7 +173,7 @@
             this.lciPermission.Control = this.lokPermission;
             this.lciPermission.Location = new System.Drawing.Point(0, 76);
             this.lciPermission.Name = "lciPermission";
-            this.lciPermission.Size = new System.Drawing.Size(564, 24);
+            this.lciPermission.Size = new System.Drawing.Size(564, 28);
             this.lciPermission.Text = "Phân quyền";
             this.lciPermission.TextSize = new System.Drawing.Size(72, 13);
             // 
@@ -175,13 +181,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 167);
+            this.ClientSize = new System.Drawing.Size(584, 171);
             this.Controls.Add(this.lctAccount);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmAccount";
             this.Text = "Thêm mới tài khoản";
-            this.Load += new System.EventHandler(this.frmTaiKhoan_Load);
             this.Controls.SetChildIndex(this.lctAccount, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).EndInit();
             this.lctAccount.ResumeLayout(false);

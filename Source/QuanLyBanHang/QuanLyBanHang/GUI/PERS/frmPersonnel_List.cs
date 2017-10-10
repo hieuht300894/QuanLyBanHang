@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using QuanLyBanHang.BLL.PERS;
 using EntityModel.DataModel;
 using System.Data.Entity;
+using QuanLyBanHang.BLL.Common;
+using System.Collections.Generic;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -21,6 +23,19 @@ namespace QuanLyBanHang.GUI.PER
         {
             loadData(0);
             customForm();
+
+            List<xPersonnel> lstTemp = new List<xPersonnel>(clsTest.Instance.GetAll());
+
+            xPersonnel personnel = new xPersonnel();
+            personnel.KeyID = 3;
+            personnel.IDAgency = 1;
+            personnel.Code = "ABC";
+            personnel.FullName = "DEF";
+            personnel.Address = "GHI";
+            personnel.IsEnable = true;
+            personnel.CreatedDate = DateTime.Now.ServerNow();
+            personnel.ModifiedDate = DateTime.Now.ServerNow();
+            clsTest.Instance.UpdateEntry(personnel);
         }
         #endregion
 
@@ -86,7 +101,7 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         private void loadPersonnel()
         {
-            rlokPersonnel.DataSource = clsPersonnel.Instance.getAllPersonnel();
+            rlokPersonnel.DataSource = clsPersonnel.Instance.GetAll();
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";
         }
@@ -94,7 +109,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadData(int KeyID)
         {
             loadPersonnel();
-            gctPersonnelList.DataSource = clsPersonnel.Instance.searchPersonnel(true);
+            gctPersonnelList.DataSource = clsPersonnel.Instance.Search(true);
             if (KeyID > 0)
                 grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
         }
@@ -135,23 +150,23 @@ namespace QuanLyBanHang.GUI.PER
 
         private void deleteEntry()
         {
-            if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
-            {
-                try
-                {
-                    if (clsPersonnel.Instance.deleteEntry(((xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle)).KeyID))
-                    {
-                        loadData(0);
-                    }
-                    else
-                        clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
+            //if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
+            //{
+            //    try
+            //    {
+            //        if (clsPersonnel.Instance.deleteEntry(((xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle)).KeyID))
+            //        {
+            //            loadData(0);
+            //        }
+            //        else
+            //            clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
 
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.showErrorException(ex, "Exception");
-                }
-            }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        clsGeneral.showErrorException(ex, "Exception");
+            //    }
+            //}
         }
 
         private void refreshEntry()

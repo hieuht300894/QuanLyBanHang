@@ -93,17 +93,9 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void loadRepositoryAccount()
-        {
-            rlokPersonnel.DataSource = clsAccount.Instance.getAllPersonnel();
-            rlokPersonnel.ValueMember = "KeyID";
-            rlokPersonnel.DisplayMember = "FullName";
-        }
-
         private void loadData(int KeyID)
         {
-            loadRepositoryAccount();
-            gctAccountList.DataSource = clsAccount.Instance.searchAccount(true);
+            gctAccountList.DataSource = clsAccount.Instance.Search(true);
             if (KeyID > 0)
                 grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }
@@ -144,23 +136,23 @@ namespace QuanLyBanHang.GUI.PER
 
         private void deleteEntry()
         {
-            if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
-            {
-                try
-                {
-                    if (clsAccount.Instance.deleteEntry(((xAccount)grvAccountList.GetRow(grvAccountList.FocusedRowHandle)).IDPersonnel))
-                    {
-                        loadData(0);
-                    }
-                    else
-                        clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
+            //if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
+            //{
+            //    try
+            //    {
+            //        if (clsAccount.Instance.deleteEntry(((xAccount)grvAccountList.GetRow(grvAccountList.FocusedRowHandle)).IDPersonnel))
+            //        {
+            //            loadData(0);
+            //        }
+            //        else
+            //            clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
 
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.showErrorException(ex, "Exception");
-                }
-            }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        clsGeneral.showErrorException(ex, "Exception");
+            //    }
+            //}
         }
 
         private void refreshEntry()
@@ -171,8 +163,10 @@ namespace QuanLyBanHang.GUI.PER
         private void customForm()
         {
             gctAccountList.Format();
-
             lctAccountList.BestFitText();
+
+            grvAccountList.Columns["CreatedDate"].ColumnEdit = rDateEdit;
+            grvAccountList.Columns["ModifiedDate"].ColumnEdit = rDateEdit;
         }
         #endregion
     }

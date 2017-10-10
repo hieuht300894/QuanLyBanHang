@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using DevExpress.XtraBars;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -17,7 +18,6 @@ namespace QuanLyBanHang.GUI.PER
 
         public xPermission _iEntry;
         xPermission _acEntry;
-        Timer tmMess;
         #endregion
 
         #region Form Events
@@ -34,111 +34,6 @@ namespace QuanLyBanHang.GUI.PER
             customForm();
         }
 
-        private void lblMessage_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(lblMessage.Text))
-            {
-                tmMess = new Timer();
-                tmMess.Interval = 5000;
-                tmMess.Tick += tmMess_Tick;
-                tmMess.Start();
-            }
-        }
-
-        void tmMess_Tick(object sender, EventArgs e)
-        {
-            lblMessage.Text = "";
-            tmMess.Stop();
-        }
-
-        private void trlFeature_BeforeCheckNode(object sender, DevExpress.XtraTreeList.CheckNodeEventArgs e)
-        {
-            e.CanCheck = !txtName.ReadOnly;
-        }
-
-        private void btnrSave_Click(object sender, EventArgs e)
-        {
-            _acEntry.Name = txtName.Text.Trim();
-            _acEntry.Description = mmeDescription.Text.Trim();
-            _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
-            if (_acEntry.KeyID == 0)
-            {
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.CreatedDate = DateTime.Now.ServerNow();
-            }
-            else
-            {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
-            }
-            try
-            {
-                //List<string> lstFeature = new List<string>();
-                //trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n)).KeyID));
-
-                //_acEntry.xUserFeatures.Where(n => !lstFeature.Contains(n.IDFeature)).ToList().ForEach(n => _acEntry.xUserFeatures.Remove(n));
-
-                //foreach (string f in lstFeature)
-                //{
-                //    if (((f.StartsWith("frm") || f.StartsWith("bbi")) && !_acEntry.xUserFeatures.Any(n => n.IDFeature.Equals(f))))
-                //        _acEntry.xUserFeatures.Add(new xUserFeature()
-                //        {
-                //            IDFeature = f
-                //        });
-                //}
-
-                List<xFeature> lstFeature = new List<xFeature>();
-                trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n))));
-
-                _acEntry.xUserFeatures.ToList().ForEach(x => x.IsEnable = false);
-
-                foreach (var fe in lstFeature)
-                {
-                    xUserFeature usr = _acEntry.xUserFeatures.FirstOrDefault(x => x.IDFeature.Equals(fe.KeyID)) ?? new xUserFeature();
-                    usr.IsEnable = true;
-
-                    //if (fe.KeyID.StartsWith("bbi"))
-                    //{
-                    //    usr.IsAdd = true;
-                    //    usr.IsEdit = true;
-                    //    usr.IsDelete = true;
-                    //}
-                    //else
-                    //{
-                    //    usr.IsAdd = fe.IsAdd;
-                    //    usr.IsEdit = fe.IsEdit;
-                    //    usr.IsDelete = fe.IsDelete;
-                    //}
-                    //if (usr.KeyID == 0)
-                    //{
-                    //    usr.IDFeature = fe.KeyID;
-                    //    _acEntry.xUserFeatures.Add(usr);
-                    //}
-                }
-
-                //if (clsPermission.Instance.accessEntry(_acEntry))
-                //{
-                //    disableEdit();
-                //    //loadDataForm(_acEntry.KeyID);
-                //    lblMessage.Text = "Lưu dữ liệu thành công".Translation("msgSaveSuccess", this.Name);
-                //}
-                //else
-                //{
-                //    lblMessage.Text = "Lưu dữ liệu không thành công!".Translation("msgSaveFailed", this.Name);
-                //}
-            }
-            catch (Exception ex)
-            {
-                clsGeneral.showErrorException(ex, "Exception");
-            }
-        }
-
-        private void btnrCancel_Click(object sender, EventArgs e)
-        {
-            disableEdit();
-            setControlValue();
-        }
-
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {
             if (e.Column == colIsAdd || e.Column == colIsEdit || e.Column == colIsDelete ||
@@ -153,35 +48,32 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Base Button Events
+        protected override void btnSave_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (validationForm())
+            {
+                if (saveData())
+                    DialogResult = DialogResult.OK;
+            }
+        }
+        protected override void btnSaveAndAdd_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (validationForm())
+            {
+                if (saveData())
+                {
+                    _iEntry = null;
+                    loadDataForm();
+                }
+            }
+        }
+        protected override void btnCancel_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            loadDataForm();
+        }
         #endregion
 
         #region Methods
-        private void enableEdit()
-        {
-            //if (_acEntry.KeyID == 0)
-            //    dkpPermission.Text = "THÊM MỚI QUYỀN".Translation("capAddPermission", this.Name);
-            //else
-            //    dkpPermission.Text = "CẬP NHẬT QUYỀN".Translation("capUpdatePermission", this.Name);
-
-            //txtName.ReadOnly = mmeDescription.ReadOnly = false;
-            //txtName.Properties.AllowFocused = mmeDescription.Properties.AllowFocused = false;
-            //txtName.TabStop = mmeDescription.TabStop = false;
-            //lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-            //lciCancel.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-            //lciEmtySpace.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-        }
-
-        private void disableEdit()
-        {
-            //dkpPermission.Text = "PHÂN QUYỀN".Translation("capPermission", this.Name);
-            //txtName.ReadOnly = mmeDescription.ReadOnly  = true;
-            //txtName.Properties.AllowFocused = mmeDescription.Properties.AllowFocused = true;
-            //txtName.TabStop = mmeDescription.TabStop = true;
-            //lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-            //lciCancel.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-            //lciEmtySpace.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-        }
-
         private void loadFeature()
         {
             trlFeature.Nodes.Clear();
@@ -225,6 +117,7 @@ namespace QuanLyBanHang.GUI.PER
             txtName.Text = _acEntry.Name;
             mmeDescription.Text = _acEntry.Description;
 
+            trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
             loadFeature();
             foreach (var usr in _acEntry.xUserFeatures.Where(n => n.IsEnable && !string.IsNullOrEmpty(n.IDFeature)))
             {
@@ -239,6 +132,7 @@ namespace QuanLyBanHang.GUI.PER
                 node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
                 node.SetValue(colIsExportExcel, usr.IsExportExcel);
             }
+            trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
 
         private void resetCheckedNodes()
@@ -254,6 +148,97 @@ namespace QuanLyBanHang.GUI.PER
                 bool _checkedVal = checkedVal;
                 checkedNode(_node, _checkedVal);
             }
+        }
+
+        private bool validationForm()
+        {
+            bool chk = true;
+
+            txtName.ErrorText = string.Empty;
+            if (string.IsNullOrEmpty(txtName.Text.Trim()))
+            {
+                txtName.ErrorText = "Tên quyền không để trống";
+                chk = false;
+            }
+            return chk;
+        }
+
+        private bool saveData()
+        {
+            bool chk = false;
+
+            _acEntry.Name = txtName.Text.Trim();
+            _acEntry.Description = mmeDescription.Text.Trim();
+
+            if (_acEntry.KeyID == 0)
+            {
+                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                _acEntry.CreatedDate = DateTime.Now.ServerNow();
+                _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
+                _acEntry.IsEnable = true;
+            }
+            else
+            {
+                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+            }
+
+            //List<string> lstFeature = new List<string>();
+            //trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n)).KeyID));
+
+            //_acEntry.xUserFeatures.Where(n => !lstFeature.Contains(n.IDFeature)).ToList().ForEach(n => _acEntry.xUserFeatures.Remove(n));
+
+            //foreach (string f in lstFeature)
+            //{
+            //    if (((f.StartsWith("frm") || f.StartsWith("bbi")) && !_acEntry.xUserFeatures.Any(n => n.IDFeature.Equals(f))))
+            //        _acEntry.xUserFeatures.Add(new xUserFeature() { IDFeature = f });
+            //}
+
+            List<xFeature> lstFeature = new List<xFeature>();
+            trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n))));
+
+            _acEntry.xUserFeatures.ToList().ForEach(x => x.IsEnable = false);
+
+            foreach (var fe in lstFeature)
+            {
+                xUserFeature usr = _acEntry.xUserFeatures.FirstOrDefault(x => x.IDFeature.Equals(fe.KeyID)) ?? new xUserFeature();
+                usr.IsEnable = true;
+
+                if (fe.KeyID.StartsWith("bbi"))
+                {
+                    usr.IsAdd = true;
+                    usr.IsEdit = true;
+                    usr.IsDelete = true;
+                    usr.IsSave = true;
+                    usr.IsSaveAndAdd = true;
+                    usr.IsCancel = true;
+                    usr.IsPrintPreview = true;
+                    usr.IsExportExcel = true;
+                }
+                else
+                {
+                    usr.IsAdd = fe.IsAdd;
+                    usr.IsEdit = fe.IsEdit;
+                    usr.IsDelete = fe.IsDelete;
+                    usr.IsSave = fe.IsSave;
+                    usr.IsSaveAndAdd = fe.IsSaveAndAdd;
+                    usr.IsCancel = fe.IsCancel;
+                    usr.IsPrintPreview = fe.IsPrintPreview;
+                    usr.IsExportExcel = fe.IsExportExcel;
+                }
+                if (usr.KeyID == 0)
+                {
+                    usr.IDFeature = fe.KeyID;
+                    _acEntry.xUserFeatures.Add(usr);
+                }
+            }
+
+            chk = _acEntry.KeyID > 0 ? clsPermission.Instance.UpdateEntry(_acEntry) : clsPermission.Instance.InsertEntry(_acEntry);
+
+            if (chk && ReloadData != null)
+                ReloadData(_acEntry.KeyID);
+
+            return chk;
         }
 
         private void customForm()
@@ -277,6 +262,8 @@ namespace QuanLyBanHang.GUI.PER
             colIsCancel.Visible = true;
             colIsPrintPreview.Visible = true;
             colIsExportExcel.Visible = true;
+
+            trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
         #endregion
     }

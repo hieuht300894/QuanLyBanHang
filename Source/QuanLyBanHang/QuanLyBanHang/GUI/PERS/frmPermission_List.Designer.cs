@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.lctPersonnel = new DevExpress.XtraLayout.LayoutControl();
-            this.gctPersonnelList = new DevExpress.XtraGrid.GridControl();
+            this.gctPermission = new DevExpress.XtraGrid.GridControl();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.grvPersonnelList = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.grvPermission = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -46,9 +46,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
             this.lctPersonnel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gctPermission)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grvPersonnelList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grvPermission)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).BeginInit();
@@ -58,7 +58,7 @@
             // 
             // lctPersonnel
             // 
-            this.lctPersonnel.Controls.Add(this.gctPersonnelList);
+            this.lctPersonnel.Controls.Add(this.gctPermission);
             this.lctPersonnel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lctPersonnel.Location = new System.Drawing.Point(0, 24);
             this.lctPersonnel.Name = "lctPersonnel";
@@ -67,37 +67,37 @@
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
             // 
-            // gctPersonnelList
+            // gctPermission
             // 
-            this.gctPersonnelList.DataSource = this.bindingSource1;
-            this.gctPersonnelList.Location = new System.Drawing.Point(12, 12);
-            this.gctPersonnelList.MainView = this.grvPersonnelList;
-            this.gctPersonnelList.Name = "gctPersonnelList";
-            this.gctPersonnelList.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.gctPermission.DataSource = this.bindingSource1;
+            this.gctPermission.Location = new System.Drawing.Point(12, 12);
+            this.gctPermission.MainView = this.grvPermission;
+            this.gctPermission.Name = "gctPermission";
+            this.gctPermission.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rlokPersonnel,
             this.rdteNgay});
-            this.gctPersonnelList.Size = new System.Drawing.Size(894, 373);
-            this.gctPersonnelList.TabIndex = 4;
-            this.gctPersonnelList.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.grvPersonnelList});
+            this.gctPermission.Size = new System.Drawing.Size(894, 373);
+            this.gctPermission.TabIndex = 4;
+            this.gctPermission.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.grvPermission});
        
             // 
             // bindingSource1
             // 
             this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xPermission);
             // 
-            // grvPersonnelList
+            // grvPermission
             // 
-            this.grvPersonnelList.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.grvPermission.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.gridColumn1,
             this.gridColumn2,
             this.gridColumn3,
             this.gridColumn4,
             this.gridColumn5,
             this.gridColumn6});
-            this.grvPersonnelList.GridControl = this.gctPersonnelList;
-            this.grvPersonnelList.Name = "grvPersonnelList";
-            this.grvPersonnelList.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.True;
+            this.grvPermission.GridControl = this.gctPermission;
+            this.grvPermission.Name = "grvPermission";
+            this.grvPermission.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.True;
             // 
             // gridColumn1
             // 
@@ -186,7 +186,7 @@
             // 
             // layoutControlItem1
             // 
-            this.layoutControlItem1.Control = this.gctPersonnelList;
+            this.layoutControlItem1.Control = this.gctPermission;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
             this.layoutControlItem1.Size = new System.Drawing.Size(898, 377);
@@ -205,9 +205,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).EndInit();
             this.lctPersonnel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gctPermission)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.grvPersonnelList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grvPermission)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).EndInit();
@@ -221,8 +221,8 @@
         #endregion
 
         private DevExpress.XtraLayout.LayoutControl lctPersonnel;
-        private DevExpress.XtraGrid.GridControl gctPersonnelList;
-        private DevExpress.XtraGrid.Views.Grid.GridView grvPersonnelList;
+        private DevExpress.XtraGrid.GridControl gctPermission;
+        private DevExpress.XtraGrid.Views.Grid.GridView grvPermission;
         private DevExpress.XtraLayout.LayoutControlGroup lcgMain;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit rlokPersonnel;

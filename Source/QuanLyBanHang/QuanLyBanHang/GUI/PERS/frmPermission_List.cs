@@ -4,7 +4,6 @@ using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.GUI.PER;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,11 +32,11 @@ namespace QuanLyBanHang.GUI.PERS
         #endregion
 
         #region Grid Events
-        private void grvPersonnelList_DoubleClick(object sender, EventArgs e)
+        private void grvPermission_DoubleClick(object sender, EventArgs e)
         {
             MouseEventArgs mouse = e as MouseEventArgs;
-            DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo hi = grvPersonnelList.CalcHitInfo(mouse.Location);
-            if (grvPersonnelList.FocusedRowHandle >= 0 && (hi.InRow || hi.InRowCell))
+            DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo hi = grvPermission.CalcHitInfo(mouse.Location);
+            if (grvPermission.FocusedRowHandle >= 0 && (hi.InRow || hi.InRowCell))
             {
                 updateEntry();
             }
@@ -46,7 +45,7 @@ namespace QuanLyBanHang.GUI.PERS
         {
             base.ShowGridPopup(sender, e);
         }
-        private void grvPersonnelList_ShownEditor(object sender, EventArgs e)
+        private void grvPermission_ShownEditor(object sender, EventArgs e)
         {
             GridView gridView = sender as GridView;
             if (gridView.IsFilterRow(gridView.FocusedRowHandle))
@@ -108,7 +107,7 @@ namespace QuanLyBanHang.GUI.PERS
         #region Methods
         private void loadPersonnel()
         {
-            lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.getAllPersonnel());
+            lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.GetAll());
             rlokPersonnel.DataSource = lstPersonel;
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";
@@ -117,9 +116,9 @@ namespace QuanLyBanHang.GUI.PERS
         private void loadData(int KeyID)
         {
             loadPersonnel();
-            gctPersonnelList.DataSource = clsPersonnel.Instance.searchPersonnel(true);
+            gctPermission.DataSource = clsPermission.Instance.Search(true);
             if (KeyID > 0)
-                grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
+                grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
         }
 
         private void insertEntry()
@@ -135,13 +134,13 @@ namespace QuanLyBanHang.GUI.PERS
 
         private void updateEntry()
         {
-            if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0)
+            if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
             {
                 try
                 {
                     using (frmPermission _frm = new frmPermission())
                     {
-                        xPermission _eEntry = (xPermission)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle);
+                        xPermission _eEntry = (xPermission)grvPermission.GetRow(grvPermission.FocusedRowHandle);
                         _frm._iEntry = _eEntry;
                         _frm.Text = "Cập nhật quyền";
                         _frm.fType = eFormType.Edit;
@@ -158,23 +157,23 @@ namespace QuanLyBanHang.GUI.PERS
 
         private void deleteEntry()
         {
-            if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
-            {
-                try
-                {
-                    if (clsPersonnel.Instance.deleteEntry(((xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle)).KeyID))
-                    {
-                        loadData(0);
-                    }
-                    else
-                        clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
+            //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
+            //{
+            //    try
+            //    {
+            //        if (clsPersonnel.Instance.re(((xPersonnel)grvPermission.GetRow(grvPermission.FocusedRowHandle)).KeyID))
+            //        {
+            //            loadData(0);
+            //        }
+            //        else
+            //            clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
 
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.showErrorException(ex, "Exception");
-                }
-            }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        clsGeneral.showErrorException(ex, "Exception");
+            //    }
+            //}
         }
 
         private void refreshEntry()
@@ -184,12 +183,12 @@ namespace QuanLyBanHang.GUI.PERS
 
         private void customForm()
         {
-            gctPersonnelList.Format();
+            gctPermission.Format();
             lctPersonnel.BestFitText();
 
-            gctPersonnelList.MouseClick += gctPersonnelList_MouseClick;
-            grvPersonnelList.DoubleClick += grvPersonnelList_DoubleClick;
-            grvPersonnelList.ShownEditor += grvPersonnelList_ShownEditor;
+            gctPermission.MouseClick += gctPersonnelList_MouseClick;
+            grvPermission.DoubleClick += grvPermission_DoubleClick;
+            grvPermission.ShownEditor += grvPermission_ShownEditor;
         }
         #endregion
     }

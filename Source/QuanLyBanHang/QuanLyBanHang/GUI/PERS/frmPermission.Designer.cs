@@ -105,7 +105,6 @@
             this.lblMessage.Size = new System.Drawing.Size(860, 18);
             this.lblMessage.StyleController = this.layoutControl1;
             this.lblMessage.TabIndex = 11;
-            this.lblMessage.TextChanged += new System.EventHandler(this.lblMessage_TextChanged);
             // 
             // layoutControl1
             // 
@@ -162,8 +161,8 @@
             this.rchkChecked});
             this.trlFeature.Size = new System.Drawing.Size(860, 244);
             this.trlFeature.TabIndex = 6;
-            this.trlFeature.BeforeCheckNode += new DevExpress.XtraTreeList.CheckNodeEventHandler(this.trlFeature_BeforeCheckNode);
-            this.trlFeature.CellValueChanging += new DevExpress.XtraTreeList.CellValueChangedEventHandler(this.trlFeature_CellValueChanging);
+          
+          
             // 
             // colVN
             // 

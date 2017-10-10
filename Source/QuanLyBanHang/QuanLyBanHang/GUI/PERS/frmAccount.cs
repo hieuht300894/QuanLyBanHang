@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DevExpress.XtraEditors;
-using EntityModel.DataModel;
+﻿using EntityModel.DataModel;
+using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
+using System;
+using System.Linq;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -24,17 +17,17 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Form Events
-
         public frmAccount()
         {
             InitializeComponent();
         }
-        private void frmTaiKhoan_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
+            base.frmBase_Load(sender, e);
+
             loadDataForm();
             customForm();
         }
-
         private void lokPersonnel_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             if (e.Button.Index == 1)
@@ -48,21 +41,31 @@ namespace QuanLyBanHang.GUI.PER
                 }
             }
         }
+        private void lokPermission_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+            if (e.Button.Index == 1)
+            {
+                using (frmPermission _frm = new frmPermission())
+                {
+                    _frm.Text = "Thêm mới quyền";
+                    _frm.fType = eFormType.Add;
+                    _frm.ReloadData = this.loadPermission;
+                    _frm.ShowDialog();
+                }
+            }
+        }
 
         #region Show/Hide Password
-
         private void txtPassword_Properties_MouseHover(object sender, EventArgs e)
         {
             btePassword.Properties.UseSystemPasswordChar = false;
         }
-
         private void txtPassword_Properties_MouseLeave(object sender, EventArgs e)
         {
             btePassword.Properties.UseSystemPasswordChar = true;
         }
 
         #endregion
-
         #endregion
 
         #region Base Button Event
@@ -101,22 +104,22 @@ namespace QuanLyBanHang.GUI.PER
             txtUserName.NotUnicode(true, false);
             lokPersonnel.Format();
             lokPermission.Format();
-            //lctAccount.BesFitFormHeight();
-            this.CenterToScreen();
-
             lctAccount.BestFitText();
-        }
 
+            txtUserName.MouseHover += txtPassword_Properties_MouseHover;
+            txtUserName.MouseLeave += txtPassword_Properties_MouseLeave;
+            lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
+            lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
+        }
         private void loadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = clsAccount.Instance.getEntry(iEntry.IDPersonnel);
+            _acEntry = clsAccount.Instance.GetEntry(iEntry.IDPersonnel);
             setControlValue();
         }
-
         private void loadPersonnel(int KeyID)
         {
-            lokPersonnel.Properties.DataSource = clsAccount.Instance.getPersonnel(KeyID);
+            lokPersonnel.Properties.DataSource = clsPersonnel.Instance.SearchNoAccount(true, KeyID);
             lokPersonnel.Properties.ValueMember = "KeyID";
             lokPersonnel.Properties.DisplayMember = "FullName";
             if (KeyID > 0)
@@ -124,16 +127,14 @@ namespace QuanLyBanHang.GUI.PER
             else
                 lokPersonnel.ItemIndex = 0;
         }
-
         private void loadPermission(int KeyID)
         {
-            lokPermission.Properties.DataSource = clsAccount.Instance.getUserRole(KeyID);
+            lokPermission.Properties.DataSource = clsPermission.Instance.Search(true, KeyID);
             lokPermission.Properties.ValueMember = "KeyID";
             lokPermission.Properties.DisplayMember = "Name";
             if (KeyID > 0)
                 lokPermission.EditValue = KeyID;
         }
-
         private void setControlValue()
         {
             if (fType == eFormType.Add)
@@ -156,8 +157,7 @@ namespace QuanLyBanHang.GUI.PER
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
             loadPermission(_acEntry.IDPermission.HasValue ? _acEntry.IDPermission.Value : 0);
         }
-
-        public bool validationForm()
+        private bool validationForm()
         {
             bool bRe = true;
             lokPersonnel.ErrorText = string.Empty;
@@ -184,11 +184,11 @@ namespace QuanLyBanHang.GUI.PER
                 txtUserName.ErrorText = "Tên đăng nhập không hợp lệ".Translation("msgUsernameIsEmpty", this.Name);
                 bRe = false; setFocusControl = txtUserName.Name;
             }
-            else if (clsAccount.Instance.checkExist(txtUserName.Text.Trim(), fType == eFormType.Add ? 0 : _acEntry.IDPersonnel))
-            {
-                txtUserName.ErrorText = "Tên đăng nhập đã tồn tại".Translation("msgDuplicateUsername", this.Name);
-                bRe = false; setFocusControl = txtUserName.Name;
-            }
+            //else if (clsAccount.Instance.checkExist(txtUserName.Text.Trim(), fType == eFormType.Add ? 0 : _acEntry.IDPersonnel))
+            //{
+            //    txtUserName.ErrorText = "Tên đăng nhập đã tồn tại".Translation("msgDuplicateUsername", this.Name);
+            //    bRe = false; setFocusControl = txtUserName.Name;
+            //}
 
             if (lokPersonnel.ToInt() == 0)
             {
@@ -202,19 +202,20 @@ namespace QuanLyBanHang.GUI.PER
             }
             return bRe;
         }
-
-        public bool saveData()
+        private bool saveData()
         {
             bool bRe = false;
 
-            _acEntry.IDPersonnel = lokPersonnel.ToInt();
             _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
             _acEntry.IDPermission = lokPermission.ToInt();
+            _acEntry.PermissionName = lokPermission.Text;
 
             if (fType == eFormType.Add)
             {
+                _acEntry.IsEnable = true;
                 _acEntry.IDPersonnel = lokPersonnel.ToInt();
-                _acEntry.UserName = txtUserName.Text.Trim().ToLower();                
+                _acEntry.PersonelName = lokPersonnel.Text;
+                _acEntry.UserName = txtUserName.Text.Trim().ToLower();
                 _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
@@ -225,7 +226,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = clsAccount.Instance.accessEntry(_acEntry);
+            bRe = _acEntry.ePersonnel == null ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.IDPersonnel);
