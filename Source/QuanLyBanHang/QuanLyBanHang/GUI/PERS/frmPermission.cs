@@ -78,7 +78,7 @@ namespace QuanLyBanHang.GUI.PER
         {
             trlFeature.Nodes.Clear();
 
-            trlFeature.DataSource = clsFeature.Instance.Search(true);
+            trlFeature.DataSource = clsFeature.Instance.SearchFeature(true);
             trlFeature.KeyFieldName = "KeyID";
             trlFeature.ParentFieldName = "IDGroup";
             if (Properties.Settings.Default.CurrentCulture.Equals("VN"))

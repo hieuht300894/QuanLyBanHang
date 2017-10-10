@@ -21,10 +21,10 @@ namespace QuanLyBanHang
         public static void InitCollection()
         {
             db = db ?? new aModel();
-            AllMessage = AllMessage ?? db.xMsgDictionaries.ToList();
-            AllConfig = AllConfig ?? db.xAppConfigs.ToList();
-            AllDisplay = AllDisplay ?? db.xDisplays.ToList();
-            AllLayoutItemCaption = AllLayoutItemCaption ?? db.xLayoutItemCaptions.ToList();
+            AllMessage = AllMessage ?? db.xMsgDictionary.ToList();
+            AllConfig = AllConfig ?? db.xAppConfig.ToList();
+            AllDisplay = AllDisplay ?? db.xDisplay.ToList();
+            AllLayoutItemCaption = AllLayoutItemCaption ?? db.xLayoutItemCaption.ToList();
         }
 
         public static bool LoadResources()
@@ -35,7 +35,7 @@ namespace QuanLyBanHang
         public static List<xAgency> GetAllAgency()
         {
             db = db ?? new aModel();
-            List<xAgency> lstResult = db.eAgencies.ToList<xAgency>();
+            List<xAgency> lstResult = db.xAgency.ToList<xAgency>();
             lstResult.Insert(0, new xAgency() { KeyID = 0, Name = "Not Selected", IsEnable = true });
             return lstResult;
         }
@@ -46,7 +46,7 @@ namespace QuanLyBanHang
             try
             {
                 db = db ?? new aModel();
-                db.eAgencies.AddOrUpdate(_acEntry);
+                db.xAgency.AddOrUpdate(_acEntry);
                 db.SaveChanges();
                 clsGeneral.curAgency = _acEntry;
                 bRe = true;
@@ -87,7 +87,7 @@ namespace QuanLyBanHang
                 FullName = "Master",
                 CreatedBy = 0,
                 CreatedDate = DateTime.Now.ServerNow(),
-                eAccount = clsGeneral.curAccount
+                xAccount = clsGeneral.curAccount
             };
         }
 
@@ -96,9 +96,9 @@ namespace QuanLyBanHang
             try
             {
                 db = new aModel();
-                if (db.eAccounts.Any(n => n.IsEnable && n.ePersonnel.IsEnable && n.UserName.Equals(_UserName) && n.Password.Equals(_Password)))
+                if (db.xAccount.Any(n => n.IsEnable && n.xPersonnel.IsEnable && n.UserName.Equals(_UserName) && n.Password.Equals(_Password)))
                 {
-                    xAccount account = db.eAccounts.Single(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
+                    xAccount account = db.xAccount.Single(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
                     clsGeneral.curAccount = account;
                     clsGeneral.curUserFeature = new xUserFeature()
                     {
@@ -113,7 +113,7 @@ namespace QuanLyBanHang
                         IsPrintPreview = false,
                         IsExportExcel = false
                     };
-                    return account.ePersonnel;
+                    return account.xPersonnel;
                 }
                 else
                     return null;
@@ -125,9 +125,9 @@ namespace QuanLyBanHang
         {
             try
             {
-                if (db.xFeatures.Any(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper())))
+                if (db.xFeature.Any(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper())))
                 {
-                    xFeature f = db.xFeatures.FirstOrDefault(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
+                    xFeature f = db.xFeature.FirstOrDefault(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
                     if (!f.GetStringByName(Properties.Settings.Default.CurrentCulture).Equals(iCaption))
                     {
                         f.VN = iCaption;
@@ -142,7 +142,7 @@ namespace QuanLyBanHang
                     xFeature nCN = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
                     nCN.VN = iCaption;
                     nCN.EN = iName.NoSign().Replace("_List", "").AutoSpace();
-                    db.xFeatures.Add(nCN);
+                    db.xFeature.Add(nCN);
                     db.SaveChanges();
                     return Properties.Settings.Default.CurrentCulture.Equals("VN") ? nCN.VN : nCN.EN;
                 }

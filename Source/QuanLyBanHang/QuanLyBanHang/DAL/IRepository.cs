@@ -12,9 +12,9 @@ namespace QuanLyBanHang.DAL
         aModel Context { get; set; }
         IEnumerable<T> GetAll();
         T GetTByID(int KeyID);
-        void InsertEntry(T TEntry);
-        void UpdateEntry(T TEntry);
-        void DeleteEntry(int KeyID);
+        void Insert(T TEntry);
+        void Update(T TEntry);
+        void Delete(T TEntry);
     }
 
     public interface IRepositoryCollection

@@ -35,19 +35,19 @@ namespace QuanLyBanHang.BLL.Common
         public int getLastKeyID()
         {
             db = new aModel();
-            return db.xUserLogs.Max(x => x.KeyID);
+            return db.xUserLog.Max(x => x.KeyID);
         }
 
         public xUserLog getUserLog(int KeyID)
         {
             db = new aModel();
-            return db.xUserLogs.Find(KeyID);
+            return db.xUserLog.Find(KeyID);
         }
 
         public string getTableName(int keyID)
         {
             db = new aModel();
-            IEnumerable<xUserLog> lstTemp = db.xUserLogs.Where(x => x.KeyID >= keyID);
+            IEnumerable<xUserLog> lstTemp = db.xUserLog.Where(x => x.KeyID >= keyID);
             string[] filter = new string[] { "eUnit" };
 
             foreach (var item in lstTemp)

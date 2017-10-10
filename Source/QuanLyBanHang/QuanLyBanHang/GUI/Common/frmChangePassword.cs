@@ -20,7 +20,7 @@ namespace QuanLyBanHang
         {
             try
             {
-                txtUserName.Text = clsGeneral.curPersonnel.eAccount.UserName;
+                txtUserName.Text = clsGeneral.curPersonnel.xAccount.UserName;
             }
             catch { this.Close(); }
             customForm();
@@ -67,10 +67,10 @@ namespace QuanLyBanHang
             {
                 try
                 {
-                    clsGeneral.curPersonnel.eAccount.Password = clsGeneral.Encrypt(bteNewPassword.Text.Trim());
+                    clsGeneral.curPersonnel.xAccount.Password = clsGeneral.Encrypt(bteNewPassword.Text.Trim());
                     using (aModel db = new aModel())
                     {
-                        db.eAccounts.AddOrUpdate(clsGeneral.curPersonnel.eAccount);
+                        db.xAccount.AddOrUpdate(clsGeneral.curPersonnel.xAccount);
                         db.SaveChanges();
                         this.Close();
                     }
@@ -122,7 +122,7 @@ namespace QuanLyBanHang
                 bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ".Translation("msgOldPasswordIsIncorrect", this.Name);
                 bRe = false; setFocusControl = bteOldPassword.Name;
             }
-            else if (!clsGeneral.Encrypt(bteOldPassword.Text.Trim()).Equals(clsGeneral.curPersonnel.eAccount.Password))
+            else if (!clsGeneral.Encrypt(bteOldPassword.Text.Trim()).Equals(clsGeneral.curPersonnel.xAccount.Password))
             {
                 bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ".Translation("msgOldPasswordIsIncorrect", this.Name);
                 bRe = false; setFocusControl = bteOldPassword.Name;

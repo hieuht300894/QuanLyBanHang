@@ -129,7 +129,7 @@ namespace QuanLyBanHang.GUI.PER
         }
         private void loadPermission(int KeyID)
         {
-            lokPermission.Properties.DataSource = clsPermission.Instance.Search(true, KeyID);
+            lokPermission.Properties.DataSource = clsPermission.Instance.SearchPermission(true, KeyID);
             lokPermission.Properties.ValueMember = "KeyID";
             lokPermission.Properties.DisplayMember = "Name";
             if (KeyID > 0)
@@ -226,7 +226,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = _acEntry.ePersonnel == null ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
+            bRe = _acEntry.xPersonnel == null ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.IDPersonnel);

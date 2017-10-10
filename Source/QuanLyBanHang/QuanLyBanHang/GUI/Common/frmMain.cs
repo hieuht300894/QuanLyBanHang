@@ -230,7 +230,7 @@ namespace QuanLyBanHang.GUI.Common
                             {
                                 BarButtonItemLink bbi = item as BarButtonItemLink;
                                 bbi.Item.Caption = clsEntity.get_Caption(bbi.Item.Name, group.Name, bbi.Item.Caption);
-                                bbi.Visible = clsEntity.Check_Role(clsGeneral.curPersonnel.eAccount, bbi.Item.Name);
+                                bbi.Visible = clsEntity.Check_Role(clsGeneral.curPersonnel.xAccount, bbi.Item.Name);
                                 if (bbi.Visible && bbi.Item.Name.StartsWith("frm"))
                                 {
                                     bbi.Item.ItemClick += bt_ItemClick;

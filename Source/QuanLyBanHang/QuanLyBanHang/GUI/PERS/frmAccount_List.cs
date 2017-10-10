@@ -95,7 +95,7 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         private void loadData(int KeyID)
         {
-            gctAccountList.DataSource = clsAccount.Instance.Search(true);
+            gctAccountList.DataSource = clsAccount.Instance.SearchAccount(true, 0);
             if (KeyID > 0)
                 grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }

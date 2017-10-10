@@ -116,7 +116,7 @@ namespace QuanLyBanHang.GUI.PERS
         private void loadData(int KeyID)
         {
             loadPersonnel();
-            gctPermission.DataSource = clsPermission.Instance.Search(true);
+            gctPermission.DataSource = clsPermission.Instance.SearchPermission(true, 0);
             if (KeyID > 0)
                 grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
         }

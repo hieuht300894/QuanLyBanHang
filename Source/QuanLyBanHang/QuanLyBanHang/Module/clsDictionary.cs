@@ -74,7 +74,7 @@ namespace QuanLyBanHang
                 try
                 {
                     db = new aModel();
-                    var msgDic = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(m => m.FormName.Equals(fName) && m.MsgName.Equals(mName));
+                    var msgDic = db.xMsgDictionary.FirstOrDefault<xMsgDictionary>(m => m.FormName.Equals(fName) && m.MsgName.Equals(mName));
                     if (msgDic != null)
                         stRe = msgDic.GetStringByName(curCulture);
                     else
@@ -93,9 +93,9 @@ namespace QuanLyBanHang
                             stIn = fName;
                         _nMsg.VN = stIn;
                         _nMsg.EN = mName.AutoSpace();
-                        if (!db.xMsgDictionaries.Any(m => m.FormName.Equals(_nMsg.FormName) && m.MsgName.Equals(_nMsg.MsgName)))
+                        if (!db.xMsgDictionary.Any(m => m.FormName.Equals(_nMsg.FormName) && m.MsgName.Equals(_nMsg.MsgName)))
                         {
-                            db.xMsgDictionaries.AddOrUpdate(_nMsg);
+                            db.xMsgDictionary.AddOrUpdate(_nMsg);
                             db.SaveChanges();
                         }
                         stRe = _nMsg.GetStringByName(curCulture);

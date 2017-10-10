@@ -14,27 +14,32 @@ namespace QuanLyBanHang.DAL
 
         public Repository(aModel context) { Context = context; }
 
-        public void DeleteEntry(int KeyID)
+        public void Delete(T TEntry)
         {
+            //Context.Entry(TEntry).State = EntityState.Deleted;
+            Context.Set<T>().Remove(TEntry);
         }
 
         public IEnumerable<T> GetAll()
         {
-            return new List<T>();
+            return Context.Set<T>().AsEnumerable();
         }
 
         public T GetTByID(int KeyID)
         {
-            return new T();
+            return Context.Set<T>().Find(KeyID);
         }
 
-        public void InsertEntry(T TEntry)
+        public void Insert(T TEntry)
         {
-
+            //Context.Entry(TEntry).State = EntityState.Added;
+            Context.Set<T>().Add(TEntry);
         }
 
-        public void UpdateEntry(T TEntry)
+        public void Update(T TEntry)
         {
+            //Context.Entry(TEntry).State = EntityState.Modified;
+            Context.Set<T>().Attach(TEntry);
         }
     }
 

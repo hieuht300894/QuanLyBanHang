@@ -23,19 +23,6 @@ namespace QuanLyBanHang.GUI.PER
         {
             loadData(0);
             customForm();
-
-            List<xPersonnel> lstTemp = new List<xPersonnel>(clsTest.Instance.GetAll());
-
-            xPersonnel personnel = new xPersonnel();
-            personnel.KeyID = 3;
-            personnel.IDAgency = 1;
-            personnel.Code = "ABC";
-            personnel.FullName = "DEF";
-            personnel.Address = "GHI";
-            personnel.IsEnable = true;
-            personnel.CreatedDate = DateTime.Now.ServerNow();
-            personnel.ModifiedDate = DateTime.Now.ServerNow();
-            clsTest.Instance.UpdateEntry(personnel);
         }
         #endregion
 
@@ -109,7 +96,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadData(int KeyID)
         {
             loadPersonnel();
-            gctPersonnelList.DataSource = clsPersonnel.Instance.Search(true);
+            gctPersonnelList.DataSource = clsPersonnel.Instance.SearchPersonnel(true, 0);
             if (KeyID > 0)
                 grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
         }

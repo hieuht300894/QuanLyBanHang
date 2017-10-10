@@ -9,11 +9,28 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsAccount : clsBase<xAccount>
+    public class clsAccount : clsTemplate<xAccount>
     {
-        protected clsAccount()
+        #region Constructor
+        private static volatile clsAccount instance = null;
+        private static readonly object mLock = new object();
+        protected clsAccount() { }
+        public new static clsAccount Instance
         {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (mLock)
+                    {
+                        if (instance == null)
+                            instance = new clsAccount();
+                    }
+                }
+                return instance;
+            }
         }
+        #endregion
 
         //#region Variables
         //private aModel db, _accessModel;
@@ -143,25 +160,10 @@ namespace QuanLyBanHang.BLL.PERS
         //}
         //#endregion
 
-        public override xAccount GetEntry(int KeyID)
+        public  IList<xAccount> SearchAccount(bool IsEnable, int KeyID)
         {
-            try
-            {
-                _accessModel = new aModel();
-                if (KeyID == 0) return new xAccount();
-                var eRe = _accessModel.eAccounts.Find(KeyID);
-                return eRe != null ? eRe : new xAccount();
-            }
-            catch
-            {
-                return new xAccount();
-            }
-        }
-
-        public override IList<xAccount> Search(bool IsEnable, int KeyID)
-        {
-            db = new aModel();
-            IEnumerable<xAccount> lstTemp = db.eAccounts.Where(n => n.IsEnable == IsEnable || n.IDPersonnel == KeyID);
+            repository.Context = new aModel();
+            IEnumerable<xAccount> lstTemp = repository.Context.xAccount.Where(n => n.IsEnable == IsEnable || n.IDPersonnel == KeyID);
             List<xAccount> lstResult = lstTemp.ToList();
             return lstResult;
         }
@@ -187,10 +189,10 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                _accessModel = _accessModel ?? new aModel();
-                _accessModel.Set<xAccount>().Add(entry);
-                _accessModel.ePersonnels.Find(entry.IDPersonnel).IsAccount = true;
-                _accessModel.SaveChanges();
+                repository.Context = new aModel();
+                repository.Insert(entry);
+                repository.Context.xPersonnel.Find(entry.IDPersonnel).IsAccount = true;
+                repository.Context.SaveChanges();
                 return true;
             }
             catch (Exception ex)

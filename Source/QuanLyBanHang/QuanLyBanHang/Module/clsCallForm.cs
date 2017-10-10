@@ -21,7 +21,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (frmBase)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.eAccount, f.Name))
+                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.xAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
@@ -31,7 +31,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (XtraForm)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.eAccount, f.Name))
+                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.xAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
@@ -41,7 +41,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (XtraForm)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.eAccount, f.Name))
+                            if (clsEntity.Check_Role(clsGeneral.curPersonnel.xAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }

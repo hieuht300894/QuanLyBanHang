@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPersonnel : clsBase<xPersonnel>
+    public class clsPersonnel : clsTemplate<xPersonnel>
     {
         #region Constructor
         private static volatile clsPersonnel instance = null;
@@ -32,14 +32,21 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                db = new aModel();
-                IEnumerable<xPersonnel> lstTemp = db.ePersonnels.Where(x => (x.IsEnable && !x.IsAccount) || (x.KeyID == KeyID && x.IsAccount) && x.IDAgency == clsGeneral.curAgency.KeyID);
+                repository.Context = new aModel();
+                IEnumerable<xPersonnel> lstTemp = repository.Context.xPersonnel.Where(x => (x.IsEnable && !x.IsAccount) || (x.KeyID == KeyID && x.IsAccount) && x.IDAgency == clsGeneral.curAgency.KeyID);
                 return lstTemp.ToList();
             }
             catch
             {
                 return new List<xPersonnel>();
             }
+        }
+
+        public IList<xPersonnel> SearchPersonnel(bool IsEnable, int KeyID)
+        {
+            repository.Context = new aModel();
+            IEnumerable<xPersonnel> lstTemp = repository.Context.xPersonnel.Where(x => x.IsEnable == IsEnable || x.KeyID == KeyID);
+            return lstTemp.ToList();
         }
     }
 }

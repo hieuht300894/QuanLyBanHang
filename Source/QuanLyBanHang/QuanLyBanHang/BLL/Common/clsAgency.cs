@@ -35,7 +35,7 @@ namespace QuanLyBanHang.BLL.Common
         public List<xAgency> GetAllAgency()
         {
             accessModel = new aModel();
-            List<xAgency> lstResult = accessModel.eAgencies.ToList<xAgency>();
+            List<xAgency> lstResult = accessModel.xAgency.ToList<xAgency>();
             lstResult.Insert(0, new xAgency() { KeyID = 0, Name = "Not Selected", IsEnable = true });
             return lstResult;
         }
@@ -43,7 +43,7 @@ namespace QuanLyBanHang.BLL.Common
         public xAgency GetAgency(int keyID)
         {
             db = new aModel();
-            return db.eAgencies.FirstOrDefault(x => x.KeyID == keyID && x.IsEnable);
+            return db.xAgency.FirstOrDefault(x => x.KeyID == keyID && x.IsEnable);
         }
 
         public bool accessEntry(xAgency aEntry)
@@ -51,7 +51,7 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 accessModel = accessModel ?? new aModel();
-                accessModel.eAgencies.AddOrUpdate(aEntry);
+                accessModel.xAgency.AddOrUpdate(aEntry);
                 accessModel.SaveChanges();
                 return true;
             }
