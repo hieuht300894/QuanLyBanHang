@@ -26,7 +26,7 @@ namespace EntityModel.DataModel
         public DateTime CreatedDate { get; set; }
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public virtual xPersonnel ePersonnel { get; set; }
+        public virtual xPersonnel xPersonnel { get; set; }
         public virtual xPermission xPermission { get; set; }
     }
 }

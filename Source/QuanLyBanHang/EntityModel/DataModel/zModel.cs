@@ -17,17 +17,17 @@ namespace EntityModel.DataModel
         {
         }
 
-        public virtual DbSet<xAccount> eAccounts { get; set; }
-        public virtual DbSet<xAgency> eAgencies { get; set; }
-        public virtual DbSet<xPersonnel> ePersonnels { get; set; }
-        public virtual DbSet<xAppConfig> xAppConfigs { get; set; }
-        public virtual DbSet<xDisplay> xDisplays { get; set; }
-        public virtual DbSet<xFeature> xFeatures { get; set; }
-        public virtual DbSet<xLayoutItemCaption> xLayoutItemCaptions { get; set; }
-        public virtual DbSet<xMsgDictionary> xMsgDictionaries { get; set; }
-        public virtual DbSet<xPermission> xPermissions { get; set; }
-        public virtual DbSet<xUserFeature> xUserFeatures { get; set; }
-        public virtual DbSet<xUserLog> xUserLogs { get; set; }
+        public virtual DbSet<xAccount> xAccount { get; set; }
+        public virtual DbSet<xAgency> xAgency { get; set; }
+        public virtual DbSet<xPersonnel> xPersonnel { get; set; }
+        public virtual DbSet<xAppConfig> xAppConfig { get; set; }
+        public virtual DbSet<xDisplay> xDisplay { get; set; }
+        public virtual DbSet<xFeature> xFeature { get; set; }
+        public virtual DbSet<xLayoutItemCaption> xLayoutItemCaption { get; set; }
+        public virtual DbSet<xMsgDictionary> xMsgDictionary { get; set; }
+        public virtual DbSet<xPermission> xPermission { get; set; }
+        public virtual DbSet<xUserFeature> xUserFeature { get; set; }
+        public virtual DbSet<xUserLog> xUserLog { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -56,8 +56,8 @@ namespace EntityModel.DataModel
                 .IsUnicode(false);
 
             modelBuilder.Entity<xPersonnel>()
-                .HasOptional(e => e.eAccount)
-                .WithRequired(e => e.ePersonnel);
+                .HasOptional(e => e.xAccount)
+                .WithRequired(e => e.xPersonnel);
 
             modelBuilder.Entity<xAppConfig>()
                 .Property(e => e.colBinary)
@@ -137,7 +137,7 @@ namespace EntityModel.DataModel
                 .IsUnicode(false);
 
             modelBuilder.Entity<xPermission>()
-                .HasMany(e => e.eAccounts)
+                .HasMany(e => e.xAccounts)
                 .WithOptional(e => e.xPermission)
                 .HasForeignKey(e => e.IDPermission);
 

@@ -31,6 +31,6 @@ namespace EntityModel.DataModel
         public DateTime CreatedDate { get; set; }
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public virtual xAccount eAccount { get; set; }
+        public virtual xAccount xAccount { get; set; }
     }
 }

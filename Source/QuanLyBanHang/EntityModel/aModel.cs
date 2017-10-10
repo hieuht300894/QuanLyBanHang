@@ -127,7 +127,7 @@ namespace EntityModel.DataModel
                         acLog = false;
                         using (zModel db = new zModel())
                         {
-                            db.xUserLogs.AddRange(AuditLogs);
+                            db.xUserLog.AddRange(AuditLogs);
                             db.SaveChanges();
                         }
                     }
@@ -153,7 +153,7 @@ namespace EntityModel.DataModel
 
         public xAccount CurrentAccount
         {
-            get { return this._CurrentAccount = this._CurrentAccount ?? Module.CurPer.eAccount; }
+            get { return this._CurrentAccount = this._CurrentAccount ?? Module.CurPer.xAccount; }
         }
     }
 }
