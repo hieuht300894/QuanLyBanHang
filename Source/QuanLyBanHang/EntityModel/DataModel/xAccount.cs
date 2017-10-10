@@ -11,6 +11,7 @@ namespace EntityModel.DataModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IDPersonnel { get; set; }
+        public string PersonelName { get; set; }
         public int IDAgency { get; set; }
         [Required]
         [StringLength(255)]
@@ -19,6 +20,7 @@ namespace EntityModel.DataModel
         [StringLength(255)]
         public string Password { get; set; }
         public int? IDPermission { get; set; }
+        public string PermissionName { get; set; }
         public bool IsEnable { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
