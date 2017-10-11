@@ -15,6 +15,10 @@ namespace QuanLyBanHang.DAL
         void Insert(T TEntry);
         void Update(T TEntry);
         void Delete(T TEntry);
+        void BeginTransaction();
+        void Commit();
+        void Rollback();
+        int SaveChanges();
     }
 
     public interface IRepositoryCollection

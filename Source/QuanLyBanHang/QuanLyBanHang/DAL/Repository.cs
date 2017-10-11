@@ -14,12 +14,6 @@ namespace QuanLyBanHang.DAL
 
         public Repository(aModel context) { Context = context; }
 
-        public void Delete(T TEntry)
-        {
-            //Context.Entry(TEntry).State = EntityState.Deleted;
-            Context.Set<T>().Remove(TEntry);
-        }
-
         public IEnumerable<T> GetAll()
         {
             return Context.Set<T>().AsEnumerable();
@@ -32,14 +26,37 @@ namespace QuanLyBanHang.DAL
 
         public void Insert(T TEntry)
         {
-            //Context.Entry(TEntry).State = EntityState.Added;
-            Context.Set<T>().Add(TEntry);
+            Context.Entry(TEntry.Clone()).State = EntityState.Added;
         }
 
         public void Update(T TEntry)
         {
-            //Context.Entry(TEntry).State = EntityState.Modified;
-            Context.Set<T>().Attach(TEntry);
+            Context.Entry(TEntry.Clone()).State = EntityState.Modified;
+        }
+
+        public void Delete(T TEntry)
+        {
+            Context.Entry(TEntry.Clone()).State = EntityState.Deleted;
+        }
+
+        public void BeginTransaction()
+        {
+            Context.Database.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            Context.Database.CurrentTransaction.Commit();
+        }
+
+        public void Rollback()
+        {
+            Context.Database.CurrentTransaction.Rollback();
+        }
+
+        public int SaveChanges()
+        {
+            return Context.SaveChanges();
         }
     }
 

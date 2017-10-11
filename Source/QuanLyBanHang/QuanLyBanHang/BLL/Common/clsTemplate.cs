@@ -43,19 +43,21 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Function
-        public virtual IList<T> GetAll()
+        public virtual List<T> GetAll()
         {
             try
             {
                 repository.Context = new aModel();
                 IEnumerable<T> lstTemp = repository.GetAll();
-                return lstTemp.ToList();
+                List<T> lstResult = lstTemp.ToList();
+                return lstResult;
             }
             catch
             {
                 return new List<T>();
             }
         }
+
 
         public virtual T GetByID(int KeyID)
         {
