@@ -74,8 +74,6 @@ namespace QuanLyBanHang
                 IsEdit = true,
                 IsDelete = true,
                 IsSave = true,
-                IsSaveAndAdd = true,
-                IsCancel = true,
                 IsPrintPreview = true,
                 IsExportExcel = true
             };
@@ -108,8 +106,6 @@ namespace QuanLyBanHang
                         IsEdit = false,
                         IsDelete = false,
                         IsSave = false,
-                        IsSaveAndAdd = false,
-                        IsCancel = false,
                         IsPrintPreview = false,
                         IsExportExcel = false
                     };

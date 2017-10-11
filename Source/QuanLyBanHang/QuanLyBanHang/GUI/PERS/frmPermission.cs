@@ -37,8 +37,7 @@ namespace QuanLyBanHang.GUI.PER
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {
             if (e.Column == colIsAdd || e.Column == colIsEdit || e.Column == colIsDelete ||
-                e.Column == colIsSave || e.Column == colIsSaveAndAdd || e.Column == colIsCancel ||
-                e.Column == colIsPrintPreview || e.Column == colIsExportExcel)
+                e.Column == colIsSave || e.Column == colIsPrintPreview || e.Column == colIsExportExcel)
             {
                 List<TreeListNode> lstNode = new List<TreeListNode>();
                 checkedNode(e.Node, (bool)e.Value);
@@ -96,8 +95,6 @@ namespace QuanLyBanHang.GUI.PER
             colIsEdit.Visible = true;
             colIsDelete.Visible = true;
             colIsSave.Visible = true;
-            colIsSaveAndAdd.Visible = true;
-            colIsCancel.Visible = true;
             colIsPrintPreview.Visible = true;
             colIsExportExcel.Visible = true;
 
@@ -127,8 +124,6 @@ namespace QuanLyBanHang.GUI.PER
                 node.SetValue(colIsEdit, usr.IsEdit);
                 node.SetValue(colIsDelete, usr.IsDelete);
                 node.SetValue(colIsSave, usr.IsSave);
-                node.SetValue(colIsSaveAndAdd, usr.IsSaveAndAdd);
-                node.SetValue(colIsCancel, usr.IsCancel);
                 node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
                 node.SetValue(colIsExportExcel, usr.IsExportExcel);
             }
@@ -210,8 +205,6 @@ namespace QuanLyBanHang.GUI.PER
                     usr.IsEdit = true;
                     usr.IsDelete = true;
                     usr.IsSave = true;
-                    usr.IsSaveAndAdd = true;
-                    usr.IsCancel = true;
                     usr.IsPrintPreview = true;
                     usr.IsExportExcel = true;
                 }
@@ -221,8 +214,6 @@ namespace QuanLyBanHang.GUI.PER
                     usr.IsEdit = fe.IsEdit;
                     usr.IsDelete = fe.IsDelete;
                     usr.IsSave = fe.IsSave;
-                    usr.IsSaveAndAdd = fe.IsSaveAndAdd;
-                    usr.IsCancel = fe.IsCancel;
                     usr.IsPrintPreview = fe.IsPrintPreview;
                     usr.IsExportExcel = fe.IsExportExcel;
                 }
@@ -258,8 +249,6 @@ namespace QuanLyBanHang.GUI.PER
             colIsEdit.Visible = true;
             colIsDelete.Visible = true;
             colIsSave.Visible = true;
-            colIsSaveAndAdd.Visible = true;
-            colIsCancel.Visible = true;
             colIsPrintPreview.Visible = true;
             colIsExportExcel.Visible = true;
 

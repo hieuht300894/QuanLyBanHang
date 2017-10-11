@@ -44,8 +44,6 @@
             this.colIsPrintPreview = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             this.colIsExportExcel = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             this.colIsSave = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            this.colIsSaveAndAdd = new DevExpress.XtraTreeList.Columns.TreeListColumn();
-            this.colIsCancel = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             this.colIsEnable = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             this.colxUserFeatures = new DevExpress.XtraTreeList.Columns.TreeListColumn();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
@@ -147,8 +145,6 @@
             this.colIsPrintPreview,
             this.colIsExportExcel,
             this.colIsSave,
-            this.colIsSaveAndAdd,
-            this.colIsCancel,
             this.colIsEnable,
             this.colxUserFeatures});
             this.trlFeature.Cursor = System.Windows.Forms.Cursors.Default;
@@ -161,8 +157,6 @@
             this.rchkChecked});
             this.trlFeature.Size = new System.Drawing.Size(860, 244);
             this.trlFeature.TabIndex = 6;
-          
-          
             // 
             // colVN
             // 
@@ -232,22 +226,6 @@
             this.colIsSave.FieldName = "IsSave";
             this.colIsSave.Name = "colIsSave";
             this.colIsSave.Width = 80;
-            // 
-            // colIsSaveAndAdd
-            // 
-            this.colIsSaveAndAdd.Caption = "Lưu và thêm mới";
-            this.colIsSaveAndAdd.ColumnEdit = this.rchkChecked;
-            this.colIsSaveAndAdd.FieldName = "IsSaveAndAdd";
-            this.colIsSaveAndAdd.Name = "colIsSaveAndAdd";
-            this.colIsSaveAndAdd.Width = 80;
-            // 
-            // colIsCancel
-            // 
-            this.colIsCancel.Caption = "Hủy";
-            this.colIsCancel.ColumnEdit = this.rchkChecked;
-            this.colIsCancel.FieldName = "IsCancel";
-            this.colIsCancel.Name = "colIsCancel";
-            this.colIsCancel.Width = 80;
             // 
             // colIsEnable
             // 
@@ -370,8 +348,6 @@
         private DevExpress.XtraTreeList.Columns.TreeListColumn colIsPrintPreview;
         private DevExpress.XtraTreeList.Columns.TreeListColumn colIsExportExcel;
         private DevExpress.XtraTreeList.Columns.TreeListColumn colIsSave;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn colIsSaveAndAdd;
-        private DevExpress.XtraTreeList.Columns.TreeListColumn colIsCancel;
         private DevExpress.XtraTreeList.Columns.TreeListColumn colIsEnable;
         private DevExpress.XtraTreeList.Columns.TreeListColumn colxUserFeatures;
     }

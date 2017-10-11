@@ -115,8 +115,7 @@ namespace QuanLyBanHang
         }
         protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
             bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
-            bool IsSave = false, bool IsSaveAndAdd = false, bool IsCancel = false,
-            bool IsPrintPreview = false, bool IsExportExcel = false)
+            bool IsSave = false, bool IsPrintPreview = false, bool IsExportExcel = false)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -138,14 +137,14 @@ namespace QuanLyBanHang
                         if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd)
                         {
                             bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSaveAndAdd && IsSaveAndAdd;
+                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
                         }
                         if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit)
                         {
                             bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSaveAndAdd && IsSaveAndAdd;
+                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
                         }
-                        bbpCancel.Enabled = clsGeneral.curUserFeature.IsCancel && IsCancel;
+                        bbpCancel.Enabled = true;
                     }
                     if (fType == eFormType.Print)
                     {
