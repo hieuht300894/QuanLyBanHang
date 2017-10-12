@@ -9,6 +9,7 @@ using QuanLyBanHang.BLL.Common;
 using System.Windows.Forms;
 using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraBars;
+using QuanLyBanHang.BLL.PERS;
 
 namespace QuanLyBanHang
 {
@@ -86,37 +87,34 @@ namespace QuanLyBanHang
                 KeyID = 0,
                 FullName = "Master",
                 CreatedBy = 0,
-                CreatedDate = DateTime.Now.ServerNow(),
-                xAccount = clsGeneral.curAccount
+                CreatedDate = DateTime.Now.ServerNow()
             };
         }
 
-        public static xPersonnel CheckUser_Login(string _UserName, string _Password)
+        public static bool CheckUser_Login(string _UserName, string _Password, xPersonnel personnel, xAccount account)
         {
             try
             {
                 db = new aModel();
-                if (db.xAccount.Any(n => n.IsEnable && n.xPersonnel.IsEnable && n.UserName.Equals(_UserName) && n.Password.Equals(_Password)))
+                account = db.xAccount.FirstOrDefault(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
+                if (account != null)
                 {
-                    xAccount account = db.xAccount.Single(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
-                    clsGeneral.curAccount = account;
-                    clsGeneral.curUserFeature = new xUserFeature()
+                    personnel = db.xPersonnel.FirstOrDefault(x => x.KeyID == account.IDPersonnel && x.IsEnable && x.IsAccount);
+
+                    if (personnel != null)
                     {
-                        IDUserRole = 0,
-                        IsEnable = true,
-                        IsAdd = false,
-                        IsEdit = false,
-                        IsDelete = false,
-                        IsSave = false,
-                        IsPrintPreview = false,
-                        IsExportExcel = false
-                    };
-                    return account.xPersonnel;
+                        clsGeneral.curAccount = account;
+                        clsGeneral.curPersonnel = personnel;
+                        clsGeneral.curUserFeature = new xUserFeature() { IsEnable = true };
+                        return true;
+                    }
+                    else
+                        return false;
                 }
                 else
-                    return null;
+                    return false;
             }
-            catch { return null; }
+            catch { return false; }
         }
 
         public static string get_Caption(object ribbon, string iName, string pName, string iCaption)
@@ -176,10 +174,14 @@ namespace QuanLyBanHang
             db = db ?? new aModel();
             if (_iAccount.IDPersonnel == 0)
                 return true;
-            else if (_iAccount.xPermission == null)
+            else if (_iAccount.IDPermission == 0)
                 return false;
             else
-                return _iAccount.xPermission.xUserFeatures.Any(n => n.IsEnable && n.xFeature == null || (n.xFeature != null && n.IDFeature.Contains(cName)));
+            {
+                xPermission permission = clsPermission.Instance.GetByID(_iAccount.IDPermission) ?? new xPermission();
+                List<xUserFeature> lstRoles = new List<xUserFeature>(clsUserRole.Instance.getUserFeature(permission.KeyID));
+                return lstRoles.Any(n => n.IsEnable && n.IDFeature.Contains(cName));
+            }
         }
 
         static bool setCurrentAgency()

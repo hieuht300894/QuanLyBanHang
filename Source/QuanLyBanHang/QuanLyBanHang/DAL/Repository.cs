@@ -11,6 +11,7 @@ namespace QuanLyBanHang.DAL
     public class Repository<T> : IRepository<T> where T : class, new()
     {
         public aModel Context { get; set; }
+        private DbContextTransaction curTrans;
 
         public Repository(aModel context) { Context = context; }
 
@@ -26,25 +27,22 @@ namespace QuanLyBanHang.DAL
 
         public void Insert(T TEntry)
         {
-            //Context.Entry(TEntry.Clone()).State = EntityState.Added;
-            Context.Set<T>().Add(TEntry);
+            Context.Entry(TEntry.Clone()).State = EntityState.Added;
         }
 
         public void Update(T TEntry)
         {
-            //Context.Entry(TEntry.Clone()).State = EntityState.Modified;
-            Context.Set<T>().Attach(TEntry);
+            Context.Entry(TEntry.Clone()).State = EntityState.Modified;
         }
 
         public void Delete(T TEntry)
         {
-            //Context.Entry(TEntry.Clone()).State = EntityState.Deleted;
-            Context.Set<T>().Remove(TEntry);
+            Context.Entry(TEntry.Clone()).State = EntityState.Deleted;
         }
 
         public void BeginTransaction()
         {
-            Context.Database.BeginTransaction();
+            curTrans = Context.Database.BeginTransaction();
         }
 
         public void Commit()

@@ -155,7 +155,7 @@ namespace QuanLyBanHang.GUI.PER
             loadPersonnel(_acEntry.IDPersonnel);
             txtUserName.Text = _acEntry.UserName;
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
-            loadPermission(_acEntry.IDPermission.HasValue ? _acEntry.IDPermission.Value : 0);
+            loadPermission(_acEntry.IDPermission);
         }
         private bool validationForm()
         {
@@ -226,7 +226,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = _acEntry.xPersonnel == null ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
+            bRe = fType == eFormType.Add ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.IDPersonnel);

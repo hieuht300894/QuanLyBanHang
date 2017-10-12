@@ -54,12 +54,9 @@ namespace QuanLyBanHang.GUI.Common
         {
             if (ValidateForm())
             {
-                var chkUser = clsEntity.CheckUser_Login(txtUserName.Text, clsGeneral.Encrypt(txtPassword.Text));
-                if (chkUser != null && chkUser.KeyID > 0)
+                var chkUser = clsEntity.CheckUser_Login(txtUserName.Text, clsGeneral.Encrypt(txtPassword.Text), clsGeneral.curPersonnel, clsGeneral.curAccount);
+                if (chkUser)
                 {
-                    //if (pteLanguage.Image == enFlag)
-                    //    Properties.Settings.Default.CurrentCulture = "EN";
-                    //else
                     Properties.Settings.Default.CurrentCulture = "VN";
                     Properties.Settings.Default.Save();
                     Properties.Settings.Default.Reload();
@@ -78,9 +75,9 @@ namespace QuanLyBanHang.GUI.Common
                         Properties.Settings.Default.Save();
                     }
                     Properties.Settings.Default.Reload();
-                    clsGeneral.curPersonnel = chkUser;
-                    EntityModel.Module.CurPer = chkUser;
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    EntityModel.Module.CurPer = clsGeneral.curPersonnel;
+                    EntityModel.Module.CurAcc= clsGeneral.curAccount;
+                    DialogResult = DialogResult.OK;
                 }
                 else
                 {

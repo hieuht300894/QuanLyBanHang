@@ -118,10 +118,17 @@ namespace QuanLyBanHang.BLL.PERS
         {
             repository.Context = new aModel();
             xUserFeature uf = new xUserFeature();
-            if (clsGeneral.curAccount.IDPermission.HasValue)
+            if (clsGeneral.curAccount.IDPermission>0)
                 uf = repository.Context.xUserFeature.FirstOrDefault(x => x.IDUserRole == clsGeneral.curAccount.IDPermission && x.IDFeature.Equals(IDFeature) && x.IsEnable);
 
             return uf ?? new xUserFeature();
+        }
+
+        public List<xUserFeature> getUserFeature(int IDPermission)
+        {
+            repository.Context = new aModel();
+            IEnumerable<xUserFeature> lstTemp = repository.Context.xUserFeature.Where(x => x.IDUserRole == IDPermission && x.IsEnable);
+            return lstTemp.ToList();
         }
         #endregion
     }

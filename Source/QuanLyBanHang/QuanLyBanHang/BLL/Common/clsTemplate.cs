@@ -85,12 +85,15 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 repository.Context = new aModel();
+                repository.BeginTransaction();
                 repository.Insert(entry);
-                repository.Context.SaveChanges();
+                repository.SaveChanges();
+                repository.Commit();
                 return true;
             }
             catch (Exception ex)
             {
+                repository.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(T).Name}");
                 return false;
             }
@@ -101,12 +104,15 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 repository.Context = new aModel();
+                repository.BeginTransaction();
                 repository.Update(entry);
-                repository.Context.SaveChanges();
+                repository.SaveChanges();
+                repository.Commit();
                 return true;
             }
             catch (Exception ex)
             {
+                repository.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(T).Name}");
                 return false;
             }
@@ -117,12 +123,15 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 repository.Context = new aModel();
+                repository.BeginTransaction();
                 repository.Delete(entry);
-                repository.Context.SaveChanges();
+                repository.SaveChanges();
+                repository.Commit();
                 return true;
             }
             catch (Exception ex)
             {
+                repository.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi xóa: {typeof(T).Name}");
                 return false;
             }
