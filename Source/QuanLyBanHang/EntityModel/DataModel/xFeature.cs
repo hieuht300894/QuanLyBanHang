@@ -33,8 +33,6 @@ namespace EntityModel.DataModel
         public bool IsPrintPreview { get; set; }
         public bool IsExportExcel { get; set; }
         public bool IsSave { get; set; }
-        public bool IsSaveAndAdd { get; set; }
-        public bool IsCancel { get; set; }
 
         public bool IsEnable { get; set; }
 
