@@ -7,35 +7,23 @@ namespace EntityModel.DataModel
     [Table("xFeature")]
     public partial class xFeature
     {
-        public xFeature()
-        {
-            xUserFeatures = new HashSet<xUserFeature>();
-        }
-
         [Key]
         [StringLength(255)]
         public string KeyID { get; set; }
-
         [StringLength(255)]
         public string IDGroup { get; set; }
-
         [Required]
         [StringLength(255)]
         public string VN { get; set; }
-
         [Required]
         [StringLength(255)]
         public string EN { get; set; }
-
         public bool IsAdd { get; set; }
         public bool IsEdit { get; set; }
         public bool IsDelete { get; set; }
         public bool IsPrintPreview { get; set; }
         public bool IsExportExcel { get; set; }
         public bool IsSave { get; set; }
-
         public bool IsEnable { get; set; }
-
-        public virtual ICollection<xUserFeature> xUserFeatures { get; set; }
     }
 }

@@ -55,10 +55,6 @@ namespace EntityModel.DataModel
                 .Property(e => e.Phone)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<xPersonnel>()
-                .HasOptional(e => e.xAccount)
-                .WithRequired(e => e.xPersonnel);
-
             modelBuilder.Entity<xAppConfig>()
                 .Property(e => e.colBinary)
                 .IsFixedLength();
@@ -90,11 +86,6 @@ namespace EntityModel.DataModel
             modelBuilder.Entity<xFeature>()
                 .Property(e => e.EN)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<xFeature>()
-                .HasMany(e => e.xUserFeatures)
-                .WithOptional(e => e.xFeature)
-                .HasForeignKey(e => e.IDFeature);
 
             modelBuilder.Entity<xLayoutItemCaption>()
                 .Property(e => e.FormName)
@@ -135,17 +126,6 @@ namespace EntityModel.DataModel
             modelBuilder.Entity<xMsgDictionary>()
                 .Property(e => e.EN)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<xPermission>()
-                .HasMany(e => e.xAccounts)
-                .WithOptional(e => e.xPermission)
-                .HasForeignKey(e => e.IDPermission);
-
-            modelBuilder.Entity<xPermission>()
-                .HasMany(e => e.xUserFeatures)
-                .WithRequired(e => e.xPermission)
-                .HasForeignKey(e => e.IDUserRole)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<xUserFeature>()
                 .Property(e => e.IDFeature)

@@ -13,11 +13,17 @@ namespace EntityModel
         public static string dbConnectString = "";
 
         private static xPersonnel _curPer = null;
+        private static xAccount _curAcc = null;
 
         public static xPersonnel CurPer
         {
             get { return _curPer; }
             set { _curPer = value; }
+        }
+        public static xAccount CurAcc
+        {
+            get { return _curAcc; }
+            set { _curAcc = value; }
         }
 
         private class MyConfiguration : System.Data.Entity.Migrations.DbMigrationsConfiguration<aModel>

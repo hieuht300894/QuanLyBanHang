@@ -140,20 +140,14 @@ namespace EntityModel.DataModel
     public partial class zModel
     {
         private xPersonnel _CurrentPersonnel;
-
+        private xAccount _CurrentAccount;
         public xPersonnel CurrentPersonnel
         {
-            get
-            {
-                return this._CurrentPersonnel = this._CurrentPersonnel ?? Module.CurPer;
-            }
+            get { return this._CurrentPersonnel = this._CurrentPersonnel ?? Module.CurPer; }
         }
-
-        private xAccount _CurrentAccount;
-
         public xAccount CurrentAccount
         {
-            get { return this._CurrentAccount = this._CurrentAccount ?? Module.CurPer.xAccount; }
+            get { return this._CurrentAccount = this._CurrentAccount ?? Module.CurAcc; }
         }
     }
 }

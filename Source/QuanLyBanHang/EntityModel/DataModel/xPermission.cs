@@ -6,12 +6,6 @@ namespace EntityModel.DataModel
 
     public partial class xPermission
     {
-        public xPermission()
-        {
-            xAccounts = new HashSet<xAccount>();
-            xUserFeatures = new HashSet<xUserFeature>();
-        }
-
         [Key]
         public int KeyID { get; set; }
         public int IDAgency { get; set; }
@@ -24,7 +18,5 @@ namespace EntityModel.DataModel
         public DateTime CreatedDate { get; set; }
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public virtual ICollection<xAccount> xAccounts { get; set; }
-        public virtual ICollection<xUserFeature> xUserFeatures { get; set; }
     }
 }

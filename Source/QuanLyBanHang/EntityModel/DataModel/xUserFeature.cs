@@ -16,7 +16,5 @@ namespace EntityModel.DataModel
         public bool IsExportExcel { get; set; }
         public bool IsSave { get; set; }
         public bool IsEnable { get; set; }
-        public virtual xFeature xFeature { get; set; }
-        public virtual xPermission xPermission { get; set; }
     }
 }
