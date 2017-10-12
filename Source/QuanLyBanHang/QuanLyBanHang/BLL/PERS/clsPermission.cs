@@ -38,5 +38,59 @@ namespace QuanLyBanHang.BLL.PERS
             IEnumerable<xPermission> lstTemp = repository.Context.xPermission.Where(x => x.IsEnable == IsEnable || x.KeyID == KeyID);
             return lstTemp.ToList();
         }
+
+        public bool InsertEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
+        {
+            try
+            {
+                repository.Context = new aModel();
+                repository.BeginTransaction();
+
+                repository.Context.xPermission.AddOrUpdate(entry);
+                repository.Context.SaveChanges();
+
+                lstUserFeatures.ForEach(x =>
+                {
+                    x.IDUserRole = entry.KeyID;
+                    repository.Context.xUserFeature.Add(x);
+                });
+
+                repository.Context.SaveChanges();
+                repository.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                repository.Rollback();
+                clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(xPermission).Name}");
+                return false;
+            }
+        }
+
+        public bool UpdateEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
+        {
+            try
+            {
+                repository.Context = new aModel();
+                repository.BeginTransaction();
+                repository.Context.xPermission.AddOrUpdate(entry);
+                lstUserFeatures.ForEach(x =>
+                {
+                    if (x.KeyID == 0)
+                        repository.Context.xUserFeature.Add(x);
+                    else
+                        repository.Context.xUserFeature.AddOrUpdate(x);
+                });
+                repository.Context.SaveChanges();
+                repository.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                repository.Rollback();
+                clsGeneral.showErrorException(ex, $"Lỗi cập nhật mới: {typeof(xPermission).Name}");
+                return false;
+            }
+        }
     }
 }

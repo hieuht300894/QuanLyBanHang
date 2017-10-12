@@ -190,7 +190,7 @@ namespace QuanLyBanHang.BLL.PERS
             try
             {
                 repository.Context = new aModel();
-                repository.Insert(entry);
+                repository.Context.xAccount.AddOrUpdate(entry);
                 repository.Context.xPersonnel.Find(entry.IDPersonnel).IsAccount = true;
                 repository.Context.SaveChanges();
                 return true;

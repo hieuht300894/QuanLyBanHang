@@ -18,6 +18,7 @@ namespace QuanLyBanHang.GUI.PER
 
         public xPermission _iEntry;
         xPermission _acEntry;
+        List<xUserFeature> lstUserFeatures = new List<xUserFeature>();
         #endregion
 
         #region Form Events
@@ -101,6 +102,11 @@ namespace QuanLyBanHang.GUI.PER
             resetCheckedNodes();
         }
 
+        private void loadUserFeature(int IDPermission)
+        {
+            lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
+        }
+
         private void loadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
@@ -111,22 +117,26 @@ namespace QuanLyBanHang.GUI.PER
 
         private void setControlValue()
         {
+            trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
+
             txtName.Text = _acEntry.Name;
             mmeDescription.Text = _acEntry.Description;
 
-            trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
             loadFeature();
-            //foreach (var usr in _acEntry.xUserFeatures.Where(n => n.IsEnable && !string.IsNullOrEmpty(n.IDFeature)))
-            //{
-            //    TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
-            //    node.CheckState = CheckState.Checked;
-            //    node.SetValue(colIsAdd, usr.IsAdd);
-            //    node.SetValue(colIsEdit, usr.IsEdit);
-            //    node.SetValue(colIsDelete, usr.IsDelete);
-            //    node.SetValue(colIsSave, usr.IsSave);
-            //    node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
-            //    node.SetValue(colIsExportExcel, usr.IsExportExcel);
-            //}
+            loadUserFeature(_acEntry.KeyID);
+
+            foreach (var usr in lstUserFeatures)
+            {
+                TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
+                node.CheckState = CheckState.Checked;
+                node.SetValue(colIsAdd, usr.IsAdd);
+                node.SetValue(colIsEdit, usr.IsEdit);
+                node.SetValue(colIsDelete, usr.IsDelete);
+                node.SetValue(colIsSave, usr.IsSave);
+                node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
+                node.SetValue(colIsExportExcel, usr.IsExportExcel);
+            }
+
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
 
@@ -178,53 +188,43 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            //List<string> lstFeature = new List<string>();
-            //trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n)).KeyID));
-
-            //_acEntry.xUserFeatures.Where(n => !lstFeature.Contains(n.IDFeature)).ToList().ForEach(n => _acEntry.xUserFeatures.Remove(n));
-
-            //foreach (string f in lstFeature)
-            //{
-            //    if (((f.StartsWith("frm") || f.StartsWith("bbi")) && !_acEntry.xUserFeatures.Any(n => n.IDFeature.Equals(f))))
-            //        _acEntry.xUserFeatures.Add(new xUserFeature() { IDFeature = f });
-            //}
-
             List<xFeature> lstFeature = new List<xFeature>();
             trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n))));
 
-           // _acEntry.xUserFeatures.ToList().ForEach(x => x.IsEnable = false);
+            lstUserFeatures.ForEach(x => x.IsEnable = false);
 
             foreach (var fe in lstFeature)
             {
-                //xUserFeature usr = _acEntry.xUserFeatures.FirstOrDefault(x => x.IDFeature.Equals(fe.KeyID)) ?? new xUserFeature();
-                //usr.IsEnable = true;
+                xUserFeature usr = lstUserFeatures.FirstOrDefault(x => x.IDFeature.Equals(fe.KeyID)) ?? new xUserFeature();
+                usr.IsEnable = true;
 
-                //if (fe.KeyID.StartsWith("bbi"))
-                //{
-                //    usr.IsAdd = true;
-                //    usr.IsEdit = true;
-                //    usr.IsDelete = true;
-                //    usr.IsSave = true;
-                //    usr.IsPrintPreview = true;
-                //    usr.IsExportExcel = true;
-                //}
-                //else
-                //{
-                //    usr.IsAdd = fe.IsAdd;
-                //    usr.IsEdit = fe.IsEdit;
-                //    usr.IsDelete = fe.IsDelete;
-                //    usr.IsSave = fe.IsSave;
-                //    usr.IsPrintPreview = fe.IsPrintPreview;
-                //    usr.IsExportExcel = fe.IsExportExcel;
-                //}
-                //if (usr.KeyID == 0)
-                //{
-                //    usr.IDFeature = fe.KeyID;
-                //   // _acEntry.xUserFeatures.Add(usr);
-                //}
+                if (fe.KeyID.StartsWith("bbi"))
+                {
+                    usr.IsAdd = true;
+                    usr.IsEdit = true;
+                    usr.IsDelete = true;
+                    usr.IsSave = true;
+                    usr.IsPrintPreview = true;
+                    usr.IsExportExcel = true;
+                }
+                else
+                {
+                    usr.IsAdd = fe.IsAdd;
+                    usr.IsEdit = fe.IsEdit;
+                    usr.IsDelete = fe.IsDelete;
+                    usr.IsSave = fe.IsSave;
+                    usr.IsPrintPreview = fe.IsPrintPreview;
+                    usr.IsExportExcel = fe.IsExportExcel;
+                }
+                if (usr.KeyID == 0)
+                {
+                    usr.IDFeature = fe.KeyID;
+                    usr.IDUserRole = _acEntry.KeyID;
+                    lstUserFeatures.Add(usr);
+                }
             }
 
-            chk = _acEntry.KeyID > 0 ? clsPermission.Instance.UpdateEntry(_acEntry) : clsPermission.Instance.InsertEntry(_acEntry);
+            chk = _acEntry.KeyID > 0 ? clsPermission.Instance.UpdateEntry(_acEntry, lstUserFeatures) : clsPermission.Instance.InsertEntry(_acEntry, lstUserFeatures);
 
             if (chk && ReloadData != null)
                 ReloadData(_acEntry.KeyID);

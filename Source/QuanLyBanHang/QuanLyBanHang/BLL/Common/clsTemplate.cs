@@ -2,11 +2,8 @@
 using QuanLyBanHang.DAL;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity.Migrations;
 
 namespace QuanLyBanHang.BLL.Common
 {
@@ -48,7 +45,7 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 repository.Context = new aModel();
-                IEnumerable<T> lstTemp = repository.GetAll();
+                IEnumerable<T> lstTemp = repository.Context.Set<T>().AsEnumerable();
                 List<T> lstResult = lstTemp.ToList();
                 return lstResult;
             }
@@ -86,8 +83,8 @@ namespace QuanLyBanHang.BLL.Common
             {
                 repository.Context = new aModel();
                 repository.BeginTransaction();
-                repository.Insert(entry);
-                repository.SaveChanges();
+                repository.Context.Set<T>().AddOrUpdate(entry);
+                repository.Context.SaveChanges();
                 repository.Commit();
                 return true;
             }
@@ -105,8 +102,8 @@ namespace QuanLyBanHang.BLL.Common
             {
                 repository.Context = new aModel();
                 repository.BeginTransaction();
-                repository.Update(entry);
-                repository.SaveChanges();
+                repository.Context.Set<T>().AddOrUpdate(entry);
+                repository.Context.SaveChanges();
                 repository.Commit();
                 return true;
             }
@@ -124,8 +121,8 @@ namespace QuanLyBanHang.BLL.Common
             {
                 repository.Context = new aModel();
                 repository.BeginTransaction();
-                repository.Delete(entry);
-                repository.SaveChanges();
+                repository.Context.Set<T>().Remove(entry);
+                repository.Context.SaveChanges();
                 repository.Commit();
                 return true;
             }
