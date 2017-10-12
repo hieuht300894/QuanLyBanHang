@@ -16,8 +16,8 @@ namespace QuanLyBanHang.GUI.Common
     public partial class frmInfomation : XtraForm
     {
         #region Variables
-        public delegate void LoadData();
-        public LoadData ReloadData;
+        //public delegate void LoadData();
+        //public LoadData ReloadData;
         xAgency _acEntry;
         #endregion
 
@@ -26,7 +26,6 @@ namespace QuanLyBanHang.GUI.Common
         {
             InitializeComponent();
         }
-
         private void frmInfomation_Load(object sender, EventArgs e)
         {
             loadData();
@@ -35,44 +34,28 @@ namespace QuanLyBanHang.GUI.Common
         #endregion
 
         #region Method
-        private void loadAgency()
-        {
-            lokAgency.EditValue = null;
-
-            List<xAgency> lst = clsAgency.Instance.GetAllAgency();
-            lokAgency.Properties.DataSource = lst;
-            lokAgency.Properties.ValueMember = "KeyID";
-            lokAgency.Properties.DisplayMember = "Name";
-
-            if (Properties.Settings.Default.IDAgency > 0)
-                lokAgency.EditValue = Properties.Settings.Default.IDAgency;
-            else if (lst.Any(x => x.KeyID > 0))
-                lokAgency.ItemIndex = lst.FindIndex(x => x.KeyID > 0);
-            else
-                lokAgency.ItemIndex = 0;
-        }
-
         private void loadData()
         {
-            _acEntry = _acEntry ?? new xAgency();
-            loadAgency();
+            _acEntry = clsAgency.Instance.GetByID(Properties.Settings.Default.IDAgency);
             setControlValue();
         }
-
         private void setControlValue()
         {
+            if (_acEntry.KeyID > 0)
+                lciSave.Visibility = lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+            else
+            {
+                lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            }
+
             txt_Agency_Code.EditValue = _acEntry.Code;
-            txt_Agency_Name.EditValue = _acEntry.KeyID > 0 ? _acEntry.Name : "";
+            txt_Agency_Name.EditValue = _acEntry.Name;
             txt_Agency_Address.EditValue = _acEntry.Address;
             txt_Agency_Phone.EditValue = _acEntry.Phone;
             txt_Agency_Mail.EditValue = _acEntry.Email;
             mme_Agency_Note.EditValue = _acEntry.Description;
-            if (lokAgency.ToInt() > 0)
-                btnSave.Select();
-            else
-                txt_Agency_Code.Select();
         }
-
         private void saveData()
         {
             _acEntry.Code = txt_Agency_Code.Text.Trim();
@@ -93,30 +76,22 @@ namespace QuanLyBanHang.GUI.Common
                 _acEntry.ModifiedBy = 0;
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
-            if (clsAgency.Instance.accessEntry(_acEntry))
+
+            bool chk = false;
+            chk = _acEntry.KeyID > 0 ? clsAgency.Instance.UpdateEntry(_acEntry) : clsAgency.Instance.InsertEntry(_acEntry);
+            if (chk)
             {
-                clsGeneral.curAgency = clsAgency.Instance.GetAgency(_acEntry.KeyID);
+                clsGeneral.curAgency = _acEntry;
                 Properties.Settings.Default.IDAgency = clsGeneral.curAgency.KeyID;
-                //Properties.Settings.Default.IsConfigAgency = true;
+                Properties.Settings.Default.Save();
+                Properties.Settings.Default.Reload();
+                DialogResult = DialogResult.OK;
             }
-
-            Properties.Settings.Default.Save();
-            Properties.Settings.Default.Reload();
-
-            if (ReloadData != null)
-            {
-                this.DialogResult = DialogResult.OK;
-                ReloadData();
-            }
-            Application.Restart();
         }
-
         private void customForm()
         {
-            lokAgency.Format(false);
             txt_Agency_Code.NotUnicode(true, true);
             txt_Agency_Phone.PhoneOnly();
-
             layoutControl1.BestFitText();
         }
         #endregion
@@ -126,12 +101,10 @@ namespace QuanLyBanHang.GUI.Common
         {
             saveData();
         }
-
-        private void lokAgency_EditValueChanged(object sender, EventArgs e)
+        private void btnConfirm_Click(object sender, EventArgs e)
         {
-            if (lokAgency.EditValue != null)
-                _acEntry = (xAgency)lokAgency.Properties.GetDataSourceRowByKeyValue(lokAgency.EditValue);
-            setControlValue();
+            clsGeneral.curAgency = _acEntry;
+            DialogResult = DialogResult.OK;
         }
         #endregion
     }

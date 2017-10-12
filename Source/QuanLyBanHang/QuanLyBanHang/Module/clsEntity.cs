@@ -198,7 +198,7 @@ namespace QuanLyBanHang
                 }
             }
             else
-                clsGeneral.curAgency = clsAgency.Instance.GetAgency(Properties.Settings.Default.IDAgency);
+                clsGeneral.curAgency = clsAgency.Instance.GetByID(Properties.Settings.Default.IDAgency);
 
             if (clsGeneral.curAgency == null)
             {

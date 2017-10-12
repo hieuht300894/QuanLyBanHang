@@ -78,8 +78,10 @@ namespace QuanLyBanHang.BLL.PERS
                 {
                     if (x.KeyID == 0)
                         repository.Context.xUserFeature.Add(x);
-                    else
+                    else if (x.IsEnable)
                         repository.Context.xUserFeature.AddOrUpdate(x);
+                    else
+                        repository.Context.xUserFeature.Remove(x);
                 });
                 repository.Context.SaveChanges();
                 repository.Commit();

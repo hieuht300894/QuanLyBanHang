@@ -133,12 +133,12 @@ namespace QuanLyBanHang.GUI.Common
         {
             if (e.KeyData == (Keys.Alt | Keys.F10))
             {
-                using (frmAgency _frm = new frmAgency())
+                using (frmInfomation _frm = new frmInfomation())
                 {
-                    if (_frm.ShowDialog() == System.Windows.Forms.DialogResult.Yes)
+                    if (_frm.ShowDialog() == DialogResult.OK)
                     {
                         clsEntity.InitMasterAdmin();
-                        this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                        this.DialogResult = DialogResult.OK;
                     }
                 }
             }

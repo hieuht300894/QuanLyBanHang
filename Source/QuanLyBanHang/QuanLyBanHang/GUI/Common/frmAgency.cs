@@ -58,7 +58,7 @@ namespace QuanLyBanHang.GUI.Common
             {
                 Properties.Settings.Default.IDAgency = _acEntry.KeyID;
                 Properties.Settings.Default.Save();
-                clsGeneral.curAgency = clsAgency.Instance.GetAgency(_acEntry.KeyID);
+               // clsGeneral.curAgency = clsAgency.Instance.GetAgency(_acEntry.KeyID);
                 this.DialogResult = DialogResult.Yes;
             }
         }
