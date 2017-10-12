@@ -6,6 +6,7 @@ using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraEditors.Repository;
+using System.Collections.Generic;
 
 namespace QuanLyBanHang
 {
@@ -13,6 +14,7 @@ namespace QuanLyBanHang
     {
         #region Variables
         public eFormType fType;
+        public List<eFormType> fTypes;
         public RepositoryItemDateEdit rDateEdit = new RepositoryItemDateEdit();
         #endregion
 
@@ -35,12 +37,12 @@ namespace QuanLyBanHang
             }
             if (fType == eFormType.Add || fType == eFormType.Edit)
             {
-                if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit)
+                if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
                 {
                     btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                     btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                 }
-                if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd)
+                if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
                 {
                     btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                     btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
@@ -73,7 +75,13 @@ namespace QuanLyBanHang
             if (fType == eFormType.Default && (this.Name.StartsWith("frm") || this.Name.StartsWith("bbi")))
             {
                 if (this.Name.StartsWith("bbi"))
-                    clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature() { IsAdd = true, IsDelete = true, IsEdit = true, IsEnable = true };
+                    clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature()
+                    {
+                        IsAdd = true,
+                        IsDelete = true,
+                        IsEdit = true,
+                        IsEnable = true
+                    };
                 else
                 {
                     if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission > 0)
@@ -134,12 +142,12 @@ namespace QuanLyBanHang
                     }
                     if (fType == eFormType.Add || fType == eFormType.Edit)
                     {
-                        if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd)
+                        if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
                         {
                             bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
                             bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
                         }
-                        if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit)
+                        if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
                         {
                             bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
                             bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
@@ -163,6 +171,16 @@ namespace QuanLyBanHang
                     bbpPrintPreview.Enabled = false;
                     bbpExportExcel.Enabled = false;
                 }
+
+                bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpSaveAndAdd.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpCancel.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
 
                 popGridMenu.ShowPopup(MousePosition);
             }

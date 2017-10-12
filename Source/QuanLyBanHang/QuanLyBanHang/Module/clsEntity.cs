@@ -7,6 +7,8 @@ using System.Data.Entity.Migrations;
 using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.BLL.Common;
 using System.Windows.Forms;
+using DevExpress.XtraBars.Ribbon;
+using DevExpress.XtraBars;
 
 namespace QuanLyBanHang
 {
@@ -117,13 +119,13 @@ namespace QuanLyBanHang
             catch { return null; }
         }
 
-        public static string get_Caption(string iName, string pName, string iCaption)
+        public static string get_Caption(object ribbon, string iName, string pName, string iCaption)
         {
             try
             {
-                if (db.xFeature.Any(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper())))
+                xFeature f = db.xFeature.FirstOrDefault(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
+                if (f != null)
                 {
-                    xFeature f = db.xFeature.FirstOrDefault(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper()));
                     if (!f.GetStringByName(Properties.Settings.Default.CurrentCulture).Equals(iCaption))
                     {
                         f.VN = iCaption;
@@ -131,17 +133,40 @@ namespace QuanLyBanHang
                         db.SaveChanges();
                     }
                     return f.GetStringByName(Properties.Settings.Default.CurrentCulture);
-                    //return db.xFeatures.FirstOrDefault<xFeature>(n => n.KeyID.ToUpper().Equals(iName.ToUpper()) && n.IDGroup.Equals(pName.ToUpper())).GetStringByName(Properties.Settings.Default.CurrentCulture);
                 }
                 else
                 {
-                    xFeature nCN = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
-                    nCN.VN = iCaption;
-                    nCN.EN = iName.NoSign().Replace("_List", "").AutoSpace();
-                    db.xFeature.Add(nCN);
-                    db.SaveChanges();
-                    return Properties.Settings.Default.CurrentCulture.Equals("VN") ? nCN.VN : nCN.EN;
+                    if (ribbon is RibbonPage || ribbon is RibbonPageGroup || ribbon is BarButtonItemLink || ribbon is BarEditItemLink)
+                    {
+                        if ((ribbon is BarButtonItemLink || ribbon is BarEditItemLink) && iName.StartsWith("frm"))
+                        {
+                            f = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
+                            f.VN = iCaption;
+                            f.EN = iName.NoSign().Replace("_List", "").AutoSpace();
+                            db.xFeature.Add(f);
+                            db.SaveChanges();
+                            return Properties.Settings.Default.CurrentCulture.Equals("VN") ? f.VN : f.EN;
+                        }
+                        else if (ribbon is RibbonPage || ribbon is RibbonPageGroup)
+                        {
+                            f = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
+                            f.VN = iCaption;
+                            f.EN = iName.NoSign().Replace("_List", "").AutoSpace();
+                            db.xFeature.Add(f);
+                            db.SaveChanges();
+                            return Properties.Settings.Default.CurrentCulture.Equals("VN") ? f.VN : f.EN;
+                        }
+                        else
+                        {
+                            return Properties.Settings.Default.CurrentCulture.Equals("VN") ? iCaption : iName.NoSign().AutoSpace();
+                        }
+                    }
+                    else
+                    {
+                        return Properties.Settings.Default.CurrentCulture.Equals("VN") ? iCaption : iName.NoSign().AutoSpace();
+                    }
                 }
+
             }
             catch { return Properties.Settings.Default.CurrentCulture.Equals("VN") ? iCaption : iName.NoSign().AutoSpace(); }
         }

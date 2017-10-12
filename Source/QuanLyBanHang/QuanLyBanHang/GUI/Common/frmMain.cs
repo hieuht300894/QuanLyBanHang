@@ -112,7 +112,8 @@ namespace QuanLyBanHang.GUI.Common
 
         private void loadDataForm()
         {
-            ribbon.Hide(); ribbonStatusBar.Hide();
+            ribbon.Hide();
+            ribbonStatusBar.Hide();
 
             if (checkConnection())
             {
@@ -148,7 +149,7 @@ namespace QuanLyBanHang.GUI.Common
                 if (clsGeneral.curPersonnel.KeyID == 0)
                 {
                     frmLogin _frm = new frmLogin();
-                    if (_frm.ShowDialog() == System.Windows.Forms.DialogResult.Cancel || clsGeneral.curPersonnel == null)
+                    if (_frm.ShowDialog() == DialogResult.Cancel || clsGeneral.curPersonnel == null)
                         Application.Exit();
                     else
                     {
@@ -162,10 +163,6 @@ namespace QuanLyBanHang.GUI.Common
                         if (clsEntity.LoadResources())
                         {
                             clsCallForm.InitFormCollection();
-                            //tmClock = new Timer();
-                            //tmClock.Interval = 1000;
-                            //tmClock.Tick += tmClock_Tick;
-                            //tmClock.Start();
                             bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
                             bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + _sDatabase;
                             bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
@@ -217,19 +214,19 @@ namespace QuanLyBanHang.GUI.Common
             foreach (RibbonPage page in ribbon.Pages)
             {
                 page.Visible = false;
-                page.Text = clsEntity.get_Caption(page.Name, ribbon.Name, page.Text);
+                page.Text = clsEntity.get_Caption(page, page.Name, ribbon.Name, page.Text);
                 try
                 {
                     foreach (RibbonPageGroup group in page.Groups)
                     {
                         group.Visible = false;
-                        group.Text = clsEntity.get_Caption(group.Name, page.Name, group.Text);
+                        group.Text = clsEntity.get_Caption(group, group.Name, page.Name, group.Text);
                         foreach (var item in group.ItemLinks)
                         {
                             if (item is BarButtonItemLink)
                             {
                                 BarButtonItemLink bbi = item as BarButtonItemLink;
-                                bbi.Item.Caption = clsEntity.get_Caption(bbi.Item.Name, group.Name, bbi.Item.Caption);
+                                bbi.Item.Caption = clsEntity.get_Caption(bbi, bbi.Item.Name, group.Name, bbi.Item.Caption);
                                 bbi.Visible = clsEntity.Check_Role(clsGeneral.curPersonnel.xAccount, bbi.Item.Name);
                                 if (bbi.Visible && bbi.Item.Name.StartsWith("frm"))
                                 {
@@ -243,7 +240,7 @@ namespace QuanLyBanHang.GUI.Common
                             if (item is BarEditItemLink)
                             {
                                 BarEditItemLink bei = item as BarEditItemLink;
-                                bei.Item.Caption = clsEntity.get_Caption(bei.Item.Name, group.Name, bei.Item.Caption);
+                                bei.Item.Caption = clsEntity.get_Caption(bei, bei.Item.Name, group.Name, bei.Item.Caption);
                                 bei.Visible = page.Visible = group.Visible = true;
                             }
                         }

@@ -43,7 +43,7 @@ namespace QuanLyBanHang.GUI.PERS
         }
         private void gctPersonnelList_MouseClick(object sender, MouseEventArgs e)
         {
-            base.ShowGridPopup(sender, e);
+            base.ShowGridPopup(sender, e, true, true, true, false, true, true);
         }
         private void grvPermission_ShownEditor(object sender, EventArgs e)
         {
