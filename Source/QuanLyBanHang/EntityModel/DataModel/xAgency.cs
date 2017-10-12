@@ -2,7 +2,9 @@ namespace EntityModel.DataModel
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("xAgency")]
     public partial class xAgency
     {
         [Key]

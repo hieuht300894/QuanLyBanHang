@@ -1,7 +1,9 @@
 namespace EntityModel.DataModel
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("xUserFeature")]
     public partial class xUserFeature
     {
         [Key]

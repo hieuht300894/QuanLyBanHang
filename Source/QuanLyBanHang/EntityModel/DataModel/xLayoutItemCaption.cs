@@ -1,7 +1,9 @@
 namespace EntityModel.DataModel
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("xLayoutItemCaption")]
     public partial class xLayoutItemCaption
     {
         [Key]

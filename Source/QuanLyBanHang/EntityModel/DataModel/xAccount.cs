@@ -4,6 +4,7 @@ namespace EntityModel.DataModel
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    [Table("xAccount")]
     public partial class xAccount
     {
         [Key]
