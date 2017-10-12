@@ -1,4 +1,4 @@
-namespace EntityModel.DataModel
+﻿namespace EntityModel.DataModel
 {
     using System;
     using System.Data.Entity;
@@ -17,6 +17,7 @@ namespace EntityModel.DataModel
         {
         }
 
+        #region Common
         public virtual DbSet<xAccount> xAccount { get; set; }
         public virtual DbSet<xAgency> xAgency { get; set; }
         public virtual DbSet<xPersonnel> xPersonnel { get; set; }
@@ -28,6 +29,13 @@ namespace EntityModel.DataModel
         public virtual DbSet<xPermission> xPermission { get; set; }
         public virtual DbSet<xUserFeature> xUserFeature { get; set; }
         public virtual DbSet<xUserLog> xUserLog { get; set; }
+        #endregion
+
+        #region Danh mục
+        public virtual DbSet<eKhachHang> eKhachHang { get; set; }
+        public virtual DbSet<eNhomKhachHang> eNhomKhachHang { get; set; }
+        public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
+        #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

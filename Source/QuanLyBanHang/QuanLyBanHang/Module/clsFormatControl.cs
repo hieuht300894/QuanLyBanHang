@@ -620,17 +620,19 @@ namespace QuanLyBanHang
                     using (StreamReader sr = new StreamReader(path))
                     {
                         grvMain.BeginUpdate();
-                        List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>();
+                        List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>().OrderByDescending(x => x.VisibleIndex).ToList();
 
                         foreach (GridColumn col in grvMain.Columns)
                         {
-                            xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name));
+                            xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name)) ?? new xDisplay() { Showing = false };
                             col.Visible = dis.Showing;
                         }
 
-                        foreach (GridColumn col in grvMain.Columns)
+                        List<xDisplay> lstVisibles = lstDisplays.Where(x => x.VisibleIndex >= 0).OrderBy(x => x.VisibleIndex).ToList();
+
+                        foreach (xDisplay dis in lstVisibles)
                         {
-                            xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name));
+                            GridColumn col = grvMain.Columns.FirstOrDefault(x => x.Name.Equals(dis.ColumnName));
                             col.VisibleIndex = dis.VisibleIndex;
                         }
 
