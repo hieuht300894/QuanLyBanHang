@@ -447,6 +447,7 @@ namespace QuanLyBanHang
         {
             try
             {
+                gctMain.ForceInitialize();
                 GridView grvMain = gctMain.MainView as GridView;
                 grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
             }
@@ -494,36 +495,20 @@ namespace QuanLyBanHang
             grvMain.Appearance.FooterPanel.Options.UseFont = true;
             grvMain.Appearance.FooterPanel.Font = new Font(grvMain.Appearance.FooterPanel.Font, FontStyle.Bold);
 
+            grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
+            grvMain.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.CellFocus;
+            grvMain.Appearance.FocusedCell.BackColor = MyColor.BackColorEditing;
+            grvMain.Appearance.FocusedCell.ForeColor = MyColor.ForeColorEditing;
+            grvMain.Appearance.FocusedCell.Font = new Font(grvMain.Appearance.FocusedCell.Font, FontStyle.Bold);
+
             if (allowNewRow)
             {
                 grvMain.GridControl.UseEmbeddedNavigator = false;
-
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Append.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.CancelEdit.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Edit.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.EndEdit.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.First.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Last.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Next.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.NextPage.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Prev.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.PrevPage.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Remove.Visible = false;
-                //grvMain.GridControl.EmbeddedNavigator.Buttons.Remove.Hint = "Xóa";
-                //grvMain.GridControl.EmbeddedNavigator.TextStringFormat = "";
-                //grvMain.GridControl.UseEmbeddedNavigator = true;
 
                 grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
                 grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridEditRow;
                 grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridEditRow;
                 grvMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
-
-
-                grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
-                grvMain.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.CellFocus;
-                grvMain.Appearance.FocusedCell.BackColor = MyColor.BackColorEditing;
-                grvMain.Appearance.FocusedCell.ForeColor = MyColor.ForeColorEditing;
-                grvMain.Appearance.FocusedCell.Font = new Font(grvMain.Appearance.FocusedCell.Font, FontStyle.Bold);
 
                 grvMain.ShowingEditor -= grvMain_ShowingEditor;
                 grvMain.ShowingEditor += grvMain_ShowingEditor;
@@ -551,7 +536,6 @@ namespace QuanLyBanHang
             {
                 grvMain.OptionsView.EnableAppearanceOddRow = true;
 
-                //grvMain.Appearance.OddRow.Font = Properties.Settings.Default.GeneralFont;
                 grvMain.Appearance.OddRow.BackColor = Color.AliceBlue;
                 grvMain.Appearance.OddRow.BackColor2 = Color.AliceBlue;
                 grvMain.Appearance.OddRow.BorderColor = Color.AliceBlue;
@@ -560,7 +544,6 @@ namespace QuanLyBanHang
                 grvMain.Appearance.OddRow.Options.UseBorderColor = true;
                 grvMain.Appearance.OddRow.Options.UseForeColor = true;
 
-                //grvMain.Appearance.EvenRow.Font = Properties.Settings.Default.GeneralFont;
                 grvMain.Appearance.EvenRow.BackColor = Color.AliceBlue;
                 grvMain.Appearance.EvenRow.BackColor2 = Color.AliceBlue;
                 grvMain.Appearance.EvenRow.BorderColor = Color.AliceBlue;
@@ -571,10 +554,10 @@ namespace QuanLyBanHang
 
             grvMain.FormatColmnsGridView();
 
-            //New
             grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.NewItemRowText = string.Empty;
             grvMain.OptionsSelection.MultiSelect = true;
+            grvMain.OptionsSelection.MultiSelectMode= GridMultiSelectMode.RowSelect;
             grvMain.OptionsView.ShowFooter = true;
 
             grvMain.BestFitColumns();
@@ -582,8 +565,8 @@ namespace QuanLyBanHang
 
             grvMain.KeyDown -= grvMain_KeyDown;
             grvMain.KeyDown += grvMain_KeyDown;
-            grvMain.RowCellStyle -= grvMain_RowCellStyle;
-            grvMain.RowCellStyle += grvMain_RowCellStyle;
+            //grvMain.RowCellStyle -= grvMain_RowCellStyle;
+            //grvMain.RowCellStyle += grvMain_RowCellStyle;
             grvMain.DataSourceChanged -= grvMain_DataSourceChanged;
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
             grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
@@ -679,38 +662,13 @@ namespace QuanLyBanHang
 
         static void grvMain_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
-            GridView view = sender as GridView;
-            if (view.Columns.Any(x => x.FieldName.Equals("Status")) && !view.IsFilterRow(e.RowHandle) && e.RowHandle >= 0)
-            {
-                int id = Convert.ToInt32(view.GetRowCellValue(e.RowHandle, view.Columns["Status"]));
-                DateTime dateCreated = Convert.ToDateTime(view.GetRowCellValue(e.RowHandle, view.Columns["CreatedDate"]));
-                DateTime? dateModified = Convert.ToDateTime(view.GetRowCellValue(e.RowHandle, view.Columns["ModifiedDate"]));
-                if (id > 0)
-                {
-                    e.Appearance.Options.UseBackColor = true;
-                    if (id == 1 && dateCreated.Date == DateTime.Now.ServerNow().Date)
-                    {
-                        e.Appearance.BackColor = Color.FromArgb(85, 255, 95);
-                        e.Appearance.BackColor2 = Color.FromArgb(85, 255, 95);
-                    }
-                    if (id == 2 && dateModified.HasValue && dateModified.Value.Date == DateTime.Now.ServerNow().Date)
-                    {
-                        e.Appearance.BackColor = Color.FromArgb(255, 200, 50);
-                        e.Appearance.BackColor2 = Color.FromArgb(255, 200, 50);
-                    }
-                    if (id == 3 && dateModified.HasValue && dateModified.Value.Date == DateTime.Now.ServerNow().Date)
-                    {
-                        e.Appearance.BackColor = Color.FromArgb(244, 68, 68);
-                        e.Appearance.BackColor2 = Color.FromArgb(244, 68, 68);
-                    }
-                }
-            }
-            if (e.RowHandle == view.FocusedRowHandle)
-            {
-                e.Appearance.Options.UseBackColor = true;
-                e.Appearance.BackColor = MyColor.GridDefaultRow;
-                e.Appearance.BackColor2 = MyColor.GridDefaultRow;
-            }
+            //GridView view = sender as GridView;
+            //if (e.RowHandle == view.FocusedRowHandle)
+            //{
+            //    e.Appearance.Options.UseBackColor = true;
+            //    e.Appearance.BackColor = MyColor.GridDefaultRow;
+            //    e.Appearance.BackColor2 = MyColor.GridDefaultRow;
+            //}
         }
 
         public static void SumResult(this GridView grvMain)

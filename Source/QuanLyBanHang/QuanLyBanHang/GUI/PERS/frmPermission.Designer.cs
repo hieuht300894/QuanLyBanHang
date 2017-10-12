@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
-            this.lblMessage = new DevExpress.XtraEditors.LabelControl();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.mmeDescription = new DevExpress.XtraEditors.MemoEdit();
             this.txtName = new DevExpress.XtraEditors.TextEdit();
@@ -49,7 +48,6 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).BeginInit();
@@ -65,7 +63,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             this.SuspendLayout();
@@ -88,30 +85,13 @@
             "DevExpress.XtraBars.Navigation.OfficeNavigationBar",
             "DevExpress.XtraBars.Navigation.TileNavPane"});
             // 
-            // lblMessage
-            // 
-            this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblMessage.Appearance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.lblMessage.Appearance.ForeColor = System.Drawing.Color.Maroon;
-            this.lblMessage.Appearance.Options.UseFont = true;
-            this.lblMessage.Appearance.Options.UseForeColor = true;
-            this.lblMessage.Appearance.Options.UseTextOptions = true;
-            this.lblMessage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.lblMessage.Location = new System.Drawing.Point(12, 334);
-            this.lblMessage.MinimumSize = new System.Drawing.Size(0, 18);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(860, 18);
-            this.lblMessage.StyleController = this.layoutControl1;
-            this.lblMessage.TabIndex = 11;
-            // 
             // layoutControl1
             // 
             this.layoutControl1.Controls.Add(this.mmeDescription);
             this.layoutControl1.Controls.Add(this.txtName);
-            this.layoutControl1.Controls.Add(this.lblMessage);
             this.layoutControl1.Controls.Add(this.trlFeature);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutControl1.Location = new System.Drawing.Point(0, 24);
+            this.layoutControl1.Location = new System.Drawing.Point(0, 26);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
             this.layoutControl1.Size = new System.Drawing.Size(884, 364);
@@ -155,7 +135,7 @@
             this.trlFeature.ParentFieldName = "IDGroup";
             this.trlFeature.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rchkChecked});
-            this.trlFeature.Size = new System.Drawing.Size(860, 244);
+            this.trlFeature.Size = new System.Drawing.Size(860, 266);
             this.trlFeature.TabIndex = 6;
             // 
             // colVN
@@ -249,7 +229,6 @@
             this.layoutControlGroup1.GroupBordersVisible = false;
             this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem1,
-            this.layoutControlItem3,
             this.layoutControlItem2,
             this.layoutControlItem4});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
@@ -262,18 +241,9 @@
             this.layoutControlItem1.Control = this.trlFeature;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 74);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(864, 248);
+            this.layoutControlItem1.Size = new System.Drawing.Size(864, 270);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
-            // 
-            // layoutControlItem3
-            // 
-            this.layoutControlItem3.Control = this.lblMessage;
-            this.layoutControlItem3.Location = new System.Drawing.Point(0, 322);
-            this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(864, 22);
-            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem3.TextVisible = false;
             // 
             // layoutControlItem2
             // 
@@ -318,7 +288,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             this.ResumeLayout(false);
@@ -331,13 +300,11 @@
         private DevExpress.XtraTreeList.TreeList trlFeature;
         private DevExpress.XtraEditors.MemoEdit mmeDescription;
         private DevExpress.XtraEditors.TextEdit txtName;
-        private DevExpress.XtraEditors.LabelControl lblMessage;
         private System.Windows.Forms.BindingSource bindingSource1;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit rchkChecked;
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem4;
         private DevExpress.XtraTreeList.Columns.TreeListColumn colVN;
