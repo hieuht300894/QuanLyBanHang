@@ -15,6 +15,7 @@ namespace QuanLyBanHang
         #region Variables
         public eFormType fType;
         public List<eFormType> fTypes;
+        bool IsLeaveForm = false;
         public RepositoryItemDateEdit rDateEdit = new RepositoryItemDateEdit();
         #endregion
 
@@ -28,33 +29,35 @@ namespace QuanLyBanHang
         #region Methods
         private void BarItemVisibility()
         {
-            if (fType == eFormType.Default)
+            foreach (eFormType _fType in fTypes)
             {
-                btnAdd.Visibility = clsGeneral.curUserFeature.IsAdd ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                btnEdit.Visibility = clsGeneral.curUserFeature.IsEdit ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                btnDelete.Visibility = clsGeneral.curUserFeature.IsDelete ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            }
-            if (fType == eFormType.Add || fType == eFormType.Edit)
-            {
-                if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+                if (_fType == eFormType.Default)
                 {
-                    btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                    btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    btnAdd.Visibility = clsGeneral.curUserFeature.IsAdd ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                    btnEdit.Visibility = clsGeneral.curUserFeature.IsEdit ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                    btnDelete.Visibility = clsGeneral.curUserFeature.IsDelete ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                    btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                 }
-                if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+                if (_fType == eFormType.Add || _fType == eFormType.Edit)
                 {
-                    btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                    btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+                    {
+                        btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                        btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    }
+                    if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+                    {
+                        btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                        btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    }
+                    btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                 }
-                btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                if (_fType == eFormType.Print)
+                {
+                    btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                }
             }
-            if (fType == eFormType.Print)
-            {
-                btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            }
-
         }
         private void SetCaptionButton()
         {
@@ -72,24 +75,32 @@ namespace QuanLyBanHang
         }
         private void loadAccessForm()
         {
-            if (fType == eFormType.Default && (this.Name.StartsWith("frm") || this.Name.StartsWith("bbi")))
-            {
-                if (this.Name.StartsWith("bbi"))
-                    clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature()
-                    {
-                        IsAdd = true,
-                        IsDelete = true,
-                        IsEdit = true,
-                        IsEnable = true
-                    };
-                else
-                {
-                    if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission > 0)
-                        clsGeneral.curUserFeature = clsUserRole.Instance.getUserFeature(this.Name);
-                    else if (clsGeneral.curPersonnel.KeyID == 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission == 0)
-                        clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature() { IsAdd = true, IsDelete = true, IsEdit = true, IsEnable = true };
-                }
-            }
+            fTypes = fTypes ?? new List<eFormType>();
+            if (!fTypes.Any(x => x == fType)) fTypes.Add(fType);
+
+            //if (_fType == eFormType.Default && (this.Name.StartsWith("frm") || this.Name.StartsWith("bbi")))
+            //{
+            //    if (this.Name.StartsWith("bbi"))
+            //        clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature()
+            //        {
+            //            IsAdd = true,
+            //            IsDelete = true,
+            //            IsEdit = true,
+            //            IsEnable = true
+            //        };
+            //    else
+            //    {
+            //        if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission > 0)
+            //            clsGeneral.curUserFeature = clsUserRole.Instance.getUserFeature(this.Name);
+            //        else if (clsGeneral.curPersonnel.KeyID == 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission == 0)
+            //            clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature() { IsAdd = true, IsDelete = true, IsEdit = true, IsEnable = true };
+            //    }
+            //}
+
+            if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission > 0)
+                clsGeneral.curUserFeature = clsUserRole.Instance.getUserFeature(this.Name);
+            else if (clsGeneral.curPersonnel.KeyID == 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission == 0)
+                clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature() { IsAdd = true, IsDelete = true, IsEdit = true, IsSave = true, IsExportExcel = true, IsPrintPreview = true, IsEnable = true };
         }
         private void InitEvents()
         {
@@ -133,31 +144,34 @@ namespace QuanLyBanHang
 
                 if (hi.RowHandle >= 0 && (hi.InRow || hi.InRowCell))
                 {
-                    if (fType == eFormType.Default)
+                    foreach (eFormType _fType in fTypes)
                     {
-                        bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-                        bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
-                        bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
-                        bbpRefresh.Enabled = true;
-                    }
-                    if (fType == eFormType.Add || fType == eFormType.Edit)
-                    {
-                        if (fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+                        if (_fType == eFormType.Default)
                         {
-                            bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+                            bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
+                            bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
+                            bbpRefresh.Enabled = true;
                         }
-                        if (fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+                        if (_fType == eFormType.Add || _fType == eFormType.Edit)
                         {
-                            bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+                            {
+                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            }
+                            if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+                            {
+                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            }
+                            bbpCancel.Enabled = true;
                         }
-                        bbpCancel.Enabled = true;
-                    }
-                    if (fType == eFormType.Print)
-                    {
-                        bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
-                        bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
+                        if (_fType == eFormType.Print)
+                        {
+                            bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
+                            bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
+                        }
                     }
                 }
                 else
@@ -286,8 +300,21 @@ namespace QuanLyBanHang
         }
         private void frmBase_Enter(object sender, EventArgs e)
         {
-            loadAccessForm();
+            if (IsLeaveForm)
+            {
+                loadAccessForm();
+                IsLeaveForm = !IsLeaveForm;
+            }
+        }
+        private void frmBase_Leave(object sender, EventArgs e)
+        {
+            if (!IsLeaveForm)
+            {
+                IsLeaveForm = !IsLeaveForm;
+            }
         }
         #endregion
+
+
     }
 }

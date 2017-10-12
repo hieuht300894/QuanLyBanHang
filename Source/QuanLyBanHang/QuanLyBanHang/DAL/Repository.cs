@@ -26,17 +26,20 @@ namespace QuanLyBanHang.DAL
 
         public void Insert(T TEntry)
         {
-            Context.Entry(TEntry.Clone()).State = EntityState.Added;
+            //Context.Entry(TEntry.Clone()).State = EntityState.Added;
+            Context.Set<T>().Add(TEntry);
         }
 
         public void Update(T TEntry)
         {
-            Context.Entry(TEntry.Clone()).State = EntityState.Modified;
+            //Context.Entry(TEntry.Clone()).State = EntityState.Modified;
+            Context.Set<T>().Attach(TEntry);
         }
 
         public void Delete(T TEntry)
         {
-            Context.Entry(TEntry.Clone()).State = EntityState.Deleted;
+            //Context.Entry(TEntry.Clone()).State = EntityState.Deleted;
+            Context.Set<T>().Remove(TEntry);
         }
 
         public void BeginTransaction()

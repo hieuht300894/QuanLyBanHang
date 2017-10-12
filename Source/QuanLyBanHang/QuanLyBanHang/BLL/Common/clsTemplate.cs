@@ -58,7 +58,6 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
-
         public virtual T GetByID(int KeyID)
         {
             try
@@ -92,7 +91,7 @@ namespace QuanLyBanHang.BLL.Common
             }
             catch (Exception ex)
             {
-                clsGeneral.showErrorException(ex, "Lỗi thêm mới");
+                clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(T).Name}");
                 return false;
             }
         }
@@ -108,7 +107,7 @@ namespace QuanLyBanHang.BLL.Common
             }
             catch (Exception ex)
             {
-                clsGeneral.showErrorException(ex, "Lỗi cập nhật");
+                clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(T).Name}");
                 return false;
             }
         }
@@ -124,7 +123,7 @@ namespace QuanLyBanHang.BLL.Common
             }
             catch (Exception ex)
             {
-                clsGeneral.showErrorException(ex, "Lỗi xóa");
+                clsGeneral.showErrorException(ex, $"Lỗi xóa: {typeof(T).Name}");
                 return false;
             }
         }
