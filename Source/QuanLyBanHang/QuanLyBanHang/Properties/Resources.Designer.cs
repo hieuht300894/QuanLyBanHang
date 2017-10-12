@@ -4713,6 +4713,16 @@ namespace QuanLyBanHang.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap demoLogo {
+            get {
+                object obj = ResourceManager.GetObject("demoLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Design_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Design_16x16", resourceCulture);

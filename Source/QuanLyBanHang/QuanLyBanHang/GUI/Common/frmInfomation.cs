@@ -42,7 +42,9 @@ namespace QuanLyBanHang.GUI.Common
         private void setControlValue()
         {
             if (_acEntry.KeyID > 0)
+            {
                 lciSave.Visibility = lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+            }
             else
             {
                 lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
@@ -55,6 +57,10 @@ namespace QuanLyBanHang.GUI.Common
             txt_Agency_Phone.EditValue = _acEntry.Phone;
             txt_Agency_Mail.EditValue = _acEntry.Email;
             mme_Agency_Note.EditValue = _acEntry.Description;
+
+            picLogo.Image = clsGeneral.byteArrayToImage(_acEntry.Logo);
+            if (picLogo.Image == null)
+                picLogo.Image = Properties.Resources.demoLogo;
         }
         private void saveData()
         {
@@ -64,6 +70,7 @@ namespace QuanLyBanHang.GUI.Common
             _acEntry.Phone = txt_Agency_Phone.Text.Trim();
             _acEntry.Email = txt_Agency_Mail.Text.Trim();
             _acEntry.Description = mme_Agency_Note.Text.Trim();
+            _acEntry.Logo = clsGeneral.imageToByteArray(picLogo.Image);
             _acEntry.IsEnable = true;
 
             if (_acEntry.KeyID == 0)
@@ -105,6 +112,16 @@ namespace QuanLyBanHang.GUI.Common
         {
             clsGeneral.curAgency = _acEntry;
             DialogResult = DialogResult.OK;
+        }
+        private void picLogo_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Image Files(*.BMP;*.PNG;*.JPG;*.JPEG;*.GIF)|*.BMP;*.PNG;*.JPG;*.JPEG;*.GIF";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap bitmap = new Bitmap(dialog.FileName);
+                picLogo.Image = bitmap;
+            }
         }
         #endregion
     }
