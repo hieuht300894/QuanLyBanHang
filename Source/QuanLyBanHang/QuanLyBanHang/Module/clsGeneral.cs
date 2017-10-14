@@ -153,7 +153,7 @@ namespace QuanLyBanHang
         /// </summary>
         /// <param name="_ex"></param>
         /// <param name="_message"></param>
-        public static void showErrorException(Exception _ex, string _message)
+        public static void showErrorException(Exception _ex, string _message="Thông báo")
         {
             if (_frmError == null) _frmError = new GUI.Common.frmError();
             if (!_frmError.IsHandleCreated)

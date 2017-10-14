@@ -25,6 +25,7 @@ using DevExpress.Utils.Win;
 using DevExpress.LookAndFeel;
 using System.IO;
 using Newtonsoft.Json;
+using System.Data.SqlClient;
 
 namespace QuanLyBanHang
 {
@@ -135,54 +136,6 @@ namespace QuanLyBanHang
             string temp = sSource.Normalize(NormalizationForm.FormD);
             string nameNosign = regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
             return nameNosign;
-        }
-
-        public static string GetStringByName(this object oSource, string pName)
-        {
-            if (oSource == null) return string.Empty;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? oRe.ToString() : string.Empty;
-        }
-
-        public static int GetInt16ByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToInt16(oRe) : 0;
-        }
-
-        public static int GetInt32ByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToInt32(oRe) : 0;
-        }
-
-        public static bool GetBooleanByName(this object oSource, string pName)
-        {
-            if (oSource == null) return false;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToBoolean(oRe) : false;
-        }
-
-        public static decimal GetDecimalByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToDecimal(oRe) : 0;
-        }
-
-        public static void SetValue(this object obj, string FieldName, object Value)
-        {
-            if (obj == null) return;
-
-            obj.GetType().GetProperties().Where(x => x.Name.Equals(FieldName)).ToList().ForEach(x =>
-            {
-                if (x.PropertyType.GenericTypeArguments.Length > 0)
-                    x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType.GenericTypeArguments[0]));
-                else
-                    x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType));
-            });
         }
 
         // Hàm đọc số thành chữ
@@ -557,7 +510,7 @@ namespace QuanLyBanHang
             grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.NewItemRowText = string.Empty;
             grvMain.OptionsSelection.MultiSelect = true;
-            grvMain.OptionsSelection.MultiSelectMode= GridMultiSelectMode.RowSelect;
+            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             grvMain.OptionsView.ShowFooter = true;
 
             grvMain.BestFitColumns();
@@ -962,7 +915,7 @@ namespace QuanLyBanHang
                 trlMain.NodesReloaded += trlMain_NodesReloaded;
             }
             trlMain.ColumnPanelRowHeight = 25;
-           
+
             trlMain.Translation();
             trlMain.FormatColumnTreeList();
             trlMain.BestFitColumns();
@@ -1729,7 +1682,7 @@ namespace QuanLyBanHang
             return JsonConvert.DeserializeObject<List<T>>(serialized);
         }
 
-        public static string Serialize<T>(this T source)
+        public static string SerializeJSON<T>(this T source)
         {
             var serialized = JsonConvert.SerializeObject(
                 source,
@@ -1741,10 +1694,148 @@ namespace QuanLyBanHang
             return serialized;
         }
 
-        public static T Deserialize<T>(this string source) where T : new()
+        public static T DeserializeJSON<T>(this string source) where T : new()
         {
             try { return JsonConvert.DeserializeObject<T>(source); }
             catch { return new T(); }
         }
+    }
+
+    public static class ReflectionPopulator
+    {
+        public static List<List<ObjectTemp>> CreateObjects(this SqlDataReader reader, Type type)
+        {
+            var results = new List<List<ObjectTemp>>();
+            var properties = type.GetProperties();
+
+            while (reader.Read())
+            {
+                List<ObjectTemp> list = new List<ObjectTemp>();
+                foreach (var property in properties)
+                {
+                    Type convertTo = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                    ObjectTemp obj = new ObjectTemp();
+                    int index = reader.GetOrdinal(property.Name);
+                    var val = reader[property.Name];
+                    obj.Name = property.Name;
+                    switch (convertTo.Name)
+                    {
+                        case "Int16":
+                        case "Int32":
+                        case "Int64":
+                            obj.Value = reader.IsDBNull(index) ? 0 : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "String":
+                            obj.Value = reader.IsDBNull(index) ? string.Empty : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "Boolean":
+                            obj.Value = reader.IsDBNull(index) ? false : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "DateTime":
+                            obj.Value = reader.IsDBNull(index) ? null : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        default:
+                            obj.Value = null;
+                            break;
+                    }
+                    list.Add(obj);
+                }
+                results.Add(list);
+            }
+            return results;
+        }
+
+        public static object CreateObject(this SqlDataReader reader, Type type)
+        {
+            var properties = type.GetProperties();
+            while (reader.Read())
+            {
+                var item = type.Clone();
+                foreach (var property in properties)
+                {
+                    if (!reader.IsDBNull(reader.GetOrdinal(property.Name)))
+                    {
+                        item.SetValue(property.Name, reader[property.Name]);
+                    }
+                }
+                return item;
+            }
+            return null;
+        }
+    }
+
+    public static class Converter
+    {
+        public static string GetStringByName(this object oSource, string pName)
+        {
+            if (oSource == null) return string.Empty;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? oRe.ToString() : string.Empty;
+        }
+
+        public static int GetInt16ByName(this object oSource, string pName)
+        {
+            if (oSource == null) return 0;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ToInt16(oRe) : 0;
+        }
+
+        public static int GetInt32ByName(this object oSource, string pName)
+        {
+            if (oSource == null) return 0;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ToInt32(oRe) : 0;
+        }
+
+        public static bool GetBooleanByName(this object oSource, string pName)
+        {
+            if (oSource == null) return false;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ToBoolean(oRe) : false;
+        }
+
+        public static decimal GetDecimalByName(this object oSource, string pName)
+        {
+            if (oSource == null) return 0;
+            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ToDecimal(oRe) : 0;
+        }
+
+        public static object GetObjectByName(this Type oSource, string pName, Type convertTo)
+        {
+            if (oSource == null) return Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
+
+            var properties = oSource.GetProperties();
+            oSource.Clone();
+            var oRe = oSource.GetProperty(pName).GetValue(oSource, null);
+            return oRe != null ? Convert.ChangeType(oRe, convertTo) : Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
+        }
+
+        public static string SerializeJSON(this Type source)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            source.GetProperties().ToList().ForEach(x => dic.Add(x.Name, x.GetValue(source)));
+            string result = dic.SerializeJSON();
+            return result;
+        }
+
+        public static void SetValue(this object obj, string FieldName, object Value)
+        {
+            if (obj == null) return;
+
+            obj.GetType().GetProperties().Where(x => x.Name.Equals(FieldName)).ToList().ForEach(x =>
+            {
+                if (x.PropertyType.GenericTypeArguments.Length > 0)
+                    x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType.GenericTypeArguments[0]));
+                else
+                    x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType));
+            });
+        }
+    }
+
+    public class ObjectTemp
+    {
+        public string Name { get; set; }
+        public object Value { get; set; }
     }
 }
