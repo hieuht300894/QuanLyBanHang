@@ -44,7 +44,7 @@ namespace QuanLyBanHang.DAL
 
         public void BeginTransaction()
         {
-            curTrans = Context.Database.BeginTransaction();
+            curTrans = Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
         }
 
         public void Commit()

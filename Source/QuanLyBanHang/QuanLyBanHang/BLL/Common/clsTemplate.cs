@@ -4,6 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity.Migrations;
+using System.ComponentModel;
+using System.Data.Entity;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace QuanLyBanHang.BLL.Common
 {
@@ -39,7 +44,7 @@ namespace QuanLyBanHang.BLL.Common
         }
         #endregion
 
-        #region Function
+        #region Common Function
         public virtual List<T> GetAll()
         {
             try
@@ -132,6 +137,246 @@ namespace QuanLyBanHang.BLL.Common
                 clsGeneral.showErrorException(ex, $"Lỗi xóa: {typeof(T).Name}");
                 return false;
             }
+        }
+        #endregion
+
+        #region Delete Items
+        public delegate void LoadStatus(bool status);
+        public delegate void LoadPecent(int percent);
+        public LoadStatus ReloadStatus;
+        public LoadPecent ReloadPercent;
+        //private List<int> ListEntry;
+        private BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+        Timer timer = new Timer() { Interval = 1000, Enabled = false };
+        private Dictionary<string, List<int>> ListEntity = new Dictionary<string, List<int>>();
+        private bool CurrentStatus = false;
+        private int TotalNumber = 0;
+        private int CurrentNumber = 0;
+        private DateTime CurrentDate;
+
+        public void Init()
+        {
+            bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+            bWorker.DoWork += bWorker_DoWork;
+            bWorker.ProgressChanged += bWorker_ProgressChanged;
+            bWorker.RunWorkerCompleted += bWorker_RunWorkerCompleted;
+
+            timer = new Timer() { Interval = 1000, Enabled = false };
+            timer.Tick += timer_Tick;
+
+            ListEntity = new Dictionary<string, List<int>>();
+            CurrentStatus = false;
+            TotalNumber = 0;
+            CurrentNumber = 0;
+        }
+
+        public void SetEntity(string Name, List<int> _lstEntry)
+        {
+            ListEntity.Add(Name, _lstEntry);
+        }
+
+        public void StartRun()
+        {
+            bWorker.RunWorkerAsync();
+            timer.Enabled = true;
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (TotalNumber > 0 && bWorker.IsBusy)
+            {
+                int curPercent = Convert.ToInt32(((CurrentNumber * 1.0f) / TotalNumber) * 100);
+                bWorker.ReportProgress(curPercent, bWorker.IsBusy);
+            }
+        }
+
+        void bWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timer.Enabled = false;
+
+            timer.Dispose();
+            bWorker.Dispose();
+
+            ReloadStatus?.Invoke(CurrentStatus);
+            ReloadPercent?.Invoke(100);
+
+            clsGeneral.showMessage((DateTime.Now.ServerNow().Minute - CurrentDate.Minute).ToString());
+        }
+
+        void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (!(bool)e.UserState)
+                timer.Enabled = false;
+
+            ReloadPercent?.Invoke(e.ProgressPercentage);
+        }
+
+        void bWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            CurrentNumber = 0;
+
+            if (ListEntity != null)
+                ListEntity.ToList().ForEach(x => TotalNumber += x.Value.Count);
+
+            CurrentStatus = RemoveEntry();
+        }
+
+        //private bool RemoveEntry()
+        //{
+        //    try
+        //    {
+        //        repository.Context = new aModel();
+        //        foreach (var entity in ListEntity)
+        //        {
+        //            DbSet dbSet = getDbSet(entity.Key);
+        //            if (dbSet == null)
+        //                return false;
+        //            foreach (int id in entity.Value)
+        //            {
+        //                object obj = dbSet.Find(id);
+        //                if (obj != null)
+        //                {
+        //                    xLog log = new xLog();
+        //                    log.AccessDate = CurrentDate;
+        //                    log.IDPersonnel = clsGeneral.curPersonnel.KeyID;
+        //                    log.State = EntityState.Deleted.ToString();
+        //                    log.TableName = entity.Key;
+        //                    log.OldValue = obj.Serialize();
+        //                    repository.Context.xLog.AddOrUpdate(log);
+        //                    dbSet.Remove(obj);
+        //                }
+        //                CurrentNumber++;
+        //            }
+        //        }
+        //        repository.Context.SaveChangesAsync().Wait();
+        //        return true;
+        //    }
+        //    catch { return false; }
+        //}
+
+        //private bool RemoveEntry()
+        //{
+        //    try
+        //    {
+        //        CurrentDate = DateTime.Now.ServerNow();
+        //        repository.Context = new aModel();
+        //        repository.BeginTransaction();
+        //        foreach (var entity in ListEntity)
+        //        {
+        //            DbSet dbSet = getDbSet(entity.Key);
+        //            if (dbSet == null)
+        //                return false;
+        //            foreach (int id in entity.Value)
+        //            {
+        //                string qSelect = "select * from " + entity.Key + " where KeyID=@KeyID";
+        //                object obj = dbSet.SqlQuery(qSelect, new SqlParameter("@KeyID", id)).ToListAsync().Result.FirstOrDefault();
+        //                if (obj != null)
+        //                {
+        //                    string qInsert = $"insert into xLog (AccessDate,IDPersonnel,State,TableName,OldValue) values(@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
+        //                    repository.Context.Database.ExecuteSqlCommand(
+        //                        qInsert,
+        //                        new SqlParameter("@AccessDate", CurrentDate),
+        //                        new SqlParameter("@IDPersonnel", clsGeneral.curPersonnel.KeyID),
+        //                        new SqlParameter("@State", EntityState.Deleted.ToString()),
+        //                        new SqlParameter("@TableName", entity.Key),
+        //                        new SqlParameter("@OldValue", obj.Serialize()));
+
+        //                    string qDelete = $"delete from {entity.Key} where KeyID=@KeyID";
+        //                    repository.Context.Database.ExecuteSqlCommand(qDelete, new SqlParameter("@KeyID", id));
+        //                }
+        //                else
+        //                    return false;
+        //                CurrentNumber++;
+        //            }
+        //        }
+        //        repository.Context.SaveChangesAsync().Wait();
+        //        repository.Commit();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        repository.Rollback();
+        //        clsGeneral.showErrorException(ex);
+        //        return false;
+        //    }
+        //}
+
+        private bool RemoveEntry()
+        {
+            CurrentDate = DateTime.Now.ServerNow();
+            repository.Context = new aModel();
+            SqlConnection conn = new SqlConnection(repository.Context.Database.Connection.ConnectionString);
+            SqlTransaction tran = null;
+            try
+            {
+                conn.Open();
+                tran = conn.BeginTransaction(System.Data.IsolationLevel.Serializable);
+
+                foreach (var entity in ListEntity)
+                {
+                    Type type = null;
+                    GetInstance(entity.Key, ref type);
+
+                    if (type == null) return false;
+
+                    int minID = entity.Value.DefaultIfEmpty().Min();
+                    int maxID = entity.Value.DefaultIfEmpty().Max();
+                    string qSelect = $"select * from {entity.Key} where KeyID between {minID} and {maxID}";
+                    SqlCommand cmdSelect = new SqlCommand(qSelect, conn, tran);
+                    List<List<ObjectTemp>> listParent = new List<List<ObjectTemp>>(cmdSelect.ExecuteReader().CreateObjects(type));
+                    int countSelect = listParent.Count;
+                    int currentSelect = 0;
+                    foreach (int id in entity.Value)
+                    {
+                        List<ObjectTemp> listChild = listParent[currentSelect++];
+                        ObjectTemp obj = listChild.FirstOrDefault(x => x.Name.Equals("KeyID") && x.Value.Equals(id));
+                        if (obj == null) return false;
+                        if (obj != null)
+                        {
+                            string qInsert = $"insert into xLog (AccessDate,IDPersonnel,State,TableName,OldValue) ";
+                            qInsert += $" values({CurrentDate}, {clsGeneral.curPersonnel.KeyID}, {EntityState.Deleted.ToString()}, {entity.Key}, {listChild.SerializeJSON()})";
+                            SqlCommand cmdInsert = new SqlCommand(qInsert, conn, tran);
+                            cmdSelect.ExecuteNonQuery();
+
+                            string qDelete = $"delete from {entity.Key} where KeyID={id}";
+                            SqlCommand cmdDelete = new SqlCommand(qInsert, conn, tran);
+                            cmdDelete.ExecuteNonQuery();
+                        }
+                        CurrentNumber++;
+                    }
+                }
+
+                tran.Commit();
+                conn.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                tran.Rollback();
+                conn.Close();
+                clsGeneral.showErrorException(ex);
+                return false;
+            }
+        }
+
+        public DbSet getDbSet(string tableName)
+        {
+            Assembly asse = Assembly.Load("EntityModel");
+            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
+            if (mod != null)
+            {
+                Type type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
+                if (type != null)
+                    return repository.Context.Set(type);
+            }
+            return null;
+        }
+
+        public void GetInstance(string tableName, ref Type type)
+        {
+            Assembly asse = Assembly.Load("EntityModel");
+            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
+            if (mod != null) type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
         }
         #endregion
     }
