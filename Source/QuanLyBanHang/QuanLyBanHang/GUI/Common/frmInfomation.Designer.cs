@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInfomation));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.layoutControl3 = new DevExpress.XtraLayout.LayoutControl();
+            this.picLogo = new DevExpress.XtraEditors.PictureEdit();
+            this.btnConfirm = new DevExpress.XtraEditors.SimpleButton();
+            this.btnSave = new DevExpress.XtraEditors.SimpleButton();
             this.mme_Agency_Note = new DevExpress.XtraEditors.MemoEdit();
             this.txt_Agency_Mail = new DevExpress.XtraEditors.TextEdit();
             this.txt_Agency_Phone = new DevExpress.XtraEditors.TextEdit();
@@ -44,19 +47,17 @@
             this.layoutControlItem10 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem11 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem12 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
-            this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.picLogo = new DevExpress.XtraEditors.PictureEdit();
-            this.btnConfirm = new DevExpress.XtraEditors.SimpleButton();
-            this.btnSave = new DevExpress.XtraEditors.SimpleButton();
             this.lciSave = new DevExpress.XtraLayout.LayoutControlItem();
+            this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.lciConfirm = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem13 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl3)).BeginInit();
             this.layoutControl3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mme_Agency_Note.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Agency_Mail.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Agency_Phone.Properties)).BeginInit();
@@ -70,13 +71,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciSave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciConfirm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -109,6 +109,47 @@
             this.layoutControl3.Size = new System.Drawing.Size(560, 287);
             this.layoutControl3.TabIndex = 0;
             this.layoutControl3.Text = "layoutControl3";
+            // 
+            // picLogo
+            // 
+            this.picLogo.Cursor = System.Windows.Forms.Cursors.Default;
+            this.picLogo.EditValue = global::QuanLyBanHang.Properties.Resources.default_logo;
+            this.picLogo.Location = new System.Drawing.Point(432, 12);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Properties.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
+            this.picLogo.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
+            this.picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
+            this.picLogo.Properties.ZoomAccelerationFactor = 1D;
+            this.picLogo.Size = new System.Drawing.Size(116, 116);
+            this.picLogo.StyleController = this.layoutControl3;
+            this.picLogo.TabIndex = 13;
+            this.picLogo.Click += new System.EventHandler(this.picLogo_Click);
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Appearance.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Bold);
+            this.btnConfirm.Appearance.Options.UseFont = true;
+            this.btnConfirm.Image = global::QuanLyBanHang.Properties.Resources.Apply_32x32;
+            this.btnConfirm.Location = new System.Drawing.Point(432, 237);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(116, 38);
+            this.btnConfirm.StyleController = this.layoutControl3;
+            this.btnConfirm.TabIndex = 12;
+            this.btnConfirm.Text = "Chọn";
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Appearance.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Bold);
+            this.btnSave.Appearance.Options.UseFont = true;
+            this.btnSave.Image = global::QuanLyBanHang.Properties.Resources.Save_32x32;
+            this.btnSave.Location = new System.Drawing.Point(312, 237);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(116, 38);
+            this.btnSave.StyleController = this.layoutControl3;
+            this.btnSave.TabIndex = 11;
+            this.btnSave.Text = "Cập nhật";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // mme_Agency_Note
             // 
@@ -262,75 +303,6 @@
             this.layoutControlItem12.Text = "Ghi chú";
             this.layoutControlItem12.TextSize = new System.Drawing.Size(88, 19);
             // 
-            // emptySpaceItem1
-            // 
-            this.emptySpaceItem1.AllowHotTrack = false;
-            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 225);
-            this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(300, 42);
-            this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
-            // 
-            // layoutControlGroup1
-            // 
-            this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
-            this.layoutControlGroup1.GroupBordersVisible = false;
-            this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem13});
-            this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 311);
-            this.layoutControlGroup1.TextVisible = false;
-            // 
-            // layoutControlItem13
-            // 
-            this.layoutControlItem13.Control = this.layoutControl3;
-            this.layoutControlItem13.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem13.Name = "layoutControlItem13";
-            this.layoutControlItem13.Size = new System.Drawing.Size(564, 291);
-            this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem13.TextVisible = false;
-            // 
-            // picLogo
-            // 
-            this.picLogo.Cursor = System.Windows.Forms.Cursors.Default;
-            this.picLogo.EditValue = global::QuanLyBanHang.Properties.Resources.demoLogo;
-            this.picLogo.Location = new System.Drawing.Point(432, 12);
-            this.picLogo.Name = "picLogo";
-            this.picLogo.Properties.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.ByteArray;
-            this.picLogo.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
-            this.picLogo.Properties.ZoomAccelerationFactor = 1D;
-            this.picLogo.Size = new System.Drawing.Size(116, 116);
-            this.picLogo.StyleController = this.layoutControl3;
-            this.picLogo.TabIndex = 13;
-            this.picLogo.Click += new System.EventHandler(this.picLogo_Click);
-            // 
-            // btnConfirm
-            // 
-            this.btnConfirm.Appearance.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Bold);
-            this.btnConfirm.Appearance.Options.UseFont = true;
-            this.btnConfirm.Image = global::QuanLyBanHang.Properties.Resources.Apply_32x32;
-            this.btnConfirm.Location = new System.Drawing.Point(432, 237);
-            this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(116, 38);
-            this.btnConfirm.StyleController = this.layoutControl3;
-            this.btnConfirm.TabIndex = 12;
-            this.btnConfirm.Text = "Chọn";
-            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Appearance.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Bold);
-            this.btnSave.Appearance.Options.UseFont = true;
-            this.btnSave.Image = global::QuanLyBanHang.Properties.Resources.Save_32x32;
-            this.btnSave.Location = new System.Drawing.Point(312, 237);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(116, 38);
-            this.btnSave.StyleController = this.layoutControl3;
-            this.btnSave.TabIndex = 11;
-            this.btnSave.Text = "Cập nhật";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // lciSave
             // 
             this.lciSave.Control = this.btnSave;
@@ -342,6 +314,14 @@
             this.lciSave.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
             this.lciSave.TextSize = new System.Drawing.Size(0, 0);
             this.lciSave.TextVisible = false;
+            // 
+            // emptySpaceItem1
+            // 
+            this.emptySpaceItem1.AllowHotTrack = false;
+            this.emptySpaceItem1.Location = new System.Drawing.Point(0, 225);
+            this.emptySpaceItem1.Name = "emptySpaceItem1";
+            this.emptySpaceItem1.Size = new System.Drawing.Size(300, 42);
+            this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // lciConfirm
             // 
@@ -369,6 +349,26 @@
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
+            // layoutControlGroup1
+            // 
+            this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            this.layoutControlGroup1.GroupBordersVisible = false;
+            this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
+            this.layoutControlItem13});
+            this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlGroup1.Name = "Root";
+            this.layoutControlGroup1.Size = new System.Drawing.Size(584, 311);
+            this.layoutControlGroup1.TextVisible = false;
+            // 
+            // layoutControlItem13
+            // 
+            this.layoutControlItem13.Control = this.layoutControl3;
+            this.layoutControlItem13.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem13.Name = "layoutControlItem13";
+            this.layoutControlItem13.Size = new System.Drawing.Size(564, 291);
+            this.layoutControlItem13.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem13.TextVisible = false;
+            // 
             // frmInfomation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -386,6 +386,7 @@
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl3)).EndInit();
             this.layoutControl3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mme_Agency_Note.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Agency_Mail.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Agency_Phone.Properties)).EndInit();
@@ -399,13 +400,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciSave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciConfirm)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem13)).EndInit();
             this.ResumeLayout(false);
 
         }

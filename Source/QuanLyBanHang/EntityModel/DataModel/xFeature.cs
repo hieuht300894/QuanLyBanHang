@@ -25,5 +25,7 @@ namespace EntityModel.DataModel
         public bool IsExportExcel { get; set; }
         public bool IsSave { get; set; }
         public bool IsEnable { get; set; }
+        public int ItemCount { get; set; }
+        public int Level { get; set; }
     }
 }

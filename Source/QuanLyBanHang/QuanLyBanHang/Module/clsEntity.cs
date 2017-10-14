@@ -117,7 +117,7 @@ namespace QuanLyBanHang
             catch { return false; }
         }
 
-        public static string get_Caption(object ribbon, string iName, string pName, string iCaption)
+        public static string get_Caption(object ribbon, string iName, string pName, string iCaption, int Level)
         {
             try
             {
@@ -126,6 +126,7 @@ namespace QuanLyBanHang
                 {
                     if (!f.GetStringByName(Properties.Settings.Default.CurrentCulture).Equals(iCaption))
                     {
+                        f.Level = Level;
                         f.VN = iCaption;
                         f.EN = iName.NoSign().Replace("_List", "").AutoSpace();
                         db.SaveChanges();
@@ -141,6 +142,7 @@ namespace QuanLyBanHang
                             f = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
                             f.VN = iCaption;
                             f.EN = iName.NoSign().Replace("_List", "").AutoSpace();
+                            f.Level = Level;
                             db.xFeature.Add(f);
                             db.SaveChanges();
                             return Properties.Settings.Default.CurrentCulture.Equals("VN") ? f.VN : f.EN;
@@ -150,6 +152,7 @@ namespace QuanLyBanHang
                             f = new xFeature() { KeyID = iName, IDGroup = pName, IsEnable = true };
                             f.VN = iCaption;
                             f.EN = iName.NoSign().Replace("_List", "").AutoSpace();
+                            f.Level = Level;
                             db.xFeature.Add(f);
                             db.SaveChanges();
                             return Properties.Settings.Default.CurrentCulture.Equals("VN") ? f.VN : f.EN;
@@ -215,6 +218,11 @@ namespace QuanLyBanHang
                 }
             }
             return true;
+        }
+
+        public static void UpdateFeatures()
+        {
+            clsFeature.Instance.UpdateFeaturesCount();
         }
     }
 

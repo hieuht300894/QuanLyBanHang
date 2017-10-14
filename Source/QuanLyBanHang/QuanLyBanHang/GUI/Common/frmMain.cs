@@ -168,6 +168,7 @@ namespace QuanLyBanHang.GUI.Common
                             bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
                             bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
                             addItemClick();
+                            clsEntity.UpdateFeatures();
                             ribbon.Show();
                             ribbonStatusBar.Show();
                             clsGeneral.CloseWaitForm();
@@ -211,43 +212,43 @@ namespace QuanLyBanHang.GUI.Common
         private void addItemClick()
         {
             // Duyệt từng page trong ribbon
-            foreach (RibbonPage page in ribbon.Pages)
+            try
             {
-                page.Visible = false;
-                page.Text = clsEntity.get_Caption(page, page.Name, ribbon.Name, page.Text);
-                try
+                foreach (RibbonPage page in ribbon.Pages)
                 {
+                    page.Visible = false;
+                    page.Text = clsEntity.get_Caption(page, page.Name, ribbon.Name, page.Text, 0);
+
                     foreach (RibbonPageGroup group in page.Groups)
                     {
                         group.Visible = false;
-                        group.Text = clsEntity.get_Caption(group, group.Name, page.Name, group.Text);
+                        group.Text = clsEntity.get_Caption(group, group.Name, page.Name, group.Text, 1);
                         foreach (var item in group.ItemLinks)
                         {
                             if (item is BarButtonItemLink)
                             {
                                 BarButtonItemLink bbi = item as BarButtonItemLink;
-                                bbi.Item.Caption = clsEntity.get_Caption(bbi, bbi.Item.Name, group.Name, bbi.Item.Caption);
-                                bbi.Visible = clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
-                                if (bbi.Visible && bbi.Item.Name.StartsWith("frm"))
+                                if (bbi.Item.Name.StartsWith("bbi"))
                                 {
-                                    bbi.Item.ItemClick += bt_ItemClick;
+                                    bbi.Visible = true;
                                     page.Visible = group.Visible = true;
                                 }
-                                if (bbi.Visible)
-                                    page.Visible = group.Visible = true;
-                            }
-
-                            if (item is BarEditItemLink)
-                            {
-                                BarEditItemLink bei = item as BarEditItemLink;
-                                bei.Item.Caption = clsEntity.get_Caption(bei, bei.Item.Name, group.Name, bei.Item.Caption);
-                                bei.Visible = page.Visible = group.Visible = true;
+                                else if (bbi.Item.Name.StartsWith("frm"))
+                                {
+                                    bbi.Item.Caption = clsEntity.get_Caption(bbi, bbi.Item.Name, group.Name, bbi.Item.Caption, 2);
+                                    bbi.Visible = clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
+                                    if (bbi.Visible)
+                                    {
+                                        bbi.Item.ItemClick += bt_ItemClick;
+                                        page.Visible = group.Visible = true;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                catch { }
             }
+            catch { }
         }
 
         private void bt_ItemClick(object sender, ItemClickEventArgs e)

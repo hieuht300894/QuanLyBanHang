@@ -43,12 +43,15 @@ namespace QuanLyBanHang.GUI.Common
         {
             if (_acEntry.KeyID > 0)
             {
-                lciSave.Visibility = lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                btnConfirm.Select();
             }
             else
             {
                 lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
                 lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                btnSave.Select();
             }
 
             txt_Agency_Code.EditValue = _acEntry.Code;
@@ -60,7 +63,7 @@ namespace QuanLyBanHang.GUI.Common
 
             picLogo.Image = clsGeneral.byteArrayToImage(_acEntry.Logo);
             if (picLogo.Image == null)
-                picLogo.Image = Properties.Resources.demoLogo;
+                picLogo.Image = Properties.Resources.default_logo;
         }
         private void saveData()
         {

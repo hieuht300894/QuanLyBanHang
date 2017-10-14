@@ -78,7 +78,9 @@ namespace QuanLyBanHang.GUI.PER
         {
             trlFeature.Nodes.Clear();
 
-            trlFeature.DataSource = clsFeature.Instance.SearchFeature(true);
+            List<xFeature> list = new List<xFeature>(clsFeature.Instance.SearchFeature(true));
+            //list = list.Where(x => ((x.Level == 0 || x.Level == 1) && x.ItemCount > 0) || (x.Level == 2 && x.ItemCount == 0)).ToList();
+            trlFeature.DataSource = list;
             trlFeature.KeyFieldName = "KeyID";
             trlFeature.ParentFieldName = "IDGroup";
             if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
@@ -128,13 +130,16 @@ namespace QuanLyBanHang.GUI.PER
             foreach (var usr in lstUserFeatures)
             {
                 TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
-                node.CheckState = CheckState.Checked;
-                node.SetValue(colIsAdd, usr.IsAdd);
-                node.SetValue(colIsEdit, usr.IsEdit);
-                node.SetValue(colIsDelete, usr.IsDelete);
-                node.SetValue(colIsSave, usr.IsSave);
-                node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
-                node.SetValue(colIsExportExcel, usr.IsExportExcel);
+                if (node != null)
+                {
+                    node.CheckState = CheckState.Checked;
+                    node.SetValue(colIsAdd, usr.IsAdd);
+                    node.SetValue(colIsEdit, usr.IsEdit);
+                    node.SetValue(colIsDelete, usr.IsDelete);
+                    node.SetValue(colIsSave, usr.IsSave);
+                    node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
+                    node.SetValue(colIsExportExcel, usr.IsExportExcel);
+                }
             }
 
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;

@@ -74,15 +74,7 @@ namespace QuanLyBanHang.BLL.PERS
                 repository.Context = new aModel();
                 repository.BeginTransaction();
                 repository.Context.xPermission.AddOrUpdate(entry);
-                lstUserFeatures.ForEach(x =>
-                {
-                    if (x.KeyID == 0)
-                        repository.Context.xUserFeature.Add(x);
-                    else if (x.IsEnable)
-                        repository.Context.xUserFeature.AddOrUpdate(x);
-                    else
-                        repository.Context.xUserFeature.Remove(x);
-                });
+                lstUserFeatures.ForEach(x => { repository.Context.xUserFeature.AddOrUpdate(x); });
                 repository.Context.SaveChanges();
                 repository.Commit();
                 return true;
@@ -90,7 +82,7 @@ namespace QuanLyBanHang.BLL.PERS
             catch (Exception ex)
             {
                 repository.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi cập nhật mới: {typeof(xPermission).Name}");
+                clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(xPermission).Name}");
                 return false;
             }
         }
