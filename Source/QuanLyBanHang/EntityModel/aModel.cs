@@ -13,14 +13,14 @@ namespace EntityModel.DataModel
         static bool acLog = true;
         public override int SaveChanges()
         {
-            List<DbEntityEntry> entries = null;
             try
             {
-                entries = base.ChangeTracker.Entries()
-                .Where(e => e.Entity.GetType().Name.StartsWith("e") && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
-                .ToList();
-                if (entries != null && entries.Count > 0)
-                    AutoLog(entries);
+                //List<DbEntityEntry> entries = null;
+                //entries = base.ChangeTracker.Entries()
+                //.Where(e => e.Entity.GetType().Name.StartsWith("e") && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
+                //.ToList();
+                //if (entries != null && entries.Count > 0)
+                //    AutoLog(entries);
             }
             catch { }
             return base.SaveChanges();

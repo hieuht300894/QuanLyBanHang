@@ -29,6 +29,7 @@
         public virtual DbSet<xPermission> xPermission { get; set; }
         public virtual DbSet<xUserFeature> xUserFeature { get; set; }
         public virtual DbSet<xUserLog> xUserLog { get; set; }
+        public virtual DbSet<xLog> xLog { get; set; }
         #endregion
 
         #region Danh mục
