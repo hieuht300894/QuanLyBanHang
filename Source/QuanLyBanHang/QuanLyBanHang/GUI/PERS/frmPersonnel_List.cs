@@ -21,8 +21,22 @@ namespace QuanLyBanHang.GUI.PER
 
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
-            loadData(0);
+            //loadData(0);
             customForm();
+
+            clsPersonnel.Instance.ReloadPercent = SetProgress;
+            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            betPercent.EditValue = 0;
+            List<int> list = new List<int>();
+            for(int i = 1; i <= 10001; i++) { list.Add(i); }
+            clsPersonnel.Instance.Init();
+            clsPersonnel.Instance.SetEntity(typeof(eTinhThanh).Name, list);
+            clsPersonnel.Instance.StartRun();
+        }
+
+        private void SetProgress(int percent)
+        {
+            betPercent.EditValue = percent;
         }
         #endregion
 
