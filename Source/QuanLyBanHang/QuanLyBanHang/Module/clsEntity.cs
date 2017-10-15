@@ -99,7 +99,7 @@ namespace QuanLyBanHang
                 account = db.xAccount.FirstOrDefault(n => n.UserName.Equals(_UserName) && n.Password.Equals(_Password));
                 if (account != null)
                 {
-                    personnel = db.xPersonnel.FirstOrDefault(x => x.KeyID == account.IDPersonnel && x.IsEnable && x.IsAccount);
+                    personnel = db.xPersonnel.FirstOrDefault(x => x.KeyID == account.KeyID && x.IsEnable && x.IsAccount);
 
                     if (personnel != null)
                     {
@@ -175,7 +175,7 @@ namespace QuanLyBanHang
         public static bool Check_Role(xAccount _iAccount, string cName)
         {
             db = db ?? new aModel();
-            if (_iAccount.IDPersonnel == 0)
+            if (_iAccount.KeyID == 0)
                 return true;
             else if (_iAccount.IDPermission == 0)
                 return false;

@@ -114,7 +114,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = clsAccount.Instance.GetEntry(iEntry.IDPersonnel);
+            _acEntry = clsAccount.Instance.GetEntry(iEntry.KeyID);
             setControlValue();
         }
         private void loadPersonnel(int KeyID)
@@ -152,7 +152,7 @@ namespace QuanLyBanHang.GUI.PER
             //lctAccount.BesFitFormHeight();
             this.CenterToScreen();
 
-            loadPersonnel(_acEntry.IDPersonnel);
+            loadPersonnel(_acEntry.KeyID);
             txtUserName.Text = _acEntry.UserName;
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
             loadPermission(_acEntry.IDPermission);
@@ -213,7 +213,7 @@ namespace QuanLyBanHang.GUI.PER
             if (fType == eFormType.Add)
             {
                 _acEntry.IsEnable = true;
-                _acEntry.IDPersonnel = lokPersonnel.ToInt();
+                _acEntry.KeyID = lokPersonnel.ToInt();
                 _acEntry.PersonelName = lokPersonnel.Text;
                 _acEntry.UserName = txtUserName.Text.Trim().ToLower();
                 _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
@@ -229,7 +229,7 @@ namespace QuanLyBanHang.GUI.PER
             bRe = fType == eFormType.Add ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
 
             if (bRe && ReLoadParent != null)
-                ReLoadParent(_acEntry.IDPersonnel);
+                ReLoadParent(_acEntry.KeyID);
 
             return bRe;
         }

@@ -41,8 +41,6 @@
             this.lciPassword = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPersonnel = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPermission = new DevExpress.XtraLayout.LayoutControlItem();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).BeginInit();
             this.lctAccount.SuspendLayout();
@@ -56,10 +54,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.lciPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPermission)).BeginInit();
             this.SuspendLayout();
-            // 
-            // rDateEdit
-            // 
-            this.rDateEdit.Mask.EditMask = "dd/MM/yyyy";
             // 
             // lctAccount
             // 
@@ -187,8 +181,6 @@
             this.Name = "frmAccount";
             this.Text = "Thêm mới tài khoản";
             this.Controls.SetChildIndex(this.lctAccount, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccount)).EndInit();
             this.lctAccount.ResumeLayout(false);

@@ -164,9 +164,6 @@ namespace QuanLyBanHang.GUI.PER
         {
             gctAccountList.Format();
             lctAccountList.BestFitText();
-
-            grvAccountList.Columns["CreatedDate"].ColumnEdit = rDateEdit;
-            grvAccountList.Columns["ModifiedDate"].ColumnEdit = rDateEdit;
         }
         #endregion
     }

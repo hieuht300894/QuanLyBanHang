@@ -7,16 +7,18 @@ using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraEditors.Repository;
 using System.Collections.Generic;
+using DevExpress.XtraEditors;
 
 namespace QuanLyBanHang
 {
-    public partial class frmBase : DevExpress.XtraEditors.XtraForm
+    public partial class frmBase : XtraForm
     {
         #region Variables
         public eFormType fType;
         public List<eFormType> fTypes;
         bool IsLeaveForm = false;
-        public RepositoryItemDateEdit rDateEdit = new RepositoryItemDateEdit();
+        delegate void _LoadProgress();
+
         #endregion
 
         #region Form
@@ -130,7 +132,6 @@ namespace QuanLyBanHang
         }
         private void CustomForm()
         {
-            rDateEdit.Format();
         }
         protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
             bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
@@ -199,15 +200,29 @@ namespace QuanLyBanHang
                 popGridMenu.ShowPopup(MousePosition);
             }
         }
-        protected virtual void _showPercent(int value)
+        protected virtual void LoadPercent(int Percent)
         {
-            betPercent.EditValue = value;
-            if (value == 100)
-                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            betPercent.EditValue = Percent;
         }
-        protected virtual void _showMessage(bool status)
+        protected virtual void LoadMessage(string Msg)
         {
-            clsGeneral.showMessage("Đã xóa xong dữ liệu.");
+            betPercent.EditValue = 0;
+            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            clsGeneral.showMessage(Msg);
+        }
+        protected virtual void LoadError(Exception Ex)
+        {
+            clsGeneral.showErrorException(Ex);
+        }
+        protected virtual void LoadProgress()
+        {
+            _LoadProgress _loadProgress = new _LoadProgress(ShowProgress);
+            Invoke(_loadProgress);
+        }
+        private void ShowProgress()
+        {
+            betPercent.EditValue = 0;
+            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
         }
         #endregion
 
@@ -314,7 +329,5 @@ namespace QuanLyBanHang
             }
         }
         #endregion
-
-
     }
 }

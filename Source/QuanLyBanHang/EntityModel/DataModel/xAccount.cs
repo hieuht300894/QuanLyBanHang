@@ -9,7 +9,7 @@ namespace EntityModel.DataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDPersonnel { get; set; }
+        public int KeyID { get; set; }
         public string PersonelName { get; set; }
         public int IDAgency { get; set; }
         [Required]

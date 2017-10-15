@@ -21,22 +21,8 @@ namespace QuanLyBanHang.GUI.PER
 
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
-            //loadData(0);
+            loadData(0);
             customForm();
-
-            clsPersonnel.Instance.ReloadPercent = SetProgress;
-            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            betPercent.EditValue = 0;
-            List<int> list = new List<int>();
-            for(int i = 1; i <= 100000; i++) { list.Add(i); }
-            clsPersonnel.Instance.Init();
-            clsPersonnel.Instance.SetEntity(typeof(eTinhThanh).Name, list);
-            clsPersonnel.Instance.StartRun();
-        }
-
-        private void SetProgress(int percent)
-        {
-            betPercent.EditValue = percent;
         }
         #endregion
 
@@ -151,23 +137,49 @@ namespace QuanLyBanHang.GUI.PER
 
         private void deleteEntry()
         {
-            //if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
-            //{
-            //    try
-            //    {
-            //        if (clsPersonnel.Instance.deleteEntry(((xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle)).KeyID))
-            //        {
-            //            loadData(0);
-            //        }
-            //        else
-            //            clsGeneral.showMessage("Xóa dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgDeleteFailed", this.Name));
+            int[] Indexes = grvPersonnelList.GetSelectedRows();
+            List<int> lstIDNhanVien = new List<int>();
+            List<int> lstIDTaiKhoan = new List<int>();
+            bool IsWarming = false;
+            for (int i = 0; i < Indexes.Length; i++)
+            {
+                xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
+                if (!IsWarming)
+                {
+                    //Thông báo nếu chưa được cảnh báo nhân viên đã có tài khoản
+                    if (personnel.IsAccount)
+                    {
+                        bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
+                        if (IsXoa)
+                        {
+                            lstIDNhanVien.Add(personnel.KeyID);
+                            lstIDTaiKhoan.Add(personnel.KeyID);
+                        }
+                    }
+                    else
+                    {
+                        lstIDNhanVien.Add(personnel.KeyID);
+                    }
+                }
+                else
+                {
+                    lstIDNhanVien.Add(personnel.KeyID);
+                    if (personnel.IsAccount)
+                        lstIDTaiKhoan.Add(personnel.KeyID);
+                }
+                //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
+                if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
+            }
 
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        clsGeneral.showErrorException(ex, "Exception");
-            //    }
-            //}
+            clsPersonnel.Instance.Init();
+            clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstIDNhanVien);
+            clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstIDTaiKhoan);
+            clsPersonnel.Instance.ReloadProgress = LoadProgress;
+            clsPersonnel.Instance.ReloadPercent = LoadPercent;
+            clsPersonnel.Instance.ReloadMessage = LoadMessage;
+            clsPersonnel.Instance.ReloadError = LoadError;
+            clsPersonnel.Instance.ReloadData = loadData;
+            clsPersonnel.Instance.StartRun();
         }
 
         private void refreshEntry()

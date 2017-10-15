@@ -141,18 +141,36 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Delete Items
-        public delegate void LoadStatus(bool status);
-        public delegate void LoadPecent(int percent);
-        public LoadStatus ReloadStatus;
+
+        /*
+            Cách sử dụng hàm Delete Items:
+
+            List<int> list = new List<int>();
+            for(int i = 1; i <= 100000; i++) { list.Add(i); }
+            clsPersonnel.Instance.Init();
+            clsPersonnel.Instance.SetEntity(typeof(eTinhThanh).Name, list);
+            clsPersonnel.Instance.ReloadProgress = LoadProgress;
+            clsPersonnel.Instance.ReloadPercent = LoadPercent;
+            clsPersonnel.Instance.ReloadMessage = LoadMessage;
+            clsPersonnel.Instance.ReloadError = LoadError;
+            clsPersonnel.Instance.StartRun();
+         */
+        public delegate void LoadProgress();
+        public delegate void LoadData(int KeyID);
+        public delegate void LoadPecent(int Percent);
+        public delegate void LoadMessage(string Msg);
+        public delegate void LoadError(Exception Ex);
+        public LoadData ReloadData;
+        public LoadProgress ReloadProgress;
         public LoadPecent ReloadPercent;
-        //private List<int> ListEntry;
+        public LoadMessage ReloadMessage;
+        public LoadError ReloadError;
         private BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
         Timer timer = new Timer() { Interval = 1000, Enabled = false };
         private Dictionary<string, List<int>> ListEntity = new Dictionary<string, List<int>>();
         private bool CurrentStatus = false;
         private int TotalNumber = 0;
         private int CurrentNumber = 0;
-        private DateTime CurrentDate;
 
         public void Init()
         {
@@ -172,7 +190,7 @@ namespace QuanLyBanHang.BLL.Common
 
         public void SetEntity(string Name, List<int> _lstEntry)
         {
-            ListEntity.Add(Name, _lstEntry);
+            ListEntity.Add(Name, _lstEntry.OrderBy(x => x).ToList());
         }
 
         public void StartRun()
@@ -197,10 +215,9 @@ namespace QuanLyBanHang.BLL.Common
             timer.Dispose();
             bWorker.Dispose();
 
-            ReloadStatus?.Invoke(CurrentStatus);
+            ReloadData?.Invoke(0);
             ReloadPercent?.Invoke(100);
-
-            clsGeneral.showMessage((DateTime.Now.ServerNow().Minute - CurrentDate.Minute).ToString());
+            ReloadMessage?.Invoke(CurrentStatus ? "Xóa dữ liệu hoàn thành!" : "Xóa dữ liệu không thành công!");
         }
 
         void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -213,97 +230,16 @@ namespace QuanLyBanHang.BLL.Common
 
         void bWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            CurrentNumber = 0;
-
             if (ListEntity != null)
                 ListEntity.ToList().ForEach(x => TotalNumber += x.Value.Count);
 
+            ReloadProgress?.Invoke();
             CurrentStatus = RemoveEntry();
         }
 
-        //private bool RemoveEntry()
-        //{
-        //    try
-        //    {
-        //        repository.Context = new aModel();
-        //        foreach (var entity in ListEntity)
-        //        {
-        //            DbSet dbSet = getDbSet(entity.Key);
-        //            if (dbSet == null)
-        //                return false;
-        //            foreach (int id in entity.Value)
-        //            {
-        //                object obj = dbSet.Find(id);
-        //                if (obj != null)
-        //                {
-        //                    xLog log = new xLog();
-        //                    log.AccessDate = CurrentDate;
-        //                    log.IDPersonnel = clsGeneral.curPersonnel.KeyID;
-        //                    log.State = EntityState.Deleted.ToString();
-        //                    log.TableName = entity.Key;
-        //                    log.OldValue = obj.Serialize();
-        //                    repository.Context.xLog.AddOrUpdate(log);
-        //                    dbSet.Remove(obj);
-        //                }
-        //                CurrentNumber++;
-        //            }
-        //        }
-        //        repository.Context.SaveChangesAsync().Wait();
-        //        return true;
-        //    }
-        //    catch { return false; }
-        //}
-
-        //private bool RemoveEntry()
-        //{
-        //    try
-        //    {
-        //        CurrentDate = DateTime.Now.ServerNow();
-        //        repository.Context = new aModel();
-        //        repository.BeginTransaction();
-        //        foreach (var entity in ListEntity)
-        //        {
-        //            DbSet dbSet = getDbSet(entity.Key);
-        //            if (dbSet == null)
-        //                return false;
-        //            foreach (int id in entity.Value)
-        //            {
-        //                string qSelect = "select * from " + entity.Key + " where KeyID=@KeyID";
-        //                object obj = dbSet.SqlQuery(qSelect, new SqlParameter("@KeyID", id)).ToListAsync().Result.FirstOrDefault();
-        //                if (obj != null)
-        //                {
-        //                    string qInsert = $"insert into xLog (AccessDate,IDPersonnel,State,TableName,OldValue) values(@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
-        //                    repository.Context.Database.ExecuteSqlCommand(
-        //                        qInsert,
-        //                        new SqlParameter("@AccessDate", CurrentDate),
-        //                        new SqlParameter("@IDPersonnel", clsGeneral.curPersonnel.KeyID),
-        //                        new SqlParameter("@State", EntityState.Deleted.ToString()),
-        //                        new SqlParameter("@TableName", entity.Key),
-        //                        new SqlParameter("@OldValue", obj.Serialize()));
-
-        //                    string qDelete = $"delete from {entity.Key} where KeyID=@KeyID";
-        //                    repository.Context.Database.ExecuteSqlCommand(qDelete, new SqlParameter("@KeyID", id));
-        //                }
-        //                else
-        //                    return false;
-        //                CurrentNumber++;
-        //            }
-        //        }
-        //        repository.Context.SaveChangesAsync().Wait();
-        //        repository.Commit();
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        repository.Rollback();
-        //        clsGeneral.showErrorException(ex);
-        //        return false;
-        //    }
-        //}
-
         private bool RemoveEntry()
         {
-            CurrentDate = DateTime.Now.ServerNow();
+            DateTime CurrentDate = DateTime.Now.ServerNow();
             repository.Context = new aModel();
             SqlConnection conn = new SqlConnection(repository.Context.Database.Connection.ConnectionString);
             SqlTransaction tran = null;
@@ -311,7 +247,6 @@ namespace QuanLyBanHang.BLL.Common
             {
                 conn.Open();
                 tran = conn.BeginTransaction(System.Data.IsolationLevel.Serializable);
-
                 foreach (var entity in ListEntity)
                 {
                     Type type = null;
@@ -328,7 +263,7 @@ namespace QuanLyBanHang.BLL.Common
                     int currentSelect = 0;
                     foreach (int id in entity.Value)
                     {
-                        Dictionary<string, object> listChild = listParent[currentSelect++];
+                        Dictionary<string, object> listChild = listParent[currentSelect];
                         bool chk = listChild.Any(x => x.Key.Equals("KeyID") && x.Value.Equals(id));
                         if (!chk) return false;
                         else
@@ -346,8 +281,8 @@ namespace QuanLyBanHang.BLL.Common
                             SqlCommand cmdDelete = new SqlCommand(qDelete, conn, tran);
                             cmdDelete.Parameters.Add("@KeyID", System.Data.SqlDbType.Int).Value = id;
                             cmdDelete.ExecuteNonQuery();
-
                         }
+                        currentSelect++;
                         CurrentNumber++;
                     }
                 }
@@ -360,22 +295,9 @@ namespace QuanLyBanHang.BLL.Common
             {
                 tran.Rollback();
                 conn.Close();
-                clsGeneral.showErrorException(ex);
+                ReloadError?.Invoke(ex);
                 return false;
             }
-        }
-
-        public DbSet getDbSet(string tableName)
-        {
-            Assembly asse = Assembly.Load("EntityModel");
-            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
-            if (mod != null)
-            {
-                Type type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
-                if (type != null)
-                    return repository.Context.Set(type);
-            }
-            return null;
         }
 
         public void GetInstance(string tableName, ref Type type)

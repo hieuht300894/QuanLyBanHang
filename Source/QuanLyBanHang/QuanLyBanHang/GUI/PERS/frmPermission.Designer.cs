@@ -50,8 +50,7 @@
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).BeginInit();
+  
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
@@ -69,7 +68,7 @@
             // 
             // rDateEdit
             // 
-            this.rDateEdit.Mask.EditMask = "dd/MM/yyyy";
+
             // 
             // dockManager1
             // 
@@ -275,8 +274,7 @@
             this.Name = "frmPermission";
             this.Text = "Phân quyền";
             this.Controls.SetChildIndex(this.layoutControl1, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).EndInit();
+     
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();

@@ -43,8 +43,6 @@
             this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccountList)).BeginInit();
             this.lctAccountList.SuspendLayout();
@@ -58,10 +56,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // rDateEdit
-            // 
-            this.rDateEdit.Mask.EditMask = "dd/MM/yyyy";
+
             // 
             // lctAccountList
             // 
@@ -202,8 +197,7 @@
             this.Text = "Danh sách tài khoản";
             this.Load += new System.EventHandler(this.frmAccount_List_Load);
             this.Controls.SetChildIndex(this.lctAccountList, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rDateEdit)).EndInit();
+      
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctAccountList)).EndInit();
             this.lctAccountList.ResumeLayout(false);

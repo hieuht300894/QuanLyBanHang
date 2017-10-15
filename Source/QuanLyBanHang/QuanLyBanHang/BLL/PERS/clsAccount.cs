@@ -163,7 +163,7 @@ namespace QuanLyBanHang.BLL.PERS
         public  IList<xAccount> SearchAccount(bool IsEnable, int KeyID)
         {
             repository.Context = new aModel();
-            IEnumerable<xAccount> lstTemp = repository.Context.xAccount.Where(n => n.IsEnable == IsEnable || n.IDPersonnel == KeyID);
+            IEnumerable<xAccount> lstTemp = repository.Context.xAccount.Where(n => n.IsEnable == IsEnable || n.KeyID == KeyID);
             List<xAccount> lstResult = lstTemp.ToList();
             return lstResult;
         }
@@ -191,7 +191,7 @@ namespace QuanLyBanHang.BLL.PERS
             {
                 repository.Context = new aModel();
                 repository.Context.xAccount.AddOrUpdate(entry);
-                repository.Context.xPersonnel.Find(entry.IDPersonnel).IsAccount = true;
+                repository.Context.xPersonnel.Find(entry.KeyID).IsAccount = true;
                 repository.Context.SaveChanges();
                 return true;
             }
