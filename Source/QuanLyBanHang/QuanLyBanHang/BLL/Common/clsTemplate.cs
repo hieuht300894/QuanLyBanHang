@@ -321,26 +321,32 @@ namespace QuanLyBanHang.BLL.Common
 
                     int minID = entity.Value.DefaultIfEmpty().Min();
                     int maxID = entity.Value.DefaultIfEmpty().Max();
-                    string qSelect = $"select * from {entity.Key} where KeyID between {minID} and {maxID}";
+                    string qSelect = $"SELECT * FROM {entity.Key} WHERE KeyID BETWEEN {minID} AND {maxID}";
                     SqlCommand cmdSelect = new SqlCommand(qSelect, conn, tran);
-                    List<List<ObjectTemp>> listParent = new List<List<ObjectTemp>>(cmdSelect.ExecuteReader().CreateObjects(type));
+                    List<Dictionary<string, object>> listParent = new List<Dictionary<string, object>>(cmdSelect.ExecuteReader().CreateObjects(type));
                     int countSelect = listParent.Count;
                     int currentSelect = 0;
                     foreach (int id in entity.Value)
                     {
-                        List<ObjectTemp> listChild = listParent[currentSelect++];
-                        ObjectTemp obj = listChild.FirstOrDefault(x => x.Name.Equals("KeyID") && x.Value.Equals(id));
-                        if (obj == null) return false;
-                        if (obj != null)
+                        Dictionary<string, object> listChild = listParent[currentSelect++];
+                        bool chk = listChild.Any(x => x.Key.Equals("KeyID") && x.Value.Equals(id));
+                        if (!chk) return false;
+                        else
                         {
-                            string qInsert = $"insert into xLog (AccessDate,IDPersonnel,State,TableName,OldValue) ";
-                            qInsert += $" values({CurrentDate}, {clsGeneral.curPersonnel.KeyID}, {EntityState.Deleted.ToString()}, {entity.Key}, {listChild.SerializeJSON()})";
+                            string qInsert = $"INSERT INTO xLog (AccessDate,IDPersonnel,State,TableName,OldValue) VALUES (@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
                             SqlCommand cmdInsert = new SqlCommand(qInsert, conn, tran);
-                            cmdSelect.ExecuteNonQuery();
+                            cmdInsert.Parameters.Add("@AccessDate", System.Data.SqlDbType.DateTime).Value = CurrentDate;
+                            cmdInsert.Parameters.Add("@IDPersonnel", System.Data.SqlDbType.Int).Value = clsGeneral.curPersonnel.KeyID;
+                            cmdInsert.Parameters.Add("@State", System.Data.SqlDbType.NVarChar).Value = EntityState.Deleted.ToString();
+                            cmdInsert.Parameters.Add("@TableName", System.Data.SqlDbType.NVarChar).Value = entity.Key;
+                            cmdInsert.Parameters.Add("@OldValue", System.Data.SqlDbType.NVarChar).Value = listChild.SerializeJSON();
+                            cmdInsert.ExecuteNonQuery();
 
-                            string qDelete = $"delete from {entity.Key} where KeyID={id}";
-                            SqlCommand cmdDelete = new SqlCommand(qInsert, conn, tran);
+                            string qDelete = $"DELETE FROM {entity.Key} WHERE KeyID=@KeyID";
+                            SqlCommand cmdDelete = new SqlCommand(qDelete, conn, tran);
+                            cmdDelete.Parameters.Add("@KeyID", System.Data.SqlDbType.Int).Value = id;
                             cmdDelete.ExecuteNonQuery();
+
                         }
                         CurrentNumber++;
                     }

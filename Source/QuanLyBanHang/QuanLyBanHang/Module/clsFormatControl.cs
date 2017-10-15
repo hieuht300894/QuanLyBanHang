@@ -1703,45 +1703,45 @@ namespace QuanLyBanHang
 
     public static class ReflectionPopulator
     {
-        public static List<List<ObjectTemp>> CreateObjects(this SqlDataReader reader, Type type)
+        public static List<Dictionary<string,object>> CreateObjects(this SqlDataReader reader, Type type)
         {
-            var results = new List<List<ObjectTemp>>();
+            List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
             var properties = type.GetProperties();
 
             while (reader.Read())
             {
-                List<ObjectTemp> list = new List<ObjectTemp>();
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                results.Add(dic);
                 foreach (var property in properties)
                 {
+                    object Value = null;
                     Type convertTo = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                    ObjectTemp obj = new ObjectTemp();
                     int index = reader.GetOrdinal(property.Name);
-                    var val = reader[property.Name];
-                    obj.Name = property.Name;
                     switch (convertTo.Name)
                     {
                         case "Int16":
                         case "Int32":
                         case "Int64":
-                            obj.Value = reader.IsDBNull(index) ? 0 : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            Value = reader.IsDBNull(index) ? 0 : Convert.ChangeType(reader.GetValue(index), convertTo);
                             break;
                         case "String":
-                            obj.Value = reader.IsDBNull(index) ? string.Empty : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            Value = reader.IsDBNull(index) ? string.Empty : Convert.ChangeType(reader.GetValue(index), convertTo);
                             break;
                         case "Boolean":
-                            obj.Value = reader.IsDBNull(index) ? false : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            Value = reader.IsDBNull(index) ? false : Convert.ChangeType(reader.GetValue(index), convertTo);
                             break;
                         case "DateTime":
-                            obj.Value = reader.IsDBNull(index) ? null : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            Value = reader.IsDBNull(index) ? null : Convert.ChangeType(reader.GetValue(index), convertTo);
                             break;
                         default:
-                            obj.Value = null;
+                            Value = null;
                             break;
                     }
-                    list.Add(obj);
+
+                    dic.Add(property.Name, Value);
                 }
-                results.Add(list);
             }
+            reader.Close();
             return results;
         }
 
@@ -1811,14 +1811,6 @@ namespace QuanLyBanHang
             return oRe != null ? Convert.ChangeType(oRe, convertTo) : Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
         }
 
-        public static string SerializeJSON(this Type source)
-        {
-            Dictionary<string, object> dic = new Dictionary<string, object>();
-            source.GetProperties().ToList().ForEach(x => dic.Add(x.Name, x.GetValue(source)));
-            string result = dic.SerializeJSON();
-            return result;
-        }
-
         public static void SetValue(this object obj, string FieldName, object Value)
         {
             if (obj == null) return;
@@ -1831,11 +1823,5 @@ namespace QuanLyBanHang
                     x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType));
             });
         }
-    }
-
-    public class ObjectTemp
-    {
-        public string Name { get; set; }
-        public object Value { get; set; }
     }
 }
