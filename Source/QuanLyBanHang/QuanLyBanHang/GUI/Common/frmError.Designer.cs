@@ -58,6 +58,8 @@
             // lblMessage
             // 
             this.lblMessage.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Appearance.Options.UseFont = true;
+            this.lblMessage.Appearance.Options.UseTextOptions = true;
             this.lblMessage.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.lblMessage.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
             this.lblMessage.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
@@ -106,6 +108,7 @@
             this.pteIcon.Properties.Padding = new System.Windows.Forms.Padding(25);
             this.pteIcon.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             this.pteIcon.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
+            this.pteIcon.Properties.ZoomAccelerationFactor = 1D;
             this.pteIcon.Size = new System.Drawing.Size(107, 107);
             this.pteIcon.TabIndex = 3;
             // 
