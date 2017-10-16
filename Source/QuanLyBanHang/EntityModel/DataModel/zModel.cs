@@ -34,7 +34,6 @@
 
         #region Danh mục
         public virtual DbSet<eKhachHang> eKhachHang { get; set; }
-        public virtual DbSet<eNhomKhachHang> eNhomKhachHang { get; set; }
         public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
         #endregion
 
