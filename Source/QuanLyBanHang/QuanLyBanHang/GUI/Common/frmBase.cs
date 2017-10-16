@@ -17,8 +17,6 @@ namespace QuanLyBanHang
         public eFormType fType;
         public List<eFormType> fTypes;
         bool IsLeaveForm = false;
-        delegate void _LoadProgress();
-
         #endregion
 
         #region Form
@@ -63,7 +61,7 @@ namespace QuanLyBanHang
         }
         private void SetCaptionButton()
         {
-            foreach (var item in bar3.Manager.Items)
+            foreach (var item in barTop.Manager.Items)
             {
                 if (item is DevExpress.XtraBars.BarButtonItem)
                 {
@@ -177,7 +175,11 @@ namespace QuanLyBanHang
                 }
                 else
                 {
-                    bbpAdd.Enabled = false;
+                    foreach (eFormType _fType in fTypes)
+                    {
+                        if (_fType == eFormType.Default)
+                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+                    }
                     bbpEdit.Enabled = false;
                     bbpDelete.Enabled = false;
                     bbpSave.Enabled = false;
@@ -206,6 +208,7 @@ namespace QuanLyBanHang
         }
         protected virtual void LoadMessage(string Msg)
         {
+            barBottom.Visible = false;
             betPercent.EditValue = 0;
             betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             clsGeneral.showMessage(Msg);
@@ -216,13 +219,17 @@ namespace QuanLyBanHang
         }
         protected virtual void LoadProgress()
         {
-            _LoadProgress _loadProgress = new _LoadProgress(ShowProgress);
-            Invoke(_loadProgress);
+            Action action = () =>
+            {
+                barBottom.Visible = true;
+                betPercent.EditValue = 0;
+                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            };
+            Invoke(action);
         }
-        private void ShowProgress()
+        protected virtual void ShowAlert(string Title = "", string Text = "")
         {
-            betPercent.EditValue = 0;
-            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            alertMsg.Show(this, Title, Text);
         }
         #endregion
 

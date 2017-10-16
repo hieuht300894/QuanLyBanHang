@@ -33,7 +33,7 @@
             this.repositoryItemTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.repositoryItemTextEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.barMenu = new DevExpress.XtraBars.BarManager(this.components);
-            this.bar3 = new DevExpress.XtraBars.Bar();
+            this.barTop = new DevExpress.XtraBars.Bar();
             this.btnAdd = new DevExpress.XtraBars.BarButtonItem();
             this.btnEdit = new DevExpress.XtraBars.BarButtonItem();
             this.btnDelete = new DevExpress.XtraBars.BarButtonItem();
@@ -43,7 +43,7 @@
             this.btnRefresh = new DevExpress.XtraBars.BarButtonItem();
             this.btnPrintPreview = new DevExpress.XtraBars.BarButtonItem();
             this.btnExportExcel = new DevExpress.XtraBars.BarButtonItem();
-            this.bar1 = new DevExpress.XtraBars.Bar();
+            this.barBottom = new DevExpress.XtraBars.Bar();
             this.betPercent = new DevExpress.XtraBars.BarEditItem();
             this.rpbPercent = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
@@ -62,6 +62,7 @@
             this.bbpSaveAndAdd = new DevExpress.XtraBars.BarButtonItem();
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -85,8 +86,8 @@
             this.barMenu.AllowCustomization = false;
             this.barMenu.AllowQuickCustomization = false;
             this.barMenu.Bars.AddRange(new DevExpress.XtraBars.Bar[] {
-            this.bar3,
-            this.bar1});
+            this.barTop,
+            this.barBottom});
             this.barMenu.DockControls.Add(this.barDockControlTop);
             this.barMenu.DockControls.Add(this.barDockControlBottom);
             this.barMenu.DockControls.Add(this.barDockControlLeft);
@@ -114,21 +115,21 @@
             this.bbpSave,
             this.bbpSaveAndAdd,
             this.bbpExportExcel});
-            this.barMenu.MainMenu = this.bar3;
+            this.barMenu.MainMenu = this.barTop;
             this.barMenu.MaxItemId = 27;
             this.barMenu.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rpbPercent});
-            this.barMenu.StatusBar = this.bar1;
+            this.barMenu.StatusBar = this.barBottom;
             // 
-            // bar3
+            // barTop
             // 
-            this.bar3.BarName = "Main menu";
-            this.bar3.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Top;
-            this.bar3.DockCol = 0;
-            this.bar3.DockRow = 0;
-            this.bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
-            this.bar3.FloatLocation = new System.Drawing.Point(68, 180);
-            this.bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            this.barTop.BarName = "Main menu";
+            this.barTop.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Top;
+            this.barTop.DockCol = 0;
+            this.barTop.DockRow = 0;
+            this.barTop.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            this.barTop.FloatLocation = new System.Drawing.Point(68, 180);
+            this.barTop.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnAdd),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnEdit),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnDelete),
@@ -138,10 +139,10 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.btnRefresh, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnPrintPreview, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnExportExcel)});
-            this.bar3.OptionsBar.DrawDragBorder = false;
-            this.bar3.OptionsBar.MultiLine = true;
-            this.bar3.OptionsBar.UseWholeRow = true;
-            this.bar3.Text = "Main menu";
+            this.barTop.OptionsBar.DrawDragBorder = false;
+            this.barTop.OptionsBar.MultiLine = true;
+            this.barTop.OptionsBar.UseWholeRow = true;
+            this.barTop.Text = "Main menu";
             // 
             // btnAdd
             // 
@@ -230,20 +231,21 @@
             this.btnExportExcel.Name = "btnExportExcel";
             this.btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
-            // bar1
+            // barBottom
             // 
-            this.bar1.BarName = "Bottom Menu";
-            this.bar1.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
-            this.bar1.DockCol = 0;
-            this.bar1.DockRow = 0;
-            this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
-            this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            this.barBottom.BarName = "Bottom Menu";
+            this.barBottom.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
+            this.barBottom.DockCol = 0;
+            this.barBottom.DockRow = 0;
+            this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
+            this.barBottom.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.betPercent)});
-            this.bar1.OptionsBar.DrawBorder = false;
-            this.bar1.OptionsBar.DrawDragBorder = false;
-            this.bar1.OptionsBar.MultiLine = true;
-            this.bar1.OptionsBar.UseWholeRow = true;
-            this.bar1.Text = "Bottom Menu";
+            this.barBottom.OptionsBar.DrawBorder = false;
+            this.barBottom.OptionsBar.DrawDragBorder = false;
+            this.barBottom.OptionsBar.MultiLine = true;
+            this.barBottom.OptionsBar.UseWholeRow = true;
+            this.barBottom.Text = "Bottom Menu";
+            this.barBottom.Visible = false;
             // 
             // betPercent
             // 
@@ -327,7 +329,6 @@
             // bbpRefresh
             // 
             this.bbpRefresh.Caption = "Làm mới";
-            this.bbpRefresh.Enabled = false;
             this.bbpRefresh.Id = 17;
             this.bbpRefresh.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Refresh_16x16;
             this.bbpRefresh.Name = "bbpRefresh";
@@ -398,6 +399,14 @@
             this.popGridMenu.Manager = this.barMenu;
             this.popGridMenu.Name = "popGridMenu";
             // 
+            // alertMsg
+            // 
+            this.alertMsg.AutoFormDelay = 5000;
+            this.alertMsg.FormShowingEffect = DevExpress.XtraBars.Alerter.AlertFormShowingEffect.SlideHorizontal;
+            this.alertMsg.LookAndFeel.SkinName = "Office 2010 Blue";
+            this.alertMsg.ShowPinButton = false;
+            this.alertMsg.ShowToolTips = false;
+            // 
             // frmBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -431,7 +440,7 @@
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem btnClose;
         public DevExpress.XtraBars.BarButtonItem btnEdit;
-        public DevExpress.XtraBars.Bar bar3;
+        public DevExpress.XtraBars.Bar barTop;
         public DevExpress.XtraBars.BarButtonItem btnDelete;
         public DevExpress.XtraBars.BarButtonItem btnRefresh;
         public DevExpress.XtraBars.BarButtonItem btnSave;
@@ -447,7 +456,7 @@
         public DevExpress.XtraBars.BarButtonItem btnPrintPreview;
         public DevExpress.XtraBars.BarButtonItem btnExportExcel;
         public DevExpress.XtraBars.BarButtonItem btnAdd;
-        public DevExpress.XtraBars.Bar bar1;
+        public DevExpress.XtraBars.Bar barBottom;
         public DevExpress.XtraBars.BarEditItem betPercent;
         private DevExpress.XtraEditors.Repository.RepositoryItemProgressBar rpbPercent;
         private DevExpress.XtraBars.BarButtonItem bbpConfirm;
@@ -457,5 +466,6 @@
         public DevExpress.XtraBars.BarButtonItem bbpExportExcel;
         public DevExpress.XtraBars.BarButtonItem bbpCancel;
         public DevExpress.XtraBars.BarButtonItem bbpPrintPreview;
+        private DevExpress.XtraBars.Alerter.AlertControl alertMsg;
     }
 }
