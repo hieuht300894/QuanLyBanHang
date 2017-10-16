@@ -1,4 +1,5 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars.Alerter;
+using DevExpress.XtraEditors;
 using DevExpress.XtraSplashScreen;
 using EntityModel.DataModel;
 using System;
@@ -153,7 +154,7 @@ namespace QuanLyBanHang
         /// </summary>
         /// <param name="_ex"></param>
         /// <param name="_message"></param>
-        public static void showErrorException(Exception _ex, string _message="Thông báo")
+        public static void showErrorException(Exception _ex, string _message = "Thông báo")
         {
             if (_frmError == null) _frmError = new GUI.Common.frmError();
             if (!_frmError.IsHandleCreated)
@@ -471,8 +472,6 @@ namespace QuanLyBanHang
 namespace QuanLyBanHang
 {
     public enum eFormType { Default = 0, List, Add, Edit, Print };
-
-    public enum eNTaskWorker { BVN = 0, Volo, Say, Xuc, Ralo, GHX, BV_GHX, Gang, TinhX, BV_TinhX, GHT, BV_GHT, Tach, TinhT, BV_TinhT };
 
     #region Extension Method
     public class ObjectShredder<T>
