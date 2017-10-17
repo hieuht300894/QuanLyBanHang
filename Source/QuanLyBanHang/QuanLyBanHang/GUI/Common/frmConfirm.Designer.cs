@@ -55,9 +55,10 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(224, 78);
+            this.btnOk.Image = global::QuanLyBanHang.Properties.Resources.Apply_16x16;
+            this.btnOk.Location = new System.Drawing.Point(214, 78);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.Size = new System.Drawing.Size(80, 23);
             this.btnOk.TabIndex = 5;
             this.btnOk.Text = "&Xác nhận";
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -66,9 +67,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(304, 78);
+            this.btnCancel.Image = global::QuanLyBanHang.Properties.Resources.Cancel_16x16;
+            this.btnCancel.Location = new System.Drawing.Point(300, 78);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(80, 23);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "&Hủy";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);

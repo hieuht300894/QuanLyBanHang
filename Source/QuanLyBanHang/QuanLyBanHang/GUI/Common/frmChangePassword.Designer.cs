@@ -80,11 +80,12 @@
             this.lctDoiMatKhau.Name = "lctDoiMatKhau";
             this.lctDoiMatKhau.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(761, 221, 250, 350);
             this.lctDoiMatKhau.Root = this.layoutControlGroup2;
-            this.lctDoiMatKhau.Size = new System.Drawing.Size(412, 149);
+            this.lctDoiMatKhau.Size = new System.Drawing.Size(384, 149);
             this.lctDoiMatKhau.TabIndex = 0;
             // 
             // pteIcon
             // 
+            this.pteIcon.Cursor = System.Windows.Forms.Cursors.Default;
             this.pteIcon.EditValue = global::QuanLyBanHang.Properties.Resources.LoginIcon;
             this.pteIcon.Location = new System.Drawing.Point(12, 12);
             this.pteIcon.Name = "pteIcon";
@@ -92,7 +93,8 @@
             this.pteIcon.Properties.Appearance.Options.UseBackColor = true;
             this.pteIcon.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             this.pteIcon.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            this.pteIcon.Size = new System.Drawing.Size(96, 125);
+            this.pteIcon.Properties.ZoomAccelerationFactor = 1D;
+            this.pteIcon.Size = new System.Drawing.Size(89, 125);
             this.pteIcon.StyleController = this.lctDoiMatKhau;
             this.pteIcon.TabIndex = 11;
             // 
@@ -100,9 +102,9 @@
             // 
             this.btnCancel.Image = global::QuanLyBanHang.Properties.Resources.Cancel_16x16;
             this.btnCancel.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(288, 114);
+            this.btnCancel.Location = new System.Drawing.Point(296, 114);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(112, 22);
+            this.btnCancel.Size = new System.Drawing.Size(76, 23);
             this.btnCancel.StyleController = this.lctDoiMatKhau;
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Hủy";
@@ -112,9 +114,9 @@
             // 
             this.btnSave.Image = global::QuanLyBanHang.Properties.Resources.SaveTo_16x16;
             this.btnSave.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
-            this.btnSave.Location = new System.Drawing.Point(199, 114);
+            this.btnSave.Location = new System.Drawing.Point(216, 114);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(85, 22);
+            this.btnSave.Size = new System.Drawing.Size(76, 22);
             this.btnSave.StyleController = this.lctDoiMatKhau;
             this.btnSave.TabIndex = 9;
             this.btnSave.Text = "Lưu";
@@ -122,12 +124,12 @@
             // 
             // bteConfirmPassword
             // 
-            this.bteConfirmPassword.Location = new System.Drawing.Point(187, 88);
+            this.bteConfirmPassword.Location = new System.Drawing.Point(180, 88);
             this.bteConfirmPassword.Name = "bteConfirmPassword";
             this.bteConfirmPassword.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Show_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
             this.bteConfirmPassword.Properties.UseSystemPasswordChar = true;
-            this.bteConfirmPassword.Size = new System.Drawing.Size(213, 22);
+            this.bteConfirmPassword.Size = new System.Drawing.Size(192, 22);
             this.bteConfirmPassword.StyleController = this.lctDoiMatKhau;
             this.bteConfirmPassword.TabIndex = 7;
             this.bteConfirmPassword.MouseLeave += new System.EventHandler(this.bteConfirmPassword_MouseLeave);
@@ -135,12 +137,12 @@
             // 
             // bteNewPassword
             // 
-            this.bteNewPassword.Location = new System.Drawing.Point(187, 62);
+            this.bteNewPassword.Location = new System.Drawing.Point(180, 62);
             this.bteNewPassword.Name = "bteNewPassword";
             this.bteNewPassword.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Show_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
             this.bteNewPassword.Properties.UseSystemPasswordChar = true;
-            this.bteNewPassword.Size = new System.Drawing.Size(213, 22);
+            this.bteNewPassword.Size = new System.Drawing.Size(192, 22);
             this.bteNewPassword.StyleController = this.lctDoiMatKhau;
             this.bteNewPassword.TabIndex = 6;
             this.bteNewPassword.MouseLeave += new System.EventHandler(this.bteNewPassword_MouseLeave);
@@ -148,12 +150,12 @@
             // 
             // bteOldPassword
             // 
-            this.bteOldPassword.Location = new System.Drawing.Point(187, 36);
+            this.bteOldPassword.Location = new System.Drawing.Point(180, 36);
             this.bteOldPassword.Name = "bteOldPassword";
             this.bteOldPassword.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Show_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject3, "", null, null, true)});
             this.bteOldPassword.Properties.UseSystemPasswordChar = true;
-            this.bteOldPassword.Size = new System.Drawing.Size(213, 22);
+            this.bteOldPassword.Size = new System.Drawing.Size(192, 22);
             this.bteOldPassword.StyleController = this.lctDoiMatKhau;
             this.bteOldPassword.TabIndex = 5;
             this.bteOldPassword.MouseLeave += new System.EventHandler(this.bteOldPassword_MouseLeave);
@@ -161,7 +163,7 @@
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(187, 12);
+            this.txtUserName.Location = new System.Drawing.Point(180, 12);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Properties.AllowFocused = false;
             this.txtUserName.Properties.Appearance.BackColor = System.Drawing.Color.White;
@@ -170,7 +172,7 @@
             this.txtUserName.Properties.AppearanceReadOnly.BackColor2 = System.Drawing.Color.White;
             this.txtUserName.Properties.AppearanceReadOnly.Options.UseBackColor = true;
             this.txtUserName.Properties.ReadOnly = true;
-            this.txtUserName.Size = new System.Drawing.Size(213, 20);
+            this.txtUserName.Size = new System.Drawing.Size(192, 20);
             this.txtUserName.StyleController = this.lctDoiMatKhau;
             this.txtUserName.TabIndex = 4;
             this.txtUserName.TabStop = false;
@@ -190,69 +192,72 @@
             this.layoutControlItem2});
             this.layoutControlGroup2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup2.Name = "Root";
-            this.layoutControlGroup2.Size = new System.Drawing.Size(412, 149);
+            this.layoutControlGroup2.Size = new System.Drawing.Size(384, 149);
             this.layoutControlGroup2.TextVisible = false;
             // 
             // lciUserName
             // 
             this.lciUserName.Control = this.txtUserName;
-            this.lciUserName.Location = new System.Drawing.Point(100, 0);
+            this.lciUserName.Location = new System.Drawing.Point(93, 0);
             this.lciUserName.Name = "lciUserName";
-            this.lciUserName.Size = new System.Drawing.Size(292, 24);
+            this.lciUserName.Size = new System.Drawing.Size(271, 24);
             this.lciUserName.Text = "Tên đăng nhập";
             this.lciUserName.TextSize = new System.Drawing.Size(72, 13);
             // 
             // lciOldPassword
             // 
             this.lciOldPassword.Control = this.bteOldPassword;
-            this.lciOldPassword.Location = new System.Drawing.Point(100, 24);
+            this.lciOldPassword.Location = new System.Drawing.Point(93, 24);
             this.lciOldPassword.Name = "lciOldPassword";
-            this.lciOldPassword.Size = new System.Drawing.Size(292, 26);
+            this.lciOldPassword.Size = new System.Drawing.Size(271, 26);
             this.lciOldPassword.Text = "Mật khẩu cũ";
             this.lciOldPassword.TextSize = new System.Drawing.Size(72, 13);
             // 
             // lciNewPassword
             // 
             this.lciNewPassword.Control = this.bteNewPassword;
-            this.lciNewPassword.Location = new System.Drawing.Point(100, 50);
+            this.lciNewPassword.Location = new System.Drawing.Point(93, 50);
             this.lciNewPassword.Name = "lciNewPassword";
-            this.lciNewPassword.Size = new System.Drawing.Size(292, 26);
+            this.lciNewPassword.Size = new System.Drawing.Size(271, 26);
             this.lciNewPassword.Text = "Mật khẩu mới";
             this.lciNewPassword.TextSize = new System.Drawing.Size(72, 13);
             // 
             // lciConfirmPassword
             // 
             this.lciConfirmPassword.Control = this.bteConfirmPassword;
-            this.lciConfirmPassword.Location = new System.Drawing.Point(100, 76);
+            this.lciConfirmPassword.Location = new System.Drawing.Point(93, 76);
             this.lciConfirmPassword.Name = "lciConfirmPassword";
-            this.lciConfirmPassword.Size = new System.Drawing.Size(292, 26);
+            this.lciConfirmPassword.Size = new System.Drawing.Size(271, 26);
             this.lciConfirmPassword.Text = "Xác thực";
             this.lciConfirmPassword.TextSize = new System.Drawing.Size(72, 13);
             // 
             // lciLuu
             // 
             this.lciLuu.Control = this.btnSave;
-            this.lciLuu.Location = new System.Drawing.Point(187, 102);
+            this.lciLuu.Location = new System.Drawing.Point(204, 102);
             this.lciLuu.Name = "lciLuu";
-            this.lciLuu.Size = new System.Drawing.Size(89, 27);
+            this.lciLuu.Size = new System.Drawing.Size(80, 27);
             this.lciLuu.TextSize = new System.Drawing.Size(0, 0);
             this.lciLuu.TextVisible = false;
             // 
             // lciHuy
             // 
             this.lciHuy.Control = this.btnCancel;
-            this.lciHuy.Location = new System.Drawing.Point(276, 102);
+            this.lciHuy.Location = new System.Drawing.Point(284, 102);
+            this.lciHuy.MaxSize = new System.Drawing.Size(80, 27);
+            this.lciHuy.MinSize = new System.Drawing.Size(80, 27);
             this.lciHuy.Name = "lciHuy";
-            this.lciHuy.Size = new System.Drawing.Size(116, 27);
+            this.lciHuy.Size = new System.Drawing.Size(80, 27);
+            this.lciHuy.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
             this.lciHuy.TextSize = new System.Drawing.Size(0, 0);
             this.lciHuy.TextVisible = false;
             // 
             // emptySpaceItem2
             // 
             this.emptySpaceItem2.AllowHotTrack = false;
-            this.emptySpaceItem2.Location = new System.Drawing.Point(100, 102);
+            this.emptySpaceItem2.Location = new System.Drawing.Point(93, 102);
             this.emptySpaceItem2.Name = "emptySpaceItem2";
-            this.emptySpaceItem2.Size = new System.Drawing.Size(87, 27);
+            this.emptySpaceItem2.Size = new System.Drawing.Size(111, 27);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControlItem2
@@ -260,7 +265,7 @@
             this.layoutControlItem2.Control = this.pteIcon;
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(100, 129);
+            this.layoutControlItem2.Size = new System.Drawing.Size(93, 129);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
@@ -268,13 +273,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 149);
+            this.ClientSize = new System.Drawing.Size(384, 149);
             this.ControlBox = false;
             this.Controls.Add(this.lctDoiMatKhau);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.LookAndFeel.SkinName = "Office 2010 Blue";
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "frmChangePassword";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

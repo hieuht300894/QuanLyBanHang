@@ -88,7 +88,7 @@
             this.lctAgency.Location = new System.Drawing.Point(0, 0);
             this.lctAgency.Name = "lctAgency";
             this.lctAgency.Root = this.layoutControlGroup1;
-            this.lctAgency.Size = new System.Drawing.Size(484, 284);
+            this.lctAgency.Size = new System.Drawing.Size(484, 283);
             this.lctAgency.TabIndex = 0;
             this.lctAgency.Text = "layoutControl1";
             // 
@@ -125,10 +125,12 @@
             // 
             // pteLogo
             // 
+            this.pteLogo.Cursor = System.Windows.Forms.Cursors.Default;
             this.pteLogo.Location = new System.Drawing.Point(332, 12);
             this.pteLogo.Name = "pteLogo";
             this.pteLogo.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             this.pteLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
+            this.pteLogo.Properties.ZoomAccelerationFactor = 1D;
             this.pteLogo.Size = new System.Drawing.Size(140, 140);
             this.pteLogo.StyleController = this.lctAgency;
             this.pteLogo.TabIndex = 10;
@@ -199,7 +201,7 @@
             this.emptySpaceItem1});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(484, 284);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(484, 283);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // lciCode
@@ -285,7 +287,7 @@
             this.layoutControlItem2.Control = this.btnSave;
             this.layoutControlItem2.Location = new System.Drawing.Point(374, 236);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(90, 28);
+            this.layoutControlItem2.Size = new System.Drawing.Size(90, 27);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
@@ -294,14 +296,14 @@
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(0, 236);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(374, 28);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(374, 27);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // frmAgency
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 284);
+            this.ClientSize = new System.Drawing.Size(484, 283);
             this.Controls.Add(this.lctAgency);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

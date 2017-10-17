@@ -138,7 +138,7 @@
             this.lcMain.Name = "lcMain";
             this.lcMain.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(676, 117, 250, 350);
             this.lcMain.Root = this.layoutControlGroup1;
-            this.lcMain.Size = new System.Drawing.Size(363, 310);
+            this.lcMain.Size = new System.Drawing.Size(384, 311);
             this.lcMain.TabIndex = 4;
             this.lcMain.Text = "layoutControl1";
             // 
@@ -149,9 +149,9 @@
             this.btnHuy.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnHuy.Image = ((System.Drawing.Image)(resources.GetObject("btnHuy.Image")));
             this.btnHuy.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
-            this.btnHuy.Location = new System.Drawing.Point(249, 276);
+            this.btnHuy.Location = new System.Drawing.Point(263, 277);
             this.btnHuy.Name = "btnHuy";
-            this.btnHuy.Size = new System.Drawing.Size(102, 22);
+            this.btnHuy.Size = new System.Drawing.Size(109, 22);
             this.btnHuy.StyleController = this.lcMain;
             this.btnHuy.TabIndex = 6;
             this.btnHuy.Tag = "";
@@ -165,9 +165,9 @@
             this.btnLuu.Appearance.Options.UseFont = true;
             this.btnLuu.Image = ((System.Drawing.Image)(resources.GetObject("btnLuu.Image")));
             this.btnLuu.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
-            this.btnLuu.Location = new System.Drawing.Point(148, 276);
+            this.btnLuu.Location = new System.Drawing.Point(156, 277);
             this.btnLuu.Name = "btnLuu";
-            this.btnLuu.Size = new System.Drawing.Size(97, 22);
+            this.btnLuu.Size = new System.Drawing.Size(103, 22);
             this.btnLuu.StyleController = this.lcMain;
             this.btnLuu.TabIndex = 5;
             this.btnLuu.Text = "&Lưu";
@@ -181,7 +181,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(12, 12);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.tpDatabase;
-            this.xtraTabControl1.Size = new System.Drawing.Size(339, 260);
+            this.xtraTabControl1.Size = new System.Drawing.Size(360, 261);
             this.xtraTabControl1.TabIndex = 4;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.tpDatabase,
@@ -194,7 +194,7 @@
             this.tpDatabase.Appearance.PageClient.Options.UseBackColor = true;
             this.tpDatabase.Controls.Add(this.layoutControl2);
             this.tpDatabase.Name = "tpDatabase";
-            this.tpDatabase.Size = new System.Drawing.Size(333, 232);
+            this.tpDatabase.Size = new System.Drawing.Size(354, 233);
             this.tpDatabase.Text = "&Cơ sở dữ liệu";
             // 
             // layoutControl2
@@ -212,7 +212,7 @@
             this.layoutControl2.Name = "layoutControl2";
             this.layoutControl2.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(674, 120, 250, 350);
             this.layoutControl2.Root = this.layoutControlGroup2;
-            this.layoutControl2.Size = new System.Drawing.Size(333, 232);
+            this.layoutControl2.Size = new System.Drawing.Size(354, 233);
             this.layoutControl2.TabIndex = 0;
             this.layoutControl2.Text = "layoutControl2";
             // 
@@ -223,7 +223,7 @@
             this.txtComputerName.Properties.AppearanceReadOnly.BackColor = System.Drawing.Color.White;
             this.txtComputerName.Properties.AppearanceReadOnly.BackColor2 = System.Drawing.Color.White;
             this.txtComputerName.Properties.AppearanceReadOnly.Options.UseBackColor = true;
-            this.txtComputerName.Size = new System.Drawing.Size(230, 20);
+            this.txtComputerName.Size = new System.Drawing.Size(251, 20);
             this.txtComputerName.StyleController = this.layoutControl2;
             this.txtComputerName.TabIndex = 0;
             this.txtComputerName.TabStop = false;
@@ -232,7 +232,7 @@
             // 
             this.txtSQLServerName.Location = new System.Drawing.Point(91, 36);
             this.txtSQLServerName.Name = "txtSQLServerName";
-            this.txtSQLServerName.Size = new System.Drawing.Size(230, 20);
+            this.txtSQLServerName.Size = new System.Drawing.Size(251, 20);
             this.txtSQLServerName.StyleController = this.layoutControl2;
             this.txtSQLServerName.TabIndex = 1;
             // 
@@ -240,7 +240,7 @@
             // 
             this.txtSQLUserName.Location = new System.Drawing.Point(91, 88);
             this.txtSQLUserName.Name = "txtSQLUserName";
-            this.txtSQLUserName.Size = new System.Drawing.Size(230, 20);
+            this.txtSQLUserName.Size = new System.Drawing.Size(251, 20);
             this.txtSQLUserName.StyleController = this.layoutControl2;
             this.txtSQLUserName.TabIndex = 3;
             // 
@@ -251,9 +251,9 @@
             this.btnTestConnect.Appearance.Options.UseFont = true;
             this.btnTestConnect.Appearance.Options.UseForeColor = true;
             this.btnTestConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnTestConnect.Image")));
-            this.btnTestConnect.Location = new System.Drawing.Point(210, 136);
+            this.btnTestConnect.Location = new System.Drawing.Point(223, 136);
             this.btnTestConnect.Name = "btnTestConnect";
-            this.btnTestConnect.Size = new System.Drawing.Size(111, 22);
+            this.btnTestConnect.Size = new System.Drawing.Size(119, 22);
             this.btnTestConnect.StyleController = this.layoutControl2;
             this.btnTestConnect.TabIndex = 5;
             this.btnTestConnect.Text = "&Kiểm tra kết nối";
@@ -265,7 +265,7 @@
             this.txtSQLPassword.Location = new System.Drawing.Point(91, 112);
             this.txtSQLPassword.Name = "txtSQLPassword";
             this.txtSQLPassword.Properties.PasswordChar = '*';
-            this.txtSQLPassword.Size = new System.Drawing.Size(230, 20);
+            this.txtSQLPassword.Size = new System.Drawing.Size(251, 20);
             this.txtSQLPassword.StyleController = this.layoutControl2;
             this.txtSQLPassword.TabIndex = 4;
             // 
@@ -279,7 +279,7 @@
             this.tsbSQLAuthentication.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Far;
             this.tsbSQLAuthentication.Properties.OffText = "Quyền Windows";
             this.tsbSQLAuthentication.Properties.OnText = "Tài khoản SQL Server";
-            this.tsbSQLAuthentication.Size = new System.Drawing.Size(309, 24);
+            this.tsbSQLAuthentication.Size = new System.Drawing.Size(330, 24);
             this.tsbSQLAuthentication.StyleController = this.layoutControl2;
             this.tsbSQLAuthentication.TabIndex = 2;
             this.tsbSQLAuthentication.Toggled += new System.EventHandler(this.tsbXacThuc_Toggled);
@@ -291,7 +291,7 @@
             this.cbbDatabase.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbbDatabase.Properties.PopupSizeable = true;
-            this.cbbDatabase.Size = new System.Drawing.Size(230, 20);
+            this.cbbDatabase.Size = new System.Drawing.Size(251, 20);
             this.cbbDatabase.StyleController = this.layoutControl2;
             this.cbbDatabase.TabIndex = 6;
             this.cbbDatabase.TextChanged += new System.EventHandler(this.cbbDatabase_TextChanged);
@@ -311,7 +311,7 @@
             this.lciComputerName});
             this.layoutControlGroup2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup2.Name = "Root";
-            this.layoutControlGroup2.Size = new System.Drawing.Size(333, 232);
+            this.layoutControlGroup2.Size = new System.Drawing.Size(354, 233);
             this.layoutControlGroup2.TextVisible = false;
             // 
             // layoutControlItem2
@@ -319,7 +319,7 @@
             this.layoutControlItem2.Control = this.tsbSQLAuthentication;
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 48);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(313, 28);
+            this.layoutControlItem2.Size = new System.Drawing.Size(334, 28);
             this.layoutControlItem2.Text = "&Xác thực";
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
@@ -329,16 +329,16 @@
             this.lciPassword.Control = this.txtSQLPassword;
             this.lciPassword.Location = new System.Drawing.Point(0, 100);
             this.lciPassword.Name = "lciPassword";
-            this.lciPassword.Size = new System.Drawing.Size(313, 24);
+            this.lciPassword.Size = new System.Drawing.Size(334, 24);
             this.lciPassword.Text = "&Mật khẩu:";
             this.lciPassword.TextSize = new System.Drawing.Size(76, 13);
             // 
             // layoutControlItem6
             // 
             this.layoutControlItem6.Control = this.btnTestConnect;
-            this.layoutControlItem6.Location = new System.Drawing.Point(198, 124);
+            this.layoutControlItem6.Location = new System.Drawing.Point(211, 124);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(115, 26);
+            this.layoutControlItem6.Size = new System.Drawing.Size(123, 26);
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
             // 
@@ -347,7 +347,7 @@
             this.lciDatabase.Control = this.cbbDatabase;
             this.lciDatabase.Location = new System.Drawing.Point(0, 150);
             this.lciDatabase.Name = "lciDatabase";
-            this.lciDatabase.Size = new System.Drawing.Size(313, 62);
+            this.lciDatabase.Size = new System.Drawing.Size(334, 63);
             this.lciDatabase.Text = "&Cơ sở dữ liệu:";
             this.lciDatabase.TextSize = new System.Drawing.Size(76, 13);
             // 
@@ -356,7 +356,7 @@
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(0, 124);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(198, 26);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(211, 26);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // lciUserName
@@ -364,7 +364,7 @@
             this.lciUserName.Control = this.txtSQLUserName;
             this.lciUserName.Location = new System.Drawing.Point(0, 76);
             this.lciUserName.Name = "lciUserName";
-            this.lciUserName.Size = new System.Drawing.Size(313, 24);
+            this.lciUserName.Size = new System.Drawing.Size(334, 24);
             this.lciUserName.Text = "&Tên đăng nhập:";
             this.lciUserName.TextSize = new System.Drawing.Size(76, 13);
             // 
@@ -373,7 +373,7 @@
             this.lciServer.Control = this.txtSQLServerName;
             this.lciServer.Location = new System.Drawing.Point(0, 24);
             this.lciServer.Name = "lciServer";
-            this.lciServer.Size = new System.Drawing.Size(313, 24);
+            this.lciServer.Size = new System.Drawing.Size(334, 24);
             this.lciServer.Text = "&Máy chủ:";
             this.lciServer.TextSize = new System.Drawing.Size(76, 13);
             // 
@@ -382,7 +382,7 @@
             this.lciComputerName.Control = this.txtComputerName;
             this.lciComputerName.Location = new System.Drawing.Point(0, 0);
             this.lciComputerName.Name = "lciComputerName";
-            this.lciComputerName.Size = new System.Drawing.Size(313, 24);
+            this.lciComputerName.Size = new System.Drawing.Size(334, 24);
             this.lciComputerName.Text = "Tên máy:";
             this.lciComputerName.TextSize = new System.Drawing.Size(76, 13);
             // 
@@ -605,7 +605,7 @@
             this.emptySpaceItem2});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(363, 310);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(384, 311);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItem1
@@ -613,34 +613,34 @@
             this.layoutControlItem1.Control = this.xtraTabControl1;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(343, 264);
+            this.layoutControlItem1.Size = new System.Drawing.Size(364, 265);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
             // layoutControlItem8
             // 
             this.layoutControlItem8.Control = this.btnLuu;
-            this.layoutControlItem8.Location = new System.Drawing.Point(136, 264);
+            this.layoutControlItem8.Location = new System.Drawing.Point(144, 265);
             this.layoutControlItem8.Name = "layoutControlItem8";
-            this.layoutControlItem8.Size = new System.Drawing.Size(101, 26);
+            this.layoutControlItem8.Size = new System.Drawing.Size(107, 26);
             this.layoutControlItem8.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem8.TextVisible = false;
             // 
             // layoutControlItem9
             // 
             this.layoutControlItem9.Control = this.btnHuy;
-            this.layoutControlItem9.Location = new System.Drawing.Point(237, 264);
+            this.layoutControlItem9.Location = new System.Drawing.Point(251, 265);
             this.layoutControlItem9.Name = "layoutControlItem9";
-            this.layoutControlItem9.Size = new System.Drawing.Size(106, 26);
+            this.layoutControlItem9.Size = new System.Drawing.Size(113, 26);
             this.layoutControlItem9.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem9.TextVisible = false;
             // 
             // emptySpaceItem2
             // 
             this.emptySpaceItem2.AllowHotTrack = false;
-            this.emptySpaceItem2.Location = new System.Drawing.Point(0, 264);
+            this.emptySpaceItem2.Location = new System.Drawing.Point(0, 265);
             this.emptySpaceItem2.Name = "emptySpaceItem2";
-            this.emptySpaceItem2.Size = new System.Drawing.Size(136, 26);
+            this.emptySpaceItem2.Size = new System.Drawing.Size(144, 26);
             this.emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // frmSetting
@@ -649,7 +649,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnHuy;
-            this.ClientSize = new System.Drawing.Size(363, 310);
+            this.ClientSize = new System.Drawing.Size(384, 311);
             this.Controls.Add(this.lcMain);
             this.IsMdiContainer = true;
             this.Name = "frmSetting";

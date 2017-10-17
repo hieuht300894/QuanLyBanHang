@@ -48,9 +48,10 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(299, 65);
+            this.btnOK.Image = global::QuanLyBanHang.Properties.Resources.Close_16x16;
+            this.btnOK.Location = new System.Drawing.Point(304, 65);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(80, 23);
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 4;
             this.btnOK.Text = "Thoát";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -98,6 +99,7 @@
             // 
             // pteIcon
             // 
+            this.pteIcon.Cursor = System.Windows.Forms.Cursors.Default;
             this.pteIcon.Dock = System.Windows.Forms.DockStyle.Left;
             this.pteIcon.EditValue = global::QuanLyBanHang.Properties.Resources.Error;
             this.pteIcon.Location = new System.Drawing.Point(2, 2);
@@ -114,7 +116,8 @@
             // 
             // btnContinue
             // 
-            this.btnContinue.Location = new System.Drawing.Point(127, 65);
+            this.btnContinue.Image = global::QuanLyBanHang.Properties.Resources.Redo_16x16;
+            this.btnContinue.Location = new System.Drawing.Point(112, 65);
             this.btnContinue.Name = "btnContinue";
             this.btnContinue.Size = new System.Drawing.Size(80, 23);
             this.btnContinue.TabIndex = 4;
@@ -123,9 +126,10 @@
             // 
             // btnRestart
             // 
-            this.btnRestart.Location = new System.Drawing.Point(213, 65);
+            this.btnRestart.Image = global::QuanLyBanHang.Properties.Resources.Reset2_16x16;
+            this.btnRestart.Location = new System.Drawing.Point(198, 65);
             this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(80, 23);
+            this.btnRestart.Size = new System.Drawing.Size(100, 23);
             this.btnRestart.TabIndex = 4;
             this.btnRestart.Text = "Khởi động lại";
             this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);

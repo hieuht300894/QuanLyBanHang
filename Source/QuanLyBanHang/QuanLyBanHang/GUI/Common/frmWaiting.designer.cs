@@ -41,12 +41,13 @@
             this.progressPanel1.AppearanceCaption.Options.UseFont = true;
             this.progressPanel1.AppearanceDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.progressPanel1.AppearanceDescription.Options.UseFont = true;
+            this.progressPanel1.BarAnimationElementThickness = 2;
             this.progressPanel1.Caption = "Vui lòng chờ!";
             this.progressPanel1.Description = "Đang xử lý ......";
             this.progressPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressPanel1.ImageHorzOffset = 20;
             this.progressPanel1.Location = new System.Drawing.Point(0, 17);
-            this.progressPanel1.LookAndFeel.SkinName = "Visual Studio 2013 Blue";
+            this.progressPanel1.LookAndFeel.SkinName = "Visual Studio 2013 Light";
             this.progressPanel1.LookAndFeel.UseDefaultLookAndFeel = false;
             this.progressPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.progressPanel1.Name = "progressPanel1";
