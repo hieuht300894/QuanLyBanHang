@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.Common
 {
@@ -228,12 +229,10 @@ namespace QuanLyBanHang.BLL.Common
         //    try
         //    {
         //        conn.Open();
-        //        tran = conn.BeginTransaction(System.Data.IsolationLevel.Serializable);
+        //        tran = conn.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
         //        foreach (var entity in ListEntity)
         //        {
-        //            Type type = null;
-        //            GetInstance(entity.Key, ref type);
-
+        //            Type type = GetInstance(entity.Key);
         //            if (type == null) return false;
 
         //            int minID = entity.Value.DefaultIfEmpty().Min();
@@ -286,70 +285,77 @@ namespace QuanLyBanHang.BLL.Common
         {
             DateTime CurrentDate = DateTime.Now.ServerNow();
             repository.Context = new aModel();
-            SqlConnection conn = new SqlConnection(repository.Context.Database.Connection.ConnectionString);
-            SqlTransaction tran = null;
             try
             {
-                conn.Open();
-                tran = conn.BeginTransaction(System.Data.IsolationLevel.Serializable);
+                repository.BeginTransaction();
+                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(repository.Context.GetPrimaryKeys());
+
                 foreach (var entity in ListEntity)
                 {
-                    Type type = null;
-                    GetInstance(entity.Key, ref type);
-
+                    DbSet dbSet = getDbSet(entity.Key);
+                    if (dbSet == null) return false;
+                    Type type = GetInstance(entity.Key);
                     if (type == null) return false;
 
                     int minID = entity.Value.DefaultIfEmpty().Min();
                     int maxID = entity.Value.DefaultIfEmpty().Max();
-                    string qSelect = $"SELECT * FROM {entity.Key} WHERE KeyID BETWEEN {minID} AND {maxID}";
-                    SqlCommand cmdSelect = new SqlCommand(qSelect, conn, tran);
-                    List<Dictionary<string, object>> listParent = new List<Dictionary<string, object>>(cmdSelect.ExecuteReader().CreateObjects(type));
-                    int countSelect = listParent.Count;
-                    int currentSelect = 0;
-                    foreach (int id in entity.Value)
-                    {
-                        Dictionary<string, object> listChild = listParent[currentSelect];
-                        bool chk = listChild.Any(x => x.Key.Equals("KeyID") && x.Value.Equals(id));
-                        if (!chk) return false;
-                        else
-                        {
-                            string qInsert = $"INSERT INTO xLog (AccessDate,IDPersonnel,State,TableName,OldValue) VALUES (@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
-                            SqlCommand cmdInsert = new SqlCommand(qInsert, conn, tran);
-                            cmdInsert.Parameters.Add("@AccessDate", System.Data.SqlDbType.DateTime).Value = CurrentDate;
-                            cmdInsert.Parameters.Add("@IDPersonnel", System.Data.SqlDbType.Int).Value = clsGeneral.curPersonnel.KeyID;
-                            cmdInsert.Parameters.Add("@State", System.Data.SqlDbType.NVarChar).Value = EntityState.Deleted.ToString();
-                            cmdInsert.Parameters.Add("@TableName", System.Data.SqlDbType.NVarChar).Value = entity.Key;
-                            cmdInsert.Parameters.Add("@OldValue", System.Data.SqlDbType.NVarChar).Value = listChild.SerializeJSON();
-                            cmdInsert.ExecuteNonQuery();
 
-                            string qDelete = $"DELETE FROM {entity.Key} WHERE KeyID=@KeyID";
-                            SqlCommand cmdDelete = new SqlCommand(qDelete, conn, tran);
-                            cmdDelete.Parameters.Add("@KeyID", System.Data.SqlDbType.Int).Value = id;
-                            cmdDelete.ExecuteNonQuery();
+                    var qColumnsKey = new List<ColumnKey>(repository.Context.GetColumnKeys(lstPrimaryKeys, entity.Key));
+                    //var qColumnsNotKey = new List<string>(repository.Context.GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), type.GetProperties().Select(x => x.Name).ToList(), entity.Key));
+
+                    var result = repository.Context.SearchRange(
+                        entity.Key,
+                        type,
+                        new Dictionary<string, object>() { { "KeyID", minID } },
+                        new Dictionary<string, object>() { { "KeyID", maxID } });
+
+                    foreach (var obj in result)
+                    {
+                        Dictionary<string, object> dic = new Dictionary<string, object>();
+                        foreach (ColumnKey info in qColumnsKey)
+                        {
+                            var tempProperty = obj.GetType().GetProperty(info.COLUMN_NAME);
+                            var tempType = tempProperty.PropertyType;
+                            var tempValue = tempProperty.GetValue(obj);
+                            if (tempValue != null)
+                                dic.Add(info.COLUMN_NAME, Convert.ChangeType(tempValue, tempType));
+                            else
+                                dic.Add(info.COLUMN_NAME, tempValue);
                         }
-                        currentSelect++;
+                        repository.Context.SaveDelete(entity.Key, dic);
                         CurrentNumber++;
                     }
                 }
-
-                tran.Commit();
-                conn.Close();
+                repository.Context.SaveChangesAsync();
+                repository.Commit();
                 return true;
             }
             catch (Exception ex)
             {
-                tran.Rollback();
-                conn.Close();
+                repository.Rollback();
                 ReloadError?.Invoke(ex);
                 return false;
             }
         }
 
-        public void GetInstance(string tableName, ref Type type)
+        public DbSet getDbSet(string tableName)
         {
             Assembly asse = Assembly.Load("EntityModel");
             Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
-            if (mod != null) type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
+            if (mod != null)
+            {
+                Type type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
+                if (type != null) return repository.Context.Set(type);
+            }
+            return null;
+        }
+
+        public Type GetInstance(string tableName)
+        {
+            Assembly asse = Assembly.Load("EntityModel");
+            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
+            if (mod != null) return mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
+            else return null;
         }
         #endregion
     }

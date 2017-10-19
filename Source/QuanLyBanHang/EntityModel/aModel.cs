@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using EntityModel.Method;
 using System.Reflection.Emit;
+using System.Threading.Tasks;
 
 namespace EntityModel.DataModel
 {
@@ -395,24 +396,29 @@ namespace EntityModel.DataModel
             }
             return Convert.ToInt32(true);
         }
+        public override Task<int> SaveChangesAsync()
+        {
+            Task<int> task = Task.Run<int>(() =>
+             {
+                 List<DbEntityEntry> entries = new List<DbEntityEntry>(ChangeTracker.Entries()
+                     .Where(e => (e.Entity.GetType().Name.StartsWith("e") || e.Entity.GetType().Name.StartsWith("x")) && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
+                     .ToList());
+                 if (entries != null && entries.Count > 0)
+                 {
+                     Exception exception = AutoLog(entries);
+                     if (exception != null) throw exception;
+                 }
+                 return Convert.ToInt32(true);
+             });
+            return task;
+        }
         private Exception AutoLog(List<DbEntityEntry> changeTrack)
         {
             var dateQuery = Database.SqlQuery<DateTime>("SELECT GETDATE()");
             DateTime CurrentDate = dateQuery.AsEnumerable().First();
             if (CurrentAccount != null && CurrentPersonnel != null)
             {
-                string qSelectPrimaryKey =
-                    "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
-                    "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
-                    "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
-                    "left join ( " +
-                    "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
-                    "	from sys.tables t " +
-                    "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
-                    "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
-
-                List<ColumnKey> lstPrimaryKeys = Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
-
+                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(GetPrimaryKeys());
                 List<xLog> lstLogs = new List<xLog>();
                 foreach (var entry in changeTrack)
                 {
@@ -428,8 +434,8 @@ namespace EntityModel.DataModel
 
                         if (entry.State == EntityState.Added)
                         {
-                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
-                            var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
                             Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
@@ -460,8 +466,8 @@ namespace EntityModel.DataModel
                         }
                         else if (entry.State == EntityState.Modified)
                         {
-                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
-                            var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
                             Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
@@ -502,8 +508,8 @@ namespace EntityModel.DataModel
                         }
                         else if (entry.State == EntityState.Deleted)
                         {
-                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
-                            var qColumnsNotKey = entry.OriginalValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.OriginalValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
                             Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
@@ -545,7 +551,32 @@ namespace EntityModel.DataModel
             }
             else { return new Exception("CurrentAccount is null or CurrentPersonnel is null"); }
         }
-        private int? SaveInsert(string TableName, Dictionary<string, object> dParams)
+        public List<ColumnKey> GetPrimaryKeys()
+        {
+            string qSelectPrimaryKey =
+                  "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
+                  "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
+                  "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
+                  "left join ( " +
+                  "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
+                  "	from sys.tables t " +
+                  "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
+                  "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
+
+            List<ColumnKey> lstPrimaryKeys = Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
+            return lstPrimaryKeys ?? new List<ColumnKey>();
+        }
+        public List<ColumnKey> GetColumnKeys(List<ColumnKey> lstPrimaryKeys, string TableName)
+        {
+            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(TableName)).ToList();
+            return qColumnsKey ?? new List<ColumnKey>();
+        }
+        public List<string> GetColumnNotKeys(List<string> lstColumnKeys, List<string> lstColumns, string TableName)
+        {
+            var qColumnsNotKey = lstColumns.Except(lstColumnKeys).ToList();
+            return qColumnsNotKey ?? new List<string>();
+        }
+        public int? SaveInsert(string TableName, Dictionary<string, object> dParams)
         {
             string qFormat = $"INSERT INTO {{0}} ({{1}}) VALUES ({{2}}) SELECT SCOPE_IDENTITY()";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -567,7 +598,7 @@ namespace EntityModel.DataModel
             if (res.HasValue) { return Convert.ToInt32(res.Value); }
             else { return null; }
         }
-        private void SaveUpdate(string TableName, Dictionary<string, object> dParamKeys, Dictionary<string, object> dParamValues)
+        public void SaveUpdate(string TableName, Dictionary<string, object> dParamKeys, Dictionary<string, object> dParamValues)
         {
             string qFormat = $"UPDATE {{0}} SET {{1}} WHERE {{2}}";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -592,7 +623,7 @@ namespace EntityModel.DataModel
 
             Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qAssigns, qConditions), parameters.ToArray());
         }
-        private void SaveDelete(string TableName, Dictionary<string, object> dParamKeys)
+        public void SaveDelete(string TableName, Dictionary<string, object> dParamKeys)
         {
             string qFormat = $"DELETE FROM {{0}} WHERE {{1}}";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -607,6 +638,24 @@ namespace EntityModel.DataModel
             });
 
             Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qConditions), parameters.ToArray());
+        }
+        public DbRawSqlQuery SearchRange(string TableName, Type type, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
+        {
+            string qFormat = "SELECT * FROM {0} WHERE {1}";
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
+            string qConditions = "";
+
+            int i = 0;
+            int length = dParamKeysFrom.Count - 1;
+            dParamKeysFrom.ToList().ForEach(x =>
+            {
+                qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}From", $"@{x.Key}To", $"{ (i++ < length ? " AND " : "")}");
+                parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}From", Value = x.Value ?? DBNull.Value });
+                parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
+            });
+
+            return Database.SqlQuery(type, string.Format(qFormat, TableName, qConditions), parameters.ToArray());
         }
     }
     public partial class zModel
