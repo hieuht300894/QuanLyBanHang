@@ -89,6 +89,9 @@ namespace QuanLyBanHang
                 CreatedBy = 0,
                 CreatedDate = DateTime.Now.ServerNow()
             };
+
+            EntityModel.Module.CurPer = clsGeneral.curPersonnel;
+            EntityModel.Module.CurAcc = clsGeneral.curAccount;
         }
 
         public static bool CheckUser_Login(string _UserName, string _Password, xPersonnel personnel, xAccount account)

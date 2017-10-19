@@ -82,7 +82,7 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new T(); }
         }
 
-        public virtual bool InsertEntry(T entry)
+        public virtual bool AddOrUpdate(T entry)
         {
             try
             {
@@ -96,26 +96,7 @@ namespace QuanLyBanHang.BLL.Common
             catch (Exception ex)
             {
                 repository.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(T).Name}");
-                return false;
-            }
-        }
-
-        public virtual bool UpdateEntry(T entry)
-        {
-            try
-            {
-                repository.Context = new aModel();
-                repository.BeginTransaction();
-                repository.Context.Set<T>().AddOrUpdate(entry);
-                repository.Context.SaveChanges();
-                repository.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                repository.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(T).Name}");
+                clsGeneral.showErrorException(ex, $"Lỗi AddOrUpdate: {typeof(T).Name}");
                 return false;
             }
         }
@@ -126,6 +107,7 @@ namespace QuanLyBanHang.BLL.Common
             {
                 repository.Context = new aModel();
                 repository.BeginTransaction();
+                repository.Context.Set<T>().Attach(entry);
                 repository.Context.Set<T>().Remove(entry);
                 repository.Context.SaveChanges();
                 repository.Commit();
@@ -134,7 +116,7 @@ namespace QuanLyBanHang.BLL.Common
             catch (Exception ex)
             {
                 repository.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi xóa: {typeof(T).Name}");
+                clsGeneral.showErrorException(ex, $"Lỗi Delete: {typeof(T).Name}");
                 return false;
             }
         }
@@ -236,6 +218,69 @@ namespace QuanLyBanHang.BLL.Common
             ReloadProgress?.Invoke();
             CurrentStatus = RemoveEntry();
         }
+
+        //private bool RemoveEntry()
+        //{
+        //    DateTime CurrentDate = DateTime.Now.ServerNow();
+        //    repository.Context = new aModel();
+        //    SqlConnection conn = new SqlConnection(repository.Context.Database.Connection.ConnectionString);
+        //    SqlTransaction tran = null;
+        //    try
+        //    {
+        //        conn.Open();
+        //        tran = conn.BeginTransaction(System.Data.IsolationLevel.Serializable);
+        //        foreach (var entity in ListEntity)
+        //        {
+        //            Type type = null;
+        //            GetInstance(entity.Key, ref type);
+
+        //            if (type == null) return false;
+
+        //            int minID = entity.Value.DefaultIfEmpty().Min();
+        //            int maxID = entity.Value.DefaultIfEmpty().Max();
+        //            string qSelect = $"SELECT * FROM {entity.Key} WHERE KeyID BETWEEN {minID} AND {maxID}";
+        //            SqlCommand cmdSelect = new SqlCommand(qSelect, conn, tran);
+        //            List<Dictionary<string, object>> listParent = new List<Dictionary<string, object>>(cmdSelect.ExecuteReader().CreateObjects(type));
+        //            int countSelect = listParent.Count;
+        //            int currentSelect = 0;
+        //            foreach (int id in entity.Value)
+        //            {
+        //                Dictionary<string, object> listChild = listParent[currentSelect];
+        //                bool chk = listChild.Any(x => x.Key.Equals("KeyID") && x.Value.Equals(id));
+        //                if (!chk) return false;
+        //                else
+        //                {
+        //                    string qInsert = $"INSERT INTO xLog (AccessDate,IDPersonnel,State,TableName,OldValue) VALUES (@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
+        //                    SqlCommand cmdInsert = new SqlCommand(qInsert, conn, tran);
+        //                    cmdInsert.Parameters.Add("@AccessDate", System.Data.SqlDbType.DateTime).Value = CurrentDate;
+        //                    cmdInsert.Parameters.Add("@IDPersonnel", System.Data.SqlDbType.Int).Value = clsGeneral.curPersonnel.KeyID;
+        //                    cmdInsert.Parameters.Add("@State", System.Data.SqlDbType.NVarChar).Value = EntityState.Deleted.ToString();
+        //                    cmdInsert.Parameters.Add("@TableName", System.Data.SqlDbType.NVarChar).Value = entity.Key;
+        //                    cmdInsert.Parameters.Add("@OldValue", System.Data.SqlDbType.NVarChar).Value = listChild.SerializeJSON();
+        //                    cmdInsert.ExecuteNonQuery();
+
+        //                    string qDelete = $"DELETE FROM {entity.Key} WHERE KeyID=@KeyID";
+        //                    SqlCommand cmdDelete = new SqlCommand(qDelete, conn, tran);
+        //                    cmdDelete.Parameters.Add("@KeyID", System.Data.SqlDbType.Int).Value = id;
+        //                    cmdDelete.ExecuteNonQuery();
+        //                }
+        //                currentSelect++;
+        //                CurrentNumber++;
+        //            }
+        //        }
+
+        //        tran.Commit();
+        //        conn.Close();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        tran.Rollback();
+        //        conn.Close();
+        //        ReloadError?.Invoke(ex);
+        //        return false;
+        //    }
+        //}
 
         private bool RemoveEntry()
         {

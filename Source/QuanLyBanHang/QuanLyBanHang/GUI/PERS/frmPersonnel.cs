@@ -154,7 +154,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = _acEntry.KeyID > 0 ? clsPersonnel.Instance.UpdateEntry(_acEntry) : clsPersonnel.Instance.InsertEntry(_acEntry);
+            bRe = clsPersonnel.Instance.AddOrUpdate(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.KeyID);

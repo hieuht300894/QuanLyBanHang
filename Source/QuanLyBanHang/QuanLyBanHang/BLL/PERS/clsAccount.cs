@@ -185,7 +185,7 @@ namespace QuanLyBanHang.BLL.PERS
         //    }
         //}
 
-        public override bool InsertEntry(xAccount entry)
+        public override bool AddOrUpdate(xAccount entry)
         {
             try
             {

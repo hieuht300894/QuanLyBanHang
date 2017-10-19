@@ -5,6 +5,7 @@ using EntityModel.DataModel;
 using System.Data.Entity;
 using QuanLyBanHang.BLL.Common;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -137,49 +138,83 @@ namespace QuanLyBanHang.GUI.PER
 
         private void deleteEntry()
         {
-            int[] Indexes = grvPersonnelList.GetSelectedRows();
-            List<int> lstIDNhanVien = new List<int>();
-            List<int> lstIDTaiKhoan = new List<int>();
-            bool IsWarming = false;
-            for (int i = 0; i < Indexes.Length; i++)
-            {
-                xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
-                if (!IsWarming)
-                {
-                    //Thông báo nếu chưa được cảnh báo nhân viên đã có tài khoản
-                    if (personnel.IsAccount)
-                    {
-                        bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
-                        if (IsXoa)
-                        {
-                            lstIDNhanVien.Add(personnel.KeyID);
-                            lstIDTaiKhoan.Add(personnel.KeyID);
-                        }
-                    }
-                    else
-                    {
-                        lstIDNhanVien.Add(personnel.KeyID);
-                    }
-                }
-                else
-                {
-                    lstIDNhanVien.Add(personnel.KeyID);
-                    if (personnel.IsAccount)
-                        lstIDTaiKhoan.Add(personnel.KeyID);
-                }
-                //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
-                if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
-            }
+            //int[] Indexes = grvPersonnelList.GetSelectedRows();
+            //List<int> lstIDNhanVien = new List<int>();
+            //List<int> lstIDTaiKhoan = new List<int>();
+            //bool IsWarming = false;
+            //for (int i = 0; i < Indexes.Length; i++)
+            //{
+            //    xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
+            //    if (!IsWarming)
+            //    {
+            //        //Thông báo nếu chưa được cảnh báo nhân viên đã có tài khoản
+            //        if (personnel.IsAccount)
+            //        {
+            //            bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
+            //            if (IsXoa)
+            //            {
+            //                lstIDNhanVien.Add(personnel.KeyID);
+            //                lstIDTaiKhoan.Add(personnel.KeyID);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            lstIDNhanVien.Add(personnel.KeyID);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        lstIDNhanVien.Add(personnel.KeyID);
+            //        if (personnel.IsAccount)
+            //            lstIDTaiKhoan.Add(personnel.KeyID);
+            //    }
+            //    //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
+            //    if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
+            //}
 
-            clsPersonnel.Instance.Init();
-            clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstIDNhanVien);
-            clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstIDTaiKhoan);
-            clsPersonnel.Instance.ReloadProgress = LoadProgress;
-            clsPersonnel.Instance.ReloadPercent = LoadPercent;
-            clsPersonnel.Instance.ReloadMessage = LoadMessage;
-            clsPersonnel.Instance.ReloadError = LoadError;
-            clsPersonnel.Instance.ReloadData = loadData;
-            clsPersonnel.Instance.StartRun();
+            //clsPersonnel.Instance.Init();
+            //clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstIDNhanVien);
+            //clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstIDTaiKhoan);
+            //clsPersonnel.Instance.ReloadProgress = LoadProgress;
+            //clsPersonnel.Instance.ReloadPercent = LoadPercent;
+            //clsPersonnel.Instance.ReloadMessage = LoadMessage;
+            //clsPersonnel.Instance.ReloadError = LoadError;
+            //clsPersonnel.Instance.ReloadData = loadData;
+            //clsPersonnel.Instance.StartRun();
+
+            //int[] Indexes = grvPersonnelList.GetSelectedRows();
+            //List<int> lstIDNhanVien = new List<int>();
+            //List<int> lstIDTaiKhoan = new List<int>();
+            //bool IsWarming = false;
+            //for (int i = 0; i < Indexes.Length; i++)
+            //{
+            //    xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
+            //    if (!IsWarming)
+            //    {
+            //        //Thông báo nếu chưa được cảnh báo nhân viên đã có tài khoản
+            //        if (personnel.IsAccount)
+            //        {
+            //            bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
+            //            if (IsXoa)
+            //            {
+            //                lstIDNhanVien.Add(personnel.KeyID);
+            //                lstIDTaiKhoan.Add(personnel.KeyID);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            lstIDNhanVien.Add(personnel.KeyID);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        lstIDNhanVien.Add(personnel.KeyID);
+            //        if (personnel.IsAccount)
+            //            lstIDTaiKhoan.Add(personnel.KeyID);
+            //    }
+            //    //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
+            //    if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
+            //}
         }
 
         private void refreshEntry()

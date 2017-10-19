@@ -5,6 +5,7 @@ using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.GUI.PER;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Windows.Forms;
 

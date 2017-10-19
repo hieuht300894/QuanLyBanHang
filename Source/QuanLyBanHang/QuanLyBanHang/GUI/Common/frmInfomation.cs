@@ -88,7 +88,7 @@ namespace QuanLyBanHang.GUI.Common
             }
 
             bool chk = false;
-            chk = _acEntry.KeyID > 0 ? clsAgency.Instance.UpdateEntry(_acEntry) : clsAgency.Instance.InsertEntry(_acEntry);
+            chk = clsAgency.Instance.AddOrUpdate(_acEntry);
             if (chk)
             {
                 clsGeneral.curAgency = _acEntry;

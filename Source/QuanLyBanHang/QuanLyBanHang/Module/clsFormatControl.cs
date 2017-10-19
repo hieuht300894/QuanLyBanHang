@@ -916,7 +916,7 @@ namespace QuanLyBanHang
             }
             trlMain.ColumnPanelRowHeight = 25;
 
-            trlMain.Translation();
+            //trlMain.Translation();
             trlMain.FormatColumnTreeList();
             trlMain.BestFitColumns();
 
@@ -1739,6 +1739,47 @@ namespace QuanLyBanHang
                     }
 
                     dic.Add(property.Name, Value);
+                }
+            }
+            reader.Close();
+            return results;
+        }
+
+        public static List<Dictionary<string, object>> CreateObjects(this SqlDataReader reader, string[] FieldNames)
+        {
+            List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
+            Type convertTo = typeof(String);
+            while (reader.Read())
+            {
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                results.Add(dic);
+                foreach (string FieldName in FieldNames)
+                {
+                    object Value = null;
+                    
+                    int index = reader.GetOrdinal(FieldName);
+                    switch (convertTo.Name)
+                    {
+                        case "Int16":
+                        case "Int32":
+                        case "Int64":
+                            Value = reader.IsDBNull(index) ? 0 : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "String":
+                            Value = reader.IsDBNull(index) ? string.Empty : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "Boolean":
+                            Value = reader.IsDBNull(index) ? false : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        case "DateTime":
+                            Value = reader.IsDBNull(index) ? null : Convert.ChangeType(reader.GetValue(index), convertTo);
+                            break;
+                        default:
+                            Value = null;
+                            break;
+                    }
+
+                    dic.Add(FieldName, Value);
                 }
             }
             reader.Close();

@@ -226,7 +226,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = fType == eFormType.Add ? clsAccount.Instance.InsertEntry(_acEntry) : clsAccount.Instance.UpdateEntry(_acEntry);
+            bRe = clsAccount.Instance.AddOrUpdate(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.KeyID);

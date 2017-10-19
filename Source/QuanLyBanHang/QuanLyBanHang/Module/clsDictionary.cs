@@ -35,6 +35,8 @@ namespace QuanLyBanHang
         }
         public static string Translation(this string stIn, string mName, string fName = "")
         {
+            return stIn;
+
             //Get Method Name
             //System.Diagnostics.StackTrace _sTrace = new System.Diagnostics.StackTrace();
             //using (System.IO.Stream myFile = new System.IO.FileStream("Log.txt", System.IO.FileMode.Append, System.IO.FileAccess.Write))
@@ -53,56 +55,55 @@ namespace QuanLyBanHang
             //    }
             //}
 
-            if (string.IsNullOrEmpty(mName)) return stIn;
-            if (string.IsNullOrEmpty(fName) || fName.ToUpper().Equals("DEFAULT"))
-            {
-                try
-                {
-                    string stRe = "";
-                    if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
-                        stRe = MultiLanguage.VN.ResourceManager.GetString(mName);
-                    else
-                        stRe = MultiLanguage.EN.ResourceManager.GetString(mName);
-                    return !string.IsNullOrEmpty(stRe) ? stRe : stIn;
-                }
-                catch { return stIn; }
-            }
-            else
-            {
-                bool isAdd = false;
-                string stRe = "";
-                try
-                {
-                    db = new aModel();
-                    var msgDic = db.xMsgDictionary.FirstOrDefault<xMsgDictionary>(m => m.FormName.Equals(fName) && m.MsgName.Equals(mName));
-                    if (msgDic != null)
-                        stRe = msgDic.GetStringByName(curCulture);
-                    else
-                        isAdd = true;
-                }
-                catch { }
-                finally
-                {
-                    if (isAdd || string.IsNullOrEmpty(stRe))
-                    {
-                        db = new aModel();
-                        xMsgDictionary _nMsg = new xMsgDictionary();
-                        _nMsg.FormName = fName;
-                        _nMsg.MsgName = mName;
-                        if (string.IsNullOrEmpty(stIn))
-                            stIn = fName;
-                        _nMsg.VN = stIn;
-                        _nMsg.EN = mName.AutoSpace();
-                        if (!db.xMsgDictionary.Any(m => m.FormName.Equals(_nMsg.FormName) && m.MsgName.Equals(_nMsg.MsgName)))
-                        {
-                            db.xMsgDictionary.AddOrUpdate(_nMsg);
-                            db.SaveChanges();
-                        }
-                        stRe = _nMsg.GetStringByName(curCulture);
-                    }
-                }
-                return stRe;
-            }
+            //if (string.IsNullOrEmpty(fName) || fName.ToUpper().Equals("DEFAULT"))
+            //{
+            //    try
+            //    {
+            //        string stRe = "";
+            //        if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
+            //            stRe = MultiLanguage.VN.ResourceManager.GetString(mName);
+            //        else
+            //            stRe = MultiLanguage.EN.ResourceManager.GetString(mName);
+            //        return !string.IsNullOrEmpty(stRe) ? stRe : stIn;
+            //    }
+            //    catch { return stIn; }
+            //}
+            //else
+            //{
+            //    bool isAdd = false;
+            //    string stRe = "";
+            //    try
+            //    {
+            //        db = new aModel();
+            //        var msgDic = db.xMsgDictionary.FirstOrDefault<xMsgDictionary>(m => m.FormName.Equals(fName) && m.MsgName.Equals(mName));
+            //        if (msgDic != null)
+            //            stRe = msgDic.GetStringByName(curCulture);
+            //        else
+            //            isAdd = true;
+            //    }
+            //    catch { }
+            //    finally
+            //    {
+            //        if (isAdd || string.IsNullOrEmpty(stRe))
+            //        {
+            //            db = new aModel();
+            //            xMsgDictionary _nMsg = new xMsgDictionary();
+            //            _nMsg.FormName = fName;
+            //            _nMsg.MsgName = mName;
+            //            if (string.IsNullOrEmpty(stIn))
+            //                stIn = fName;
+            //            _nMsg.VN = stIn;
+            //            _nMsg.EN = mName.AutoSpace();
+            //            if (!db.xMsgDictionary.Any(m => m.FormName.Equals(_nMsg.FormName) && m.MsgName.Equals(_nMsg.MsgName)))
+            //            {
+            //                db.xMsgDictionary.AddOrUpdate(_nMsg);
+            //                db.SaveChanges();
+            //            }
+            //            stRe = _nMsg.GetStringByName(curCulture);
+            //        }
+            //    }
+            //    return stRe;
+            //}
         }
         #endregion
 
