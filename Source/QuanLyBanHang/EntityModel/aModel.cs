@@ -385,171 +385,167 @@ namespace EntityModel.DataModel
 
         public override int SaveChanges()
         {
-            try
+            List<DbEntityEntry> entries = new List<DbEntityEntry>(ChangeTracker.Entries()
+            .Where(e => (e.Entity.GetType().Name.StartsWith("e") || e.Entity.GetType().Name.StartsWith("x")) && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
+            .ToList());
+            if (entries != null && entries.Count > 0)
             {
-                List<DbEntityEntry> entries = new List<DbEntityEntry>(ChangeTracker.Entries()
-                .Where(e => (e.Entity.GetType().Name.StartsWith("e") || e.Entity.GetType().Name.StartsWith("x")) && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
-                .ToList());
-                if (entries != null && entries.Count > 0)
-                {
-                    Exception exception = AutoLog(entries);
-                    if (exception != null) throw exception;
-                }
-                return Convert.ToInt32(true);
+                Exception exception = AutoLog(entries);
+                if (exception != null) throw exception;
             }
-            catch { return Convert.ToInt32(false); }
+            return Convert.ToInt32(true);
         }
-        public Exception AutoLog(List<DbEntityEntry> changeTrack)
+        private Exception AutoLog(List<DbEntityEntry> changeTrack)
         {
             var dateQuery = Database.SqlQuery<DateTime>("SELECT GETDATE()");
             DateTime CurrentDate = dateQuery.AsEnumerable().First();
             if (CurrentAccount != null && CurrentPersonnel != null)
             {
-                try
+                string qSelectPrimaryKey =
+                    "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
+                    "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
+                    "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
+                    "left join ( " +
+                    "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
+                    "	from sys.tables t " +
+                    "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
+                    "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
+
+                List<ColumnKey> lstPrimaryKeys = Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
+
+                List<xLog> lstLogs = new List<xLog>();
+                foreach (var entry in changeTrack)
                 {
-                    string qSelectPrimaryKey =
-                        "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
-                        "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
-                        "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
-                        "left join ( " +
-                        "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
-                        "	from sys.tables t " +
-                        "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
-                        "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
-
-                    List<ColumnKey> lstPrimaryKeys = Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
-
-                    List<xLog> lstLogs = new List<xLog>();
-                    foreach (var entry in changeTrack)
+                    if (entry.Entity != null)
                     {
-                        if (entry.Entity != null)
+                        xLog log = new xLog()
                         {
-                            xLog log = new xLog()
+                            IDPersonnel = CurrentPersonnel.KeyID,
+                            AccessDate = CurrentDate,
+                            TableName = ObjectContext.GetObjectType(entry.Entity.GetType()).Name,
+                            State = entry.State.ToString()
+                        };
+
+                        if (entry.State == EntityState.Added)
+                        {
+                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
+                            var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+
+                            Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
+
+                            foreach (string prop in qColumnsNotKey)
                             {
-                                IDPersonnel = CurrentPersonnel.KeyID,
-                                AccessDate = CurrentDate,
-                                TableName = ObjectContext.GetObjectType(entry.Entity.GetType()).Name,
-                                State = entry.State.ToString()
-                            };
-
-                            if (entry.State == EntityState.Added)
-                            {
-                                var qColumnsKey = lstPrimaryKeys.Where(x => x.IS_IDENTITY && x.TABLE_NAME.Equals(log.TableName)).ToList();
-                                var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
-
-                                Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
-
-                                foreach (string prop in qColumnsNotKey)
-                                {
-                                    ParamsNew.Add(prop, entry.CurrentValues[prop]);
-                                }
-
-                                foreach (var key in qColumnsKey)
-                                {
-                                    int KeyID = SaveInsert(log.TableName, ParamsNew);
-                                    if (KeyID == 0) return new Exception($"Insert {log.TableName} not success");
-
-                                    entry.CurrentValues[key.COLUMN_NAME] = KeyID;
-                                    ParamsNew.Add(key.COLUMN_NAME, KeyID);
-                                }
-
-                                log.OldValue = ParamsOld.SerializeJSON();
-                                log.NewValue = ParamsNew.SerializeJSON();
-                                lstLogs.Add(log);
+                                ParamsNew.Add(prop, entry.CurrentValues[prop]);
                             }
-                            else if (entry.State == EntityState.Modified)
+
+                            foreach (var key in qColumnsKey)
                             {
-                                var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
-                                var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+                                if (!key.IS_IDENTITY)
+                                    ParamsNew.Add(key.COLUMN_NAME, entry.CurrentValues[key.COLUMN_NAME]);
 
-                                Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsUpdate = new Dictionary<string, object>();
+                                int? KeyID = SaveInsert(log.TableName, ParamsNew);
+                                if (KeyID.HasValue && KeyID == 0) return new Exception($"Insert {log.TableName} not success");
 
-                                foreach (ColumnKey prop in qColumnsKey)
+                                if (KeyID.HasValue && key.IS_IDENTITY)
                                 {
-                                    ParamsKey.Add(prop.COLUMN_NAME, entry.OriginalValues[prop.COLUMN_NAME]);
+                                    entry.CurrentValues[key.COLUMN_NAME] = KeyID.Value;
+                                    ParamsNew.Add(key.COLUMN_NAME, KeyID.Value);
                                 }
-                                foreach (string prop in qColumnsNotKey)
-                                {
-                                    object OldValue = entry.OriginalValues[prop];
-                                    object NewValue = entry.CurrentValues[prop];
-
-                                    ParamsOld.Add(prop, OldValue);
-                                    ParamsNew.Add(prop, NewValue);
-
-                                    if (OldValue == null && NewValue == null) { }
-                                    else if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue))
-                                        ParamsUpdate.Add(prop, NewValue);
-                                    else if (OldValue != null && NewValue == null)
-                                        ParamsUpdate.Add(prop, NewValue);
-                                    else if (OldValue == null && NewValue != null)
-                                        ParamsUpdate.Add(prop, NewValue);
-                                }
-
-                                SaveUpdate(log.TableName, ParamsKey, ParamsUpdate);
-                                ParamsKey.ToList().ForEach(x =>
-                                {
-                                    ParamsOld.Add(x.Key, x.Value);
-                                    ParamsNew.Add(x.Key, x.Value);
-                                });
-
-                                log.OldValue = ParamsOld.SerializeJSON();
-                                log.NewValue = ParamsNew.SerializeJSON();
-                                lstLogs.Add(log);
                             }
-                            else if (entry.State == EntityState.Deleted)
-                            {
-                                var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
-                                var qColumnsNotKey = entry.OriginalValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
 
-                                Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
-                                Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
-
-                                foreach (ColumnKey prop in qColumnsKey)
-                                {
-                                    ParamsKey.Add(prop.COLUMN_NAME, entry.OriginalValues[prop.COLUMN_NAME]);
-                                }
-                                foreach (string prop in qColumnsNotKey)
-                                {
-                                    ParamsOld.Add(prop, entry.OriginalValues[prop]);
-                                }
-
-                                SaveDelete(log.TableName, ParamsKey);
-                                ParamsKey.ToList().ForEach(x => { ParamsOld.Add(x.Key, x.Value); });
-
-                                log.OldValue = ParamsOld.SerializeJSON();
-                                log.NewValue = ParamsNew.SerializeJSON();
-                                lstLogs.Add(log);
-                            }
+                            log.OldValue = ParamsOld.SerializeJSON();
+                            log.NewValue = ParamsNew.SerializeJSON();
+                            lstLogs.Add(log);
                         }
-                    }
-                    foreach (var log in lstLogs)
-                    {
-                        Dictionary<string, object> dInsert = new Dictionary<string, object>();
-                        dInsert.Add("IDPersonnel", log.IDPersonnel);
-                        dInsert.Add("AccessDate", log.AccessDate);
-                        dInsert.Add("State", log.State);
-                        dInsert.Add("TableName", log.TableName);
-                        dInsert.Add("OldValue", log.OldValue);
-                        dInsert.Add("NewValue", log.NewValue);
-                        int KeyID = SaveInsert(typeof(xLog).Name, dInsert);
-                        if (KeyID == 0) return new Exception($"Insert {typeof(xLog).Name} not success");
-                    }
+                        else if (entry.State == EntityState.Modified)
+                        {
+                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
+                            var qColumnsNotKey = entry.CurrentValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
 
-                    return null;
+                            Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsUpdate = new Dictionary<string, object>();
+
+                            foreach (ColumnKey prop in qColumnsKey)
+                            {
+                                ParamsKey.Add(prop.COLUMN_NAME, entry.OriginalValues[prop.COLUMN_NAME]);
+                            }
+                            foreach (string prop in qColumnsNotKey)
+                            {
+                                object OldValue = entry.OriginalValues[prop];
+                                object NewValue = entry.CurrentValues[prop];
+
+                                ParamsOld.Add(prop, OldValue);
+                                ParamsNew.Add(prop, NewValue);
+
+                                if (OldValue == null && NewValue == null) { }
+                                else if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue))
+                                    ParamsUpdate.Add(prop, NewValue);
+                                else if (OldValue != null && NewValue == null)
+                                    ParamsUpdate.Add(prop, NewValue);
+                                else if (OldValue == null && NewValue != null)
+                                    ParamsUpdate.Add(prop, NewValue);
+                            }
+
+                            SaveUpdate(log.TableName, ParamsKey, ParamsUpdate);
+                            ParamsKey.ToList().ForEach(x =>
+                            {
+                                ParamsOld.Add(x.Key, x.Value);
+                                ParamsNew.Add(x.Key, x.Value);
+                            });
+
+                            log.OldValue = ParamsOld.SerializeJSON();
+                            log.NewValue = ParamsNew.SerializeJSON();
+                            lstLogs.Add(log);
+                        }
+                        else if (entry.State == EntityState.Deleted)
+                        {
+                            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(log.TableName)).ToList();
+                            var qColumnsNotKey = entry.OriginalValues.PropertyNames.Except(qColumnsKey.Select(x => x.COLUMN_NAME)).ToList();
+
+                            Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
+                            Dictionary<string, object> ParamsOld = new Dictionary<string, object>();
+
+                            foreach (ColumnKey prop in qColumnsKey)
+                            {
+                                ParamsKey.Add(prop.COLUMN_NAME, entry.OriginalValues[prop.COLUMN_NAME]);
+                            }
+                            foreach (string prop in qColumnsNotKey)
+                            {
+                                ParamsOld.Add(prop, entry.OriginalValues[prop]);
+                            }
+
+                            SaveDelete(log.TableName, ParamsKey);
+                            ParamsKey.ToList().ForEach(x => { ParamsOld.Add(x.Key, x.Value); });
+
+                            log.OldValue = ParamsOld.SerializeJSON();
+                            log.NewValue = ParamsNew.SerializeJSON();
+                            lstLogs.Add(log);
+                        }
+                        entry.State = EntityState.Unchanged;
+                    }
                 }
-                catch (Exception ex) { return ex; }
+                foreach (var log in lstLogs)
+                {
+                    Dictionary<string, object> dInsert = new Dictionary<string, object>();
+                    dInsert.Add("IDPersonnel", log.IDPersonnel);
+                    dInsert.Add("AccessDate", log.AccessDate);
+                    dInsert.Add("State", log.State);
+                    dInsert.Add("TableName", log.TableName);
+                    dInsert.Add("OldValue", log.OldValue);
+                    dInsert.Add("NewValue", log.NewValue);
+                    int? KeyID = SaveInsert(typeof(xLog).Name, dInsert);
+                    if (KeyID.HasValue && KeyID == 0) return new Exception($"Insert {typeof(xLog).Name} not success");
+                }
+
+                return null;
             }
-            else
-            {
-                return new Exception("CurrentAccount is null or CurrentPersonnel is null");
-            }
+            else { return new Exception("CurrentAccount is null or CurrentPersonnel is null"); }
         }
-        public int SaveInsert(string TableName, Dictionary<string, object> dParams)
+        private int? SaveInsert(string TableName, Dictionary<string, object> dParams)
         {
             string qFormat = $"INSERT INTO {{0}} ({{1}}) VALUES ({{2}}) SELECT SCOPE_IDENTITY()";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -566,13 +562,12 @@ namespace EntityModel.DataModel
                 parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
             });
 
-            return (int)Database.SqlQuery<decimal>(string.Format(qFormat, TableName, qFields, qParams), parameters.ToArray()).FirstOrDefault();
+            decimal? res = Database.SqlQuery<decimal?>(string.Format(qFormat, TableName, qFields, qParams), parameters.ToArray()).FirstOrDefault();
 
-            //SqlCommand cmd = new SqlCommand(string.Format(qFormat, TableName, qFields, qParams));
-            //cmd.Parameters.AddRange(parameters.ToArray());
-            //return (int)(decimal)cmd.ExecuteScalar();
+            if (res.HasValue) { return Convert.ToInt32(res.Value); }
+            else { return null; }
         }
-        public void SaveUpdate(string TableName, Dictionary<string, object> dParamKeys, Dictionary<string, object> dParamValues)
+        private void SaveUpdate(string TableName, Dictionary<string, object> dParamKeys, Dictionary<string, object> dParamValues)
         {
             string qFormat = $"UPDATE {{0}} SET {{1}} WHERE {{2}}";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -596,12 +591,8 @@ namespace EntityModel.DataModel
             });
 
             Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qAssigns, qConditions), parameters.ToArray());
-
-            //SqlCommand cmd = new SqlCommand(string.Format(qFormat, TableName, qAssigns, qConditions));
-            //cmd.Parameters.AddRange(parameters.ToArray());
-            //cmd.ExecuteNonQuery();
         }
-        public void SaveDelete(string TableName, Dictionary<string, object> dParamKeys)
+        private void SaveDelete(string TableName, Dictionary<string, object> dParamKeys)
         {
             string qFormat = $"DELETE FROM {{0}} WHERE {{1}}";
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -616,10 +607,6 @@ namespace EntityModel.DataModel
             });
 
             Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qConditions), parameters.ToArray());
-
-            //SqlCommand cmd = new SqlCommand(string.Format(qFormat, TableName, qConditions));
-            //cmd.Parameters.AddRange(parameters.ToArray());
-            //cmd.ExecuteNonQuery();
         }
     }
     public partial class zModel

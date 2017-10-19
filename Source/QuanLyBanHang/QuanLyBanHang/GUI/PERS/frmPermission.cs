@@ -229,7 +229,7 @@ namespace QuanLyBanHang.GUI.PER
                 }
             }
 
-            chk = _acEntry.KeyID > 0 ? clsPermission.Instance.UpdateEntry(_acEntry, lstUserFeatures) : clsPermission.Instance.InsertEntry(_acEntry, lstUserFeatures);
+            chk = clsPermission.Instance.AddOrUpdate(_acEntry, lstUserFeatures);
 
             if (chk && ReloadData != null)
                 ReloadData(_acEntry.KeyID);

@@ -97,7 +97,7 @@
             this.btnLogin.Image = global::QuanLyBanHang.Properties.Resources.Apply_32x32;
             this.btnLogin.Location = new System.Drawing.Point(160, 104);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(107, 38);
+            this.btnLogin.Size = new System.Drawing.Size(107, 39);
             this.btnLogin.StyleController = this.lcMain;
             this.btnLogin.TabIndex = 10;
             this.btnLogin.Text = "&Đăng nhập";
@@ -151,7 +151,7 @@
             this.txtPassword.Properties.MaxLength = 50;
             this.txtPassword.Properties.PasswordChar = '*';
             this.txtPassword.Properties.UseSystemPasswordChar = true;
-            this.txtPassword.Size = new System.Drawing.Size(200, 22);
+            this.txtPassword.Size = new System.Drawing.Size(200, 20);
             this.txtPassword.StyleController = this.lcMain;
             this.txtPassword.TabIndex = 2;
             // 
@@ -255,8 +255,11 @@
             // 
             this.layoutControlItem1.Control = this.btnLogin;
             this.layoutControlItem1.Location = new System.Drawing.Point(148, 92);
+            this.layoutControlItem1.MaxSize = new System.Drawing.Size(111, 43);
+            this.layoutControlItem1.MinSize = new System.Drawing.Size(111, 43);
             this.layoutControlItem1.Name = "layoutControlItem1";
             this.layoutControlItem1.Size = new System.Drawing.Size(111, 43);
+            this.layoutControlItem1.SizeConstraintsType = DevExpress.XtraLayout.SizeConstraintsType.Custom;
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 

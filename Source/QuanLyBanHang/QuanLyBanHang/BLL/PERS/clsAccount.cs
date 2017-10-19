@@ -190,13 +190,16 @@ namespace QuanLyBanHang.BLL.PERS
             try
             {
                 repository.Context = new aModel();
+                repository.BeginTransaction();
                 repository.Context.xAccount.AddOrUpdate(entry);
                 repository.Context.xPersonnel.Find(entry.KeyID).IsAccount = true;
                 repository.Context.SaveChanges();
+                repository.Commit();
                 return true;
             }
             catch (Exception ex)
             {
+                repository.Rollback();
                 clsGeneral.showErrorException(ex, "Lỗi thêm mới");
                 return false;
             }

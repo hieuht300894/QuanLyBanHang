@@ -86,5 +86,33 @@ namespace QuanLyBanHang.BLL.PERS
                 return false;
             }
         }
+
+        public  bool AddOrUpdate(xPermission entry, List<xUserFeature> lstUserFeatures)
+        {
+            try
+            {
+                repository.Context = new aModel();
+                repository.BeginTransaction();
+
+                repository.Context.xPermission.AddOrUpdate(entry);
+                repository.Context.SaveChanges();
+
+                lstUserFeatures.ForEach(x =>
+                {
+                    x.IDUserRole = entry.KeyID;
+                    repository.Context.xUserFeature.AddOrUpdate(x);
+                });
+
+                repository.Context.SaveChanges();
+                repository.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                repository.Rollback();
+                clsGeneral.showErrorException(ex, $"Lỗi AddOrUpdate: {typeof(xPermission).Name}");
+                return false;
+            }
+        }
     }
 }
