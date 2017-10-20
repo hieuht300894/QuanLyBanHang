@@ -1864,5 +1864,20 @@ namespace QuanLyBanHang
                     x.SetValue(obj, Convert.ChangeType(Value, x.PropertyType));
             });
         }
+
+        public static Dictionary<string,object> ObjectToDictionary(this object source)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            foreach (PropertyInfo pInfo in source.GetType().GetProperties())
+            {
+                var tempType = pInfo.PropertyType;
+                var tempValue = pInfo.GetValue(source);
+                if (tempValue != null)
+                    dic.Add(pInfo.Name, Convert.ChangeType(tempValue, tempType));
+                else
+                    dic.Add(pInfo.Name, tempValue);
+            }
+            return dic;
+        }
     }
 }

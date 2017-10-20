@@ -185,8 +185,7 @@ namespace QuanLyBanHang.GUI.PER
             //clsPersonnel.Instance.StartRun();
 
             int[] Indexes = grvPersonnelList.GetSelectedRows();
-            List<int> lstIDNhanVien = new List<int>();
-            List<int> lstIDTaiKhoan = new List<int>();
+            List<xPersonnel> lstNhanVien = new List<xPersonnel>();
             bool IsWarming = false;
             for (int i = 0; i < Indexes.Length; i++)
             {
@@ -198,28 +197,23 @@ namespace QuanLyBanHang.GUI.PER
                     {
                         bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
                         if (IsXoa)
-                        {
-                            lstIDNhanVien.Add(personnel.KeyID);
-                            lstIDTaiKhoan.Add(personnel.KeyID);
-                        }
+                            lstNhanVien.Add(personnel);
                     }
                     else
                     {
-                        lstIDNhanVien.Add(personnel.KeyID);
+                        lstNhanVien.Add(personnel);
                     }
                 }
                 else
                 {
-                    lstIDNhanVien.Add(personnel.KeyID);
-                    if (personnel.IsAccount)
-                        lstIDTaiKhoan.Add(personnel.KeyID);
+                    lstNhanVien.Add(personnel);
                 }
                 //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
                 if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
             }
             clsPersonnel.Instance.Init();
-            clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstIDNhanVien);
-            clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstIDTaiKhoan);
+            clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstNhanVien.ToList<object>());
+            //clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstTaiKhoan);
             clsPersonnel.Instance.ReloadProgress = LoadProgress;
             clsPersonnel.Instance.ReloadPercent = LoadPercent;
             clsPersonnel.Instance.ReloadMessage = LoadMessage;

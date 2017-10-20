@@ -28,6 +28,12 @@ namespace QuanLyBanHang.BLL.Common
             collection = new RepositoryCollection();
             repository = collection.GetRepo<T>();
         }
+        ~clsTemplate()
+        {
+            timer.Enabled = false;
+            timer.Dispose();
+            bWorker.Dispose();
+        }
         public static clsTemplate<T> Instance
         {
             get
@@ -150,7 +156,7 @@ namespace QuanLyBanHang.BLL.Common
         public LoadError ReloadError;
         private BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
         Timer timer = new Timer() { Interval = 1000, Enabled = false };
-        private Dictionary<string, List<int>> ListEntity = new Dictionary<string, List<int>>();
+        private Dictionary<string, List<object>> ListEntity = new Dictionary<string, List<object>>();
         private bool CurrentStatus = false;
         private int TotalNumber = 0;
         private int CurrentNumber = 0;
@@ -165,15 +171,15 @@ namespace QuanLyBanHang.BLL.Common
             timer = new Timer() { Interval = 1000, Enabled = false };
             timer.Tick += timer_Tick;
 
-            ListEntity = new Dictionary<string, List<int>>();
+            ListEntity = new Dictionary<string, List<object>>();
             CurrentStatus = false;
             TotalNumber = 0;
             CurrentNumber = 0;
         }
 
-        public void SetEntity(string Name, List<int> _lstEntry)
+        public void SetEntity(string Name, List<object> _lstEntry)
         {
-            ListEntity.Add(Name, _lstEntry.OrderBy(x => x).ToList());
+            ListEntity.Add(Name, _lstEntry);
         }
 
         public void StartRun()
@@ -220,67 +226,6 @@ namespace QuanLyBanHang.BLL.Common
             CurrentStatus = RemoveEntry();
         }
 
-        //private bool RemoveEntry()
-        //{
-        //    DateTime CurrentDate = DateTime.Now.ServerNow();
-        //    repository.Context = new aModel();
-        //    SqlConnection conn = new SqlConnection(repository.Context.Database.Connection.ConnectionString);
-        //    SqlTransaction tran = null;
-        //    try
-        //    {
-        //        conn.Open();
-        //        tran = conn.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
-        //        foreach (var entity in ListEntity)
-        //        {
-        //            Type type = GetInstance(entity.Key);
-        //            if (type == null) return false;
-
-        //            int minID = entity.Value.DefaultIfEmpty().Min();
-        //            int maxID = entity.Value.DefaultIfEmpty().Max();
-        //            string qSelect = $"SELECT * FROM {entity.Key} WHERE KeyID BETWEEN {minID} AND {maxID}";
-        //            SqlCommand cmdSelect = new SqlCommand(qSelect, conn, tran);
-        //            List<Dictionary<string, object>> listParent = new List<Dictionary<string, object>>(cmdSelect.ExecuteReader().CreateObjects(type));
-        //            int countSelect = listParent.Count;
-        //            int currentSelect = 0;
-        //            foreach (int id in entity.Value)
-        //            {
-        //                Dictionary<string, object> listChild = listParent[currentSelect];
-        //                bool chk = listChild.Any(x => x.Key.Equals("KeyID") && x.Value.Equals(id));
-        //                if (!chk) return false;
-        //                else
-        //                {
-        //                    string qInsert = $"INSERT INTO xLog (AccessDate,IDPersonnel,State,TableName,OldValue) VALUES (@AccessDate,@IDPersonnel,@State,@TableName,@OldValue)";
-        //                    SqlCommand cmdInsert = new SqlCommand(qInsert, conn, tran);
-        //                    cmdInsert.Parameters.Add("@AccessDate", System.Data.SqlDbType.DateTime).Value = CurrentDate;
-        //                    cmdInsert.Parameters.Add("@IDPersonnel", System.Data.SqlDbType.Int).Value = clsGeneral.curPersonnel.KeyID;
-        //                    cmdInsert.Parameters.Add("@State", System.Data.SqlDbType.NVarChar).Value = EntityState.Deleted.ToString();
-        //                    cmdInsert.Parameters.Add("@TableName", System.Data.SqlDbType.NVarChar).Value = entity.Key;
-        //                    cmdInsert.Parameters.Add("@OldValue", System.Data.SqlDbType.NVarChar).Value = listChild.SerializeJSON();
-        //                    cmdInsert.ExecuteNonQuery();
-
-        //                    string qDelete = $"DELETE FROM {entity.Key} WHERE KeyID=@KeyID";
-        //                    SqlCommand cmdDelete = new SqlCommand(qDelete, conn, tran);
-        //                    cmdDelete.Parameters.Add("@KeyID", System.Data.SqlDbType.Int).Value = id;
-        //                    cmdDelete.ExecuteNonQuery();
-        //                }
-        //                currentSelect++;
-        //                CurrentNumber++;
-        //            }
-        //        }
-
-        //        tran.Commit();
-        //        conn.Close();
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        tran.Rollback();
-        //        conn.Close();
-        //        ReloadError?.Invoke(ex);
-        //        return false;
-        //    }
-        //}
-
         private bool RemoveEntry()
         {
             DateTime CurrentDate = DateTime.Now.ServerNow();
@@ -292,25 +237,31 @@ namespace QuanLyBanHang.BLL.Common
 
                 foreach (var entity in ListEntity)
                 {
-                    DbSet dbSet = getDbSet(entity.Key);
-                    if (dbSet == null) return false;
                     Type type = GetInstance(entity.Key);
                     if (type == null) return false;
 
-                    int minID = entity.Value.DefaultIfEmpty().Min();
-                    int maxID = entity.Value.DefaultIfEmpty().Max();
-
                     var qColumnsKey = new List<ColumnKey>(repository.Context.GetColumnKeys(lstPrimaryKeys, entity.Key));
-                    //var qColumnsNotKey = new List<string>(repository.Context.GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), type.GetProperties().Select(x => x.Name).ToList(), entity.Key));
+                    Dictionary<string, object> dValueFrom = new Dictionary<string, object>();
+                    Dictionary<string, object> dValueTo = new Dictionary<string, object>();
 
-                    var result = repository.Context.SearchRange(
-                        entity.Key,
-                        type,
-                        new Dictionary<string, object>() { { "KeyID", minID } },
-                        new Dictionary<string, object>() { { "KeyID", maxID } });
+                    object objFirst = entity.Value.FirstOrDefault();
+                    object objLast = entity.Value.LastOrDefault();
+                    if (objFirst == null || objLast == null) return false;
+
+                    Dictionary<string, object> dObjFirst = objFirst.ObjectToDictionary();
+                    Dictionary<string, object> dObjLast = objLast.ObjectToDictionary();
+
+                    foreach (var key in qColumnsKey)
+                    {
+                        dValueFrom.Add(key.COLUMN_NAME, dObjFirst[key.COLUMN_NAME]);
+                        dValueTo.Add(key.COLUMN_NAME, dObjLast[key.COLUMN_NAME]);
+                    }
+
+                    var result = repository.Context.SearchRange(entity.Key, type, dValueFrom, dValueTo);
 
                     foreach (var obj in result)
                     {
+                        #region Delete Object
                         Dictionary<string, object> dic = new Dictionary<string, object>();
                         foreach (ColumnKey info in qColumnsKey)
                         {
@@ -323,6 +274,19 @@ namespace QuanLyBanHang.BLL.Common
                                 dic.Add(info.COLUMN_NAME, tempValue);
                         }
                         repository.Context.SaveDelete(entity.Key, dic);
+                        #endregion
+
+                        #region Save Log
+                        Dictionary<string, object> dInsert = new Dictionary<string, object>();
+                        dInsert.Add("IDPersonnel", clsGeneral.curPersonnel.KeyID);
+                        dInsert.Add("AccessDate", CurrentDate);
+                        dInsert.Add("State", EntityState.Deleted.ToString());
+                        dInsert.Add("TableName", entity.Key);
+                        dInsert.Add("OldValue", obj.ObjectToDictionary().SerializeJSON());
+                        dInsert.Add("NewValue", new Dictionary<string, object>().SerializeJSON());
+                        repository.Context.SaveInsert(typeof(xLog).Name, dInsert);
+                        #endregion
+
                         CurrentNumber++;
                     }
                 }
