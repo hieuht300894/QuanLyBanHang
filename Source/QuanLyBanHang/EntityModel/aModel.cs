@@ -921,21 +921,39 @@ namespace EntityModel.DataModel
         }
         public DbRawSqlQuery SearchRange(string TableName, Type type, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
         {
-            string qFormat = "SELECT * FROM {0} WHERE {1}";
+            string query = "";
+            string qFormat = "SELECT * FROM {0} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
-            string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
-            string qConditions = "";
 
-            int i = 0;
-            int length = dParamKeysFrom.Count - 1;
-            dParamKeysFrom.ToList().ForEach(x =>
+            if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
             {
-                qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}From", $"@{x.Key}To", $"{ (i++ < length ? " AND " : "")}");
-                parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}From", Value = x.Value ?? DBNull.Value });
-                parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
-            });
-        
-            return Database.SqlQuery(type, string.Format(qFormat, TableName, qConditions), parameters.ToArray());
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysFrom.Count - 1;
+                dParamKeysFrom.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}From", $"@{x.Key}To", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}From", Value = x.Value ?? DBNull.Value });
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
+            }
+            else if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count == 0)
+            {
+            }
+            else if (dParamKeysFrom.Count == 0 && dParamKeysTo.Count > 0)
+            {
+            }
+            else
+            {
+                query = string.Format(qFormat, TableName);
+            }
+
+            return Database.SqlQuery(type, query, parameters.ToArray());
         }
         #endregion
     }
