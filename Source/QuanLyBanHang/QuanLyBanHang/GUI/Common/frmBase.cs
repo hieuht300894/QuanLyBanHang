@@ -8,6 +8,8 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraEditors.Repository;
 using System.Collections.Generic;
 using DevExpress.XtraEditors;
+using System.ComponentModel;
+using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang
 {
@@ -131,106 +133,6 @@ namespace QuanLyBanHang
         private void CustomForm()
         {
         }
-        protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
-            bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
-            bool IsSave = false, bool IsPrintPreview = false, bool IsExportExcel = false)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                GridControl gctMain = (GridControl)sender;
-                GridView grvMain = (GridView)gctMain.DefaultView;
-                GridHitInfo hi = grvMain.CalcHitInfo(e.Location);
-
-                if (hi.RowHandle >= 0 && (hi.InRow || hi.InRowCell))
-                {
-                    foreach (eFormType _fType in fTypes)
-                    {
-                        if (_fType == eFormType.Default)
-                        {
-                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-                            bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
-                            bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
-                            bbpRefresh.Enabled = true;
-                        }
-                        if (_fType == eFormType.Add || _fType == eFormType.Edit)
-                        {
-                            if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
-                            {
-                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            }
-                            if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
-                            {
-                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            }
-                            bbpCancel.Enabled = true;
-                        }
-                        if (_fType == eFormType.Print)
-                        {
-                            bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
-                            bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (eFormType _fType in fTypes)
-                    {
-                        if (_fType == eFormType.Default)
-                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-                    }
-                    bbpEdit.Enabled = false;
-                    bbpDelete.Enabled = false;
-                    bbpSave.Enabled = false;
-                    bbpSaveAndAdd.Enabled = false;
-                    bbpCancel.Enabled = false;
-                    bbpPrintPreview.Enabled = false;
-                    bbpExportExcel.Enabled = false;
-                }
-
-                bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpSaveAndAdd.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpCancel.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-
-                popGridMenu.ShowPopup(MousePosition);
-            }
-        }
-        protected virtual void LoadPercent(int Percent)
-        {
-            betPercent.EditValue = Percent;
-        }
-        protected virtual void LoadMessage(string Msg)
-        {
-            barBottom.Visible = false;
-            betPercent.EditValue = 0;
-            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
-            clsGeneral.showMessage(Msg);
-        }
-        protected virtual void LoadError(Exception Ex)
-        {
-            clsGeneral.showErrorException(Ex);
-        }
-        protected virtual void LoadProgress()
-        {
-            Action action = () =>
-            {
-                barBottom.Visible = true;
-                betPercent.EditValue = 0;
-                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            };
-            Invoke(action);
-        }
-        protected virtual void ShowAlert(string Title = "", string Text = "")
-        {
-            alertMsg.Show(this, Title, Text);
-        }
         #endregion
 
         #region Events
@@ -334,6 +236,127 @@ namespace QuanLyBanHang
             {
                 IsLeaveForm = !IsLeaveForm;
             }
+        }
+        #endregion
+
+        #region Method Base
+        protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
+        bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
+        bool IsSave = false, bool IsPrintPreview = false, bool IsExportExcel = false)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                GridControl gctMain = (GridControl)sender;
+                GridView grvMain = (GridView)gctMain.DefaultView;
+                GridHitInfo hi = grvMain.CalcHitInfo(e.Location);
+
+                if (hi.RowHandle >= 0 && (hi.InRow || hi.InRowCell))
+                {
+                    foreach (eFormType _fType in fTypes)
+                    {
+                        if (_fType == eFormType.Default)
+                        {
+                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+                            bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
+                            bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
+                            bbpRefresh.Enabled = true;
+                        }
+                        if (_fType == eFormType.Add || _fType == eFormType.Edit)
+                        {
+                            if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+                            {
+                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            }
+                            if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+                            {
+                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+                            }
+                            bbpCancel.Enabled = true;
+                        }
+                        if (_fType == eFormType.Print)
+                        {
+                            bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
+                            bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (eFormType _fType in fTypes)
+                    {
+                        if (_fType == eFormType.Default)
+                            bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+                    }
+                    bbpEdit.Enabled = false;
+                    bbpDelete.Enabled = false;
+                    bbpSave.Enabled = false;
+                    bbpSaveAndAdd.Enabled = false;
+                    bbpCancel.Enabled = false;
+                    bbpPrintPreview.Enabled = false;
+                    bbpExportExcel.Enabled = false;
+                }
+
+                bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpSaveAndAdd.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpCancel.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+
+                popGridMenu.ShowPopup(MousePosition);
+            }
+        }
+        protected virtual void LoadPercent(int Percent)
+        {
+            betPercent.EditValue = Percent;
+        }
+        protected virtual void LoadMessage(string Msg)
+        {
+            barBottom.Visible = false;
+            betPercent.EditValue = 0;
+            betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            clsGeneral.showMessage(Msg);
+        }
+        protected virtual void LoadError(Exception Ex)
+        {
+            clsGeneral.showErrorException(Ex);
+        }
+        protected virtual void LoadProgress()
+        {
+            Action action = () =>
+            {
+                barBottom.Visible = true;
+                betPercent.EditValue = 0;
+                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            };
+            Invoke(action);
+        }
+        protected virtual void ShowAlert(string Title = "", string Text = "")
+        {
+            alertMsg.Show(this, Title, Text);
+        }
+        public virtual void LoadData<T>(int KeyID, GridControl gctMain, BindingList<T> ListData) where T : class, new()
+        {
+            ListData = new BindingList<T>();
+            gctMain.DataSource = ListData;
+            clsSelect<T>.Instance.Init();
+            clsSelect<T>.Instance.SetEntity(ListData);
+            clsSelect<T>.Instance.ReloadProgress = LoadProgress;
+            clsSelect<T>.Instance.ReloadPercent = LoadPercent;
+            clsSelect<T>.Instance.ReloadMessage = LoadMessage;
+            clsSelect<T>.Instance.ReloadError = LoadError;
+            clsSelect<T>.Instance.InsertData = AddData;
+            clsSelect<T>.Instance.StartRun();
+        }
+        private void AddData<T>(T TObject, BindingList<T> ListData) where T : class, new()
+        {
+            Action action = () => { ListData.Add(TObject); };
+            Invoke(action);
         }
         #endregion
     }

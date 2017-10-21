@@ -6,12 +6,14 @@ using System.Data.Entity;
 using QuanLyBanHang.BLL.Common;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
 
 namespace QuanLyBanHang.GUI.PER
 {
     public partial class frmPersonnel_List : frmBase
     {
         #region Variables
+        BindingList<xPersonnel> lstData = new BindingList<xPersonnel>();
         #endregion
 
         #region Form Events
@@ -22,10 +24,11 @@ namespace QuanLyBanHang.GUI.PER
 
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
-            loadData(0);
+            LoadData(0, gctPersonnelList, lstData);
+            //loadData(0);
             grvPersonnelList.OptionsSelection.MultiSelect = true;
             grvPersonnelList.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.RowSelect;
-            //customForm();
+            customForm();
         }
         #endregion
 
