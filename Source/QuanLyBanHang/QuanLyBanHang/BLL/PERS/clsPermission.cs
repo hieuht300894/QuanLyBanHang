@@ -9,7 +9,7 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPermission : clsTemplate<xPermission>
+    public class clsPermission : clsDelete<xPermission>
     {
         #region Constructor
         private static volatile clsPermission instance = null;

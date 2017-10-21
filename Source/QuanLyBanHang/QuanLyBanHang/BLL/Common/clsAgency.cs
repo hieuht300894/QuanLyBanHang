@@ -59,7 +59,7 @@ namespace QuanLyBanHang.BLL.Common
     //    }
     //}
 
-    public class clsAgency : clsTemplate<xAgency>
+    public class clsAgency : clsDelete<xAgency>
     {
         #region Constructor
         private static volatile clsAgency instance = null;

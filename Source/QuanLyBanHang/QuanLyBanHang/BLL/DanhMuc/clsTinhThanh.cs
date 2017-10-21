@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.DanhMuc
 {
-    class clsTinhThanh : clsTemplate<eTinhThanh>
+    class clsTinhThanh : clsDelete<eTinhThanh>
     {
     }
 }

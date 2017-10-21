@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPersonnel : clsTemplate<xPersonnel>
+    public class clsPersonnel : clsDelete<xPersonnel>
     {
         #region Constructor
         private static volatile clsPersonnel instance = null;

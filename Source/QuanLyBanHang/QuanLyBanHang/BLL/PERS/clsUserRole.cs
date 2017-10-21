@@ -6,7 +6,7 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsUserRole : clsTemplate<xUserFeature>
+    public class clsUserRole : clsDelete<xUserFeature>
     {
         #region Constructor
         private static volatile clsUserRole instance = null;

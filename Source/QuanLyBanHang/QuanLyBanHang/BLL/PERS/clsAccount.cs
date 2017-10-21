@@ -9,7 +9,7 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsAccount : clsTemplate<xAccount>
+    public class clsAccount : clsDelete<xAccount>
     {
         #region Constructor
         private static volatile clsAccount instance = null;

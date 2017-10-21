@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    class clsFeature : clsTemplate<xFeature>
+    class clsFeature : clsDelete<xFeature>
     {
         #region Constructor
         private static volatile clsFeature instance = null;
