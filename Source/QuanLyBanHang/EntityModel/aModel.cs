@@ -680,29 +680,14 @@ namespace EntityModel.DataModel
             }
             return Convert.ToInt32(true);
         }
-        public override Task<int> SaveChangesAsync()
-        {
-            Task<int> task = Task.Run<int>(() =>
-            {
-                List<DbEntityEntry> entries = new List<DbEntityEntry>(ChangeTracker.Entries()
-                    .Where(e => (e.Entity.GetType().Name.StartsWith("e") || e.Entity.GetType().Name.StartsWith("x")) && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
-                    .ToList());
-                if (entries != null && entries.Count > 0)
-                {
-                    Exception exception = AutoLog(entries);
-                    if (exception != null) throw exception;
-                }
-                return Convert.ToInt32(true);
-            });
-            return task;
-        }
         private Exception AutoLog(List<DbEntityEntry> changeTrack)
         {
             var dateQuery = Database.SqlQuery<DateTime>("SELECT GETDATE()");
             DateTime CurrentDate = dateQuery.AsEnumerable().First();
             if (CurrentAccount != null && CurrentPersonnel != null)
             {
-                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(GetPrimaryKeys());
+                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(Module.ListPrimaryKeys);
+
                 List<xLog> lstLogs = new List<xLog>();
                 foreach (var entry in changeTrack)
                 {
@@ -831,21 +816,6 @@ namespace EntityModel.DataModel
             }
             else { return new Exception("CurrentAccount is null or CurrentPersonnel is null"); }
         }
-        public List<ColumnKey> GetPrimaryKeys()
-        {
-            string qSelectPrimaryKey =
-                  "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
-                  "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
-                  "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
-                  "left join ( " +
-                  "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
-                  "	from sys.tables t " +
-                  "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
-                  "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
-
-            List<ColumnKey> lstPrimaryKeys = Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
-            return lstPrimaryKeys ?? new List<ColumnKey>();
-        }
         public List<ColumnKey> GetColumnKeys(List<ColumnKey> lstPrimaryKeys, string TableName)
         {
             var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(TableName)).ToList();
@@ -922,7 +892,7 @@ namespace EntityModel.DataModel
         public DbRawSqlQuery SearchRange(string TableName, Type type, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
         {
             string query = "";
-            string qFormat = "SELECT * FROM {0} ";
+            string qFormat = "SELECT TOP 50000 * FROM {0} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
@@ -944,9 +914,35 @@ namespace EntityModel.DataModel
             }
             else if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count == 0)
             {
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} >= {1} {2}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysFrom.Count - 1;
+                dParamKeysFrom.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
             }
             else if (dParamKeysFrom.Count == 0 && dParamKeysTo.Count > 0)
             {
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} <= {1} {2}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysTo.Count - 1;
+                dParamKeysTo.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
             }
             else
             {
@@ -954,6 +950,68 @@ namespace EntityModel.DataModel
             }
 
             return Database.SqlQuery(type, query, parameters.ToArray());
+        }
+        public Int32 GetTotalRow(string TableName, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
+        {
+            string query = "";
+            string qFormat = "SELECT TOP 50000 COUNT(*) FROM {0} ";
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
+            {
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysFrom.Count - 1;
+                dParamKeysFrom.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}From", $"@{x.Key}To", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}From", Value = x.Value ?? DBNull.Value });
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
+            }
+            else if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count == 0)
+            {
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} >= {1} {2}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysFrom.Count - 1;
+                dParamKeysFrom.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
+            }
+            else if (dParamKeysFrom.Count == 0 && dParamKeysTo.Count > 0)
+            {
+                qFormat += "WHERE {1}";
+                string qConditionFormat = "{0} <= {1} {2}";
+                string qConditions = "";
+
+                int i = 0;
+                int length = dParamKeysTo.Count - 1;
+                dParamKeysTo.ToList().ForEach(x =>
+                {
+                    qConditions += string.Format(qConditionFormat, x.Key, $"@{x.Key}", $"{ (i++ < length ? " AND " : "")}");
+                    parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
+                });
+
+                query = string.Format(qFormat, TableName, qConditions);
+            }
+            else
+            {
+                query = string.Format(qFormat, TableName);
+            }
+
+            return Database.SqlQuery<Int32>(query, parameters.ToArray()).First();
         }
         #endregion
     }

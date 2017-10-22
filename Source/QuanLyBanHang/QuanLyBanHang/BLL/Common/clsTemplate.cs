@@ -20,29 +20,46 @@ namespace QuanLyBanHang.BLL.Common
         protected static RepositoryCollection collection;
         #endregion
 
+        //#region Constructor
+        //private static volatile clsTemplate<T> instance = null;
+        //private static readonly object mLock = new object();
+        //public clsTemplate()
+        //{
+        //    collection = new RepositoryCollection();
+        //    repository = collection.GetRepo<T>();
+        //}
+        //public static clsTemplate<T> Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            lock (mLock)
+        //            {
+        //                if (instance == null)
+        //                    instance = new clsTemplate<T>();
+        //            }
+        //        }
+        //        return instance;
+        //    }
+        //}
+        //~clsTemplate()
+        //{
+        //    instance = null;
+        //}
+        //#endregion
+
         #region Constructor
-        private static volatile clsTemplate<T> instance = null;
-        private static readonly object mLock = new object();
-        protected clsTemplate()
+        public clsTemplate()
         {
             collection = new RepositoryCollection();
             repository = collection.GetRepo<T>();
         }
         public static clsTemplate<T> Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsTemplate<T>();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsTemplate<T>(); }
         }
+        ~clsTemplate() { }
         #endregion
 
         #region Common Function

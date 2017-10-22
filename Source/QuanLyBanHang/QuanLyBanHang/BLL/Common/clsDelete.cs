@@ -137,7 +137,7 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 repository.BeginTransaction();
-                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(repository.Context.GetPrimaryKeys());
+                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(EntityModel.Module.ListPrimaryKeys);
 
                 foreach (var entity in ListEntity)
                 {

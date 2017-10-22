@@ -518,8 +518,6 @@ namespace QuanLyBanHang
 
             grvMain.KeyDown -= grvMain_KeyDown;
             grvMain.KeyDown += grvMain_KeyDown;
-            //grvMain.RowCellStyle -= grvMain_RowCellStyle;
-            //grvMain.RowCellStyle += grvMain_RowCellStyle;
             grvMain.DataSourceChanged -= grvMain_DataSourceChanged;
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
             grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
@@ -1703,7 +1701,7 @@ namespace QuanLyBanHang
 
     public static class ReflectionPopulator
     {
-        public static List<Dictionary<string,object>> CreateObjects(this SqlDataReader reader, Type type)
+        public static List<Dictionary<string, object>> CreateObjects(this SqlDataReader reader, Type type)
         {
             List<Dictionary<string, object>> results = new List<Dictionary<string, object>>();
             var properties = type.GetProperties();
@@ -1756,7 +1754,7 @@ namespace QuanLyBanHang
                 foreach (string FieldName in FieldNames)
                 {
                     object Value = null;
-                    
+
                     int index = reader.GetOrdinal(FieldName);
                     switch (convertTo.Name)
                     {
@@ -1865,7 +1863,7 @@ namespace QuanLyBanHang
             });
         }
 
-        public static Dictionary<string,object> ObjectToDictionary(this object source)
+        public static Dictionary<string, object> ObjectToDictionary(this object source)
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
             foreach (PropertyInfo pInfo in source.GetType().GetProperties())

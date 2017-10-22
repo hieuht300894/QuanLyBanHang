@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.lctPersonnel = new DevExpress.XtraLayout.LayoutControl();
             this.gctPersonnelList = new DevExpress.XtraGrid.GridControl();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.grvPersonnelList = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIDAgency = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -49,16 +50,15 @@
             this.colAccount = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lcgMain = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
             this.lctPersonnel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvPersonnelList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // lctPersonnel
@@ -68,7 +68,7 @@
             this.lctPersonnel.Location = new System.Drawing.Point(0, 24);
             this.lctPersonnel.Name = "lctPersonnel";
             this.lctPersonnel.Root = this.lcgMain;
-            this.lctPersonnel.Size = new System.Drawing.Size(918, 420);
+            this.lctPersonnel.Size = new System.Drawing.Size(918, 397);
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
             // 
@@ -80,11 +80,15 @@
             this.gctPersonnelList.Name = "gctPersonnelList";
             this.gctPersonnelList.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rlokPersonnel});
-            this.gctPersonnelList.Size = new System.Drawing.Size(894, 396);
+            this.gctPersonnelList.Size = new System.Drawing.Size(894, 373);
             this.gctPersonnelList.TabIndex = 4;
             this.gctPersonnelList.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvPersonnelList});
             this.gctPersonnelList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gctPersonnelList_MouseClick);
+            // 
+            // bindingSource1
+            // 
+            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xPersonnel);
             // 
             // grvPersonnelList
             // 
@@ -105,7 +109,6 @@
             this.colAccount});
             this.grvPersonnelList.GridControl = this.gctPersonnelList;
             this.grvPersonnelList.Name = "grvPersonnelList";
-            this.grvPersonnelList.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.True;
             this.grvPersonnelList.DoubleClick += new System.EventHandler(this.grvPersonnelList_DoubleClick);
             // 
             // colKeyID
@@ -239,7 +242,7 @@
             this.layoutControlItem1});
             this.lcgMain.Location = new System.Drawing.Point(0, 0);
             this.lcgMain.Name = "lcgMain";
-            this.lcgMain.Size = new System.Drawing.Size(918, 420);
+            this.lcgMain.Size = new System.Drawing.Size(918, 397);
             this.lcgMain.TextVisible = false;
             // 
             // layoutControlItem1
@@ -247,13 +250,9 @@
             this.layoutControlItem1.Control = this.gctPersonnelList;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(898, 400);
+            this.layoutControlItem1.Size = new System.Drawing.Size(898, 377);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
-            // 
-            // bindingSource1
-            // 
-            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xPersonnel);
             // 
             // frmPersonnel_List
             // 
@@ -269,12 +268,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).EndInit();
             this.lctPersonnel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvPersonnelList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

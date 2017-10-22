@@ -14,6 +14,7 @@ namespace EntityModel
 
         private static xPersonnel _curPer = null;
         private static xAccount _curAcc = null;
+        private static List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>();
 
         public static xPersonnel CurPer
         {
@@ -24,6 +25,10 @@ namespace EntityModel
         {
             get { return _curAcc; }
             set { _curAcc = value; }
+        }
+        public static List<ColumnKey> ListPrimaryKeys
+        {
+            get { return lstPrimaryKeys; }
         }
 
         private class MyConfiguration : System.Data.Entity.Migrations.DbMigrationsConfiguration<aModel>
@@ -43,7 +48,9 @@ namespace EntityModel
             {
                 db.Database.Initialize(false);
 
-                if (db.xAgency.Count() <= 0)
+                GetPrimaryKeys(db);
+
+                if (db.xAgency.Count() == 0)
                 {
                     try
                     {
@@ -68,6 +75,21 @@ namespace EntityModel
                     catch { }
                 }
             }
+        }
+
+        private static void GetPrimaryKeys(aModel db)
+        {
+            string qSelectPrimaryKey =
+                  "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
+                  "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
+                  "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
+                  "left join ( " +
+                  "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
+                  "	from sys.tables t " +
+                  "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
+                  "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
+
+            lstPrimaryKeys = db.Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
         }
     }
 }

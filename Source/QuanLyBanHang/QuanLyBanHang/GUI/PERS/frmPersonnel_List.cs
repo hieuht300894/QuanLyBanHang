@@ -1,19 +1,19 @@
-﻿using System;
-using System.Windows.Forms;
-using QuanLyBanHang.BLL.PERS;
+﻿using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using EntityModel.DataModel;
-using System.Data.Entity;
-using QuanLyBanHang.BLL.Common;
+using QuanLyBanHang.BLL.PERS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
     public partial class frmPersonnel_List : frmBase
     {
         #region Variables
-        BindingList<xPersonnel> lstData = new BindingList<xPersonnel>();
+        IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
         #endregion
 
         #region Form Events
@@ -21,13 +21,10 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
-            LoadData(0, gctPersonnelList, lstData);
-            //loadData(0);
-            grvPersonnelList.OptionsSelection.MultiSelect = true;
-            grvPersonnelList.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.RowSelect;
+            lstPersonnel = new List<xPersonnel>();
+            LoadData(0, gctPersonnelList, lstPersonnel, null, null, true);
             customForm();
         }
         #endregion
@@ -92,33 +89,17 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void loadPersonnel()
-        {
-            rlokPersonnel.DataSource = clsPersonnel.Instance.GetAll();
-            rlokPersonnel.ValueMember = "KeyID";
-            rlokPersonnel.DisplayMember = "FullName";
-        }
-
-        private void loadData(int KeyID)
-        {
-            loadPersonnel();
-            gctPersonnelList.DataSource = clsPersonnel.Instance.SearchPersonnel(true, 0);
-            if (KeyID > 0)
-                grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
-        }
-
-        private void insertEntry()
+        public void insertEntry()
         {
             using (frmPersonnel _frm = new frmPersonnel())
             {
-                _frm.Text = "Thêm mới nhân viên".Translation("ftxtAddPersonnel", _frm.Name);
+                _frm.Text = "Thêm mới nhân viên";
                 _frm.fType = eFormType.Add;
-                _frm.ReLoadParent = this.loadData;
                 _frm.ShowDialog();
             }
         }
 
-        private void updateEntry()
+        public void updateEntry()
         {
             if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0)
             {
@@ -128,9 +109,8 @@ namespace QuanLyBanHang.GUI.PER
                     {
                         xPersonnel _eEntry = (xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle);
                         _frm.iEntry = _eEntry;
-                        _frm.Text = "Cập nhật nhân viên".Translation("ftxtUpdatePersonnel", _frm.Name);
+                        _frm.Text = "Cập nhật nhân viên";
                         _frm.fType = eFormType.Edit;
-                        _frm.ReLoadParent = this.loadData;
                         _frm.ShowDialog();
                     }
                 }
@@ -141,7 +121,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        private void deleteEntry()
+        public void deleteEntry()
         {
             //int[] Indexes = grvPersonnelList.GetSelectedRows();
             //List<int> lstIDNhanVien = new List<int>();
@@ -187,54 +167,62 @@ namespace QuanLyBanHang.GUI.PER
             //clsPersonnel.Instance.ReloadData = loadData;
             //clsPersonnel.Instance.StartRun();
 
+
             int[] Indexes = grvPersonnelList.GetSelectedRows();
             List<xPersonnel> lstNhanVien = new List<xPersonnel>();
-            bool IsWarming = false;
             for (int i = 0; i < Indexes.Length; i++)
             {
                 xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
-                if (!IsWarming)
-                {
-                    //Thông báo nếu chưa được cảnh báo nhân viên đã có tài khoản
-                    if (personnel.IsAccount)
-                    {
-                        bool IsXoa = clsGeneral.showConfirmMessage("Nhân viên đã có tài khoản! Xác nhận xóa tài khoản của nhân viên này?");
-                        if (IsXoa)
-                            lstNhanVien.Add(personnel);
-                    }
-                    else
-                    {
-                        lstNhanVien.Add(personnel);
-                    }
-                }
-                else
-                {
-                    lstNhanVien.Add(personnel);
-                }
-                //Thông báo có áp dụng cho các trường hợp nhân viên đã có tài khoản
-                if (!IsWarming && personnel.IsAccount) IsWarming = clsGeneral.showConfirmMessage("Áp dụng cho tất cả nhân viên được xóa?");
+                lstNhanVien.Add(personnel);
             }
+
             clsPersonnel.Instance.Init();
             clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstNhanVien.ToList<object>());
-            //clsPersonnel.Instance.SetEntity(typeof(xAccount).Name, lstTaiKhoan);
-            clsPersonnel.Instance.ReloadProgress = LoadProgress;
+            clsPersonnel.Instance.ReloadProgress = OpenProgress;
             clsPersonnel.Instance.ReloadPercent = LoadPercent;
             clsPersonnel.Instance.ReloadMessage = LoadMessage;
             clsPersonnel.Instance.ReloadError = LoadError;
-            clsPersonnel.Instance.ReloadData = loadData;
             clsPersonnel.Instance.StartRun();
+
+            lstPersonnel = new List<xPersonnel>();
+            LoadData(0, gctPersonnelList, lstPersonnel, null, null);
         }
 
-        private void refreshEntry()
+        public void refreshEntry()
         {
-            loadData(0);
         }
 
-        private void customForm()
+        public void customForm()
         {
+            rlokPersonnel.ValueMember = "KeyID";
+            rlokPersonnel.DisplayMember = "FullName";
             gctPersonnelList.Format();
-
             lctPersonnel.BestFitText();
+
+
+            grvPersonnelList.TopRowChanged += grvPersonnelList_TopRowChanged;
+        }
+
+        private void grvPersonnelList_TopRowChanged(object sender, EventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
+            int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
+
+            if (LastRow == RowCount)
+            {
+                GridRowInfo RowInfo = lstRowsInfo.Last();
+                Dictionary<string, object> dFrom = new Dictionary<string, object>();
+                dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
+                LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
+            }
         }
         #endregion
     }

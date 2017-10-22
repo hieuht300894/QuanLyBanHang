@@ -1,32 +1,21 @@
-﻿using DevExpress.XtraGrid;
-using EntityModel.DataModel;
-using QuanLyBanHang.DAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity;
 using System.Linq;
-using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.BLL.Common
 {
-    public partial class clsSelect<T> where T : class, new()
+    public partial class clsCustomForm
     {
         #region Variable
-        protected Repository<T> repository;
-        protected RepositoryCollection collection;
         #endregion
 
         #region Constructor
-        public clsSelect()
+        public clsCustomForm()
         {
-            collection = new RepositoryCollection();
-            repository = collection.GetRepo<T>();
-        }
-        ~clsSelect()
-        {
-
         }
         #endregion
 
@@ -49,23 +38,21 @@ namespace QuanLyBanHang.BLL.Common
         public delegate void LoadPecent(int Percent);
         public delegate void LoadMessage(string Msg);
         public delegate void LoadError(Exception Ex);
-        public delegate void InsertObjectToList(T TObject, IList<T> ListData);
+        public delegate void CallMethod(string Method);
         public OpenProgress _OpenProgress;
         public CloseProgress _CloseProgress;
-        public LoadPecent _ReloadPercent;
-        public LoadMessage _ReloadMessage;
-        public LoadError _ReloadError;
-        public InsertObjectToList _InsertObjectToList;
-        BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+        public LoadPecent ReloadPercent;
+        public LoadMessage ReloadMessage;
+        public LoadError ReloadError;
+        public CallMethod _CallMethod;
+        private BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
         Timer timer = new Timer() { Interval = 1000, Enabled = false };
-        IList<T> ListData = new List<T>();
-        Dictionary<string, object> dValueFrom = new Dictionary<string, object>();
-        Dictionary<string, object> dValueTo = new Dictionary<string, object>();
-        bool CurrentStatus = false;
-        bool IsComplete = false;
-        int TotalNumber = 0;
-        int CurrentNumber = 0;
-        int CurrentPercent = 0;
+        private List<string> ListData = new List<string>();
+        private bool CurrentStatus = false;
+        private bool IsComplete = false;
+        private int TotalNumber = 0;
+        private int CurrentNumber = 0;
+        private int CurrentPercent = 0;
 
         public void Init()
         {
@@ -77,7 +64,6 @@ namespace QuanLyBanHang.BLL.Common
             timer = new Timer() { Interval = 1000, Enabled = false };
             timer.Tick += timer_Tick;
 
-            ListData = new List<T>();
             IsComplete = false;
             CurrentStatus = false;
             TotalNumber = 0;
@@ -85,15 +71,9 @@ namespace QuanLyBanHang.BLL.Common
             CurrentPercent = 0;
         }
 
-        public void SetEntity(IList<T> ListData)
+        public void SetEntity(List<string> _ListData)
         {
-            this.ListData = ListData;
-        }
-
-        public void SetSearch(Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo)
-        {
-            this.dValueFrom = dValueFrom ?? new Dictionary<string, object>();
-            this.dValueTo = dValueTo ?? new Dictionary<string, object>();
+            ListData = _ListData;
         }
 
         public void StartRun()
@@ -106,7 +86,6 @@ namespace QuanLyBanHang.BLL.Common
         {
             if (TotalNumber > 0 && !IsComplete)
             {
-                if (CurrentPercent % 10 == 0 || CurrentPercent % 10 == 5) System.Threading.Thread.Sleep(100);
                 CurrentPercent = Convert.ToInt32(((CurrentNumber * 1.0f) / TotalNumber) * 100);
                 bWorker.ReportProgress(CurrentPercent);
             }
@@ -119,46 +98,39 @@ namespace QuanLyBanHang.BLL.Common
             bWorker.Dispose();
 
             _CloseProgress?.Invoke();
-            _ReloadPercent?.Invoke(CurrentPercent);
-            _ReloadMessage?.Invoke(CurrentStatus ? "Tải dữ liệu hoàn thành!" : "Tải dữ liệu không thành công!");
+            ReloadPercent?.Invoke(CurrentPercent);
+            ReloadMessage?.Invoke(CurrentStatus ? "Tải dữ liệu hoàn thành!" : "Tải dữ liệu không thành công!");
         }
 
         void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            _ReloadPercent?.Invoke(e.ProgressPercentage);
+            ReloadPercent?.Invoke(e.ProgressPercentage);
         }
 
         void bWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             _OpenProgress?.Invoke();
-            CurrentStatus = SelectEntry();
+            CurrentStatus = CustomForm();
             IsComplete = !IsComplete;
         }
 
-        public virtual bool SelectEntry()
+        public virtual bool CustomForm()
         {
             DateTime CurrentDate = DateTime.Now.ServerNow();
-            repository.Context = new aModel();
             try
             {
-                Type type = typeof(T);
-                TotalNumber = repository.Context.GetTotalRow(type.Name, dValueFrom, dValueTo);
-                var result = repository.Context.SearchRange(type.Name, type, dValueFrom, dValueTo);
+                TotalNumber = ListData.Count;
 
-
-                result.
-                    ForEachAsync(new Action<object>((obj) =>
-                    {
-                        _InsertObjectToList?.Invoke((T)obj, ListData);
-                        CurrentNumber++;
-                    })).
-                    Wait();
-
+                foreach(string str in ListData)
+                {
+                    _CallMethod?.Invoke(str);
+                    CurrentNumber++;
+                }
                 return true;
             }
             catch (Exception ex)
             {
-                _ReloadError?.Invoke(ex);
+                ReloadError?.Invoke(ex);
                 return false;
             }
         }

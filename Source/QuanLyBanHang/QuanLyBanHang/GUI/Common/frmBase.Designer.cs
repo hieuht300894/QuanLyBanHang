@@ -239,7 +239,7 @@
             this.barBottom.DockRow = 0;
             this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
             this.barBottom.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.betPercent)});
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", true, true, true, 138)});
             this.barBottom.OptionsBar.DrawBorder = false;
             this.barBottom.OptionsBar.DrawDragBorder = false;
             this.barBottom.OptionsBar.MultiLine = true;
@@ -252,7 +252,7 @@
             this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
             this.betPercent.Edit = this.rpbPercent;
             this.betPercent.EditValue = 0;
-            this.betPercent.EditWidth = 75;
+            this.betPercent.EditWidth = 0;
             this.betPercent.Id = 20;
             this.betPercent.Name = "betPercent";
             this.betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
