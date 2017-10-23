@@ -89,5 +89,8 @@
     <Setting Name="NamTaiKhoa" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2017</Value>
     </Setting>
+    <Setting Name="RowsInPage" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
