@@ -30,6 +30,7 @@ namespace EntityModel
         {
             get { return lstPrimaryKeys; }
         }
+        public static int RowsInPage { get { return 100; } }
 
         private class MyConfiguration : System.Data.Entity.Migrations.DbMigrationsConfiguration<aModel>
         {

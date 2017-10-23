@@ -892,7 +892,7 @@ namespace EntityModel.DataModel
         public DbRawSqlQuery SearchRange(string TableName, Type type, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
         {
             string query = "";
-            string qSelectFormat = "SELECT TOP 10000 * FROM {0} ";
+            string qSelectFormat = $"SELECT TOP {Module.RowsInPage} * FROM {{0}} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
@@ -955,7 +955,7 @@ namespace EntityModel.DataModel
         {
             string query = "";
             string qCountFormat = "SELECT COUNT(*) FROM ({0}) TEMP";
-            string qSelectFormat = "SELECT TOP 10000 * FROM {0} ";
+            string qSelectFormat = $"SELECT TOP {Module.RowsInPage} * FROM {{0}} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
