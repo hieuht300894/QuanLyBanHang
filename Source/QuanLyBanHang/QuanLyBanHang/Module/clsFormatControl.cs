@@ -805,7 +805,7 @@ namespace QuanLyBanHang
                 GridRowInfo RowInfo = lstRowsInfo.Last();
                 Dictionary<string, object> dFrom = new Dictionary<string, object>();
                 dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-                LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
+                //LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
             }
         }
 
