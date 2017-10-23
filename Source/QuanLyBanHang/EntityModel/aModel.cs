@@ -892,12 +892,12 @@ namespace EntityModel.DataModel
         public DbRawSqlQuery SearchRange(string TableName, Type type, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
         {
             string query = "";
-            string qFormat = "SELECT TOP 50000 * FROM {0} ";
+            string qSelectFormat = "SELECT TOP 10000 * FROM {0} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
                 string qConditions = "";
 
@@ -910,11 +910,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qSelectFormat, TableName, qConditions);
             }
             else if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count == 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} >= {1} {2}";
                 string qConditions = "";
 
@@ -926,11 +926,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qSelectFormat, TableName, qConditions);
             }
             else if (dParamKeysFrom.Count == 0 && dParamKeysTo.Count > 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} <= {1} {2}";
                 string qConditions = "";
 
@@ -942,11 +942,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qSelectFormat, TableName, qConditions);
             }
             else
             {
-                query = string.Format(qFormat, TableName);
+                query = string.Format(qSelectFormat, TableName);
             }
 
             return Database.SqlQuery(type, query, parameters.ToArray());
@@ -954,12 +954,13 @@ namespace EntityModel.DataModel
         public Int32 GetTotalRow(string TableName, Dictionary<string, object> dParamKeysFrom, Dictionary<string, object> dParamKeysTo)
         {
             string query = "";
-            string qFormat = "SELECT TOP 50000 COUNT(*) FROM {0} ";
+            string qCountFormat = "SELECT COUNT(*) FROM ({0}) TEMP";
+            string qSelectFormat = "SELECT TOP 10000 * FROM {0} ";
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count > 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} BETWEEN {1} AND {2} {3}";
                 string qConditions = "";
 
@@ -972,11 +973,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}To", Value = dParamKeysTo[x.Key] ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qCountFormat, string.Format(qSelectFormat, TableName, qConditions));
             }
             else if (dParamKeysFrom.Count > 0 && dParamKeysTo.Count == 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} >= {1} {2}";
                 string qConditions = "";
 
@@ -988,11 +989,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qCountFormat, string.Format(qSelectFormat, TableName, qConditions));
             }
             else if (dParamKeysFrom.Count == 0 && dParamKeysTo.Count > 0)
             {
-                qFormat += "WHERE {1}";
+                qSelectFormat += "WHERE {1}";
                 string qConditionFormat = "{0} <= {1} {2}";
                 string qConditions = "";
 
@@ -1004,11 +1005,11 @@ namespace EntityModel.DataModel
                     parameters.Add(new SqlParameter() { ParameterName = $"@{x.Key}", Value = x.Value ?? DBNull.Value });
                 });
 
-                query = string.Format(qFormat, TableName, qConditions);
+                query = string.Format(qCountFormat, string.Format(qSelectFormat, TableName, qConditions));
             }
             else
             {
-                query = string.Format(qFormat, TableName);
+                query = string.Format(qCountFormat, string.Format(qSelectFormat, TableName));
             }
 
             return Database.SqlQuery<Int32>(query, parameters.ToArray()).First();
