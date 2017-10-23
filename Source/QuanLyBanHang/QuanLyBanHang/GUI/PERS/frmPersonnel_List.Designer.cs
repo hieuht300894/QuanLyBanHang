@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.lctPersonnel = new DevExpress.XtraLayout.LayoutControl();
+            this.userGridControl1 = new CustomControl.UserGridControl();
             this.gctPersonnelList = new DevExpress.XtraGrid.GridControl();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSource1 = new System.Windows.Forms.BindingSource();
             this.grvPersonnelList = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIDAgency = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -50,6 +50,8 @@
             this.colAccount = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lcgMain = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
             this.lctPersonnel.SuspendLayout();
@@ -59,10 +61,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // lctPersonnel
             // 
+            this.lctPersonnel.Controls.Add(this.userGridControl1);
             this.lctPersonnel.Controls.Add(this.gctPersonnelList);
             this.lctPersonnel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lctPersonnel.Location = new System.Drawing.Point(0, 24);
@@ -72,6 +77,13 @@
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
             // 
+            // userGridControl1
+            // 
+            this.userGridControl1.Location = new System.Drawing.Point(12, 212);
+            this.userGridControl1.Name = "userGridControl1";
+            this.userGridControl1.Size = new System.Drawing.Size(894, 173);
+            this.userGridControl1.TabIndex = 5;
+            // 
             // gctPersonnelList
             // 
             this.gctPersonnelList.DataSource = this.bindingSource1;
@@ -80,7 +92,7 @@
             this.gctPersonnelList.Name = "gctPersonnelList";
             this.gctPersonnelList.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rlokPersonnel});
-            this.gctPersonnelList.Size = new System.Drawing.Size(894, 373);
+            this.gctPersonnelList.Size = new System.Drawing.Size(894, 196);
             this.gctPersonnelList.TabIndex = 4;
             this.gctPersonnelList.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvPersonnelList});
@@ -239,7 +251,8 @@
             this.lcgMain.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             this.lcgMain.GroupBordersVisible = false;
             this.lcgMain.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem1});
+            this.layoutControlItem1,
+            this.layoutControlItem3});
             this.lcgMain.Location = new System.Drawing.Point(0, 0);
             this.lcgMain.Name = "lcgMain";
             this.lcgMain.Size = new System.Drawing.Size(918, 397);
@@ -250,9 +263,23 @@
             this.layoutControlItem1.Control = this.gctPersonnelList;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(898, 377);
+            this.layoutControlItem1.Size = new System.Drawing.Size(898, 200);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
+            this.layoutControlItem1.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            // 
+            // layoutControlItem3
+            // 
+            this.layoutControlItem3.Control = this.userGridControl1;
+            this.layoutControlItem3.Location = new System.Drawing.Point(0, 200);
+            this.layoutControlItem3.Name = "layoutControlItem3";
+            this.layoutControlItem3.Size = new System.Drawing.Size(898, 177);
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem3.TextVisible = false;
+            // 
+            // gridView1
+            // 
+            this.gridView1.Name = "gridView1";
             // 
             // frmPersonnel_List
             // 
@@ -273,6 +300,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,5 +330,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn colModifiedDate;
         private DevExpress.XtraGrid.Columns.GridColumn colAccount;
         private System.Windows.Forms.BindingSource bindingSource1;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private CustomControl.UserGridControl userGridControl1;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
     }
 }

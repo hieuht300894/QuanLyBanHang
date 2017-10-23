@@ -11,6 +11,7 @@ using DevExpress.XtraEditors;
 using System.ComponentModel;
 using QuanLyBanHang.BLL.Common;
 using System.Reflection;
+using CustomControl;
 
 namespace QuanLyBanHang
 {
@@ -385,10 +386,22 @@ namespace QuanLyBanHang
                 custom.ReloadError = LoadError;
             }
         }
-
         public void LoadData<T>(int KeyID, GridControl gctMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
         {
             gctMain.DataSource = ListData;
+            
+            clsSelect<T> select = new clsSelect<T>();
+            select.Init();
+            select.SetEntity(ListData);
+            select.SetSearch(dValueFrom, dValueTo);
+            SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
+            select._InsertObjectToList = AddData;
+            select.StartRun();
+        }
+        public void LoadData<T>(int KeyID, UserGridControl gctMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
+        {
+            gctMain.GridControl.DataSource = ListData;
+            gctMain.SetLoading(true);
 
             clsSelect<T> select = new clsSelect<T>();
             select.Init();

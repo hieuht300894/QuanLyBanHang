@@ -789,24 +789,24 @@ namespace QuanLyBanHang
 
         private static void grvMain_TopRowChanged(object sender, EventArgs e)
         {
-            GridView view = sender as GridView;
-            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
-            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
-            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
-            {
-                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
-                    lstRowsInfo.RemoveAt(i);
-            }
-            int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
-            int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
+            //GridView view = sender as GridView;
+            //GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
+            //List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            //for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            //{
+            //    if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+            //        lstRowsInfo.RemoveAt(i);
+            //}
+            //int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
+            //int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
 
-            if (LastRow == RowCount)
-            {
-                GridRowInfo RowInfo = lstRowsInfo.Last();
-                Dictionary<string, object> dFrom = new Dictionary<string, object>();
-                dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-                //LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
-            }
+            //if (LastRow == RowCount)
+            //{
+            //    GridRowInfo RowInfo = lstRowsInfo.Last();
+            //    Dictionary<string, object> dFrom = new Dictionary<string, object>();
+            //    dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
+            //    //LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
+            //}
         }
 
         public static List<int> DeleteItem<T>(this GridView grvMain, BindingList<T> lstEntry, BindingList<T> lstEdited) where T : class
