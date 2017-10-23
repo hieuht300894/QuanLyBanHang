@@ -63,6 +63,7 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
+            this.btnLoading = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -114,9 +115,10 @@
             this.bbpPrintPreview,
             this.bbpSave,
             this.bbpSaveAndAdd,
-            this.bbpExportExcel});
+            this.bbpExportExcel,
+            this.btnLoading});
             this.barMenu.MainMenu = this.barTop;
-            this.barMenu.MaxItemId = 27;
+            this.barMenu.MaxItemId = 30;
             this.barMenu.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rpbPercent});
             this.barMenu.StatusBar = this.barBottom;
@@ -239,7 +241,8 @@
             this.barBottom.DockRow = 0;
             this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
             this.barBottom.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", true, true, true, 138)});
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", true, true, true, 138),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnLoading)});
             this.barBottom.OptionsBar.DrawBorder = false;
             this.barBottom.OptionsBar.DrawDragBorder = false;
             this.barBottom.OptionsBar.MultiLine = true;
@@ -249,7 +252,7 @@
             // 
             // betPercent
             // 
-            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Left;
             this.betPercent.Edit = this.rpbPercent;
             this.betPercent.EditValue = 0;
             this.betPercent.EditWidth = 0;
@@ -276,9 +279,9 @@
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 388);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 384);
             this.barDockControlBottom.Manager = this.barMenu;
-            this.barDockControlBottom.Size = new System.Drawing.Size(884, 23);
+            this.barDockControlBottom.Size = new System.Drawing.Size(884, 27);
             // 
             // barDockControlLeft
             // 
@@ -286,7 +289,7 @@
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barMenu;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 364);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 360);
             // 
             // barDockControlRight
             // 
@@ -294,7 +297,7 @@
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControlRight.Location = new System.Drawing.Point(884, 24);
             this.barDockControlRight.Manager = this.barMenu;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 364);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 360);
             // 
             // btnClose
             // 
@@ -407,6 +410,14 @@
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
             // 
+            // btnLoading
+            // 
+            this.btnLoading.Caption = "barButtonItem1";
+            this.btnLoading.Id = 29;
+            this.btnLoading.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Stop_16x16;
+            this.btnLoading.Name = "btnLoading";
+            this.btnLoading.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLoading_ItemClick);
+            // 
             // frmBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,5 +478,6 @@
         public DevExpress.XtraBars.BarButtonItem bbpCancel;
         public DevExpress.XtraBars.BarButtonItem bbpPrintPreview;
         private DevExpress.XtraBars.Alerter.AlertControl alertMsg;
+        private DevExpress.XtraBars.BarButtonItem btnLoading;
     }
 }

@@ -15,7 +15,7 @@ namespace EntityModel
         private static xPersonnel _curPer = null;
         private static xAccount _curAcc = null;
         private static List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>();
-
+        private static long _rowInPage = 1000000000;
         public static xPersonnel CurPer
         {
             get { return _curPer; }
@@ -30,7 +30,7 @@ namespace EntityModel
         {
             get { return lstPrimaryKeys; }
         }
-        public static int RowsInPage { get { return 100; } }
+        public static long RowsInPage { get { return _rowInPage; } set { _rowInPage = value; } }
 
         private class MyConfiguration : System.Data.Entity.Migrations.DbMigrationsConfiguration<aModel>
         {

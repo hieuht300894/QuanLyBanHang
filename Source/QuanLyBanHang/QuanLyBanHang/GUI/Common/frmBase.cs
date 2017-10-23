@@ -1,17 +1,14 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Linq;
-using QuanLyBanHang.BLL.PERS;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using DevExpress.XtraEditors.Repository;
-using System.Collections.Generic;
-using DevExpress.XtraEditors;
-using System.ComponentModel;
 using QuanLyBanHang.BLL.Common;
+using QuanLyBanHang.BLL.PERS;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using CustomControl;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang
 {
@@ -77,29 +74,10 @@ namespace QuanLyBanHang
                 }
             }
         }
-        private void loadAccessForm()
+        private void LoadAccessForm()
         {
             fTypes = fTypes ?? new List<eFormType>();
             if (!fTypes.Any(x => x == fType)) fTypes.Add(fType);
-
-            //if (_fType == eFormType.Default && (this.Name.StartsWith("frm") || this.Name.StartsWith("bbi")))
-            //{
-            //    if (this.Name.StartsWith("bbi"))
-            //        clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature()
-            //        {
-            //            IsAdd = true,
-            //            IsDelete = true,
-            //            IsEdit = true,
-            //            IsEnable = true
-            //        };
-            //    else
-            //    {
-            //        if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission > 0)
-            //            clsGeneral.curUserFeature = clsUserRole.Instance.getUserFeature(this.Name);
-            //        else if (clsGeneral.curPersonnel.KeyID == 0 && clsGeneral.curAccount.IDPermission.HasValue && clsGeneral.curAccount.IDPermission == 0)
-            //            clsGeneral.curUserFeature = new EntityModel.DataModel.xUserFeature() { IsAdd = true, IsDelete = true, IsEdit = true, IsEnable = true };
-            //    }
-            //}
 
             if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission > 0 && clsGeneral.curAccount.IDPermission > 0)
                 clsGeneral.curUserFeature = clsUserRole.Instance.GetUserFeature(this.Name);
@@ -137,54 +115,43 @@ namespace QuanLyBanHang
         #region Events
         protected virtual void frmBase_Load(object sender, EventArgs e)
         {
-            loadAccessForm();
+            LoadAccessForm();
             BarItemVisibility();
             SetCaptionButton();
             InitEvents();
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void btnPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -201,7 +168,6 @@ namespace QuanLyBanHang
         }
         protected virtual void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
         }
         protected virtual void bbpExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -211,20 +177,16 @@ namespace QuanLyBanHang
         }
         protected virtual void frmBase_ControlAdded(object sender, ControlEventArgs e)
         {
-            if (e.Control is DevExpress.XtraLayout.LayoutControl)
-            {
-                try
-                {
-                    ((DevExpress.XtraLayout.LayoutControl)e.Control).Translation();
-                }
-                catch { }
-            }
+
+        }
+        private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
         }
         private void frmBase_Enter(object sender, EventArgs e)
         {
             if (IsLeaveForm)
             {
-                loadAccessForm();
+                LoadAccessForm();
                 IsLeaveForm = !IsLeaveForm;
             }
         }
@@ -369,68 +331,12 @@ namespace QuanLyBanHang
                 select._ReloadError = LoadError;
             }
         }
-        private void SetAction(clsCustomForm custom, bool IsShowPercent, bool IsShowMessage, bool IsShowError)
-        {
-            if (IsShowPercent)
-            {
-                custom._OpenProgress = OpenProgress;
-                custom._CloseProgress = CloseProgress;
-                custom.ReloadPercent = LoadPercent;
-            }
-            if (IsShowMessage)
-            {
-                custom.ReloadMessage = LoadMessage;
-            }
-            if (IsShowError)
-            {
-                custom.ReloadError = LoadError;
-            }
-        }
-        public void LoadData<T>(int KeyID, GridControl gctMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
+        public void LoadData<T>(int KeyID, GridControl gctMain, IList<T> ListData, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
         {
             gctMain.DataSource = ListData;
-            
             clsSelect<T> select = new clsSelect<T>();
             select.Init();
             select.SetEntity(ListData);
-            select.SetSearch(dValueFrom, dValueTo);
-            SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
-            select._InsertObjectToList = AddData;
-            select.StartRun();
-        }
-        public void LoadData<T>(int KeyID, UserGridControl gctMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
-        {
-            gctMain.GridControl.DataSource = ListData;
-            gctMain.SetLoading(true);
-
-            clsSelect<T> select = new clsSelect<T>();
-            select.Init();
-            select.SetEntity(ListData);
-            select.SetSearch(dValueFrom, dValueTo);
-            SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
-            select._InsertObjectToList = AddData;
-            select.StartRun();
-        }
-        public void LoadData<T>(int KeyID, LookUpEdit lokMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
-        {
-            lokMain.Properties.DataSource = ListData;
-
-            clsSelect<T> select = new clsSelect<T>();
-            select.Init();
-            select.SetEntity(ListData);
-            select.SetSearch(dValueFrom, dValueTo);
-            SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
-            select._InsertObjectToList = AddData;
-            select.StartRun();
-        }
-        public void LoadData<T>(int KeyID, RepositoryItemLookUpEdit rlokMain, IList<T> ListData, Dictionary<string, object> dValueFrom, Dictionary<string, object> dValueTo, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
-        {
-            rlokMain.DataSource = ListData;
-
-            clsSelect<T> select = new clsSelect<T>();
-            select.Init();
-            select.SetEntity(ListData);
-            select.SetSearch(dValueFrom, dValueTo);
             SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
             select._InsertObjectToList = AddData;
             select.StartRun();

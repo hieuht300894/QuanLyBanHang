@@ -1,5 +1,4 @@
-﻿using CustomControl;
-using DevExpress.XtraGrid.Views.Grid;
+﻿using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
@@ -25,7 +24,7 @@ namespace QuanLyBanHang.GUI.PER
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
             lstPersonnel = new List<xPersonnel>();
-            LoadData(0, userGridControl1, lstPersonnel, null, null, true);
+            LoadData(0, gctPersonnelList, lstPersonnel, true);
             customForm();
         }
         #endregion
@@ -186,7 +185,7 @@ namespace QuanLyBanHang.GUI.PER
             clsPersonnel.Instance.StartRun();
 
             lstPersonnel = new List<xPersonnel>();
-            LoadData(0, gctPersonnelList, lstPersonnel, null, null);
+            LoadData(0, gctPersonnelList, lstPersonnel);
         }
 
         public void refreshEntry()
@@ -198,35 +197,7 @@ namespace QuanLyBanHang.GUI.PER
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";
             gctPersonnelList.Format();
-            userGridControl1.GridControl.Format();
             lctPersonnel.BestFitText();
-
-
-            // grvPersonnelList.TopRowChanged += grvPersonnelList_TopRowChanged;
-
-            userGridControl1.GridView.TopRowChanged += gridView_TopRowChanged;
-        }
-
-        private void gridView_TopRowChanged(object sender, EventArgs e)
-        {
-            GridView view = sender as GridView;
-            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
-            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
-            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
-            {
-                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
-                    lstRowsInfo.RemoveAt(i);
-            }
-            int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
-            int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
-
-            if (LastRow == RowCount)
-            {
-                GridRowInfo RowInfo = lstRowsInfo.Last();
-                Dictionary<string, object> dFrom = new Dictionary<string, object>();
-                dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-                LoadData(0, userGridControl1, lstPersonnel, dFrom, null, true);
-            }
         }
         #endregion
     }

@@ -1,12 +1,9 @@
-﻿using DevExpress.XtraGrid;
-using EntityModel.DataModel;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity;
-using System.Linq;
-using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.BLL.Common
@@ -26,7 +23,8 @@ namespace QuanLyBanHang.BLL.Common
         }
         ~clsSelect()
         {
-
+            timer.Dispose();
+            bWorker.Dispose();
         }
         #endregion
 
@@ -57,7 +55,7 @@ namespace QuanLyBanHang.BLL.Common
         public LoadError _ReloadError;
         public InsertObjectToList _InsertObjectToList;
         BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-        Timer timer = new Timer() { Interval = 1000, Enabled = false };
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer() { Interval = 1000, Enabled = false };
         IList<T> ListData = new List<T>();
         Dictionary<string, object> dValueFrom = new Dictionary<string, object>();
         Dictionary<string, object> dValueTo = new Dictionary<string, object>();
@@ -74,7 +72,7 @@ namespace QuanLyBanHang.BLL.Common
             bWorker.ProgressChanged += bWorker_ProgressChanged;
             bWorker.RunWorkerCompleted += bWorker_RunWorkerCompleted;
 
-            timer = new Timer() { Interval = 1000, Enabled = false };
+            timer = new System.Windows.Forms.Timer() { Interval = 1000, Enabled = false };
             timer.Tick += timer_Tick;
 
             ListData = new List<T>();
@@ -106,7 +104,6 @@ namespace QuanLyBanHang.BLL.Common
         {
             if (TotalNumber > 0 && !IsComplete)
             {
-                if (CurrentPercent % 10 == 0 || CurrentPercent % 10 == 5) System.Threading.Thread.Sleep(100);
                 CurrentPercent = Convert.ToInt32(((CurrentNumber * 1.0f) / TotalNumber) * 100);
                 bWorker.ReportProgress(CurrentPercent);
             }
@@ -115,8 +112,6 @@ namespace QuanLyBanHang.BLL.Common
         void bWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             timer.Enabled = false;
-            timer.Dispose();
-            bWorker.Dispose();
 
             _CloseProgress?.Invoke();
             _ReloadPercent?.Invoke(CurrentPercent);
@@ -128,14 +123,14 @@ namespace QuanLyBanHang.BLL.Common
             _ReloadPercent?.Invoke(e.ProgressPercentage);
         }
 
-        void bWorker_DoWork(object sender, DoWorkEventArgs e)
+        public virtual void bWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             _OpenProgress?.Invoke();
             CurrentStatus = SelectEntry();
-            IsComplete = !IsComplete;
+            IsComplete = true;
         }
 
-        public virtual bool SelectEntry()
+        private bool SelectEntry()
         {
             DateTime CurrentDate = DateTime.Now.ServerNow();
             repository.Context = new aModel();
@@ -145,15 +140,12 @@ namespace QuanLyBanHang.BLL.Common
                 TotalNumber = repository.Context.GetTotalRow(type.Name, dValueFrom, dValueTo);
                 var result = repository.Context.SearchRange(type.Name, type, dValueFrom, dValueTo);
 
-
-                result.
-                    ForEachAsync(new Action<object>((obj) =>
-                    {
-                        _InsertObjectToList?.Invoke((T)obj, ListData);
-                        CurrentNumber++;
-                    })).
-                    Wait();
-
+                foreach (T obj in result)
+                {
+                    if (bWorker.CancellationPending) { break; }
+                    _InsertObjectToList?.Invoke(obj, ListData);
+                    CurrentNumber++;
+                }
                 return true;
             }
             catch (Exception ex)

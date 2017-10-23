@@ -440,7 +440,6 @@ namespace QuanLyBanHang
 
             //Format header
             grvMain.OptionsView.AllowHtmlDrawHeaders = true;
-            //grvMain.Appearance.HeaderPanel.Font = Properties.Settings.Default.GeneralFont;
             grvMain.Appearance.HeaderPanel.TextOptions.HAlignment = HorzAlignment.Center;
             grvMain.Appearance.HeaderPanel.TextOptions.VAlignment = VertAlignment.Center;
             grvMain.Appearance.HeaderPanel.TextOptions.WordWrap = WordWrap.Wrap;

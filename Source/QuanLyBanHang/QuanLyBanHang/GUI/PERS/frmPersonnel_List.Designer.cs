@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPersonnel_List));
             this.lctPersonnel = new DevExpress.XtraLayout.LayoutControl();
-            this.userGridControl1 = new CustomControl.UserGridControl();
             this.gctPersonnelList = new DevExpress.XtraGrid.GridControl();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.grvPersonnelList = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIDAgency = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -50,9 +51,9 @@
             this.colAccount = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lcgMain = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
             this.lctPersonnel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).BeginInit();
@@ -61,28 +62,115 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.SuspendLayout();
             // 
+            // btnEdit
+            // 
+            this.btnEdit.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.Image")));
+            this.btnEdit.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.LargeImage")));
+            this.btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            // 
+            // barTop
+            // 
+            this.barTop.OptionsBar.DrawDragBorder = false;
+            this.barTop.OptionsBar.MultiLine = true;
+            this.barTop.OptionsBar.UseWholeRow = true;
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.Image")));
+            this.btnDelete.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.LargeImage")));
+            this.btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.Image")));
+            this.btnRefresh.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.LargeImage")));
+            this.btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            // 
+            // btnSave
+            // 
+            this.btnSave.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.ImageOptions.Image")));
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.Image")));
+            // 
+            // btnSaveAndAdd
+            // 
+            this.btnSaveAndAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAndAdd.ImageOptions.Image")));
+            // 
+            // bbpRefresh
+            // 
+            this.bbpRefresh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpRefresh.ImageOptions.Image")));
+            // 
+            // bbpAdd
+            // 
+            this.bbpAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpAdd.ImageOptions.Image")));
+            // 
+            // bbpEdit
+            // 
+            this.bbpEdit.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpEdit.ImageOptions.Image")));
+            // 
+            // bbpDelete
+            // 
+            this.bbpDelete.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpDelete.ImageOptions.Image")));
+            // 
+            // btnPrintPreview
+            // 
+            this.btnPrintPreview.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPreview.ImageOptions.Image")));
+            // 
+            // btnExportExcel
+            // 
+            this.btnExportExcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExportExcel.ImageOptions.Image")));
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.ImageOptions.DisabledLargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.DisabledLargeImage")));
+            this.btnAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.Image")));
+            this.btnAdd.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.LargeImage")));
+            this.btnAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            // 
+            // barBottom
+            // 
+            this.barBottom.OptionsBar.DrawBorder = false;
+            this.barBottom.OptionsBar.DrawDragBorder = false;
+            this.barBottom.OptionsBar.MultiLine = true;
+            this.barBottom.OptionsBar.UseWholeRow = true;
+            // 
+            // bbpSave
+            // 
+            this.bbpSave.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpSave.ImageOptions.Image")));
+            // 
+            // bbpSaveAndAdd
+            // 
+            this.bbpSaveAndAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpSaveAndAdd.ImageOptions.Image")));
+            // 
+            // bbpExportExcel
+            // 
+            this.bbpExportExcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpExportExcel.ImageOptions.Image")));
+            // 
+            // bbpCancel
+            // 
+            this.bbpCancel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpCancel.ImageOptions.Image")));
+            this.bbpCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bbpCancel.ImageOptions.LargeImage")));
+            // 
+            // bbpPrintPreview
+            // 
+            this.bbpPrintPreview.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpPrintPreview.ImageOptions.Image")));
+            // 
             // lctPersonnel
             // 
-            this.lctPersonnel.Controls.Add(this.userGridControl1);
             this.lctPersonnel.Controls.Add(this.gctPersonnelList);
             this.lctPersonnel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lctPersonnel.Location = new System.Drawing.Point(0, 24);
             this.lctPersonnel.Name = "lctPersonnel";
+            this.lctPersonnel.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(482, 140, 450, 400);
             this.lctPersonnel.Root = this.lcgMain;
-            this.lctPersonnel.Size = new System.Drawing.Size(918, 397);
+            this.lctPersonnel.Size = new System.Drawing.Size(884, 364);
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
-            // 
-            // userGridControl1
-            // 
-            this.userGridControl1.Location = new System.Drawing.Point(12, 212);
-            this.userGridControl1.Name = "userGridControl1";
-            this.userGridControl1.Size = new System.Drawing.Size(894, 173);
-            this.userGridControl1.TabIndex = 5;
             // 
             // gctPersonnelList
             // 
@@ -92,7 +180,7 @@
             this.gctPersonnelList.Name = "gctPersonnelList";
             this.gctPersonnelList.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rlokPersonnel});
-            this.gctPersonnelList.Size = new System.Drawing.Size(894, 196);
+            this.gctPersonnelList.Size = new System.Drawing.Size(860, 340);
             this.gctPersonnelList.TabIndex = 4;
             this.gctPersonnelList.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvPersonnelList});
@@ -251,11 +339,10 @@
             this.lcgMain.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             this.lcgMain.GroupBordersVisible = false;
             this.lcgMain.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem1,
-            this.layoutControlItem3});
+            this.layoutControlItem1});
             this.lcgMain.Location = new System.Drawing.Point(0, 0);
-            this.lcgMain.Name = "lcgMain";
-            this.lcgMain.Size = new System.Drawing.Size(918, 397);
+            this.lcgMain.Name = "Root";
+            this.lcgMain.Size = new System.Drawing.Size(884, 364);
             this.lcgMain.TextVisible = false;
             // 
             // layoutControlItem1
@@ -263,19 +350,9 @@
             this.layoutControlItem1.Control = this.gctPersonnelList;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(898, 200);
+            this.layoutControlItem1.Size = new System.Drawing.Size(864, 344);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
-            this.layoutControlItem1.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-            // 
-            // layoutControlItem3
-            // 
-            this.layoutControlItem3.Control = this.userGridControl1;
-            this.layoutControlItem3.Location = new System.Drawing.Point(0, 200);
-            this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(898, 177);
-            this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem3.TextVisible = false;
             // 
             // gridView1
             // 
@@ -285,13 +362,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(918, 444);
+            this.ClientSize = new System.Drawing.Size(884, 411);
             this.Controls.Add(this.lctPersonnel);
             this.Name = "frmPersonnel_List";
             this.Text = "Danh sách nhân viên";
             this.Load += new System.EventHandler(this.frmNhanVien_List_Load);
             this.Controls.SetChildIndex(this.lctPersonnel, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).EndInit();
             this.lctPersonnel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctPersonnelList)).EndInit();
@@ -300,7 +378,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -331,7 +408,5 @@
         private DevExpress.XtraGrid.Columns.GridColumn colAccount;
         private System.Windows.Forms.BindingSource bindingSource1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
-        private CustomControl.UserGridControl userGridControl1;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
     }
 }

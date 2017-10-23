@@ -52,7 +52,6 @@ namespace QuanLyBanHang
                 clsGeneral.showErrorException(ex, "Exception");
             }
         }
-
         public static XtraForm CreateNewForm(string bbiName)
         {
             if (fList == null)
@@ -68,7 +67,6 @@ namespace QuanLyBanHang
     public class FormItem
     {
         string _bbiName;
-
         public string BbiName
         {
             get { return _bbiName; }
