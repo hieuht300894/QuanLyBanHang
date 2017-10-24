@@ -24,7 +24,14 @@ namespace QuanLyBanHang.GUI.PER
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
             lstPersonnel = new List<xPersonnel>();
-            LoadData(0, gctPersonnelList, lstPersonnel, true);
+            gctPersonnelList.DataSource = lstPersonnel;
+            clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
+            select.Init();
+            select.SetEntity(lstPersonnel);
+            SetAction(select, true, false, false);
+            select._InsertObjectToList = AddData;
+            select.StartRun();
+            //LoadData(0, gctPersonnelList, lstPersonnel, true);
             customForm();
         }
         #endregion
@@ -176,13 +183,13 @@ namespace QuanLyBanHang.GUI.PER
                 lstNhanVien.Add(personnel);
             }
 
-            clsPersonnel.Instance.Init();
-            clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstNhanVien.ToList<object>());
-            clsPersonnel.Instance.ReloadProgress = OpenProgress;
-            clsPersonnel.Instance.ReloadPercent = LoadPercent;
-            clsPersonnel.Instance.ReloadMessage = LoadMessage;
-            clsPersonnel.Instance.ReloadError = LoadError;
-            clsPersonnel.Instance.StartRun();
+            //clsPersonnel.Instance.Init();
+            //clsPersonnel.Instance.SetEntity(typeof(xPersonnel).Name, lstNhanVien.ToList<object>());
+            //clsPersonnel.Instance.ReloadProgress = OpenProgress;
+            //clsPersonnel.Instance.ReloadPercent = LoadPercent;
+            //clsPersonnel.Instance.ReloadMessage = LoadMessage;
+            //clsPersonnel.Instance.ReloadError = LoadError;
+            //clsPersonnel.Instance.StartRun();
 
             lstPersonnel = new List<xPersonnel>();
             LoadData(0, gctPersonnelList, lstPersonnel);
@@ -198,6 +205,37 @@ namespace QuanLyBanHang.GUI.PER
             rlokPersonnel.DisplayMember = "FullName";
             gctPersonnelList.Format();
             lctPersonnel.BestFitText();
+
+            grvPersonnelList.TopRowChanged += grvPersonnelList_TopRowChanged;
+        }
+
+        private void grvPersonnelList_TopRowChanged(object sender, EventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
+            int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
+
+            if (LastRow == RowCount)
+            {
+                GridRowInfo RowInfo = lstRowsInfo.Last();
+                Dictionary<string, object> dFrom = new Dictionary<string, object>();
+                dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
+                gctPersonnelList.DataSource = lstPersonnel;
+                clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
+                select.Init();
+                select.SetEntity(lstPersonnel);
+                select.SetSearch(dFrom, null);
+                SetAction(select, true, false, false);
+                select._InsertObjectToList = AddData;
+                select.StartRun();
+            }
         }
         #endregion
     }

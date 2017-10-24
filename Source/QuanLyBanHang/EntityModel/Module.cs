@@ -15,7 +15,8 @@ namespace EntityModel
         private static xPersonnel _curPer = null;
         private static xAccount _curAcc = null;
         private static List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>();
-        private static long _rowInPage = 1000000000;
+        private static long _rowInPage = 100;
+
         public static xPersonnel CurPer
         {
             get { return _curPer; }
@@ -32,7 +33,7 @@ namespace EntityModel
         }
         public static long RowsInPage { get { return _rowInPage; } set { _rowInPage = value; } }
 
-        private class MyConfiguration : System.Data.Entity.Migrations.DbMigrationsConfiguration<aModel>
+        private class MyConfiguration : DbMigrationsConfiguration<aModel>
         {
             public MyConfiguration()
             {
@@ -40,7 +41,6 @@ namespace EntityModel
                 this.AutomaticMigrationsEnabled = true;
             }
         }
-
         public static void InitDefaultData()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<aModel, MyConfiguration>());
@@ -77,7 +77,6 @@ namespace EntityModel
                 }
             }
         }
-
         private static void GetPrimaryKeys(aModel db)
         {
             string qSelectPrimaryKey =

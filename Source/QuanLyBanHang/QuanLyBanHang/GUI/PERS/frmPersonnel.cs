@@ -63,7 +63,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry = clsPersonnel.Instance.GetEntry(iEntry.KeyID);
+           // _acEntry = clsPersonnel.Instance.GetEntry(iEntry.KeyID);
             setControlValue();
         }
 
@@ -154,7 +154,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = clsPersonnel.Instance.AddOrUpdate(_acEntry);
+          //  bRe = clsPersonnel.Instance.AddOrUpdate(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.KeyID);

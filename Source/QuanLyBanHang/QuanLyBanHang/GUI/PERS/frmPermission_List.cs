@@ -108,7 +108,7 @@ namespace QuanLyBanHang.GUI.PERS
         #region Methods
         private void loadPersonnel()
         {
-            lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.GetAll());
+            //lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.GetAll());
             rlokPersonnel.DataSource = lstPersonel;
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";

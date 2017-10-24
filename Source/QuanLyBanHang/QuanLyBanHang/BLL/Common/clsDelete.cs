@@ -206,22 +206,22 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
-        public DbSet getDbSet(string tableName)
-        {
-            Assembly asse = Assembly.Load("EntityModel");
-            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
-            if (mod != null)
-            {
-                Type type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
-                if (type != null) return repository.Context.Set(type);
-            }
-            return null;
-        }
+        //public DbSet getDbSet(string tableName)
+        //{
+        //    Assembly asse = Assembly.Load("EntityModel");
+        //    Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
+        //    if (mod != null)
+        //    {
+        //        Type type = mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
+        //        if (type != null) return repository.Context.Set(type);
+        //    }
+        //    return null;
+        //}
 
         public Type GetInstance(string tableName)
         {
             Assembly asse = Assembly.Load("EntityModel");
-            Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
+            System.Reflection.Module mod = asse.GetModules().FirstOrDefault(x => x.Name.Contains("EntityModel"));
             if (mod != null) return mod.Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(tableName));
             else return null;
         }

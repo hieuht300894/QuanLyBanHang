@@ -46,6 +46,7 @@
             this.barBottom = new DevExpress.XtraBars.Bar();
             this.betPercent = new DevExpress.XtraBars.BarEditItem();
             this.rpbPercent = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
+            this.btnLoading = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -63,7 +64,6 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
-            this.btnLoading = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -252,7 +252,7 @@
             // 
             // betPercent
             // 
-            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Left;
+            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
             this.betPercent.Edit = this.rpbPercent;
             this.betPercent.EditValue = 0;
             this.betPercent.EditWidth = 0;
@@ -266,6 +266,15 @@
             this.rpbPercent.ReadOnly = true;
             this.rpbPercent.ShowTitle = true;
             this.rpbPercent.Step = 1;
+            // 
+            // btnLoading
+            // 
+            this.btnLoading.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.btnLoading.Caption = "Stop";
+            this.btnLoading.Id = 29;
+            this.btnLoading.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Stop_16x16;
+            this.btnLoading.Name = "btnLoading";
+            this.btnLoading.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLoading_ItemClick);
             // 
             // barDockControlTop
             // 
@@ -409,14 +418,6 @@
             this.alertMsg.LookAndFeel.SkinName = "Office 2010 Blue";
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
-            // 
-            // btnLoading
-            // 
-            this.btnLoading.Caption = "barButtonItem1";
-            this.btnLoading.Id = 29;
-            this.btnLoading.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Stop_16x16;
-            this.btnLoading.Name = "btnLoading";
-            this.btnLoading.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLoading_ItemClick);
             // 
             // frmBase
             // 

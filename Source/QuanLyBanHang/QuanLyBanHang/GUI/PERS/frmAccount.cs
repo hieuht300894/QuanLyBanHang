@@ -119,7 +119,7 @@ namespace QuanLyBanHang.GUI.PER
         }
         private void loadPersonnel(int KeyID)
         {
-            lokPersonnel.Properties.DataSource = clsPersonnel.Instance.SearchNoAccount(true, KeyID);
+            //lokPersonnel.Properties.DataSource = clsPersonnel.Instance.SearchNoAccount(true, KeyID);
             lokPersonnel.Properties.ValueMember = "KeyID";
             lokPersonnel.Properties.DisplayMember = "FullName";
             if (KeyID > 0)

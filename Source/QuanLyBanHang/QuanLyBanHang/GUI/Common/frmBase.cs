@@ -2,8 +2,10 @@
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -181,6 +183,11 @@ namespace QuanLyBanHang
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            clsService.dThreads.Where(x => x.Key.StartsWith(Name)).ToList().ForEach(x =>
+            {
+                if (x.Value != null)
+                    x.Value.CancelAsync();
+            });
         }
         private void frmBase_Enter(object sender, EventArgs e)
         {
@@ -314,7 +321,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region LoadData
-        private void SetAction<T>(clsSelect<T> select, bool IsShowPercent, bool IsShowMessage, bool IsShowError) where T : class, new()
+        public void SetAction<T>(clsFuction<T> select, bool IsShowPercent, bool IsShowMessage, bool IsShowError) where T : class, new()
         {
             if (IsShowPercent)
             {
@@ -333,15 +340,15 @@ namespace QuanLyBanHang
         }
         public void LoadData<T>(int KeyID, GridControl gctMain, IList<T> ListData, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
         {
-            gctMain.DataSource = ListData;
-            clsSelect<T> select = new clsSelect<T>();
-            select.Init();
-            select.SetEntity(ListData);
-            SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
-            select._InsertObjectToList = AddData;
-            select.StartRun();
+            //gctMain.DataSource = ListData;
+            //clsPersonnel select = new clsPersonnel();
+            //select.Init();
+            //select.SetEntity(ListData);
+            //SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
+            //select._InsertObjectToList = AddData;
+            //select.StartRun();
         }
-        private void AddData<T>(T TObject, IList<T> ListData) where T : class, new()
+        public void AddData<T>(T TObject, IList<T> ListData) where T : class, new()
         {
             Action action = () => { ListData.Add(TObject); };
             Invoke(action);
