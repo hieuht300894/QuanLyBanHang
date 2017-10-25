@@ -411,7 +411,7 @@ namespace QuanLyBanHang
 
         public static void Format(this GridView grvMain, bool allowNewRow, bool showIndicator, bool ColumnAuto, bool ShowLines = false)
         {
-            grvMain.RestoreLayout(grvMain.GridControl.FindForm().Name);
+            grvMain.RestoreLayout((XtraForm)grvMain.GridControl.FindForm());
 
             grvMain.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
             grvMain.OptionsView.ShowGroupPanel = false;
@@ -526,16 +526,16 @@ namespace QuanLyBanHang
             grvMain.TopRowChanged += grvMain_TopRowChanged;
         }
 
-        public static void SaveLayout(this GridView grvMain, string frmName)
+        public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
         {
-            if (string.IsNullOrEmpty(frmName)) return;
+            if (string.IsNullOrEmpty(frmMain.Name)) return;
             try
             {
                 string dir = @"Layout\GridLayout";
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                string path = dir + @"\" + frmName + "_" + grvMain.Name + ".xml";
+                string path = dir + @"\" + frmMain + "_" + grvMain.Name + ".xml";
                 if (!File.Exists(path))
                     File.Create(path).Close();
 
@@ -543,7 +543,7 @@ namespace QuanLyBanHang
                 foreach (GridColumn col in grvMain.Columns)
                 {
                     xDisplay dis = new xDisplay();
-                    dis.ParentName = frmName;
+                    dis.ParentName = frmMain.Name;
                     dis.Group = string.Empty;
                     dis.Showing = col.Visible;
                     dis.ColumnName = col.Name;
@@ -561,13 +561,13 @@ namespace QuanLyBanHang
             catch { }
         }
 
-        public static void RestoreLayout(this GridView grvMain, string frmName)
+        public static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
         {
-            if (string.IsNullOrEmpty(frmName)) return;
+            if (string.IsNullOrEmpty(frmMain.Name)) return;
             try
             {
                 string dir = @"Layout\GridLayout";
-                string path = dir + @"\" + frmName + "_" + grvMain.Name + ".xml";
+                string path = dir + @"\" + frmMain.Name + "_" + grvMain.Name + ".xml";
                 if (File.Exists(path))
                 {
                     using (StreamReader sr = new StreamReader(path))
@@ -749,7 +749,6 @@ namespace QuanLyBanHang
             if (!string.IsNullOrEmpty(e.Info.DisplayText)) return;
             bool indicatorIcon = false;
             GridView view = (GridView)sender;
-            //e.Appearance.Font = Properties.Settings.Default.GeneralFont;
 
             if (e.Info.IsRowIndicator && e.RowHandle >= 0)
             {
@@ -758,22 +757,24 @@ namespace QuanLyBanHang
                 Rectangle rec = new Rectangle();
                 rec.X = e.Bounds.X;
                 rec.Y = e.Bounds.Y;
-                rec.Width = e.Bounds.Width;
-                rec.Height = e.Appearance.FontHeight + 20;
+                Size size = TextRenderer.MeasureText(e.RowHandle.ToString(), e.Info.Appearance.Font);
+                rec.Width = size.Width;
+                rec.Height = size.Height;
                 e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), rec);
                 e.Info.DisplayText = (Convert.ToInt32(e.RowHandle + 1)).ToString();
                 if (!indicatorIcon)
                     e.Info.ImageIndex = -1;
             }
-            if (e.RowHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle)
+            if (e.RowHandle == GridControl.InvalidRowHandle)
             {
                 e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
                 e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
                 Rectangle rec = new Rectangle();
                 rec.X = e.Bounds.X;
                 rec.Y = e.Bounds.Y;
-                rec.Width = e.Bounds.Width;
-                rec.Height = e.Appearance.FontHeight + 20;
+                Size size = TextRenderer.MeasureText(e.RowHandle.ToString(), e.Info.Appearance.Font);
+                rec.Width = size.Width;
+                rec.Height = size.Height;
                 e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), rec);
                 e.Info.DisplayText = "";
             }

@@ -3,6 +3,7 @@ using DevExpress.XtraBars;
 using DevExpress.XtraBars.Docking2010.Views;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
+using DevExpress.XtraEditors;
 using EntityModel.DataModel;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace QuanLyBanHang.GUI.Common
         {
             try
             {
-                DevExpress.XtraEditors.XtraForm cForm = (DevExpress.XtraEditors.XtraForm)sender;
+                XtraForm cForm = (XtraForm)sender;
 
                 foreach (var c in cForm.Controls)
                 {
@@ -69,7 +70,7 @@ namespace QuanLyBanHang.GUI.Common
                                                 foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
                                                 {
                                                     grv.ActiveFilter.Clear();
-                                                    grv.SaveLayout(cForm.Name);
+                                                    grv.SaveLayout(cForm);
                                                 }
                                             }
                                         }
@@ -89,7 +90,7 @@ namespace QuanLyBanHang.GUI.Common
                                 foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
                                 {
                                     grv.ActiveFilter.Clear();
-                                    grv.SaveLayout(cForm.Name);
+                                    grv.SaveLayout(cForm);
                                 }
                             }
                             if (c1 is DevExpress.XtraTreeList.TreeList)
