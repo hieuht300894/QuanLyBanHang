@@ -112,7 +112,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
-            _acEntry = clsPermission.Instance.GetEntry(_iEntry.KeyID);
+            _acEntry = clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
 
             setControlValue();
         }

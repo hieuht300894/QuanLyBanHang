@@ -184,7 +184,7 @@ namespace QuanLyBanHang
                 return false;
             else
             {
-                xPermission permission = clsPermission.Instance.GetByID(_iAccount.IDPermission) ?? new xPermission();
+                xPermission permission = clsPermission.Instance.GetByID<xPermission>(_iAccount.IDPermission) ?? new xPermission();
                 List<xUserFeature> lstRoles = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(permission.KeyID));
                 return lstRoles.Any(n => n.IsEnable && n.IDFeature.Contains(cName));
             }
@@ -204,7 +204,7 @@ namespace QuanLyBanHang
                 }
             }
             else
-                clsGeneral.curAgency = clsAgency.Instance.GetByID(Properties.Settings.Default.IDAgency);
+                clsGeneral.curAgency = clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
 
             if (clsGeneral.curAgency == null)
             {

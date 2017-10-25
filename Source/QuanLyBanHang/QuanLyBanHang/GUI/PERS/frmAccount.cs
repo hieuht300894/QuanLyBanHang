@@ -104,7 +104,7 @@ namespace QuanLyBanHang.GUI.PER
             txtUserName.NotUnicode(true, false);
             lokPersonnel.Format();
             lokPermission.Format();
-            lctAccount.BestFitText();
+            lctAccount.Format();
 
             txtUserName.MouseHover += txtPassword_Properties_MouseHover;
             txtUserName.MouseLeave += txtPassword_Properties_MouseLeave;
@@ -114,7 +114,7 @@ namespace QuanLyBanHang.GUI.PER
         private void loadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = clsAccount.Instance.GetEntry(iEntry.KeyID);
+            _acEntry = clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
             setControlValue();
         }
         private void loadPersonnel(int KeyID)

@@ -269,7 +269,7 @@ namespace QuanLyBanHang
             lctMain.FindForm().Height = BestFitHeight;
         }
 
-        public static void BestFitText(this LayoutControl lctMain)
+        public static void Format(this LayoutControl lctMain)
         {
             lctMain.Appearance.DisabledLayoutItem.Options.UseFont = true;
             lctMain.Appearance.DisabledLayoutItem.ForeColor = Color.Black;

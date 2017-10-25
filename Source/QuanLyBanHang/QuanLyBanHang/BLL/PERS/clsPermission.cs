@@ -9,7 +9,7 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPermission : clsDelete<xPermission>
+    public class clsPermission : clsFunction
     {
         #region Constructor
         private static volatile clsPermission instance = null;
@@ -34,34 +34,33 @@ namespace QuanLyBanHang.BLL.PERS
 
         public IList<xPermission> SearchPermission(bool IsEnable, int KeyID)
         {
-            repository.Context = new aModel();
-            IEnumerable<xPermission> lstTemp = repository.Context.xPermission.Where(x => x.IsEnable == IsEnable || x.KeyID == KeyID);
+            db = new aModel();
+            IEnumerable<xPermission> lstTemp = db.xPermission.Where(x => x.IsEnable == IsEnable || x.KeyID == KeyID);
             return lstTemp.ToList();
         }
 
         public bool InsertEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
         {
+            db = new aModel();
+            var tran = db.Database.BeginTransaction();
             try
             {
-                repository.Context = new aModel();
-                repository.BeginTransaction();
-
-                repository.Context.xPermission.AddOrUpdate(entry);
-                repository.Context.SaveChanges();
+                db.xPermission.AddOrUpdate(entry);
+                db.SaveChanges();
 
                 lstUserFeatures.ForEach(x =>
                 {
                     x.IDUserRole = entry.KeyID;
-                    repository.Context.xUserFeature.Add(x);
+                    db.xUserFeature.Add(x);
                 });
 
-                repository.Context.SaveChanges();
-                repository.Commit();
+                db.SaveChanges();
+                tran.Commit();
                 return true;
             }
             catch (Exception ex)
             {
-                repository.Rollback();
+                tran.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(xPermission).Name}");
                 return false;
             }
@@ -69,47 +68,46 @@ namespace QuanLyBanHang.BLL.PERS
 
         public bool UpdateEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
         {
+            db = new aModel();
+            var tran = db.Database.BeginTransaction();
             try
             {
-                repository.Context = new aModel();
-                repository.BeginTransaction();
-                repository.Context.xPermission.AddOrUpdate(entry);
-                lstUserFeatures.ForEach(x => { repository.Context.xUserFeature.AddOrUpdate(x); });
-                repository.Context.SaveChanges();
-                repository.Commit();
+                db.xPermission.AddOrUpdate(entry);
+                lstUserFeatures.ForEach(x => { db.xUserFeature.AddOrUpdate(x); });
+                db.SaveChanges();
+                tran.Commit();
                 return true;
             }
             catch (Exception ex)
             {
-                repository.Rollback();
+                tran.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(xPermission).Name}");
                 return false;
             }
         }
 
-        public  bool AddOrUpdate(xPermission entry, List<xUserFeature> lstUserFeatures)
+        public bool AddOrUpdate(xPermission entry, List<xUserFeature> lstUserFeatures)
         {
+            db = new aModel();
+            var tran = db.Database.BeginTransaction();
             try
             {
-                repository.Context = new aModel();
-                repository.BeginTransaction();
-
-                repository.Context.xPermission.AddOrUpdate(entry);
-                repository.Context.SaveChanges();
+                db.xPermission.AddOrUpdate(entry);
+                db.SaveChanges();
 
                 lstUserFeatures.ForEach(x =>
                 {
                     x.IDUserRole = entry.KeyID;
-                    repository.Context.xUserFeature.AddOrUpdate(x);
+                    db.xUserFeature.AddOrUpdate(x);
                 });
 
-                repository.Context.SaveChanges();
-                repository.Commit();
+                db.SaveChanges();
+                tran.Commit();
                 return true;
             }
             catch (Exception ex)
             {
-                repository.Rollback();
+                tran.Rollback();
                 clsGeneral.showErrorException(ex, $"Lỗi AddOrUpdate: {typeof(xPermission).Name}");
                 return false;
             }

@@ -88,7 +88,7 @@ namespace QuanLyBanHang.GUI.Common
             //txtName.IsPersonName();
             txtPhone.PhoneOnly();
             lctAgency.BestFitFormHeight();
-            lctAgency.BestFitText();
+            lctAgency.Format();
             this.CenterToScreen();
         }
 

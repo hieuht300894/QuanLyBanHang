@@ -97,7 +97,7 @@ namespace QuanLyBanHang
             bteOldPassword.Select();
             lctDoiMatKhau.Translation();
             lctDoiMatKhau.BestFitFormHeight();
-            lctDoiMatKhau.BestFitText();
+            lctDoiMatKhau.Format();
             this.CenterToScreen();
         }
 

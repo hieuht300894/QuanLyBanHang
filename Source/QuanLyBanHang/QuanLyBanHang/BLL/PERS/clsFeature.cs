@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    class clsFeature : clsDelete<xFeature>
+    class clsFeature : clsFunction
     {
         #region Constructor
         private static volatile clsFeature instance = null;
@@ -34,8 +34,8 @@ namespace QuanLyBanHang.BLL.PERS
 
         public IList<xFeature> SearchFeature(bool IsEnable)
         {
-            repository.Context = new aModel();
-            IEnumerable<xFeature> lstTemp = repository.Context.xFeature.Where(x => x.IsEnable == IsEnable);
+            db = new aModel();
+            IEnumerable<xFeature> lstTemp = db.xFeature.Where(x => x.IsEnable == IsEnable);
 
             return lstTemp.ToList();
         }
@@ -44,8 +44,8 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                repository.Context = new aModel();
-                IEnumerable<xFeature> lstTemp = repository.Context.xFeature.Where(x => x.IsEnable);
+                db = new aModel();
+                IEnumerable<xFeature> lstTemp = db.xFeature.Where(x => x.IsEnable);
                 List<xFeature> list = lstTemp.ToList();
                 list.ForEach(x => x.ItemCount = 0);
                 List<xFeature> lstParents = new List<xFeature>(list.Where(x => x.Level == 0));
@@ -53,11 +53,12 @@ namespace QuanLyBanHang.BLL.PERS
                 {
                     DuyetCay(list, f);
                 }
-                list.ForEach(x => repository.Context.xFeature.AddOrUpdate(x));
-                repository.Context.SaveChanges();
+                list.ForEach(x => db.xFeature.AddOrUpdate(x));
+                db.SaveChanges();
             }
             catch { }
         }
+
         void DuyetCay(List<xFeature> list, xFeature fParent)
         {
             List<xFeature> lstChilds = new List<xFeature>(list.Where(x => x.Level > fParent.Level && x.IDGroup.Equals(fParent.KeyID)));

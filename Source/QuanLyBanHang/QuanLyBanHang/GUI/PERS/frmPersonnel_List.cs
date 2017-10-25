@@ -1,11 +1,10 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using EntityModel.DataModel;
-using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
@@ -25,13 +24,7 @@ namespace QuanLyBanHang.GUI.PER
         {
             lstPersonnel = new List<xPersonnel>();
             gctPersonnelList.DataSource = lstPersonnel;
-            clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
-            select.Init();
-            select.SetEntity(lstPersonnel);
-            SetAction(select, true, false, false);
-            select._InsertObjectToList = AddData;
-            select.StartRun();
-            //LoadData(0, gctPersonnelList, lstPersonnel, true);
+            clsFunction.Instance.Select(this, gctPersonnelList, lstPersonnel, "select * from xPersonnel where KeyID between 1 and 1000", new System.Data.SqlClient.SqlParameter[] { });
             customForm();
         }
         #endregion
@@ -192,7 +185,6 @@ namespace QuanLyBanHang.GUI.PER
             //clsPersonnel.Instance.StartRun();
 
             lstPersonnel = new List<xPersonnel>();
-            LoadData(0, gctPersonnelList, lstPersonnel);
         }
 
         public void refreshEntry()
@@ -204,7 +196,7 @@ namespace QuanLyBanHang.GUI.PER
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";
             gctPersonnelList.Format();
-            lctPersonnel.BestFitText();
+            lctPersonnel.Format();
 
             grvPersonnelList.TopRowChanged += grvPersonnelList_TopRowChanged;
         }
@@ -224,17 +216,17 @@ namespace QuanLyBanHang.GUI.PER
 
             if (LastRow == RowCount)
             {
-                GridRowInfo RowInfo = lstRowsInfo.Last();
-                Dictionary<string, object> dFrom = new Dictionary<string, object>();
-                dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-                gctPersonnelList.DataSource = lstPersonnel;
-                clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
-                select.Init();
-                select.SetEntity(lstPersonnel);
-                select.SetSearch(dFrom, null);
-                SetAction(select, true, false, false);
-                select._InsertObjectToList = AddData;
-                select.StartRun();
+                //GridRowInfo RowInfo = lstRowsInfo.Last();
+                //Dictionary<string, object> dFrom = new Dictionary<string, object>();
+                //dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
+                //gctPersonnelList.DataSource = lstPersonnel;
+                //clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
+                //select.Init();
+                //select.SetEntity(lstPersonnel);
+                //select.SetSearch(dFrom, null);
+                //SetAction(select, true, false, false);
+                //select._InsertObjectToList = AddData;
+                //select.StartRun();
             }
         }
         #endregion

@@ -185,7 +185,7 @@ namespace QuanLyBanHang.GUI.PERS
         private void customForm()
         {
             gctPermission.Format();
-            lctPersonnel.BestFitText();
+            lctPersonnel.Format();
 
             gctPermission.MouseClick += gctPersonnelList_MouseClick;
             grvPermission.DoubleClick += grvPermission_DoubleClick;

@@ -1,15 +1,11 @@
 ﻿using EntityModel.DataModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity.Migrations;
-using QuanLyBanHang.DAL;
+using System.Linq;
 
 namespace QuanLyBanHang.BLL.Common
 {
-    public class clsAgency:clsTemplate<xAgency>
+    public class clsAgency : clsFunction
     {
         #region Constructor
         private static volatile clsAgency instance = null;
@@ -32,11 +28,10 @@ namespace QuanLyBanHang.BLL.Common
         }
         #endregion
 
-        aModel db, accessModel;
         public List<xAgency> GetAllAgency()
         {
-            accessModel = new aModel();
-            List<xAgency> lstResult = accessModel.xAgency.ToList<xAgency>();
+            db = new aModel();
+            List<xAgency> lstResult = db.xAgency.ToList<xAgency>();
             lstResult.Insert(0, new xAgency() { KeyID = 0, Name = "Not Selected", IsEnable = true });
             return lstResult;
         }
@@ -51,9 +46,9 @@ namespace QuanLyBanHang.BLL.Common
         {
             try
             {
-                accessModel = accessModel ?? new aModel();
-                accessModel.xAgency.AddOrUpdate(aEntry);
-                accessModel.SaveChanges();
+                _accessModel = new aModel();
+                _accessModel.xAgency.AddOrUpdate(aEntry);
+                _accessModel.SaveChanges();
                 return true;
             }
             catch { return false; }

@@ -163,7 +163,7 @@ namespace QuanLyBanHang.GUI.PER
         private void customForm()
         {
             gctAccountList.Format();
-            lctAccountList.BestFitText();
+            lctAccountList.Format();
         }
         #endregion
     }

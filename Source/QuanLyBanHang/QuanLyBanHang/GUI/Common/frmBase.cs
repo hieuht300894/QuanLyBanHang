@@ -2,14 +2,12 @@
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang
@@ -317,41 +315,6 @@ namespace QuanLyBanHang
         public void ShowAlert(string Title = "", string Text = "")
         {
             alertMsg.Show(this, Title, Text);
-        }
-        #endregion
-
-        #region LoadData
-        public void SetAction<T>(clsFuction<T> select, bool IsShowPercent, bool IsShowMessage, bool IsShowError) where T : class, new()
-        {
-            if (IsShowPercent)
-            {
-                select._OpenProgress = OpenProgress;
-                select._CloseProgress = CloseProgress;
-                select._ReloadPercent = LoadPercent;
-            }
-            if (IsShowMessage)
-            {
-                select._ReloadMessage = LoadMessage;
-            }
-            if (IsShowError)
-            {
-                select._ReloadError = LoadError;
-            }
-        }
-        public void LoadData<T>(int KeyID, GridControl gctMain, IList<T> ListData, bool IsShowPercent = false, bool IsShowMessage = false, bool IsShowError = false) where T : class, new()
-        {
-            //gctMain.DataSource = ListData;
-            //clsPersonnel select = new clsPersonnel();
-            //select.Init();
-            //select.SetEntity(ListData);
-            //SetAction(select, IsShowPercent, IsShowMessage, IsShowError);
-            //select._InsertObjectToList = AddData;
-            //select.StartRun();
-        }
-        public void AddData<T>(T TObject, IList<T> ListData) where T : class, new()
-        {
-            Action action = () => { ListData.Add(TObject); };
-            Invoke(action);
         }
         #endregion
         #endregion

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.DanhMuc
 {
-    class clsKhachHang : clsDelete<eKhachHang>
+    class clsKhachHang : clsFunction
     {
     }
 }

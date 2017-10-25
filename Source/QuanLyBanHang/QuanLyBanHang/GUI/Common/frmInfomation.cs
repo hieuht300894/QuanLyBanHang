@@ -36,7 +36,7 @@ namespace QuanLyBanHang.GUI.Common
         #region Method
         private void loadData()
         {
-            _acEntry = clsAgency.Instance.GetByID(Properties.Settings.Default.IDAgency);
+            _acEntry = clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
             setControlValue();
         }
         private void setControlValue()
@@ -102,7 +102,7 @@ namespace QuanLyBanHang.GUI.Common
         {
             txt_Agency_Code.NotUnicode(true, true);
             txt_Agency_Phone.PhoneOnly();
-            layoutControl1.BestFitText();
+            layoutControl1.Format();
         }
         #endregion
 
