@@ -24,7 +24,7 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            loadDataForm();
+            LoadDataForm();
             CustomForm();
         }
         #endregion
@@ -32,13 +32,13 @@ namespace QuanLyBanHang.GUI.PER
         #region Base Button Event
         protected override void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            loadDataForm();
+            LoadDataForm();
         }
 
         protected override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (validationForm())
-                if (saveData())
+            if (ValidationForm())
+                if (SaveData())
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 else
                     clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
@@ -46,11 +46,11 @@ namespace QuanLyBanHang.GUI.PER
 
         protected override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (validationForm())
-                if (saveData())
+            if (ValidationForm())
+                if (SaveData())
                 {
                     iEntry = _acEntry = new xPersonnel() { IsEnable = true };
-                    setControlValue();
+                    SetControlValue();
                     fType = eFormType.Add;
                     this.Text = "Thêm mới nhân viên".Translation("ftxtAddPersonnel", this.Name);
                 }
@@ -60,14 +60,14 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void loadDataForm()
+        private void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
             _acEntry = clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
-            setControlValue();
+            SetControlValue();
         }
 
-        private void setControlValue()
+        private void SetControlValue()
         {
             txtCode.Text = _acEntry.Code;
             txtFullName.Text = _acEntry.FullName;
@@ -89,7 +89,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public bool validationForm()
+        public bool ValidationForm()
         {
             bool bRe = true;
             txtCode.ErrorText = string.Empty;
@@ -130,7 +130,7 @@ namespace QuanLyBanHang.GUI.PER
             return bRe;
         }
 
-        public bool saveData()
+        public bool SaveData()
         {
             bool bRe = false;
 

@@ -29,7 +29,7 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            loadDataForm();
+            LoadDataForm();
             CustomForm();
         }
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
@@ -38,7 +38,7 @@ namespace QuanLyBanHang.GUI.PER
                 e.Column == colIsSave || e.Column == colIsPrintPreview || e.Column == colIsExportExcel)
             {
                 List<TreeListNode> lstNode = new List<TreeListNode>();
-                checkedNode(e.Node, (bool)e.Value);
+                CheckedNode(e.Node, (bool)e.Value);
                 e.Node.SetValue(e.Column, e.Value);
             }
         }
@@ -47,31 +47,31 @@ namespace QuanLyBanHang.GUI.PER
         #region Base Button Events
         protected override void btnSave_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (validationForm())
+            if (ValidationForm())
             {
-                if (saveData())
+                if (SaveData())
                     DialogResult = DialogResult.OK;
             }
         }
         protected override void btnSaveAndAdd_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (validationForm())
+            if (ValidationForm())
             {
-                if (saveData())
+                if (SaveData())
                 {
                     _iEntry = null;
-                    loadDataForm();
+                    LoadDataForm();
                 }
             }
         }
         protected override void btnCancel_ItemClick(object sender, ItemClickEventArgs e)
         {
-            loadDataForm();
+            LoadDataForm();
         }
         #endregion
 
         #region Methods
-        private void loadFeature()
+        private void LoadFeature()
         {
             trlFeature.Nodes.Clear();
 
@@ -98,31 +98,31 @@ namespace QuanLyBanHang.GUI.PER
             colIsPrintPreview.Visible = true;
             colIsExportExcel.Visible = true;
 
-            resetCheckedNodes();
+            ResetCheckedNodes();
         }
 
-        private void loadUserFeature(int IDPermission)
+        private void LoadUserFeature(int IDPermission)
         {
             lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
         }
 
-        private void loadDataForm()
+        private void LoadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
             _acEntry = clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
 
-            setControlValue();
+            SetControlValue();
         }
 
-        private void setControlValue()
+        private void SetControlValue()
         {
             trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
 
             txtName.Text = _acEntry.Name;
             mmeDescription.Text = _acEntry.Description;
 
-            loadFeature();
-            loadUserFeature(_acEntry.KeyID);
+            LoadFeature();
+            LoadUserFeature(_acEntry.KeyID);
 
             foreach (var usr in lstUserFeatures)
             {
@@ -142,22 +142,22 @@ namespace QuanLyBanHang.GUI.PER
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
 
-        private void resetCheckedNodes()
+        private void ResetCheckedNodes()
         {
             trlFeature.GetNodeList().ToList().ForEach(x => x.CheckState = CheckState.Unchecked);
         }
 
-        private void checkedNode(TreeListNode node, bool checkedVal)
+        private void CheckedNode(TreeListNode node, bool checkedVal)
         {
             foreach (TreeListNode _node in node.Nodes)
             {
                 _node.SetValue(trlFeature.FocusedColumn, checkedVal);
                 bool _checkedVal = checkedVal;
-                checkedNode(_node, _checkedVal);
+                CheckedNode(_node, _checkedVal);
             }
         }
 
-        private bool validationForm()
+        private bool ValidationForm()
         {
             bool chk = true;
 
@@ -170,7 +170,7 @@ namespace QuanLyBanHang.GUI.PER
             return chk;
         }
 
-        private bool saveData()
+        private bool SaveData()
         {
             bool chk = false;
 

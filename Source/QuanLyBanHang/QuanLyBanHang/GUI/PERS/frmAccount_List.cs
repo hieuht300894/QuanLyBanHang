@@ -28,7 +28,7 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            loadData(0);
+            LoadData(0);
             CustomForm();
         }
         #endregion
@@ -40,7 +40,7 @@ namespace QuanLyBanHang.GUI.PER
             DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo hi = grvAccountList.CalcHitInfo(mouse.Location);
             if (grvAccountList.FocusedRowHandle >= 0 && (hi.InRow || hi.InRowCell))
             {
-                updateEntry();
+                UpdateEntry();
             }
         }
 
@@ -53,65 +53,65 @@ namespace QuanLyBanHang.GUI.PER
         #region Base Button Events
         protected override void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
 
         protected override void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
         #endregion
 
         #region Methods
-        private void loadData(int KeyID)
+        private void LoadData(int KeyID)
         {
             gctAccountList.DataSource = clsAccount.Instance.SearchAccount(true, 0);
             if (KeyID > 0)
                 grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }
 
-        private void insertEntry()
+        private void InsertEntry()
         {
             using (frmAccount _frm = new frmAccount())
             {
                 _frm.Text = "Thêm mới tài khoản".Translation("ftxtAddAccount", _frm.Name); ;
                 _frm.fType = eFormType.Add;
-                _frm.ReLoadParent = this.loadData;
+                _frm.ReLoadParent = this.LoadData;
                 _frm.ShowDialog();
             }
         }
 
-        private void updateEntry()
+        private void UpdateEntry()
         {
             if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0)
             {
@@ -123,7 +123,7 @@ namespace QuanLyBanHang.GUI.PER
                         _frm.iEntry = _eEntry;
                         _frm.Text = "Cập nhật tài khoản".Translation("ftxtUpdateAccount", _frm.Name);
                         _frm.fType = eFormType.Edit;
-                        _frm.ReLoadParent = this.loadData;
+                        _frm.ReLoadParent = this.LoadData;
                         _frm.ShowDialog();
                     }
                 }
@@ -134,7 +134,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        private void deleteEntry()
+        private void DeleteEntry()
         {
             //if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -155,9 +155,9 @@ namespace QuanLyBanHang.GUI.PER
             //}
         }
 
-        private void refreshEntry()
+        private void RefreshEntry()
         {
-            loadData(0);
+            LoadData(0);
         }
         #endregion
     }

@@ -25,7 +25,7 @@ namespace QuanLyBanHang.GUI.PERS
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            loadData(0);
+            LoadData(0);
             CustomForm();
         }
         #endregion
@@ -37,7 +37,7 @@ namespace QuanLyBanHang.GUI.PERS
             DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo hi = grvPermission.CalcHitInfo(mouse.Location);
             if (grvPermission.FocusedRowHandle >= 0 && (hi.InRow || hi.InRowCell))
             {
-                updateEntry();
+                UpdateEntry();
             }
         }
         private void gctPersonnelList_MouseClick(object sender, MouseEventArgs e)
@@ -64,47 +64,47 @@ namespace QuanLyBanHang.GUI.PERS
         #region Base Button Events
         protected override void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
 
         protected override void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
         #endregion
 
         #region Methods
-        private void loadPersonnel()
+        private void LoadPersonnel()
         {
             //lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.GetAll());
             rlokPersonnel.DataSource = lstPersonel;
@@ -112,26 +112,26 @@ namespace QuanLyBanHang.GUI.PERS
             rlokPersonnel.DisplayMember = "FullName";
         }
 
-        private void loadData(int KeyID)
+        private void LoadData(int KeyID)
         {
-            loadPersonnel();
+            LoadPersonnel();
             gctPermission.DataSource = clsPermission.Instance.SearchPermission(true, 0);
             if (KeyID > 0)
                 grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
         }
 
-        private void insertEntry()
+        private void InsertEntry()
         {
             using (frmPermission _frm = new frmPermission())
             {
                 _frm.Text = "Thêm mới quyền";
                 _frm.fType = eFormType.Add;
-                _frm.ReloadData = this.loadData;
+                _frm.ReloadData = this.LoadData;
                 _frm.ShowDialog();
             }
         }
 
-        private void updateEntry()
+        private void UpdateEntry()
         {
             if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
             {
@@ -143,7 +143,7 @@ namespace QuanLyBanHang.GUI.PERS
                         _frm._iEntry = _eEntry;
                         _frm.Text = "Cập nhật quyền";
                         _frm.fType = eFormType.Edit;
-                        _frm.ReloadData = this.loadData;
+                        _frm.ReloadData = this.LoadData;
                         _frm.ShowDialog();
                     }
                 }
@@ -154,7 +154,7 @@ namespace QuanLyBanHang.GUI.PERS
             }
         }
 
-        private void deleteEntry()
+        private void DeleteEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -175,9 +175,9 @@ namespace QuanLyBanHang.GUI.PERS
             //}
         }
 
-        private void refreshEntry()
+        private void RefreshEntry()
         {
-            loadData(0);
+            LoadData(0);
         }
 
         public override void CustomForm()

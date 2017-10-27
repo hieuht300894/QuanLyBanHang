@@ -24,7 +24,7 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            loadDataForm();
+            LoadDataForm();
             CustomForm();
         }
         private void lokPersonnel_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
@@ -35,7 +35,7 @@ namespace QuanLyBanHang.GUI.PER
                 {
                     _frm.Text = "Thêm mới nhân viên".Translation("ftxtAddPersonnel", _frm.Name);
                     _frm.fType = eFormType.Add;
-                    _frm.ReLoadParent = this.loadPersonnel;
+                    _frm.ReLoadParent = this.LoadPersonnel;
                     _frm.ShowDialog();
                 }
             }
@@ -48,7 +48,7 @@ namespace QuanLyBanHang.GUI.PER
                 {
                     _frm.Text = "Thêm mới quyền";
                     _frm.fType = eFormType.Add;
-                    _frm.ReloadData = this.loadPermission;
+                    _frm.ReloadData = this.LoadPermission;
                     _frm.ShowDialog();
                 }
             }
@@ -70,13 +70,13 @@ namespace QuanLyBanHang.GUI.PER
         #region Base Button Event
         protected override void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            loadDataForm();
+            LoadDataForm();
         }
 
         protected override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (validationForm())
-                if (saveData())
+            if (ValidationForm())
+                if (SaveData())
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 else
                     clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
@@ -84,13 +84,13 @@ namespace QuanLyBanHang.GUI.PER
 
         protected override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (validationForm())
-                if (saveData())
+            if (ValidationForm())
+                if (SaveData())
                 {
                     fType = eFormType.Add;
                     this.Text = "Thêm mới tài khoản".Translation("ftxtAddAccount", this.Name);
                     iEntry = _acEntry = new xAccount() { IsEnable = true };
-                    setControlValue();
+                    SetControlValue();
                 }
                 else
                     clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
@@ -108,13 +108,13 @@ namespace QuanLyBanHang.GUI.PER
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
             lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
         }
-        private void loadDataForm()
+        private void LoadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
             _acEntry = clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
-            setControlValue();
+            SetControlValue();
         }
-        private void loadPersonnel(int KeyID)
+        private void LoadPersonnel(int KeyID)
         {
             //lokPersonnel.Properties.DataSource = clsPersonnel.Instance.SearchNoAccount(true, KeyID);
             lokPersonnel.Properties.ValueMember = "KeyID";
@@ -124,7 +124,7 @@ namespace QuanLyBanHang.GUI.PER
             else
                 lokPersonnel.ItemIndex = 0;
         }
-        private void loadPermission(int KeyID)
+        private void LoadPermission(int KeyID)
         {
             lokPermission.Properties.DataSource = clsPermission.Instance.SearchPermission(true, KeyID);
             lokPermission.Properties.ValueMember = "KeyID";
@@ -132,7 +132,7 @@ namespace QuanLyBanHang.GUI.PER
             if (KeyID > 0)
                 lokPermission.EditValue = KeyID;
         }
-        private void setControlValue()
+        private void SetControlValue()
         {
             if (fType == eFormType.Add)
             {
@@ -149,12 +149,12 @@ namespace QuanLyBanHang.GUI.PER
             //lctAccount.BesFitFormHeight();
             this.CenterToScreen();
 
-            loadPersonnel(_acEntry.KeyID);
+            LoadPersonnel(_acEntry.KeyID);
             txtUserName.Text = _acEntry.UserName;
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
-            loadPermission(_acEntry.IDPermission);
+            LoadPermission(_acEntry.IDPermission);
         }
-        private bool validationForm()
+        private bool ValidationForm()
         {
             bool bRe = true;
             lokPersonnel.ErrorText = string.Empty;
@@ -199,7 +199,7 @@ namespace QuanLyBanHang.GUI.PER
             }
             return bRe;
         }
-        private bool saveData()
+        private bool SaveData()
         {
             bool bRe = false;
 
