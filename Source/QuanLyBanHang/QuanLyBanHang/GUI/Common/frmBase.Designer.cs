@@ -248,7 +248,6 @@
             this.barBottom.OptionsBar.MultiLine = true;
             this.barBottom.OptionsBar.UseWholeRow = true;
             this.barBottom.Text = "Bottom Menu";
-            this.barBottom.Visible = false;
             // 
             // betPercent
             // 
@@ -431,6 +430,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmBase";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmBase_FormClosing);
             this.Load += new System.EventHandler(this.frmBase_Load);
             this.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.frmBase_ControlAdded);
             this.Enter += new System.EventHandler(this.frmBase_Enter);

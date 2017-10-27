@@ -22,13 +22,11 @@ namespace QuanLyBanHang.GUI.PERS
         {
             InitializeComponent();
         }
-
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-
             loadData(0);
-            customForm();
+            CustomForm();
         }
         #endregion
 
@@ -182,11 +180,9 @@ namespace QuanLyBanHang.GUI.PERS
             loadData(0);
         }
 
-        private void customForm()
+        public override void CustomForm()
         {
-            gctPermission.Format();
-            lctPersonnel.Format();
-
+            base.CustomForm();
             gctPermission.MouseClick += gctPersonnelList_MouseClick;
             grvPermission.DoubleClick += grvPermission_DoubleClick;
             grvPermission.ShownEditor += grvPermission_ShownEditor;

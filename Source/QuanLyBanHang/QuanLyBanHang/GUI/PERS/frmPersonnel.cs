@@ -21,11 +21,11 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-
-        private void frmNhanVien_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
+            base.frmBase_Load(sender, e);
             loadDataForm();
-            customForm();
+            CustomForm();
         }
         #endregion
 
@@ -162,13 +162,12 @@ namespace QuanLyBanHang.GUI.PER
             return bRe;
         }
 
-        private void customForm()
+        public override void CustomForm()
         {
             txtCode.NotUnicode(true, true);
             txtFullName.IsPersonName();
             txtPhone.PhoneOnly();
-            this.CenterToScreen();
-            lctPersonnel.Format();
+            base.CustomForm();
         }
         #endregion
     }

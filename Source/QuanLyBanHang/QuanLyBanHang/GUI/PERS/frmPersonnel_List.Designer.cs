@@ -360,7 +360,6 @@
             this.Controls.Add(this.lctPersonnel);
             this.Name = "frmPersonnel_List";
             this.Text = "Danh sách nhân viên";
-            this.Load += new System.EventHandler(this.frmNhanVien_List_Load);
             this.Controls.SetChildIndex(this.lctPersonnel, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).EndInit();

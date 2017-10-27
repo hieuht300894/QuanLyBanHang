@@ -206,7 +206,6 @@
             this.MinimizeBox = false;
             this.Name = "frmPersonnel";
             this.Text = "Nhân viên";
-            this.Load += new System.EventHandler(this.frmNhanVien_Load);
             this.Controls.SetChildIndex(this.lctPersonnel, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).EndInit();

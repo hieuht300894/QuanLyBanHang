@@ -88,17 +88,17 @@ namespace QuanLyBanHang.BLL.Common
 
         public void SelectAsync<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
-            var threadName = clsService.dManagerThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{gctMain.Name}"));
+            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{gctMain.Name}"));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManagerThreads[threadName].TokenSource.Cancel();
-                clsService.dManagerThreads.Remove(threadName);
+                clsService.dManageThreads[threadName].TokenSource.Cancel();
+                clsService.dManageThreads.Remove(threadName);
             };
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
             IAsyncResult asyncResult = null;
             threadName = $"{frmMain.Name}_{gctMain.Name}";
-            clsService.dManagerThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, ctrMain = gctMain });
+            clsService.dManageThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, ctrMain = gctMain });
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
@@ -210,17 +210,17 @@ namespace QuanLyBanHang.BLL.Common
 
         public void SelectAsync<T>(XtraForm frmMain, RepositoryItem repoMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
-            var threadName = clsService.dManagerThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{repoMain.Name}"));
+            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{repoMain.Name}"));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManagerThreads[threadName].TokenSource.Cancel();
-                clsService.dManagerThreads.Remove(threadName);
+                clsService.dManageThreads[threadName].TokenSource.Cancel();
+                clsService.dManageThreads.Remove(threadName);
             };
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
             IAsyncResult asyncResult = null;
             threadName = $"{frmMain.Name}_{repoMain.Name}";
-            clsService.dManagerThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, repoMain = repoMain });
+            clsService.dManageThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, repoMain = repoMain });
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };

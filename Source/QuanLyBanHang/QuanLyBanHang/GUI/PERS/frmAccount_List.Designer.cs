@@ -195,7 +195,6 @@
             this.Controls.Add(this.lctAccountList);
             this.Name = "frmAccount_List";
             this.Text = "Danh sách tài khoản";
-            this.Load += new System.EventHandler(this.frmAccount_List_Load);
             this.Controls.SetChildIndex(this.lctAccountList, 0);
       
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();

@@ -26,15 +26,12 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-
             loadDataForm();
-            customForm();
+            CustomForm();
         }
-
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {
             if (e.Column == colIsAdd || e.Column == colIsEdit || e.Column == colIsDelete ||
@@ -237,9 +234,9 @@ namespace QuanLyBanHang.GUI.PER
             return chk;
         }
 
-        private void customForm()
+        public override void CustomForm()
         {
-            trlFeature.Format(true, true);
+            base.CustomForm();
             if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
             {
                 colEN.Visible = false;

@@ -24,9 +24,8 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-
             loadDataForm();
-            customForm();
+            CustomForm();
         }
         private void lokPersonnel_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
@@ -99,13 +98,11 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void customForm()
+        public override void CustomForm()
         {
-            txtUserName.NotUnicode(true, false);
-            lokPersonnel.Format();
-            lokPermission.Format();
-            lctAccount.Format();
+            base.CustomForm();
 
+            txtUserName.NotUnicode(true, false);
             txtUserName.MouseHover += txtPassword_Properties_MouseHover;
             txtUserName.MouseLeave += txtPassword_Properties_MouseLeave;
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;

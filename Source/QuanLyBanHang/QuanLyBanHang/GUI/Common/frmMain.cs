@@ -27,7 +27,7 @@ namespace QuanLyBanHang.GUI.Common
         /// Hàm dùng chung, dùng để load form vào DocumentManager khi bấm vào menu trên ribbon menu
         /// </summary>
         /// <param name="_xtrForm"></param>
-        private void addDocument(DevExpress.XtraEditors.XtraForm _xtrForm)
+        private void addDocument(XtraForm _xtrForm)
         {
             if (_xtrForm == null) return;
             BaseDocument document = docManager.GetDocument(_xtrForm);
@@ -37,7 +37,7 @@ namespace QuanLyBanHang.GUI.Common
             {
                 _xtrForm.Text = _xtrForm.Text;
                 _xtrForm.Load -= (sender, e) => { };
-                _xtrForm.FormClosing += _xtrForm_FormClosing;
+                //_xtrForm.FormClosing += _xtrForm_FormClosing;
                 _xtrForm.MdiParent = this;
                 _xtrForm.Show();
             }
@@ -45,77 +45,77 @@ namespace QuanLyBanHang.GUI.Common
 
         private void _xtrForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                XtraForm cForm = (XtraForm)sender;
-                List<string> threadNames = new List<string>(clsService.dManagerThreads.Select(x => x.Key));
-                foreach (string threadName in threadNames)
-                {
-                    //if (clsService.dManagerThreads[threadName].ctrMain != null)
-                    //    clsService.dManagerThreads[threadName].ctrMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
-                    //if (clsService.dManagerThreads[threadName].repoMain != null)
-                    //    clsService.dManagerThreads[threadName].frmMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
-                    clsService.dManagerThreads[threadName].TokenSource.Cancel();
-                    clsService.dManagerThreads.Remove(threadName);
-                }
+            //try
+            //{
+            //    XtraForm cForm = (XtraForm)sender;
+            //    List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(cForm.Name)));
+            //    foreach (string threadName in threadNames)
+            //    {
+            //        //if (clsService.dManagerThreads[threadName].ctrMain != null)
+            //        //    clsService.dManagerThreads[threadName].ctrMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
+            //        //if (clsService.dManagerThreads[threadName].repoMain != null)
+            //        //    clsService.dManagerThreads[threadName].frmMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
+            //        clsService.dManageThreads[threadName].TokenSource.Cancel();
+            //        clsService.dManageThreads.Remove(threadName);
+            //    }
 
-                foreach (var c in cForm.Controls)
-                {
-                    if (c is DevExpress.XtraBars.Docking.DockPanel)
-                    {
-                        DevExpress.XtraBars.Docking.DockPanel dp = c as DevExpress.XtraBars.Docking.DockPanel;
-                        foreach (var c1 in dp.Controls)
-                        {
-                            if (c1 is DevExpress.XtraBars.Docking.ControlContainer)
-                            {
-                                DevExpress.XtraBars.Docking.ControlContainer cc = (DevExpress.XtraBars.Docking.ControlContainer)c1;
-                                foreach (var c2 in cc.Controls)
-                                {
-                                    if (c2 is DevExpress.XtraLayout.LayoutControl)
-                                    {
-                                        DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c2;
-                                        foreach (var c3 in lc.Controls)
-                                        {
-                                            if (c3 is DevExpress.XtraGrid.GridControl)
-                                            {
-                                                DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c3;
-                                                foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
-                                                {
-                                                    grv.ActiveFilter.Clear();
-                                                    grv.SaveLayout(cForm);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (c is DevExpress.XtraLayout.LayoutControl)
-                    {
-                        DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c;
-                        foreach (var c1 in lc.Controls)
-                        {
-                            if (c1 is DevExpress.XtraGrid.GridControl)
-                            {
-                                DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c1;
-                                foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
-                                {
-                                    grv.ActiveFilter.Clear();
-                                    grv.SaveLayout(cForm);
-                                }
-                            }
-                            if (c1 is DevExpress.XtraTreeList.TreeList)
-                            {
-                                //((DevExpress.XtraTreeList.TreeList)c).SaveLayout();
-                            }
-                        }
+            //    foreach (var c in cForm.Controls)
+            //    {
+            //        if (c is DevExpress.XtraBars.Docking.DockPanel)
+            //        {
+            //            DevExpress.XtraBars.Docking.DockPanel dp = c as DevExpress.XtraBars.Docking.DockPanel;
+            //            foreach (var c1 in dp.Controls)
+            //            {
+            //                if (c1 is DevExpress.XtraBars.Docking.ControlContainer)
+            //                {
+            //                    DevExpress.XtraBars.Docking.ControlContainer cc = (DevExpress.XtraBars.Docking.ControlContainer)c1;
+            //                    foreach (var c2 in cc.Controls)
+            //                    {
+            //                        if (c2 is DevExpress.XtraLayout.LayoutControl)
+            //                        {
+            //                            DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c2;
+            //                            foreach (var c3 in lc.Controls)
+            //                            {
+            //                                if (c3 is DevExpress.XtraGrid.GridControl)
+            //                                {
+            //                                    DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c3;
+            //                                    foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
+            //                                    {
+            //                                        grv.ActiveFilter.Clear();
+            //                                        grv.SaveLayout(cForm);
+            //                                    }
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        if (c is DevExpress.XtraLayout.LayoutControl)
+            //        {
+            //            DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c;
+            //            foreach (var c1 in lc.Controls)
+            //            {
+            //                if (c1 is DevExpress.XtraGrid.GridControl)
+            //                {
+            //                    DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c1;
+            //                    foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
+            //                    {
+            //                        grv.ActiveFilter.Clear();
+            //                        grv.SaveLayout(cForm);
+            //                    }
+            //                }
+            //                if (c1 is DevExpress.XtraTreeList.TreeList)
+            //                {
+            //                    //((DevExpress.XtraTreeList.TreeList)c).SaveLayout();
+            //                }
+            //            }
 
-                    }
-                }
-                cForm.Dispose();
-            }
-            catch { }
+            //        }
+            //    }
+            //    cForm.Dispose();
+            //}
+            //catch { }
         }
 
         private void frmMain_Load(object sender, EventArgs e)

@@ -25,11 +25,11 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-
-        private void frmAccount_List_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
+            base.frmBase_Load(sender, e);
             loadData(0);
-            customForm();
+            CustomForm();
         }
         #endregion
 
@@ -158,12 +158,6 @@ namespace QuanLyBanHang.GUI.PER
         private void refreshEntry()
         {
             loadData(0);
-        }
-
-        private void customForm()
-        {
-            gctAccountList.Format();
-            lctAccountList.Format();
         }
         #endregion
     }

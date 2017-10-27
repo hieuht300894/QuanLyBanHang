@@ -23,8 +23,9 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-        private void frmNhanVien_List_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
+            base.frmBase_Load(sender, e);
             LoadData();
             CustomForm();
         }
@@ -204,11 +205,11 @@ namespace QuanLyBanHang.GUI.PER
             LoadData();
         }
 
-        public void CustomForm()
+        public override void CustomForm()
         {
-            rlokPersonnel.Format("KeyID", "FullName");
-            gctPersonnelList.Format();
-            lctPersonnel.Format();
+            rlokPersonnel.ValueMember = "KeyID";
+            rlokPersonnel.DisplayMember = "FullName";
+            base.CustomForm();
         }
 
         protected override void grv_TopRowChanged<T>(object sender, EventArgs e, IList<T> ListData, string query, SqlParameter[] parameters)

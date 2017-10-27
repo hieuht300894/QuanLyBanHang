@@ -1,7 +1,11 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars.Docking;
+using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using DevExpress.XtraLayout;
+using DevExpress.XtraTreeList;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Module;
@@ -9,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang
@@ -111,6 +116,98 @@ namespace QuanLyBanHang
             bbpPrintPreview.ItemClick += bbpPrintPreview_ItemClick;
             bbpExportExcel.ItemClick += bbpExportExcel_ItemClick;
         }
+        private void LoadControl()
+        {
+            string frmMain_Name = clsService.dManageControls.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
+            if (!string.IsNullOrEmpty(frmMain_Name))
+                clsService.dManageControls.Remove(frmMain_Name);
+            else
+                clsService.dManageControls.Add(Name, new List<ControlObject>());
+
+            List<FieldInfo> lstFieldInfoes = new List<FieldInfo>(GetType().GetRuntimeFields());
+            foreach (FieldInfo fInfo in lstFieldInfoes)
+            {
+                var Obj = fInfo.GetValue(this);
+
+                if (Obj is LayoutControl)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
+                if (Obj is TextEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (TextEdit)Obj });
+                if (Obj is SpinEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
+                if (Obj is DateEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (DateEdit)Obj });
+                if (Obj is LookUpEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
+                if (Obj is GridControl)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (GridControl)Obj });
+                if (Obj is TreeList)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (TreeList)Obj });
+                if (Obj is SearchLookUpEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
+
+                if (Obj is RepositoryItemDateEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
+                if (Obj is RepositoryItemSpinEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
+                if (Obj is RepositoryItemLookUpEdit)
+                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
+            }
+            //foreach (var c in Controls)
+            //{
+            //    if (c is DockPanel)
+            //    {
+            //        DockPanel dp = c as DockPanel;
+            //        foreach (var c1 in dp.Controls)
+            //        {
+            //            if (c1 is ControlContainer)
+            //            {
+            //                ControlContainer cc = (ControlContainer)c1;
+            //                foreach (var c2 in cc.Controls)
+            //                {
+            //                    if (c2 is LayoutControl)
+            //                    {
+            //                        LayoutControl lc = (LayoutControl)c2;
+            //                        foreach (var c3 in lc.Controls)
+            //                        {
+            //                            if (c3 is GridControl)
+            //                            {
+            //                                GridControl gct = (GridControl)c3;
+            //                                foreach (GridView grv in gct.ViewCollection)
+            //                                {
+            //                                    grv.ActiveFilter.Clear();
+            //                                    grv.SaveLayout(this);
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (c is LayoutControl)
+            //    {
+            //        LayoutControl lc = (LayoutControl)c;
+            //        foreach (var c1 in lc.Controls)
+            //        {
+            //            if (c1 is GridControl)
+            //            {
+            //                GridControl gct = (GridControl)c1;
+            //                foreach (GridView grv in gct.ViewCollection)
+            //                {
+            //                    grv.ActiveFilter.Clear();
+            //                    grv.SaveLayout(this);
+            //                }
+            //            }
+            //            if (c1 is TreeList)
+            //            {
+            //                //((DevExpress.XtraTreeList.TreeList)c).SaveLayout();
+            //            }
+            //        }
+
+            //    }
+            //}
+        }
         #endregion
 
         #region Events
@@ -120,6 +217,7 @@ namespace QuanLyBanHang
             BarItemVisibility();
             SetCaptionButton();
             InitEvents();
+            LoadControl();
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -182,11 +280,12 @@ namespace QuanLyBanHang
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            clsService.dThreads.Where(x => x.Key.StartsWith(Name)).ToList().ForEach(x =>
+            List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(Name)));
+            foreach (string threadName in threadNames)
             {
-                if (x.Value != null)
-                    x.Value.CancelAsync();
-            });
+                clsService.dManageThreads[threadName].TokenSource.Cancel();
+                clsService.dManageThreads.Remove(threadName);
+            }
         }
         private void frmBase_Enter(object sender, EventArgs e)
         {
@@ -202,6 +301,35 @@ namespace QuanLyBanHang
             {
                 IsLeaveForm = !IsLeaveForm;
             }
+        }
+        private void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(Name)));
+                foreach (string threadName in threadNames)
+                {
+                    clsService.dManageThreads[threadName].TokenSource.Cancel();
+                    clsService.dManageThreads.Remove(threadName);
+                }
+
+                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
+                foreach (ControlObject ctrObj in lstControls)
+                {
+                    if (ctrObj.ctrMain != null)
+                    {
+                        if (ctrObj.ctrMain is GridControl)
+                            ((GridControl)ctrObj.ctrMain).ViewCollection.ToList().ForEach(x => ((GridView)x).SaveLayout(this));
+                        if (ctrObj.ctrMain is TreeList)
+                            ((TreeList)ctrObj.ctrMain).SaveLayout();
+                        if (ctrObj.ctrMain is SearchLookUpEdit)
+                            ((SearchLookUpEdit)ctrObj.ctrMain).Properties.View.SaveLayout(this);
+                    }
+                }
+
+                clsService.dManageControls.Remove(Name);
+            }
+            catch { }
         }
         protected virtual void grv_TopRowChanged<T>(object sender, EventArgs e, IList<T> ListData, string query, SqlParameter[] parameters) where T : class, new()
         {
@@ -228,7 +356,7 @@ namespace QuanLyBanHang
                 if (grvMain.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || grvMain.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
                     lstRowsInfo.RemoveAt(i);
             }
-            return lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max(); 
+            return lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
         }
         #endregion
 
@@ -308,19 +436,19 @@ namespace QuanLyBanHang
         #endregion
 
         #region Delegate Method
-        public void LoadPercent(int Percent)
+        public virtual void LoadPercent(int Percent)
         {
             betPercent.EditValue = Percent;
         }
-        public void LoadMessage(string Msg)
+        public virtual void LoadMessage(string Msg)
         {
             clsGeneral.showMessage(Msg);
         }
-        public void LoadError(Exception Ex)
+        public virtual void LoadError(Exception Ex)
         {
             clsGeneral.showErrorException(Ex);
         }
-        public void OpenProgress()
+        public virtual void OpenProgress()
         {
             Action action = () =>
             {
@@ -330,7 +458,7 @@ namespace QuanLyBanHang
             };
             Invoke(action);
         }
-        public void CloseProgress()
+        public virtual void CloseProgress()
         {
             Action action = () =>
             {
@@ -340,9 +468,48 @@ namespace QuanLyBanHang
             };
             Invoke(action);
         }
-        public void ShowAlert(string Title = "", string Text = "")
+        public virtual void ShowAlert(string Title = "", string Text = "")
         {
             alertMsg.Show(this, Title, Text);
+        }
+        public virtual void CustomForm()
+        {
+            try
+            {
+                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
+                foreach (ControlObject ctrObj in lstControls)
+                {
+                    if (ctrObj.ctrMain != null)
+                    {
+                        if (ctrObj.ctrMain is LayoutControl)
+                            ((LayoutControl)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is TextEdit)
+                            ((TextEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is SpinEdit)
+                            ((SpinEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is DateEdit)
+                            ((DateEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is LookUpEdit)
+                            ((LookUpEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is GridControl)
+                            ((GridControl)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is TreeList)
+                            ((TreeList)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is SearchLookUpEdit)
+                            ((SearchLookUpEdit)ctrObj.ctrMain).Format();
+                    }
+                    else if (ctrObj.repoMain != null)
+                    {
+                        if (ctrObj.repoMain is RepositoryItemDateEdit)
+                            ((RepositoryItemDateEdit)ctrObj.repoMain).Format();
+                        if (ctrObj.repoMain is RepositoryItemSpinEdit)
+                            ((RepositoryItemSpinEdit)ctrObj.repoMain).Format();
+                        if (ctrObj.repoMain is RepositoryItemLookUpEdit)
+                            ((RepositoryItemLookUpEdit)ctrObj.repoMain).Format();
+                    }
+                }
+            }
+            catch { }
         }
         #endregion
         #endregion
