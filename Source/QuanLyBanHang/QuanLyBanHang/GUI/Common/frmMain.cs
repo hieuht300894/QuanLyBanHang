@@ -51,7 +51,11 @@ namespace QuanLyBanHang.GUI.Common
                 List<string> threadNames = new List<string>(clsService.dManagerThreads.Select(x => x.Key));
                 foreach (string threadName in threadNames)
                 {
-                    clsService.dManagerThreads[threadName].Cancel();
+                    //if (clsService.dManagerThreads[threadName].ctrMain != null)
+                    //    clsService.dManagerThreads[threadName].ctrMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
+                    //if (clsService.dManagerThreads[threadName].repoMain != null)
+                    //    clsService.dManagerThreads[threadName].frmMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
+                    clsService.dManagerThreads[threadName].TokenSource.Cancel();
                     clsService.dManagerThreads.Remove(threadName);
                 }
 

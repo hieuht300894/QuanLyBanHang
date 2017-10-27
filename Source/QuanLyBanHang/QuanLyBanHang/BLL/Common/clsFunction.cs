@@ -91,12 +91,14 @@ namespace QuanLyBanHang.BLL.Common
             var threadName = clsService.dManagerThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{gctMain.Name}"));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManagerThreads[threadName].Cancel();
+                clsService.dManagerThreads[threadName].TokenSource.Cancel();
                 clsService.dManagerThreads.Remove(threadName);
             };
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
-            clsService.dManagerThreads.Add($"{frmMain.Name}_{gctMain.Name}", tokenSource);
+            IAsyncResult asyncResult = null;
+            threadName = $"{frmMain.Name}_{gctMain.Name}";
+            clsService.dManagerThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, ctrMain = gctMain });
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
@@ -105,17 +107,18 @@ namespace QuanLyBanHang.BLL.Common
             result.ForEachAsync((item) =>
             {
                 if (tokenSource.IsCancellationRequested) { return; }
-                else if (!gctMain.IsDisposed)
+                else
                 {
                     if (gctMain.InvokeRequired)
                     {
-                        Action<T> action = (obj) => { ListResult.Add(obj); };
-                        gctMain.Invoke(action, item);
+                        try
+                        {
+                            Action<T> action = (obj) => { ListResult.Add(obj); };
+                            gctMain.Invoke(action, item);
+                        }
+                        catch { }
                     }
-                    else
-                    {
-                        ListResult.Add(item);
-                    }
+                    else { ListResult.Add(item); }
                 }
             }, tokenSource.Token);
 
@@ -128,10 +131,7 @@ namespace QuanLyBanHang.BLL.Common
                         Action action = () => { gctMain.RefreshDataSource(); };
                         gctMain.Invoke(action);
                     }
-                    else
-                    {
-                        gctMain.RefreshDataSource();
-                    }
+                    else { gctMain.RefreshDataSource(); }
                     timer.Enabled = false;
                 }
             };
@@ -208,17 +208,19 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync<T>(XtraForm frmMain, RepositoryItem rItemMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync<T>(XtraForm frmMain, RepositoryItem repoMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
-            var threadName = clsService.dManagerThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{rItemMain.Name}"));
+            var threadName = clsService.dManagerThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{repoMain.Name}"));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManagerThreads[threadName].Cancel();
+                clsService.dManagerThreads[threadName].TokenSource.Cancel();
                 clsService.dManagerThreads.Remove(threadName);
             };
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
-            clsService.dManagerThreads.Add($"{frmMain.Name}_{rItemMain.Name}", tokenSource);
+            IAsyncResult asyncResult = null;
+            threadName = $"{frmMain.Name}_{repoMain.Name}";
+            clsService.dManagerThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, repoMain = repoMain });
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
@@ -231,8 +233,12 @@ namespace QuanLyBanHang.BLL.Common
                 {
                     if (frmMain.InvokeRequired)
                     {
-                        Action<T> action = (obj) => { ListResult.Add(obj); };
-                        frmMain.Invoke(action, item);
+                        try
+                        {
+                            Action<T> action = (obj) => { ListResult.Add(obj); };
+                            frmMain.Invoke(action, item);
+                        }
+                        catch { }
                     }
                     else
                     {
