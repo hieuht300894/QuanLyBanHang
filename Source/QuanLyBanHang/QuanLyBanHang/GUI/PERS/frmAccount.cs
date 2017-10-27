@@ -167,7 +167,7 @@ namespace QuanLyBanHang.GUI.PER
 
             string setFocusControl = "";
 
-            if (lokPermission.ToInt() == 0)
+            if (lokPermission.ToInt32() == 0)
             {
                 lokPermission.ErrorText = "Phân quyền không hợp lệ".Translation("msgUserRoleIncorrect", this.Name);
                 bRe = false; setFocusControl = lokPermission.Name;
@@ -190,7 +190,7 @@ namespace QuanLyBanHang.GUI.PER
             //    bRe = false; setFocusControl = txtUserName.Name;
             //}
 
-            if (lokPersonnel.ToInt() == 0)
+            if (lokPersonnel.ToInt32() == 0)
             {
                 lokPersonnel.ErrorText = "Nhân viên không hợp lệ".Translation("msgPersonnelIsEmpty", this.Name);
                 bRe = false; setFocusControl = lokPersonnel.Name;
@@ -207,13 +207,13 @@ namespace QuanLyBanHang.GUI.PER
             bool bRe = false;
 
             _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
-            _acEntry.IDPermission = lokPermission.ToInt();
+            _acEntry.IDPermission = lokPermission.ToInt32();
             _acEntry.PermissionName = lokPermission.Text;
 
             if (fType == eFormType.Add)
             {
                 _acEntry.IsEnable = true;
-                _acEntry.KeyID = lokPersonnel.ToInt();
+                _acEntry.KeyID = lokPersonnel.ToInt32();
                 _acEntry.PersonelName = lokPersonnel.Text;
                 _acEntry.UserName = txtUserName.Text.Trim().ToLower();
                 _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;

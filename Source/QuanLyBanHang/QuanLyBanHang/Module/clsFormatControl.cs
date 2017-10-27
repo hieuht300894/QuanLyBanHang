@@ -27,6 +27,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using DevExpress.XtraLayout.Utils;
 
 namespace QuanLyBanHang
 {
@@ -419,11 +420,18 @@ namespace QuanLyBanHang
             grvMain.OptionsMenu.EnableColumnMenu = true;
             grvMain.OptionsCustomization.AllowFilter = true;
             grvMain.OptionsCustomization.AllowSort = true;
+            grvMain.OptionsView.ShowAutoFilterRow = true;
+            grvMain.OptionsSelection.MultiSelect = true;
+            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
+            grvMain.OptionsView.ShowFooter = true;
+            grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
+            grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
+     
 
             grvMain.OptionsView.ShowIndicator = showIndicator;
             if (showIndicator)
             {
-                grvMain.IndicatorWidth = 35;
+                grvMain.IndicatorWidth = -1;
                 grvMain.CustomDrawRowIndicator -= CustomDrawRowIndicator;
                 grvMain.CustomDrawRowIndicator += CustomDrawRowIndicator;
             }
@@ -506,24 +514,17 @@ namespace QuanLyBanHang
             }
 
             grvMain.FormatColmnsGridView();
-
-            grvMain.OptionsView.ShowAutoFilterRow = true;
-            grvMain.NewItemRowText = string.Empty;
-            grvMain.OptionsSelection.MultiSelect = true;
-            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-            grvMain.OptionsView.ShowFooter = true;
-
             grvMain.BestFitColumns();
             grvMain.SumResult();
 
             grvMain.KeyDown -= grvMain_KeyDown;
             grvMain.KeyDown += grvMain_KeyDown;
+            grvMain.RowCountChanged -= grvMain_RowCountChanged;
+            grvMain.RowCountChanged += grvMain_RowCountChanged;
             grvMain.DataSourceChanged -= grvMain_DataSourceChanged;
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
             grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
             grvMain.CalcRowHeight += grvMain_CalcRowHeight;
-            grvMain.TopRowChanged -= grvMain_TopRowChanged;
-            grvMain.TopRowChanged += grvMain_TopRowChanged;
         }
 
         public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
@@ -563,6 +564,7 @@ namespace QuanLyBanHang
 
         public static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
         {
+            if (frmMain == null) return;
             if (string.IsNullOrEmpty(frmMain.Name)) return;
             try
             {
@@ -598,9 +600,8 @@ namespace QuanLyBanHang
 
         private static void grvMain_RowCountChanged(object sender, EventArgs e)
         {
-            //GridView grvMain = sender as GridView;
-            //if (grvMain != null && grvMain.Columns.Count > 0 && grvMain.Columns[0].AppearanceHeader.ForeColor != MyColor.GridForeHeader)
-            //    grvMain.FormatColmnsGridView();
+            GridView view = sender as GridView;
+            view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
         }
 
         private static void grvMain_DataSourceChanged(object sender, EventArgs e)
@@ -746,67 +747,19 @@ namespace QuanLyBanHang
 
         private static void CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
         {
-            if (!string.IsNullOrEmpty(e.Info.DisplayText)) return;
-            bool indicatorIcon = false;
-            GridView view = (GridView)sender;
-
+            GridView view = sender as GridView;
             if (e.Info.IsRowIndicator && e.RowHandle >= 0)
             {
                 e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
                 e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
-                Rectangle rec = new Rectangle();
-                rec.X = e.Bounds.X;
-                rec.Y = e.Bounds.Y;
-                Size size = TextRenderer.MeasureText(e.RowHandle.ToString(), e.Info.Appearance.Font);
-                rec.Width = size.Width;
-                rec.Height = size.Height;
-                e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), rec);
                 e.Info.DisplayText = (Convert.ToInt32(e.RowHandle + 1)).ToString();
-                if (!indicatorIcon)
-                    e.Info.ImageIndex = -1;
+                e.Info.ImageIndex = -1;
             }
-            if (e.RowHandle == GridControl.InvalidRowHandle)
-            {
-                e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
-                e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
-                Rectangle rec = new Rectangle();
-                rec.X = e.Bounds.X;
-                rec.Y = e.Bounds.Y;
-                Size size = TextRenderer.MeasureText(e.RowHandle.ToString(), e.Info.Appearance.Font);
-                rec.Width = size.Width;
-                rec.Height = size.Height;
-                e.Appearance.DrawString(e.Cache, e.RowHandle.ToString(), rec);
-                e.Info.DisplayText = "";
-            }
-            e.Painter.DrawObject(e.Info);
-            e.Handled = true;
         }
 
         private static void grvMain_InvalidRowException(object sender, DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventArgs e)
         {
             e.ExceptionMode = ExceptionMode.Ignore;
-        }
-
-        private static void grvMain_TopRowChanged(object sender, EventArgs e)
-        {
-            //GridView view = sender as GridView;
-            //GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
-            //List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
-            //for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
-            //{
-            //    if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
-            //        lstRowsInfo.RemoveAt(i);
-            //}
-            //int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
-            //int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
-
-            //if (LastRow == RowCount)
-            //{
-            //    GridRowInfo RowInfo = lstRowsInfo.Last();
-            //    Dictionary<string, object> dFrom = new Dictionary<string, object>();
-            //    dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-            //    //LoadData(0, gctPersonnelList, lstPersonnel, dFrom, null, true);
-            //}
         }
 
         public static List<int> DeleteItem<T>(this GridView grvMain, BindingList<T> lstEntry, BindingList<T> lstEdited) where T : class
@@ -1205,24 +1158,6 @@ namespace QuanLyBanHang
             }
         }
 
-        public static int ToInt(this SpinEdit spnMain)
-        {
-            try
-            {
-                return Convert.ToInt32(spnMain.EditValue);
-            }
-            catch { return 0; }
-        }
-
-        public static int ToInt16(this SpinEdit spnMain)
-        {
-            try
-            {
-                return Convert.ToInt16(spnMain.EditValue);
-            }
-            catch { return 0; }
-        }
-
         public static decimal ToDecimal(this SpinEdit spnMain)
         {
             try
@@ -1273,7 +1208,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region Format LookUpEdit
-        public static void Format(this LookUpEdit lokMain, bool showHeader = true)
+        public static void Format(this LookUpEdit lokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = false)
         {
             lokMain.Properties.BestFitMode = BestFitMode.BestFitResizePopup;
             lokMain.Properties.ShowFooter = false;
@@ -1293,6 +1228,9 @@ namespace QuanLyBanHang
 
             lokMain.Properties.KeyDown -= rlok_KeyDown;
             lokMain.Properties.KeyDown += rlok_KeyDown;
+
+            if (lokMain.Properties.Columns.Count == 0)
+                lokMain.Properties.Columns.Add(new LookUpColumnInfo() { FieldName = displayMember });
 
             //lokMain.Translation();
             //lokMain.FormatColumnLookUpEdit();
@@ -1437,7 +1375,7 @@ namespace QuanLyBanHang
             //}
         }
 
-        public static int ToInt(this LookUpEdit lokMain)
+        public static int ToInt32(this LookUpEdit lokMain)
         {
             try
             {
@@ -1448,34 +1386,10 @@ namespace QuanLyBanHang
             }
             catch { return 0; }
         }
-
-        public static int ToInt16(this LookUpEdit lokMain)
-        {
-            try
-            {
-                if (lokMain.ItemIndex < 0)
-                    return 0;
-                else
-                    return Convert.ToInt16(lokMain.EditValue);
-            }
-            catch { return 0; }
-        }
-
-        public static decimal ToDecimal(this LookUpEdit lokMain)
-        {
-            try
-            {
-                if (lokMain.ItemIndex < 0)
-                    return 0;
-                else
-                    return Convert.ToDecimal(lokMain.EditValue);
-            }
-            catch { return 0; }
-        }
         #endregion
 
         #region Format RepositoryLookUpEdit
-        public static void Format(this RepositoryItemLookUpEdit rlokMain, string fName = "", bool showHeader = false)
+        public static void Format(this RepositoryItemLookUpEdit rlokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = false)
         {
             rlokMain.NullText = "";
             rlokMain.ShowFooter = false;
@@ -1486,16 +1400,17 @@ namespace QuanLyBanHang
             rlokMain.AppearanceDropDownHeader.Options.UseFont = true;
             rlokMain.TextEditStyle = TextEditStyles.Standard;
             rlokMain.BestFitMode = BestFitMode.BestFitResizePopup;
+            rlokMain.Buttons.Clear();
 
             rlokMain.HighlightedItemStyle = HighlightStyle.Standard;
             rlokMain.LookAndFeel.UseDefaultLookAndFeel = false;
             rlokMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
-            //if (!string.IsNullOrEmpty(fName) && showHeader && rlokMain.Columns.Count > 0 && rlokMain.AppearanceDropDownHeader.ForeColor != MyColor.GridForeHeader)
-            //{
-            //    rlokMain.Translation(fName);
-            //    rlokMain.FormatColumnRepositoryLookUpEdit(fName);
-            //}
+            rlokMain.ValueMember = valueMember;
+            rlokMain.DisplayMember = displayMember;
+
+            if (rlokMain.Columns.Count == 0)
+                rlokMain.Columns.Add(new LookUpColumnInfo() { FieldName = displayMember });
 
             rlokMain.KeyDown -= rlokMain_KeyDown;
             rlokMain.KeyDown += rlokMain_KeyDown;
@@ -1668,6 +1583,59 @@ namespace QuanLyBanHang
         public static void Format(this RepositoryItemDateEdit dateEdit, string fText = "dd/MM/yyyy")
         {
             dateEdit.EditMask = fText;
+        }
+        #endregion
+
+        #region SearchLookupedit
+        public static void Format(this SearchLookUpEdit slokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = true, bool showIndicator = true, bool ColumnAuto = true)
+        {
+            slokMain.Properties.ValueMember = valueMember;
+            slokMain.Properties.DisplayMember = displayMember;
+            if (slokMain.Properties.View.Columns.Count == 0)
+            {
+                GridColumn col = new GridColumn();
+                col.Name = $"col{displayMember}";
+                col.FieldName = displayMember;
+                col.OptionsColumn.AllowEdit = false;
+                slokMain.Properties.View.Columns.Add(col);
+            }
+            slokMain.Properties.ShowFooter = false;
+            slokMain.Properties.ShowClearButton = false;
+
+            slokMain.Properties.View.Format(false, showIndicator, ColumnAuto, false);
+            slokMain.Properties.View.OptionsView.ShowColumnHeaders = showHeader;
+            slokMain.Properties.View.OptionsSelection.MultiSelect = false;
+
+            slokMain.Popup -= lokMain_Popup;
+            slokMain.Popup += lokMain_Popup;
+        }
+
+        private static void lokMain_Popup(object sender, EventArgs e)
+        {
+            Control f = (sender as IPopupControl).PopupWindow;
+            string[] controlNames = new string[] { "btClear", "btFind" };
+            foreach (string name in controlNames)
+            {
+                Control[] controls = f.Controls.Find(name, true);
+                if (controls.Length > 0)
+                {
+                    Control ctr = controls[0];
+                    LayoutControl layoutControl = ctr.Parent as LayoutControl;
+                    if (layoutControl != null)
+                        layoutControl.GetItemByControl(ctr).Visibility = LayoutVisibility.Never;
+                }
+            }
+            SearchLookUpEdit lokMain = sender as SearchLookUpEdit;
+            lokMain.Popup -= lokMain_Popup;
+        }
+
+        public static int ToInt32(this SearchLookUpEdit lokMain)
+        {
+            try
+            {
+                return Convert.ToInt32(lokMain.EditValue);
+            }
+            catch { return 0; }
         }
         #endregion
         #endregion

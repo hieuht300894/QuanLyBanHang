@@ -5,6 +5,7 @@ using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraEditors;
 using EntityModel.DataModel;
+using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,8 @@ namespace QuanLyBanHang.GUI.Common
                 tbvMain.Controller.Activate(document);
             else
             {
-                _xtrForm.Text = _xtrForm.Text.Translation(_xtrForm.Name.Replace("_", ""), _xtrForm.Name);
+                _xtrForm.Text = _xtrForm.Text;
+                _xtrForm.Load -= (sender, e) => { };
                 _xtrForm.FormClosing += _xtrForm_FormClosing;
                 _xtrForm.MdiParent = this;
                 _xtrForm.Show();
@@ -46,6 +48,12 @@ namespace QuanLyBanHang.GUI.Common
             try
             {
                 XtraForm cForm = (XtraForm)sender;
+                List<string> threadNames = new List<string>(clsService.dManagerThreads.Select(x => x.Key));
+                foreach (string threadName in threadNames)
+                {
+                    clsService.dManagerThreads[threadName].Cancel();
+                    clsService.dManagerThreads.Remove(threadName);
+                }
 
                 foreach (var c in cForm.Controls)
                 {
@@ -255,10 +263,7 @@ namespace QuanLyBanHang.GUI.Common
         private void bt_ItemClick(object sender, ItemClickEventArgs e)
         {
             clsGeneral.CallWaitForm(this);
-            try
-            {
-                addDocument(clsCallForm.CreateNewForm(e.Item.Name));
-            }
+            try { addDocument(clsCallForm.CreateNewForm(e.Item.Name)); }
             catch { }
             clsGeneral.CloseWaitForm();
         }

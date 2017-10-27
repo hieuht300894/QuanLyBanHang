@@ -9,7 +9,7 @@ namespace QuanLyBanHang
         public static List<FormItem> fList = null;
         public static void InitFormCollection()
         {
-            fList = new List<FormItem>();            
+            fList = new List<FormItem>();
             try
             {
                 System.Reflection.Assembly projectA = System.Reflection.Assembly.GetExecutingAssembly();
@@ -56,11 +56,9 @@ namespace QuanLyBanHang
         {
             if (fList == null)
                 return null;
-            try
-            {
-                return fList.Find(f => f.BbiName.Equals(bbiName)).CForm;
-            }
+            try { return fList.Find(f => f.BbiName.Equals(bbiName)).CForm; }
             catch { return null; }
+
         }
     }
 

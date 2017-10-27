@@ -51,7 +51,6 @@
             this.colAccount = new DevExpress.XtraGrid.Columns.GridColumn();
             this.lcgMain = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lctPersonnel)).BeginInit();
@@ -62,7 +61,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnEdit
@@ -168,7 +166,7 @@
             this.lctPersonnel.Name = "lctPersonnel";
             this.lctPersonnel.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(482, 140, 450, 400);
             this.lctPersonnel.Root = this.lcgMain;
-            this.lctPersonnel.Size = new System.Drawing.Size(884, 364);
+            this.lctPersonnel.Size = new System.Drawing.Size(884, 360);
             this.lctPersonnel.TabIndex = 4;
             this.lctPersonnel.Text = "layoutControl1";
             // 
@@ -180,7 +178,7 @@
             this.gctPersonnelList.Name = "gctPersonnelList";
             this.gctPersonnelList.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rlokPersonnel});
-            this.gctPersonnelList.Size = new System.Drawing.Size(860, 340);
+            this.gctPersonnelList.Size = new System.Drawing.Size(860, 336);
             this.gctPersonnelList.TabIndex = 4;
             this.gctPersonnelList.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvPersonnelList});
@@ -342,7 +340,7 @@
             this.layoutControlItem1});
             this.lcgMain.Location = new System.Drawing.Point(0, 0);
             this.lcgMain.Name = "Root";
-            this.lcgMain.Size = new System.Drawing.Size(884, 364);
+            this.lcgMain.Size = new System.Drawing.Size(884, 360);
             this.lcgMain.TextVisible = false;
             // 
             // layoutControlItem1
@@ -350,13 +348,9 @@
             this.layoutControlItem1.Control = this.gctPersonnelList;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(864, 344);
+            this.layoutControlItem1.Size = new System.Drawing.Size(864, 340);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
-            // 
-            // gridView1
-            // 
-            this.gridView1.Name = "gridView1";
             // 
             // frmPersonnel_List
             // 
@@ -378,7 +372,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.rlokPersonnel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lcgMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,6 +400,5 @@
         private DevExpress.XtraGrid.Columns.GridColumn colModifiedDate;
         private DevExpress.XtraGrid.Columns.GridColumn colAccount;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
     }
 }

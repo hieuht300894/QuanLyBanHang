@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using QuanLyBanHang.BLL.PERS;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -13,6 +15,7 @@ namespace QuanLyBanHang.GUI.PER
     {
         #region Variables
         IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
+        IList<xPersonnel> lstRepoPersonnel = new List<xPersonnel>();
         #endregion
 
         #region Form Events
@@ -22,10 +25,8 @@ namespace QuanLyBanHang.GUI.PER
         }
         private void frmNhanVien_List_Load(object sender, EventArgs e)
         {
-            lstPersonnel = new List<xPersonnel>();
-            gctPersonnelList.DataSource = lstPersonnel;
-            clsFunction.Instance.Select(this, gctPersonnelList, lstPersonnel, "select * from xPersonnel where KeyID between 1 and 1000", new System.Data.SqlClient.SqlParameter[] { });
-            customForm();
+            LoadData();
+            CustomForm();
         }
         #endregion
 
@@ -36,7 +37,7 @@ namespace QuanLyBanHang.GUI.PER
             DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo hi = grvPersonnelList.CalcHitInfo(mouse.Location);
             if (grvPersonnelList.FocusedRowHandle >= 0 && (hi.InRow || hi.InRowCell))
             {
-                updateEntry();
+                UpdateEntry();
             }
         }
 
@@ -49,47 +50,58 @@ namespace QuanLyBanHang.GUI.PER
         #region Base Button Events
         protected override void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
 
         protected override void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            insertEntry();
+            InsertEntry();
         }
 
         protected override void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            updateEntry();
+            UpdateEntry();
         }
 
         protected override void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            deleteEntry();
+            DeleteEntry();
         }
 
         protected override void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            refreshEntry();
+            RefreshEntry();
         }
         #endregion
 
         #region Methods
-        public void insertEntry()
+        private void LoadData()
+        {
+            lstPersonnel = new List<xPersonnel>();
+            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 100 * from xPersonnel", new SqlParameter[] { });
+            gctPersonnelList.DataSource = lstPersonnel;
+
+            lstRepoPersonnel = new List<xPersonnel>();
+            clsFunction.Instance.SelectAsync(this, rlokPersonnel, lstRepoPersonnel, "select top 100 * from xPersonnel", new SqlParameter[] { });
+            rlokPersonnel.DataSource = lstRepoPersonnel;
+        }
+
+        public void InsertEntry()
         {
             using (frmPersonnel _frm = new frmPersonnel())
             {
@@ -99,7 +111,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public void updateEntry()
+        public void UpdateEntry()
         {
             if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0)
             {
@@ -121,7 +133,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public void deleteEntry()
+        public void DeleteEntry()
         {
             //int[] Indexes = grvPersonnelList.GetSelectedRows();
             //List<int> lstIDNhanVien = new List<int>();
@@ -184,50 +196,32 @@ namespace QuanLyBanHang.GUI.PER
             //clsPersonnel.Instance.ReloadError = LoadError;
             //clsPersonnel.Instance.StartRun();
 
-            lstPersonnel = new List<xPersonnel>();
+            // lstPersonnel = new List<xPersonnel>();
         }
 
-        public void refreshEntry()
+        public void RefreshEntry()
         {
+            LoadData();
         }
 
-        public void customForm()
+        public void CustomForm()
         {
-            rlokPersonnel.ValueMember = "KeyID";
-            rlokPersonnel.DisplayMember = "FullName";
+            rlokPersonnel.Format("KeyID", "FullName");
             gctPersonnelList.Format();
             lctPersonnel.Format();
-
-            grvPersonnelList.TopRowChanged += grvPersonnelList_TopRowChanged;
         }
 
-        private void grvPersonnelList_TopRowChanged(object sender, EventArgs e)
+        protected override void grv_TopRowChanged<T>(object sender, EventArgs e, IList<T> ListData, string query, SqlParameter[] parameters)
         {
-            GridView view = sender as GridView;
-            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
-            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
-            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
-            {
-                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
-                    lstRowsInfo.RemoveAt(i);
-            }
-            int LastRow = lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max();
-            int RowCount = view.OptionsView.NewItemRowPosition == NewItemRowPosition.None ? view.RowCount - 1 : view.RowCount - 2;
+            GridView view = (GridView)sender;
+            xPersonnel personnel = view.GetRow(GetGridViewLastRow(view)) as xPersonnel;
+            if (personnel == null) return;
 
-            if (LastRow == RowCount)
-            {
-                //GridRowInfo RowInfo = lstRowsInfo.Last();
-                //Dictionary<string, object> dFrom = new Dictionary<string, object>();
-                //dFrom.Add("KeyID", ((xPersonnel)RowInfo.RowKey).KeyID + 1);
-                //gctPersonnelList.DataSource = lstPersonnel;
-                //clsPersonnel select = new clsPersonnel(Name, gctPersonnelList.Name);
-                //select.Init();
-                //select.SetEntity(lstPersonnel);
-                //select.SetSearch(dFrom, null);
-                //SetAction(select, true, false, false);
-                //select._InsertObjectToList = AddData;
-                //select.StartRun();
-            }
+            query = $"select top 10 * from xPersonnel where KeyID>@KeyID";
+            parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("@KeyID", personnel.KeyID);
+            base.grv_TopRowChanged(sender, e, ListData, query, parameters);
+
         }
         #endregion
     }

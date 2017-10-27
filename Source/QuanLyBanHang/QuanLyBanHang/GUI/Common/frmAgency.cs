@@ -143,7 +143,7 @@ namespace QuanLyBanHang.GUI.Common
             txtEmail.Text = _acEntry.Email;
             mmeDescription.Text = _acEntry.Description;
             LoadImage(_acEntry.Logo);
-            if (lokAgency.ToInt() > 0)
+            if (lokAgency.ToInt32() > 0)
                 btnSave.Select();
             else
                 txtCode.Select();

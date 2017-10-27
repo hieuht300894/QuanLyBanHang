@@ -7,6 +7,7 @@ using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -201,6 +202,33 @@ namespace QuanLyBanHang
             {
                 IsLeaveForm = !IsLeaveForm;
             }
+        }
+        protected virtual void grv_TopRowChanged<T>(object sender, EventArgs e, IList<T> ListData, string query, SqlParameter[] parameters) where T : class, new()
+        {
+            GridView view = sender as GridView;
+            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            int LastRow = GetGridViewLastRow(view);
+            int RowCount = ListData.Count - 1;
+
+            if (LastRow == RowCount)
+                clsFunction.Instance.SelectAsync(this, view.GridControl, ListData, query, parameters);
+        }
+        public int GetGridViewLastRow(GridView grvMain)
+        {
+            GridViewInfo vi = grvMain.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (grvMain.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || grvMain.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            return lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max(); 
         }
         #endregion
 
