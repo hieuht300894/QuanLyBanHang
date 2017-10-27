@@ -426,7 +426,7 @@ namespace QuanLyBanHang
             grvMain.OptionsView.ShowFooter = true;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
-     
+
 
             grvMain.OptionsView.ShowIndicator = showIndicator;
             if (showIndicator)
@@ -650,13 +650,18 @@ namespace QuanLyBanHang
         private static void grvMain_KeyDown(object sender, KeyEventArgs e)
         {
             GridView view = sender as GridView;
-            if (view != null && e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete)
             {
                 if (view.IsFilterRow(view.FocusedRowHandle))
                     view.ActiveFilter.Clear();
                 else if (!(view.FocusedColumn.ColumnEdit is RepositoryItemDateEdit))
                     view.SetRowCellValue(view.FocusedRowHandle, view.FocusedColumn, 0);
             }
+            //if (e.KeyData ==  Keys.R)
+            //{
+            //    view.BestFitColumns();
+            //    view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+            //}
         }
 
         private static void realColumnEdit_KeyDown(object sender, KeyEventArgs e)
@@ -850,9 +855,9 @@ namespace QuanLyBanHang
 
                     string path;
                     path = TreeLayoutPath + @"\" + trlMain.FindForm().Name + "_" + trlMain.Name + ".xml";
-                    if (System.IO.File.Exists(path))
-                        System.IO.File.Delete(path);
-                    var options = new DevExpress.XtraLayout.LayoutSerializationOptions();
+                    if (File.Exists(path))
+                        File.Delete(path);
+                    var options = new LayoutSerializationOptions();
                     options.RestoreLayoutItemText = false;
 
                     trlMain.OptionsLayout.Assign(options);
@@ -1172,6 +1177,7 @@ namespace QuanLyBanHang
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
                 e.Handled = true;
         }
+        #endregion
 
         #region Format RepositorySpinEdit
         public static void Format(this RepositoryItemSpinEdit rspnMain, int DecimalScale = 0, bool LeftAlight = true, bool NotNegative = true)
@@ -1205,10 +1211,9 @@ namespace QuanLyBanHang
             }
         }
         #endregion
-        #endregion
 
         #region Format LookUpEdit
-        public static void Format(this LookUpEdit lokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = false)
+        public static void Format(this LookUpEdit lokMain, bool showHeader = false)
         {
             lokMain.Properties.BestFitMode = BestFitMode.BestFitResizePopup;
             lokMain.Properties.ShowFooter = false;
@@ -1229,8 +1234,8 @@ namespace QuanLyBanHang
             lokMain.Properties.KeyDown -= rlok_KeyDown;
             lokMain.Properties.KeyDown += rlok_KeyDown;
 
-            if (lokMain.Properties.Columns.Count == 0)
-                lokMain.Properties.Columns.Add(new LookUpColumnInfo() { FieldName = displayMember });
+            if (lokMain.Properties.Columns.Count == 0 && !string.IsNullOrEmpty(lokMain.Properties.DisplayMember))
+                lokMain.Properties.Columns.Add(new LookUpColumnInfo() { FieldName = lokMain.Properties.DisplayMember });
 
             //lokMain.Translation();
             //lokMain.FormatColumnLookUpEdit();
@@ -1389,7 +1394,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region Format RepositoryLookUpEdit
-        public static void Format(this RepositoryItemLookUpEdit rlokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = false)
+        public static void Format(this RepositoryItemLookUpEdit rlokMain, bool showHeader = false)
         {
             rlokMain.NullText = "";
             rlokMain.ShowFooter = false;
@@ -1406,11 +1411,8 @@ namespace QuanLyBanHang
             rlokMain.LookAndFeel.UseDefaultLookAndFeel = false;
             rlokMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
-            rlokMain.ValueMember = valueMember;
-            rlokMain.DisplayMember = displayMember;
-
-            if (rlokMain.Columns.Count == 0)
-                rlokMain.Columns.Add(new LookUpColumnInfo() { FieldName = displayMember });
+            if (rlokMain.Columns.Count == 0 && !string.IsNullOrEmpty(rlokMain.DisplayMember))
+                rlokMain.Columns.Add(new LookUpColumnInfo() { FieldName = rlokMain.DisplayMember });
 
             rlokMain.KeyDown -= rlokMain_KeyDown;
             rlokMain.KeyDown += rlokMain_KeyDown;
@@ -1587,15 +1589,13 @@ namespace QuanLyBanHang
         #endregion
 
         #region SearchLookupedit
-        public static void Format(this SearchLookUpEdit slokMain, string valueMember = "KeyID", string displayMember = "Code", bool showHeader = true, bool showIndicator = true, bool ColumnAuto = true)
+        public static void Format(this SearchLookUpEdit slokMain, bool showHeader = true, bool showIndicator = true, bool ColumnAuto = true)
         {
-            slokMain.Properties.ValueMember = valueMember;
-            slokMain.Properties.DisplayMember = displayMember;
-            if (slokMain.Properties.View.Columns.Count == 0)
+            if (slokMain.Properties.View.Columns.Count == 0 && !string.IsNullOrEmpty(slokMain.Properties.DisplayMember))
             {
                 GridColumn col = new GridColumn();
-                col.Name = $"col{displayMember}";
-                col.FieldName = displayMember;
+                col.Name = $"col{slokMain.Properties.DisplayMember}";
+                col.FieldName = slokMain.Properties.DisplayMember;
                 col.OptionsColumn.AllowEdit = false;
                 slokMain.Properties.View.Columns.Add(col);
             }
