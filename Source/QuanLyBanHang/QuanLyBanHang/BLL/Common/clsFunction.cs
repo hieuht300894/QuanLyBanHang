@@ -44,83 +44,49 @@ namespace QuanLyBanHang.BLL.Common
         {
         }
 
-        public IList<T> Select<T>(string Query, SqlParameter[] Parameters) where T : class, new()
-        {
-            IList<T> ListResult = new List<T>();
-            db = new aModel();
-            BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-            bWorker.DoWork += (sender, e) =>
-            {
-                try
-                {
-                    DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
-                    foreach (T item in result)
-                    {
-                        ListResult.Add(item);
-                    }
-                }
-                catch { ListResult = new List<T>(); }
-            };
-
-            bWorker.RunWorkerCompleted += (sender, e) =>
-            {
-                var _threadName = clsService.dThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(GetType().FullName + "." + MethodBase.GetCurrentMethod().Name));
-                if (!string.IsNullOrEmpty(_threadName))
-                    clsService.dThreads.Remove(_threadName);
-                Func<IList<T>, IList<T>> func = delegate (IList<T> Result) { return Result; };
-                func.Invoke((IList<T>)e.Result);
-                bWorker.Dispose();
-            };
-
-            try
-            {
-                var threadName = clsService.dThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(GetType().FullName + "." + MethodBase.GetCurrentMethod().Name));
-                if (string.IsNullOrEmpty(threadName))
-                {
-                    clsService.dThreads.Add(GetType().FullName + "." + MethodBase.GetCurrentMethod().Name, bWorker);
-                    bWorker.RunWorkerAsync();
-                    //while (bWorker.IsBusy) { Application.DoEvents(); }
-                }
-            }
-            catch { }
-            return ListResult;
-        }
-
         public void SelectAsync<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
-            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{gctMain.Name}"));
+            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManageThreads[threadName].TokenSource.Cancel();
-                clsService.dManageThreads.Remove(threadName);
-            };
+                ThreadObject oldThreadObject = clsService.dManageThreads[threadName].FirstOrDefault(x => x.Name.Equals(gctMain.Name));
+                if (oldThreadObject != null)
+                {
+                    oldThreadObject.TokenSource.Cancel();
+                    clsService.dManageThreads[threadName].Remove(oldThreadObject);
+                }
+            }
+            else
+            {
+                threadName = frmMain.Name;
+                clsService.dManageThreads.Add(threadName, new List<ThreadObject>());
+            }
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
-            IAsyncResult asyncResult = null;
-            threadName = $"{frmMain.Name}_{gctMain.Name}";
-            clsService.dManageThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, ctrMain = gctMain });
+            ThreadObject newThreadObject = new ThreadObject() { Name = gctMain.Name, TokenSource = tokenSource, FrmMain = frmMain, CtrMain = gctMain };
+            clsService.dManageThreads[threadName].Add(newThreadObject);
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
             DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
 
-            result.ForEachAsync((item) =>
-            {
-                if (tokenSource.IsCancellationRequested) { return; }
-                else
-                {
-                    if (gctMain.InvokeRequired)
-                    {
-                        try
-                        {
-                            Action<T> action = (obj) => { ListResult.Add(obj); };
-                            gctMain.Invoke(action, item);
-                        }
-                        catch { }
-                    }
-                    else { ListResult.Add(item); }
-                }
-            }, tokenSource.Token);
+            newThreadObject.Task = result.ForEachAsync((item) =>
+             {
+                 if (tokenSource.IsCancellationRequested) { return; }
+                 else
+                 {
+                     if (gctMain.InvokeRequired)
+                     {
+                         try
+                         {
+                             Action<T> action = (obj) => { ListResult.Add(obj); };
+                             gctMain.Invoke(action, item);
+                         }
+                         catch { }
+                     }
+                     else { ListResult.Add(item); }
+                 }
+             }, tokenSource.Token);
 
             timer.Tick += (sender, e) =>
             {
@@ -210,42 +176,50 @@ namespace QuanLyBanHang.BLL.Common
 
         public void SelectAsync<T>(XtraForm frmMain, RepositoryItem repoMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
-            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals($"{frmMain.Name}_{repoMain.Name}"));
+            var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManageThreads[threadName].TokenSource.Cancel();
-                clsService.dManageThreads.Remove(threadName);
-            };
+                ThreadObject oldThreadObject = clsService.dManageThreads[threadName].FirstOrDefault(x => x.Name.Equals(repoMain.Name));
+                if (oldThreadObject != null)
+                {
+                    oldThreadObject.TokenSource.Cancel();
+                    clsService.dManageThreads[threadName].Remove(oldThreadObject);
+                }
+            }
+            else
+            {
+                threadName = frmMain.Name;
+                clsService.dManageThreads.Add(threadName, new List<ThreadObject>());
+            }
 
             System.Threading.CancellationTokenSource tokenSource = new System.Threading.CancellationTokenSource();
-            IAsyncResult asyncResult = null;
-            threadName = $"{frmMain.Name}_{repoMain.Name}";
-            clsService.dManageThreads.Add(threadName, new ThreadObject() { TokenSource = tokenSource, AsyncResult = asyncResult, frmMain = frmMain, repoMain = repoMain });
+            ThreadObject newThreadObject = new ThreadObject() { Name = repoMain.Name, TokenSource = tokenSource, FrmMain = frmMain, RepoMain = repoMain };
+            clsService.dManageThreads[threadName].Add(newThreadObject);
 
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
             DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
 
-            result.ForEachAsync((item) =>
-            {
-                if (tokenSource.IsCancellationRequested) { return; }
-                else if (!frmMain.IsDisposed)
-                {
-                    if (frmMain.InvokeRequired)
-                    {
-                        try
-                        {
-                            Action<T> action = (obj) => { ListResult.Add(obj); };
-                            frmMain.Invoke(action, item);
-                        }
-                        catch { }
-                    }
-                    else
-                    {
-                        ListResult.Add(item);
-                    }
-                }
-            }, tokenSource.Token);
+            newThreadObject.Task = result.ForEachAsync((item) =>
+              {
+                  if (tokenSource.IsCancellationRequested) { return; }
+                  else if (!frmMain.IsDisposed)
+                  {
+                      if (frmMain.InvokeRequired)
+                      {
+                          try
+                          {
+                              Action<T> action = (obj) => { ListResult.Add(obj); };
+                              frmMain.Invoke(action, item);
+                          }
+                          catch { }
+                      }
+                      else
+                      {
+                          ListResult.Add(item);
+                      }
+                  }
+              }, tokenSource.Token);
 
             timer.Tick += (sender, e) =>
             {

@@ -219,6 +219,58 @@ namespace QuanLyBanHang
             InitEvents();
             LoadControl();
         }
+        private void frmBase_ControlAdded(object sender, ControlEventArgs e)
+        {
+
+        }
+        private void frmBase_Enter(object sender, EventArgs e)
+        {
+            if (IsLeaveForm)
+            {
+                LoadAccessForm();
+                IsLeaveForm = !IsLeaveForm;
+            }
+        }
+        private void frmBase_Leave(object sender, EventArgs e)
+        {
+            if (!IsLeaveForm)
+            {
+                IsLeaveForm = !IsLeaveForm;
+            }
+        }
+        private void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
+                if (!string.IsNullOrEmpty(threadName))
+                {
+                    foreach (var threadObj in clsService.dManageThreads[threadName])
+                    {
+                        threadObj.TokenSource.Cancel();
+                    }
+
+                    clsService.dManageThreads.Remove(threadName);
+                }
+
+                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
+                foreach (ControlObject ctrObj in lstControls)
+                {
+                    if (ctrObj.ctrMain != null)
+                    {
+                        if (ctrObj.ctrMain is GridControl)
+                            ((GridControl)ctrObj.ctrMain).ViewCollection.ToList().ForEach(x => ((GridView)x).SaveLayout(this));
+                        if (ctrObj.ctrMain is TreeList)
+                            ((TreeList)ctrObj.ctrMain).SaveLayout();
+                        if (ctrObj.ctrMain is SearchLookUpEdit)
+                            ((SearchLookUpEdit)ctrObj.ctrMain).Properties.View.SaveLayout(this);
+                    }
+                }
+
+                clsService.dManageControls.Remove(Name);
+            }
+            catch { }
+        }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
         }
@@ -274,60 +326,51 @@ namespace QuanLyBanHang
         protected virtual void bbpPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
         }
-        protected virtual void frmBase_ControlAdded(object sender, ControlEventArgs e)
-        {
-
-        }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(Name)));
-            foreach (string threadName in threadNames)
+            string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
+            if (!string.IsNullOrEmpty(threadName))
             {
-                clsService.dManageThreads[threadName].TokenSource.Cancel();
+                foreach (var threadObj in clsService.dManageThreads[threadName])
+                {
+                    threadObj.TokenSource.Cancel();
+                }
+
                 clsService.dManageThreads.Remove(threadName);
             }
         }
-        private void frmBase_Enter(object sender, EventArgs e)
-        {
-            if (IsLeaveForm)
-            {
-                LoadAccessForm();
-                IsLeaveForm = !IsLeaveForm;
-            }
-        }
-        private void frmBase_Leave(object sender, EventArgs e)
-        {
-            if (!IsLeaveForm)
-            {
-                IsLeaveForm = !IsLeaveForm;
-            }
-        }
-        private void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        private void btnFitComlum_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             try
             {
-                List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(Name)));
-                foreach (string threadName in threadNames)
-                {
-                    clsService.dManageThreads[threadName].TokenSource.Cancel();
-                    clsService.dManageThreads.Remove(threadName);
-                }
-
                 List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
                 foreach (ControlObject ctrObj in lstControls)
                 {
                     if (ctrObj.ctrMain != null)
                     {
                         if (ctrObj.ctrMain is GridControl)
-                            ((GridControl)ctrObj.ctrMain).ViewCollection.ToList().ForEach(x => ((GridView)x).SaveLayout(this));
+                        {
+                            foreach (GridView view in ((GridControl)ctrObj.ctrMain).ViewCollection)
+                            {
+                                view.BestFitColumns();
+                                view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+                            }
+                        }
                         if (ctrObj.ctrMain is TreeList)
-                            ((TreeList)ctrObj.ctrMain).SaveLayout();
+                        {
+                            TreeList trlMain = (TreeList)ctrObj.ctrMain;
+                            trlMain.BestFitColumns();
+                            trlMain.IndicatorWidth = TextRenderer.MeasureText(trlMain.Nodes.Count.ToString(), trlMain.Appearance.FocusedRow.Font).Width + 10;
+
+                        }
                         if (ctrObj.ctrMain is SearchLookUpEdit)
-                            ((SearchLookUpEdit)ctrObj.ctrMain).Properties.View.SaveLayout(this);
+                        {
+                            SearchLookUpEdit slokMain = (SearchLookUpEdit)ctrObj.ctrMain;
+                            slokMain.Properties.View.BestFitColumns();
+                            slokMain.Properties.View.IndicatorWidth = TextRenderer.MeasureText(slokMain.Properties.View.RowCount.ToString(), slokMain.Properties.View.Appearance.FocusedRow.Font).Width + 10;
+                        }
                     }
                 }
-
-                clsService.dManageControls.Remove(Name);
             }
             catch { }
         }
@@ -435,7 +478,7 @@ namespace QuanLyBanHang
         }
         #endregion
 
-        #region Delegate Method
+        #region Virtual Method
         public virtual void LoadPercent(int Percent)
         {
             betPercent.EditValue = Percent;

@@ -94,7 +94,7 @@ namespace QuanLyBanHang.GUI.PER
         private void LoadData()
         {
             lstPersonnel = new List<xPersonnel>();
-            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 100000 * from xPersonnel", new SqlParameter[] { });
+            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 100 * from xPersonnel", new SqlParameter[] { });
             gctPersonnelList.DataSource = lstPersonnel;
 
             //lstRepoPersonnel = new List<xPersonnel>();

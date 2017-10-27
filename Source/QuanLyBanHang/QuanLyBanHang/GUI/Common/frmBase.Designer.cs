@@ -64,6 +64,7 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
+            this.btnFitComlum = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -116,9 +117,10 @@
             this.bbpSave,
             this.bbpSaveAndAdd,
             this.bbpExportExcel,
-            this.btnLoading});
+            this.btnLoading,
+            this.btnFitComlum});
             this.barMenu.MainMenu = this.barTop;
-            this.barMenu.MaxItemId = 30;
+            this.barMenu.MaxItemId = 31;
             this.barMenu.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rpbPercent});
             this.barMenu.StatusBar = this.barBottom;
@@ -242,6 +244,7 @@
             this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
             this.barBottom.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", true, true, true, 138),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnFitComlum),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnLoading)});
             this.barBottom.OptionsBar.DrawBorder = false;
             this.barBottom.OptionsBar.DrawDragBorder = false;
@@ -418,6 +421,15 @@
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
             // 
+            // btnFitComlum
+            // 
+            this.btnFitComlum.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.btnFitComlum.Caption = "Fit column";
+            this.btnFitComlum.Id = 30;
+            this.btnFitComlum.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.FitToContent_16x16;
+            this.btnFitComlum.Name = "btnFitComlum";
+            this.btnFitComlum.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnFitComlum_ItemClick);
+            // 
             // frmBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -480,5 +492,6 @@
         public DevExpress.XtraBars.BarButtonItem bbpPrintPreview;
         private DevExpress.XtraBars.Alerter.AlertControl alertMsg;
         private DevExpress.XtraBars.BarButtonItem btnLoading;
+        private DevExpress.XtraBars.BarButtonItem btnFitComlum;
     }
 }
