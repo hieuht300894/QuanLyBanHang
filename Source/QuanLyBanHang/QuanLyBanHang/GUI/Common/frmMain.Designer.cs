@@ -51,6 +51,9 @@
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.rbpDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.rbgDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.frmTinhThanh_List = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -75,14 +78,16 @@
             this.bsiDBName,
             this.bbiChangePassword,
             this.bbiSkin,
-            this.bbiInfomation});
+            this.bbiInfomation,
+            this.frmTinhThanh_List});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 218;
+            this.ribbon.MaxItemId = 220;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.rbpAccount,
-            this.rbpConfig});
+            this.rbpConfig,
+            this.rbpDanhMuc});
             this.ribbon.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonControlStyle.Office2013;
             this.ribbon.ShowToolbarCustomizeItem = false;
             this.ribbon.Size = new System.Drawing.Size(1008, 144);
@@ -234,6 +239,25 @@
             // 
             this.tbvMain.RootContainer.Element = null;
             // 
+            // rbpDanhMuc
+            // 
+            this.rbpDanhMuc.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.rbgDanhMuc});
+            this.rbpDanhMuc.Name = "rbpDanhMuc";
+            this.rbpDanhMuc.Text = "Danh mục";
+            // 
+            // rbgDanhMuc
+            // 
+            this.rbgDanhMuc.ItemLinks.Add(this.frmTinhThanh_List);
+            this.rbgDanhMuc.Name = "rbgDanhMuc";
+            this.rbgDanhMuc.Text = "Danh mục chung";
+            // 
+            // frmTinhThanh_List
+            // 
+            this.frmTinhThanh_List.Caption = "Tỉnh thành";
+            this.frmTinhThanh_List.Id = 219;
+            this.frmTinhThanh_List.Name = "frmTinhThanh_List";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -282,6 +306,8 @@
         private DevExpress.XtraBars.Ribbon.RibbonPage rbpConfig;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgSkin;
         private DevExpress.XtraBars.BarButtonItem bbiInfomation;
-       
+        private DevExpress.XtraBars.BarButtonItem frmTinhThanh_List;
+        private DevExpress.XtraBars.Ribbon.RibbonPage rbpDanhMuc;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgDanhMuc;
     }
 }

@@ -143,7 +143,6 @@ namespace QuanLyBanHang.GUI.PER
             if (_acEntry.KeyID == 0)
             {
                 _acEntry.IsEnable = true;
-                _acEntry.IDAgency = clsGeneral.curAgency.KeyID;
                 _acEntry.Code = txtCode.Text.Trim().ToUpper();
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();

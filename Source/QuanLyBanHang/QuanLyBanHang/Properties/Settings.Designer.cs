@@ -241,42 +241,6 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
-        public decimal Bao50 {
-            get {
-                return ((decimal)(this["Bao50"]));
-            }
-            set {
-                this["Bao50"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("45")]
-        public decimal Bao45 {
-            get {
-                return ((decimal)(this["Bao45"]));
-            }
-            set {
-                this["Bao45"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
-        public decimal Tui500 {
-            get {
-                return ((decimal)(this["Tui500"]));
-            }
-            set {
-                this["Tui500"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SkinName {
             get {
@@ -284,18 +248,6 @@ namespace QuanLyBanHang.Properties {
             }
             set {
                 this["SkinName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int IDFactory {
-            get {
-                return ((int)(this["IDFactory"]));
-            }
-            set {
-                this["IDFactory"] = value;
             }
         }
         
@@ -337,18 +289,6 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int IDAgency {
-            get {
-                return ((int)(this["IDAgency"]));
-            }
-            set {
-                this["IDAgency"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PrinterName {
             get {
@@ -361,18 +301,6 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2017")]
-        public int NamTaiKhoa {
-            get {
-                return ((int)(this["NamTaiKhoa"]));
-            }
-            set {
-                this["NamTaiKhoa"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public int RowsInPage {
             get {
@@ -380,6 +308,18 @@ namespace QuanLyBanHang.Properties {
             }
             set {
                 this["RowsInPage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int IDAgency {
+            get {
+                return ((int)(this["IDAgency"]));
+            }
+            set {
+                this["IDAgency"] = value;
             }
         }
     }

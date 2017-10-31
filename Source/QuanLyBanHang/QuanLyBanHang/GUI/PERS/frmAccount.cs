@@ -213,7 +213,6 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.KeyID = lokPersonnel.ToInt32();
                 _acEntry.PersonelName = lokPersonnel.Text;
                 _acEntry.UserName = txtUserName.Text.Trim().ToLower();
-                _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
             }

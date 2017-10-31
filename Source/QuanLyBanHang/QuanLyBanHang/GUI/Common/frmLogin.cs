@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyBanHang.MultiLanguage;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 namespace QuanLyBanHang.GUI.Common
@@ -6,7 +7,6 @@ namespace QuanLyBanHang.GUI.Common
     public partial class frmLogin : DevExpress.XtraEditors.XtraForm
     {
         Bitmap vnFlag, enFlag;
-        string IncorrectUsername, IncorrectPassword, LoginFailed;
 
         public frmLogin()
         {
@@ -39,12 +39,12 @@ namespace QuanLyBanHang.GUI.Common
             bool err = true;
             if (string.IsNullOrEmpty(txtUserName.Text))
             {
-                txtUserName.ErrorText = IncorrectUsername;
+               // txtUserName.ErrorText = IncorrectUsername;
                 err = false;
             }
             if (string.IsNullOrEmpty(txtPassword.Text))
             {
-                txtPassword.ErrorText = IncorrectPassword;
+                //txtPassword.ErrorText = IncorrectPassword;
                 err = false;
             }
             return err;
@@ -52,42 +52,44 @@ namespace QuanLyBanHang.GUI.Common
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (ValidateForm())
-            {
-                var chkUser = clsEntity.CheckUser_Login(txtUserName.Text, clsGeneral.Encrypt(txtPassword.Text), clsGeneral.curPersonnel, clsGeneral.curAccount);
-                if (chkUser)
-                {
-                    Properties.Settings.Default.CurrentCulture = "VN";
-                    Properties.Settings.Default.Save();
-                    Properties.Settings.Default.Reload();
-                    if (chkSavePassword.Checked)
-                    {
-                        Properties.Settings.Default.isSaveUserAndPassword = true;
-                        Properties.Settings.Default.username = txtUserName.Text;
-                        Properties.Settings.Default.password = txtPassword.Text;
-                        Properties.Settings.Default.Save();
-                    }
-                    else
-                    {
-                        Properties.Settings.Default.isSaveUserAndPassword = false;
-                        Properties.Settings.Default.username = "";
-                        Properties.Settings.Default.password = "";
-                        Properties.Settings.Default.Save();
-                    }
-                    Properties.Settings.Default.Reload();
-                    EntityModel.Module.CurPer = clsGeneral.curPersonnel;
-                    EntityModel.Module.CurAcc= clsGeneral.curAccount;
-                    DialogResult = DialogResult.OK;
-                }
-                else
-                {
-                    lblMessage.Text = LoginFailed;
-                    txtUserName.Focus();
-                }
-            }
-            else
-                return;
+            //if (ValidateForm())
+            //{
+            //    var chkUser = clsEntity.CheckUser_Login(txtUserName.Text, clsGeneral.Encrypt(txtPassword.Text), clsGeneral.curPersonnel, clsGeneral.curAccount);
+            //    if (chkUser)
+            //    {
+            //        Properties.Settings.Default.CurrentCulture = "VN";
+            //        Properties.Settings.Default.Save();
+            //        Properties.Settings.Default.Reload();
+            //        if (chkSavePassword.Checked)
+            //        {
+            //            Properties.Settings.Default.isSaveUserAndPassword = true;
+            //            Properties.Settings.Default.username = txtUserName.Text;
+            //            Properties.Settings.Default.password = txtPassword.Text;
+            //            Properties.Settings.Default.Save();
+            //        }
+            //        else
+            //        {
+            //            Properties.Settings.Default.isSaveUserAndPassword = false;
+            //            Properties.Settings.Default.username = "";
+            //            Properties.Settings.Default.password = "";
+            //            Properties.Settings.Default.Save();
+            //        }
+            //        Properties.Settings.Default.Reload();
+            //        EntityModel.Module.CurPer = clsGeneral.curPersonnel;
+            //        EntityModel.Module.CurAcc= clsGeneral.curAccount;
+            //        DialogResult = DialogResult.OK;
+            //    }
+            //    else
+            //    {
+            //        lblMessage.Text = LoginFailed;
+            //        txtUserName.Focus();
+            //    }
+            //}
+            //else
+            //    return;
 
+            clsEntity.InitMasterAdmin();
+            DialogResult = DialogResult.OK;
         }
 
         private void pteIcon_Click(object sender, EventArgs e)
@@ -103,47 +105,41 @@ namespace QuanLyBanHang.GUI.Common
 
         private void setVNCulture()
         {
-            this.Text = "Đăng nhập";
+            //this.Text = "Đăng nhập";
             //pteLanguage.Image = vnFlag;
-            IncorrectUsername = "Tên đăng nhập không hợp lệ";
-            IncorrectPassword = "Mật khẩu không hợp lệ";
-            LoginFailed = "Đăng nhập không thành công!";
-            lciUserName.Text = "Tên đăng nhập:";
-            lciPassword.Text = "Mật khẩu:";
-            chkSavePassword.Text = "Nhớ tài khoản và mật khẩu";
-            btnLogin.Text = "Đăng nhập";
-            btnCancel.Text = "Hủy";
+            //IncorrectUsername = "Tên đăng nhập không hợp lệ";
+            //IncorrectPassword = "Mật khẩu không hợp lệ";
+            //LoginFailed = "Đăng nhập không thành công!";
+            //lciUserName.Text = "Tên đăng nhập:";
+            //lciPassword.Text = "Mật khẩu:";
+            //chkSavePassword.Text = "Nhớ tài khoản và mật khẩu";
+            //btnLogin.Text = "Đăng nhập";
+            //btnCancel.Text = "Hủy";
         }
 
         private void setENCulture()
         {
-            this.Text = "Login";
+            //this.Text = "Login";
             //pteLanguage.Image = enFlag;
-            IncorrectUsername = "User name incorrect";
-            IncorrectPassword = "Password is incorrect";
-            LoginFailed = "Login failed!";
-            lciUserName.Text = "User name:";
-            lciPassword.Text = "Password:";
-            chkSavePassword.Text = "Remember password";
-            btnLogin.Text = "Login";
-            btnCancel.Text = "Cancel";
+            //IncorrectUsername = "User name incorrect";
+            //IncorrectPassword = "Password is incorrect";
+            //LoginFailed = "Login failed!";
+            //lciUserName.Text = "User name:";
+           // lciPassword.Text = "Password:";
+            //chkSavePassword.Text = "Remember password";
+            //btnLogin.Text = "Login";
+            //btnCancel.Text = "Cancel";
         }
 
         private void frmLogin_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == (Keys.Alt | Keys.F10))
-            {
-                using (frmInfomation _frm = new frmInfomation())
-                {
-                    if (_frm.ShowDialog() == DialogResult.OK)
-                    {
-                        clsEntity.InitMasterAdmin();
-                        this.DialogResult = DialogResult.OK;
-                    }
-                }
-            }
-            else if (e.KeyData == Keys.Enter)
-                btnLogin.PerformClick();
+            //if (e.KeyData == (Keys.Alt | Keys.F10))
+            //{
+            //    clsEntity.InitMasterAdmin();
+            //    DialogResult = DialogResult.OK;
+            //}
+            //else if (e.KeyData == Keys.Enter)
+            //    btnLogin.PerformClick();
         }
     }
 }

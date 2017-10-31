@@ -56,20 +56,8 @@
     <Setting Name="CurrentDevice" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Bao50" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">50</Value>
-    </Setting>
-    <Setting Name="Bao45" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">45</Value>
-    </Setting>
-    <Setting Name="Tui500" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">500</Value>
-    </Setting>
     <Setting Name="SkinName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="IDFactory" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="CompanyName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -80,17 +68,14 @@
     <Setting Name="Phone" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="IDAgency" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="PrinterName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="NamTaiKhoa" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2017</Value>
-    </Setting>
     <Setting Name="RowsInPage" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="IDAgency" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

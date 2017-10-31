@@ -75,7 +75,16 @@ namespace EntityModel.Method
                 var tempType = pInfo.PropertyType;
                 var tempValue = pInfo.GetValue(source);
                 if (tempValue != null)
-                    dic.Add(pInfo.Name, Convert.ChangeType(tempValue, tempType));
+                {
+                    if (tempType.IsGenericType)
+                    {
+                        if (tempType.GetGenericTypeDefinition() == typeof(ICollection<>)) { }
+                        else if (tempType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                            dic.Add(pInfo.Name, Convert.ChangeType(tempValue, Nullable.GetUnderlyingType(tempType)));
+                    }
+                    else
+                        dic.Add(pInfo.Name, Convert.ChangeType(tempValue, tempType));
+                }
                 else
                     dic.Add(pInfo.Name, tempValue);
             }

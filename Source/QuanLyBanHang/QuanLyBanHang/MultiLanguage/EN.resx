@@ -171,4 +171,10 @@
   <data name="WaitingDescriptionText" xml:space="preserve">
     <value>Processing...</value>
   </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Password is incorrect</value>
+  </data>
+  <data name="IncorrectUsername" xml:space="preserve">
+    <value>Username is incorrect</value>
+  </data>
 </root>

@@ -30,10 +30,6 @@ namespace QuanLyBanHang
             AllLayoutItemCaption = AllLayoutItemCaption ?? db.xLayoutItemCaption.ToList();
         }
 
-        public static bool LoadResources()
-        {
-            return setCurrentAgency();
-        }
 
         public static List<xAgency> GetAllAgency()
         {
@@ -43,30 +39,11 @@ namespace QuanLyBanHang
             return lstResult;
         }
 
-        public static bool AccessAgency(xAgency _acEntry)
-        {
-            bool bRe = false;
-            try
-            {
-                db = db ?? new aModel();
-                db.xAgency.AddOrUpdate(_acEntry);
-                db.SaveChanges();
-                clsGeneral.curAgency = _acEntry;
-                bRe = true;
-            }
-            catch (Exception ex)
-            {
-                clsGeneral.showErrorException(ex, "Exception");
-            }
-            return bRe;
-        }
-
         public static void InitMasterAdmin()
         {
             clsGeneral.curAccount = new xAccount()
             {
                 UserName = "Master",
-                IDAgency = clsGeneral.curAgency.KeyID,
                 IDPermission = 0
             };
             clsGeneral.curUserFeature = new xUserFeature()
@@ -82,7 +59,6 @@ namespace QuanLyBanHang
             };
             clsGeneral.curPersonnel = new xPersonnel()
             {
-                IDAgency = clsGeneral.curAgency.KeyID,
                 Code = "Master",
                 KeyID = 0,
                 FullName = "Master",
@@ -188,39 +164,6 @@ namespace QuanLyBanHang
                 List<xUserFeature> lstRoles = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(permission.KeyID));
                 return lstRoles.Any(n => n.IsEnable && n.IDFeature.Contains(cName));
             }
-        }
-
-        static bool setCurrentAgency()
-        {
-            if (Properties.Settings.Default.IDAgency == 0)
-            {
-                clsGeneral.CloseWaitForm();
-                frmInfomation frm = new frmInfomation();
-                frm.Text = "Cấu hình chi nhánh";
-                if (frm.ShowDialog() == DialogResult.Cancel)
-                {
-                    Application.Exit();
-                    return false;
-                }
-            }
-            else
-                clsGeneral.curAgency = clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
-
-            if (clsGeneral.curAgency == null)
-            {
-                if (clsGeneral.showConfirmMessage("Chi nhánh không tồn tại. Thiết lập lại chi nhánh?"))
-                {
-                    Properties.Settings.Default.IDAgency = 0;
-                    Properties.Settings.Default.Save();
-                    setCurrentAgency();
-                }
-                else
-                {
-                    Application.Exit();
-                    return false;
-                }
-            }
-            return true;
         }
 
         public static void UpdateFeatures()

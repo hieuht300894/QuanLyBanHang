@@ -181,7 +181,6 @@ namespace QuanLyBanHang.GUI.PER
             {
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
-                _acEntry.IDAgency = clsGeneral.curPersonnel.IDAgency;
                 _acEntry.IsEnable = true;
             }
             else

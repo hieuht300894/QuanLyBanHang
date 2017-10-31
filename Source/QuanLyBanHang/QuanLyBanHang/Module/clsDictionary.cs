@@ -14,7 +14,6 @@ namespace QuanLyBanHang
     public static class TranslateDictionary
     {
         #region String Translation
-        static aModel db;
 
         public static string curCulture
         {
@@ -108,162 +107,129 @@ namespace QuanLyBanHang
         #endregion
 
         #region LayoutControl Translation
-        static List<LayoutControlGroup> lstGroupItem = null;
-        static List<LayoutControlItem> lstItem = null;
+        //static List<LayoutControlGroup> lstGroupItem = null;
+        //static List<LayoutControlItem> lstItem = null;
 
-        #region Contructor
+        //private static void ProcessLayoutControlGroup(LayoutControlGroup group)
+        //{
+        //    lstGroupItem.Add(group);
+        //    foreach (var item in group.Items)
+        //    {
+        //        if (item is LayoutControlGroup)
+        //            ProcessLayoutControlGroup((LayoutControlGroup)item);
+        //        if (item is TabbedControlGroup)
+        //            ProcessTabbedGroup((TabbedControlGroup)item);
+        //        if (item is LayoutControlItem)
+        //            ProcessLayoutControlItem(((LayoutControlItem)item));
+        //    }
+        //}
 
-        #endregion
+        //private static void ProcessTabbedGroup(TabbedControlGroup group)
+        //{
+        //    foreach (LayoutControlGroup page in group.TabPages)
+        //        ProcessLayoutControlGroup(page);
+        //}
 
-        public static void Translation(this LayoutControl lctMain)
-        {
-            db = new aModel();
-            string fName = lctMain.ParentForm.Name;
-            if (fName.Equals("frmBase"))
-                fName = lctMain.ParentForm.GetType().Name;
-            if (string.IsNullOrEmpty(fName) || fName.Equals("frmBase")) return;
-            //lstCaption = clsEntity.AllLayoutItemCaption.Where(c => c.FormName.Equals(fName) && c.LayoutControlName.Equals(lctMain.Name.ToString())).ToList();
+        //private static void ProcessLayoutControlItem(LayoutControlItem item)
+        //{
+        //    lstItem.Add(item);
+        //}
 
-            lstGroupItem = new List<LayoutControlGroup>();
-            lstItem = new List<LayoutControlItem>();
-            ProcessLayoutControlGroup(lctMain.Root);
+        //private static void setCaptionGroup(string FormName, string lctName, LayoutControlGroup gItem)
+        //{
+        //    //xLayoutItemCaption _cCaption = null;
+        //    try
+        //    {
+        //        //if (db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(gItem.Name)))
+        //        //    _cCaption = db.xLayoutItemCaptions.FirstOrDefault<xLayoutItemCaption>(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(gItem.Name));
+        //        //else
+        //        //{
+        //        //    _cCaption = new xLayoutItemCaption();
+        //        //    _cCaption.FormName = FormName;
+        //        //    _cCaption.LayoutControlName = lctName;
+        //        //    _cCaption.LayoutControlItem = gItem.Name;
+        //        //    _cCaption.VN = gItem.Text;
+        //        //    _cCaption.EN = gItem.Name.AutoSpace();
+        //        //    _cCaption.Visibility = gItem.Visibility.ToString();
+        //        //    _cCaption.TextVisible = gItem.TextVisible;
+        //        //    _cCaption.TextLocation = gItem.TextLocation.ToString();
+        //        //    _cCaption.ControlAlignment = "NotSet";
+        //        //    if (!db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlName.Equals(lctName) && n.LayoutControlItem.Equals(gItem.Name)))
+        //        //    {
+        //        //        db.xLayoutItemCaptions.AddOrUpdate(_cCaption);
+        //        //        db.SaveChanges();
+        //        //    }
+        //        //}
+        //        //if (_cCaption != null)
+        //        //    SetCaption(gItem, _cCaption);
+        //    }
+        //    catch { }
+        //}
 
-            //Set Caption Group
-            foreach (LayoutControlGroup gItem in lstGroupItem)
-            {
-                setCaptionGroup(fName, lctMain.Name, gItem);
-            }
+        //private static void SetCaption(LayoutControlGroup gItem, xLayoutItemCaption _Caption)
+        //{
+        //    string iText = _Caption.GetStringByName(curCulture);
+        //    if (string.IsNullOrEmpty(iText))
+        //    {
+        //        if (curCulture.Equals("EN"))
+        //            iText = gItem.Name.AutoSpace();
+        //        else
+        //            iText = gItem.Text;
+        //    }
+        //    gItem.Text = iText;
+        //    gItem.Visibility = (LayoutVisibility)Enum.Parse(typeof(LayoutVisibility), _Caption.Visibility);
+        //    gItem.TextVisible = _Caption.TextVisible;
+        //    gItem.TextLocation = (Locations)Enum.Parse(typeof(Locations), _Caption.TextLocation);
+        //}
 
-            foreach (LayoutControlItem iItem in lstItem)
-            {
-                //Set Caption Item
-                setCaptionItem(fName, lctMain.Name, iItem);
-            }
-            //lstCaption = null;
-            lstGroupItem = null;
-            lstItem = null;
-        }
+        //private static void setCaptionItem(string FormName, string lctName, LayoutControlItem iItem)
+        //{
+        //    //xLayoutItemCaption _cCaption = null;
+        //    try
+        //    {
+        //        //if (db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(iItem.Name)))
+        //        //    _cCaption = db.xLayoutItemCaptions.FirstOrDefault<xLayoutItemCaption>(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(iItem.Name));
+        //        //else
+        //        //{
+        //        //    _cCaption = new xLayoutItemCaption();
+        //        //    _cCaption.FormName = FormName;
+        //        //    _cCaption.LayoutControlName = lctName;
+        //        //    _cCaption.LayoutControlItem = iItem.Name;
+        //        //    _cCaption.VN = iItem.Text;
+        //        //    _cCaption.EN = iItem.Name.Replace("_List", "").AutoSpace();
+        //        //    _cCaption.Visibility = iItem.Visibility.ToString();
+        //        //    _cCaption.TextVisible = iItem.TextVisible;
+        //        //    _cCaption.TextLocation = iItem.TextLocation.ToString();
+        //        //    _cCaption.ControlAlignment = iItem.ControlAlignment.ToString();
 
-        private static void ProcessLayoutControlGroup(LayoutControlGroup group)
-        {
-            lstGroupItem.Add(group);
-            foreach (var item in group.Items)
-            {
-                if (item is LayoutControlGroup)
-                    ProcessLayoutControlGroup((LayoutControlGroup)item);
-                if (item is TabbedControlGroup)
-                    ProcessTabbedGroup((TabbedControlGroup)item);
-                if (item is LayoutControlItem)
-                    ProcessLayoutControlItem(((LayoutControlItem)item));
-            }
-        }
+        //        //    if (!db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlName.Equals(lctName) && n.LayoutControlItem.Equals(iItem.Name)))
+        //        //    {
+        //        //        db.xLayoutItemCaptions.Add(_cCaption);
+        //        //        db.SaveChanges();
+        //        //    }
+        //        //}
+        //        //if (_cCaption != null)
+        //        //    SetCaption(iItem, _cCaption);
+        //    }
+        //    catch { }
+        //}
 
-        private static void ProcessTabbedGroup(TabbedControlGroup group)
-        {
-            foreach (LayoutControlGroup page in group.TabPages)
-                ProcessLayoutControlGroup(page);
-        }
-
-        private static void ProcessLayoutControlItem(LayoutControlItem item)
-        {
-            lstItem.Add(item);
-        }
-
-        private static void setCaptionGroup(string FormName, string lctName, LayoutControlGroup gItem)
-        {
-            //xLayoutItemCaption _cCaption = null;
-            try
-            {
-                //if (db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(gItem.Name)))
-                //    _cCaption = db.xLayoutItemCaptions.FirstOrDefault<xLayoutItemCaption>(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(gItem.Name));
-                //else
-                //{
-                //    _cCaption = new xLayoutItemCaption();
-                //    _cCaption.FormName = FormName;
-                //    _cCaption.LayoutControlName = lctName;
-                //    _cCaption.LayoutControlItem = gItem.Name;
-                //    _cCaption.VN = gItem.Text;
-                //    _cCaption.EN = gItem.Name.AutoSpace();
-                //    _cCaption.Visibility = gItem.Visibility.ToString();
-                //    _cCaption.TextVisible = gItem.TextVisible;
-                //    _cCaption.TextLocation = gItem.TextLocation.ToString();
-                //    _cCaption.ControlAlignment = "NotSet";
-                //    if (!db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlName.Equals(lctName) && n.LayoutControlItem.Equals(gItem.Name)))
-                //    {
-                //        db.xLayoutItemCaptions.AddOrUpdate(_cCaption);
-                //        db.SaveChanges();
-                //    }
-                //}
-                //if (_cCaption != null)
-                //    SetCaption(gItem, _cCaption);
-            }
-            catch { }
-        }
-
-        private static void SetCaption(LayoutControlGroup gItem, xLayoutItemCaption _Caption)
-        {
-            string iText = _Caption.GetStringByName(curCulture);
-            if (string.IsNullOrEmpty(iText))
-            {
-                if (curCulture.Equals("EN"))
-                    iText = gItem.Name.AutoSpace();
-                else
-                    iText = gItem.Text;
-            }
-            gItem.Text = iText;
-            gItem.Visibility = (LayoutVisibility)Enum.Parse(typeof(LayoutVisibility), _Caption.Visibility);
-            gItem.TextVisible = _Caption.TextVisible;
-            gItem.TextLocation = (Locations)Enum.Parse(typeof(Locations), _Caption.TextLocation);
-        }
-
-        private static void setCaptionItem(string FormName, string lctName, LayoutControlItem iItem)
-        {
-            //xLayoutItemCaption _cCaption = null;
-            try
-            {
-                //if (db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(iItem.Name)))
-                //    _cCaption = db.xLayoutItemCaptions.FirstOrDefault<xLayoutItemCaption>(n => n.FormName.Equals(FormName) && n.LayoutControlItem.Equals(iItem.Name));
-                //else
-                //{
-                //    _cCaption = new xLayoutItemCaption();
-                //    _cCaption.FormName = FormName;
-                //    _cCaption.LayoutControlName = lctName;
-                //    _cCaption.LayoutControlItem = iItem.Name;
-                //    _cCaption.VN = iItem.Text;
-                //    _cCaption.EN = iItem.Name.Replace("_List", "").AutoSpace();
-                //    _cCaption.Visibility = iItem.Visibility.ToString();
-                //    _cCaption.TextVisible = iItem.TextVisible;
-                //    _cCaption.TextLocation = iItem.TextLocation.ToString();
-                //    _cCaption.ControlAlignment = iItem.ControlAlignment.ToString();
-
-                //    if (!db.xLayoutItemCaptions.Any(n => n.FormName.Equals(FormName) && n.LayoutControlName.Equals(lctName) && n.LayoutControlItem.Equals(iItem.Name)))
-                //    {
-                //        db.xLayoutItemCaptions.Add(_cCaption);
-                //        db.SaveChanges();
-                //    }
-                //}
-                //if (_cCaption != null)
-                //    SetCaption(iItem, _cCaption);
-            }
-            catch { }
-        }
-
-        private static void SetCaption(LayoutControlItem iItem, xLayoutItemCaption lciCaption)
-        {
-            string iText = lciCaption.GetStringByName(curCulture);
-            if (string.IsNullOrEmpty(iText))
-            {
-                if (curCulture.Equals("EN"))
-                    iText = iItem.Name.Replace("_List", "").AutoSpace();
-                else
-                    iText = iItem.Text;
-            }
-            iItem.Text = iText;
-            iItem.Visibility = (LayoutVisibility)Enum.Parse(typeof(LayoutVisibility), lciCaption.Visibility);
-            iItem.TextVisible = lciCaption.TextVisible;
-            iItem.TextLocation = (Locations)Enum.Parse(typeof(Locations), lciCaption.TextLocation);
-            iItem.ControlAlignment = (ContentAlignment)Enum.Parse(typeof(ContentAlignment), lciCaption.ControlAlignment);
-        }
+        //private static void SetCaption(LayoutControlItem iItem, xLayoutItemCaption lciCaption)
+        //{
+        //    string iText = lciCaption.GetStringByName(curCulture);
+        //    if (string.IsNullOrEmpty(iText))
+        //    {
+        //        if (curCulture.Equals("EN"))
+        //            iText = iItem.Name.Replace("_List", "").AutoSpace();
+        //        else
+        //            iText = iItem.Text;
+        //    }
+        //    iItem.Text = iText;
+        //    iItem.Visibility = (LayoutVisibility)Enum.Parse(typeof(LayoutVisibility), lciCaption.Visibility);
+        //    iItem.TextVisible = lciCaption.TextVisible;
+        //    iItem.TextLocation = (Locations)Enum.Parse(typeof(Locations), lciCaption.TextLocation);
+        //    iItem.ControlAlignment = (ContentAlignment)Enum.Parse(typeof(ContentAlignment), lciCaption.ControlAlignment);
+        //}
         #endregion
     }
 }

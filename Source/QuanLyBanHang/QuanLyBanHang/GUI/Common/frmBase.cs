@@ -249,7 +249,6 @@ namespace QuanLyBanHang
                     {
                         threadObj.TokenSource.Cancel();
                     }
-
                     clsService.dManageThreads.Remove(threadName);
                 }
 
@@ -268,6 +267,8 @@ namespace QuanLyBanHang
                 }
 
                 clsService.dManageControls.Remove(Name);
+
+                Dispose();
             }
             catch { }
         }

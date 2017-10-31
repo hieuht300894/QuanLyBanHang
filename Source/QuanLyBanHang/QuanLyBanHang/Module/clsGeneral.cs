@@ -471,7 +471,10 @@ namespace QuanLyBanHang
 
 namespace QuanLyBanHang
 {
+    #region Enum
     public enum eFormType { Default = 0, List, Add, Edit, Print };
+    #endregion
+
 
     #region Extension Method
     public class ObjectShredder<T>
@@ -650,8 +653,7 @@ namespace QuanLyBanHang
             return new ObjectShredder<T>().Shred(source, null, null);
         }
 
-        public static DataTable CopyToDataTable<T>(this IEnumerable<T> source,
-                                                    DataTable table, LoadOption? options)
+        public static DataTable CopyToDataTable<T>(this IEnumerable<T> source, DataTable table, LoadOption? options)
         {
             return new ObjectShredder<T>().Shred(source, table, options);
         }

@@ -11,7 +11,6 @@ namespace EntityModel.DataModel
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int KeyID { get; set; }
         public string PersonelName { get; set; }
-        public int IDAgency { get; set; }
         [Required]
         [StringLength(255)]
         public string UserName { get; set; }

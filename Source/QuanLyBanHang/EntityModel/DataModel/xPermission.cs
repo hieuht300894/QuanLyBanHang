@@ -10,7 +10,6 @@ namespace EntityModel.DataModel
     {
         [Key]
         public int KeyID { get; set; }
-        public int IDAgency { get; set; }
         [Required]
         [StringLength(255)]
         public string Name { get; set; }

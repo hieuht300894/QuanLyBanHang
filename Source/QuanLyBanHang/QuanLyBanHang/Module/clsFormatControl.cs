@@ -618,13 +618,6 @@ namespace QuanLyBanHang
 
         static void grvMain_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
-            //GridView view = sender as GridView;
-            //if (e.RowHandle == view.FocusedRowHandle)
-            //{
-            //    e.Appearance.Options.UseBackColor = true;
-            //    e.Appearance.BackColor = MyColor.GridDefaultRow;
-            //    e.Appearance.BackColor2 = MyColor.GridDefaultRow;
-            //}
         }
 
         public static void SumResult(this GridView grvMain)
@@ -657,11 +650,6 @@ namespace QuanLyBanHang
                 else if (!(view.FocusedColumn.ColumnEdit is RepositoryItemDateEdit))
                     view.SetRowCellValue(view.FocusedRowHandle, view.FocusedColumn, 0);
             }
-            //if (e.KeyData ==  Keys.R)
-            //{
-            //    view.BestFitColumns();
-            //    view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
-            //}
         }
 
         private static void realColumnEdit_KeyDown(object sender, KeyEventArgs e)
@@ -738,9 +726,9 @@ namespace QuanLyBanHang
                         rItem.EditFormat.FormatType = FormatType.DateTime;
                         rItem.DisplayFormat.FormatType = FormatType.DateTime;
 
-                        col.DisplayFormat.FormatString = rItem.EditMask;
-                        rItem.EditFormat.FormatString = rItem.EditMask;
-                        rItem.DisplayFormat.FormatString = rItem.EditMask;
+                        col.DisplayFormat.FormatString = string.IsNullOrEmpty(rItem.EditMask) ? Properties.Settings.Default.DateFormat : rItem.EditMask;
+                        rItem.EditFormat.FormatString = string.IsNullOrEmpty(rItem.EditMask) ? Properties.Settings.Default.DateFormat : rItem.EditMask;
+                        rItem.DisplayFormat.FormatString = string.IsNullOrEmpty(rItem.EditMask) ? Properties.Settings.Default.DateFormat : rItem.EditMask;
 
                         rItem.ShowClear = false;
                     }
@@ -765,78 +753,6 @@ namespace QuanLyBanHang
         private static void grvMain_InvalidRowException(object sender, DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventArgs e)
         {
             e.ExceptionMode = ExceptionMode.Ignore;
-        }
-
-        public static List<int> DeleteItem<T>(this GridView grvMain, BindingList<T> lstEntry, BindingList<T> lstEdited) where T : class
-        {
-            GridControl gctMain = grvMain.GridControl;
-
-            List<int> lstID = new List<int>();
-
-            gctMain.BeginUpdate();
-            int[] ids = grvMain.GetSelectedRows();
-            for (int i = ids.Length - 1; i >= 0; i--)
-            {
-                T item = grvMain.GetRow(ids[i]) as T;
-                if (item != null)
-                {
-                    int id = item.GetInt32ByName("KeyID");
-                    if (id > 0)
-                        lstID.Add(id);
-                    lstEdited.Remove(item);
-                    lstEntry.Remove(item);
-                }
-            }
-            gctMain.EndUpdate();
-            return lstID;
-        }
-
-        public static List<int> DeleteItem<T>(this GridView grvMain, BindingList<T> lstEntry) where T : class
-        {
-            GridControl gctMain = grvMain.GridControl;
-
-            List<int> lstID = new List<int>();
-
-            gctMain.BeginUpdate();
-            int[] ids = grvMain.GetSelectedRows();
-            for (int i = ids.Length - 1; i >= 0; i--)
-            {
-                T item = grvMain.GetRow(ids[i]) as T;
-                if (item != null)
-                {
-                    int id = item.GetInt32ByName("KeyID");
-                    if (id > 0)
-                        lstID.Add(id);
-                    lstEntry.Remove(item);
-                }
-            }
-            gctMain.EndUpdate();
-            return lstID;
-        }
-
-        public static List<int> DeleteItem<T>(this GridView grvMain) where T : class
-        {
-            GridControl gctMain = grvMain.GridControl;
-
-            List<int> lstID = new List<int>();
-
-            gctMain.BeginUpdate();
-            int[] ids = grvMain.GetSelectedRows();
-            IList<T> lstEntity = grvMain.DataSource != null ? (gctMain.DataSource as IEnumerable<T>).ToList() : new List<T>();
-            for (int i = ids.Length - 1; i >= 0; i--)
-            {
-                T item = grvMain.GetRow(ids[i]) as T;
-                if (item != null)
-                {
-                    int id = item.GetInt32ByName("KeyID");
-                    if (id > 0)
-                        lstID.Add(id);
-                    lstEntity.RemoveAt(ids[i]);
-                }
-            }
-            gctMain.DataSource = lstEntity;
-            gctMain.EndUpdate();
-            return lstID;
         }
         #endregion
 
@@ -1864,7 +1780,16 @@ namespace QuanLyBanHang
                 var tempType = pInfo.PropertyType;
                 var tempValue = pInfo.GetValue(source);
                 if (tempValue != null)
-                    dic.Add(pInfo.Name, Convert.ChangeType(tempValue, tempType));
+                {
+                    if (tempType.IsGenericType)
+                    {
+                        if (tempType.GetGenericTypeDefinition() == typeof(ICollection<>)) { }
+                        else if (tempType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                            dic.Add(pInfo.Name, Convert.ChangeType(tempValue, Nullable.GetUnderlyingType(tempType)));
+                    }
+                    else
+                        dic.Add(pInfo.Name, Convert.ChangeType(tempValue, tempType));
+                }
                 else
                     dic.Add(pInfo.Name, tempValue);
             }

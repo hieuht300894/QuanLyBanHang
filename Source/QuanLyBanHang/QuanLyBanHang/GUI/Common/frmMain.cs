@@ -173,21 +173,18 @@ namespace QuanLyBanHang.GUI.Common
                             System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat = enCulture.NumberFormat;
                         }
                         clsGeneral.CallWaitForm(this);
-                        if (clsEntity.LoadResources())
-                        {
-                            clsCallForm.InitFormCollection();
-                            bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
-                            bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + _sDatabase;
-                            bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
-                            bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
-                            addItemClick();
-                            clsEntity.UpdateFeatures();
-                            ribbon.Show();
-                            ribbonStatusBar.Show();
-                            clsGeneral.CloseWaitForm();
-                        }
-                        else
-                            Application.Exit();
+
+                        clsCallForm.InitFormCollection();
+                        bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
+                        bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + _sDatabase;
+                        bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
+                        bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
+                        addItemClick();
+                        clsEntity.UpdateFeatures();
+                        ribbon.Show();
+                        ribbonStatusBar.Show();
+                        clsGeneral.CloseWaitForm();
+
                     }
                 }
             }

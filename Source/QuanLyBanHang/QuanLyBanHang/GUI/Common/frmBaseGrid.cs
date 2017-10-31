@@ -227,7 +227,6 @@ namespace QuanLyBanHang
             {
                 try
                 {
-                    ((DevExpress.XtraLayout.LayoutControl)e.Control).Translation();
                 }
                 catch { }
             }

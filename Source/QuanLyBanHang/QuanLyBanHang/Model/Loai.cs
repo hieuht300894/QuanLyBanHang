@@ -21,7 +21,7 @@ namespace QuanLyBanHang.Model
             lstResult.Add(new Loai() { KeyID = 6, Ten = "Thị xã" });
             lstResult.Add(new Loai() { KeyID = 7, Ten = "Phường" });
             lstResult.Add(new Loai() { KeyID = 8, Ten = "Thị trấn" });
-            lstResult.Add(new Loai() { KeyID = 8, Ten = "Xã" });
+            lstResult.Add(new Loai() { KeyID = 9, Ten = "Xã" });
             return lstResult;
         }
         public static List<Loai> LoaiNhomKhachHang()

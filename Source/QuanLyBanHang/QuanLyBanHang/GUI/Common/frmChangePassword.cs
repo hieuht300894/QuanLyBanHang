@@ -95,7 +95,6 @@ namespace QuanLyBanHang
             btnSave.Text = "Lưu".Translation("capSave", this.Name);
             btnCancel.Text = "Hủy".Translation("capCancel", this.Name);
             bteOldPassword.Select();
-            lctDoiMatKhau.Translation();
             lctDoiMatKhau.BestFitFormHeight();
             lctDoiMatKhau.Format();
             this.CenterToScreen();

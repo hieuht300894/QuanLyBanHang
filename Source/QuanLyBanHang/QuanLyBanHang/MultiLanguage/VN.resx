@@ -171,4 +171,10 @@
   <data name="WaitingDescriptionText" xml:space="preserve">
     <value>Đang xử lý...</value>
   </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Mật khảu không đúng hoặc hợp lệ</value>
+  </data>
+  <data name="IncorrectUsername" xml:space="preserve">
+    <value>Tài khoản không đúng hoặc hợp lệ</value>
+  </data>
 </root>
