@@ -14,7 +14,7 @@ namespace EntityModel
 
         private static xPersonnel _curPer = null;
         private static xAccount _curAcc = null;
-        private static List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>();
+        private static List<ColumnKey> lstKeys = new List<ColumnKey>();
         private static long _rowInPage = 100;
 
         public static xPersonnel CurPer
@@ -27,9 +27,9 @@ namespace EntityModel
             get { return _curAcc; }
             set { _curAcc = value; }
         }
-        public static List<ColumnKey> ListPrimaryKeys
+        public static List<ColumnKey> ListKeys
         {
-            get { return lstPrimaryKeys; }
+            get { return lstKeys; }
         }
         public static long RowsInPage { get { return _rowInPage; } set { _rowInPage = value; } }
 
@@ -79,17 +79,48 @@ namespace EntityModel
         }
         private static void GetPrimaryKeys(aModel db)
         {
-            string qSelectPrimaryKey =
-                  "select distinct Tab.TABLE_NAME, Col.COLUMN_NAME, p.IS_IDENTITY " +
-                  "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
-                  "left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col on Col.Table_Name = Tab.Table_Name " +
-                  "left join ( " +
-                  "	select c.name cName, c.is_identity IS_IDENTITY, t.name tName " +
-                  "	from sys.tables t " +
-                  "	left join sys.columns c on c.object_id=t.object_id) p on p.cName=Col.COLUMN_NAME and p.tName=Tab.TABLE_NAME " +
-                  "WHERE Col.Constraint_Name = Tab.Constraint_Name AND Constraint_Type = 'PRIMARY KEY'";
+            string qSelectKey =
+                "SELECT DISTINCT" +
+                "    PK_TableName = PK.TABLE_NAME, " +
+                "    PK_ColumnName = CU.COLUMN_NAME, " +
+                "    PK_Indentity = CAST(p.IS_IDENTITY as bit), " +
+                "    FK_TableName = '', " +
+                "    FK_ColumnName = '', " +
+                "    FK_Indentity = CAST(0 as bit) " +
+                "FROM " +
+                "    INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK " +
+                "    LEFT JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CU ON CU.Table_Name = PK.Table_Name " +
+                "    LEFT JOIN( " +
+                "        SELECT c.name COLUMN_NAME, t.name TABLE_NAME, c.is_identity IS_IDENTITY " +
+                "        FROM " +
+                "            sys.tables t " +
+                "            left join sys.columns c on c.object_id= t.object_id) p ON p.COLUMN_NAME = CU.COLUMN_NAME and p.TABLE_NAME = PK.TABLE_NAME " +
+                "WHERE " +
+                "    CU.Constraint_Name = PK.Constraint_Name AND Constraint_Type = 'PRIMARY KEY' " +
+                "UNION " +
+               "SELECT DISTINCT " +
+               "    PK_TableName = PK.TABLE_NAME, " +
+               "    PK_ColumnName = PT.COLUMN_NAME, " +
+               "    PK_Indentity = CAST(0 as bit), " +
+               "    FK_TableName = FK.TABLE_NAME, " +
+               "    FK_ColumnName = CU.COLUMN_NAME, " +
+               "    FK_Indentity = CAST(0 as bit) " +
+               "FROM " +
+               "    INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS C " +
+               "    LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS FK ON C.CONSTRAINT_NAME = FK.CONSTRAINT_NAME " +
+               "    LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK ON C.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME " +
+               "    LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CU ON C.CONSTRAINT_NAME = CU.CONSTRAINT_NAME " +
+               "    LEFT JOIN( " +
+               "        SELECT DISTINCT " +
+               "            i1.TABLE_NAME, " +
+               "            i2.COLUMN_NAME " +
+               "        FROM " +
+               "            INFORMATION_SCHEMA.TABLE_CONSTRAINTS i1 " +
+               "            LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE i2 ON i1.CONSTRAINT_NAME = i2.CONSTRAINT_NAME " +
+               "        WHERE " +
+               "            i1.CONSTRAINT_TYPE = 'PRIMARY KEY') PT ON PT.TABLE_NAME = PK.TABLE_NAME";
 
-            lstPrimaryKeys = db.Database.SqlQuery<ColumnKey>(qSelectPrimaryKey).ToList();
+            lstKeys = new List<ColumnKey>(db.Database.SqlQuery<ColumnKey>(qSelectKey).ToList());
         }
     }
 }

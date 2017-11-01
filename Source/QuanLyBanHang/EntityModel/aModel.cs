@@ -686,7 +686,7 @@ namespace EntityModel.DataModel
             DateTime CurrentDate = dateQuery.AsEnumerable().First();
             if (CurrentAccount != null && CurrentPersonnel != null)
             {
-                List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(Module.ListPrimaryKeys);
+                //List<ColumnKey> lstPrimaryKeys = new List<ColumnKey>(Module.ListPrimaryKeys);
 
                 List<xLog> lstLogs = new List<xLog>();
                 foreach (var entry in changeTrack)
@@ -703,20 +703,20 @@ namespace EntityModel.DataModel
 
                         if (entry.State == EntityState.Added)
                         {
-                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
-                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
+                            var qColumnsKey = new List<ColumnKey>(GetPrimaryKeys(log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.PK_ColumnName).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsNew = entry.Entity.ObjectToDictionary();
 
                             foreach (var key in qColumnsKey)
                             {
-                                if (key.IS_IDENTITY)
-                                    ParamsNew.Remove(key.COLUMN_NAME);
+                                if (key.PK_Indentity)
+                                    ParamsNew.Remove(key.PK_ColumnName);
                             }
 
                             foreach (var key in qColumnsKey)
                             {
-                                if (key.IS_IDENTITY)
+                                if (key.PK_Indentity)
                                 {
                                     int? KeyID = SaveInsert(log.TableName, ParamsNew);
                                     if (KeyID.HasValue)
@@ -724,7 +724,7 @@ namespace EntityModel.DataModel
                                         if (KeyID == 0)
                                             return new Exception($"Insert {log.TableName} not success");
                                         else
-                                            entry.CurrentValues[key.COLUMN_NAME] = KeyID.Value;
+                                            entry.CurrentValues[key.PK_ColumnName] = KeyID.Value;
                                     }
                                 }
                             }
@@ -735,8 +735,8 @@ namespace EntityModel.DataModel
                         }
                         else if (entry.State == EntityState.Modified)
                         {
-                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
-                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
+                            var qColumnsKey = new List<ColumnKey>(GetPrimaryKeys(log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.PK_ColumnName).ToList(), entry.CurrentValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
                             Dictionary<string, object> ParamsNew = new Dictionary<string, object>();
@@ -755,7 +755,7 @@ namespace EntityModel.DataModel
 
                             foreach (ColumnKey key in qColumnsKey)
                             {
-                                ParamsKey.Add(key.COLUMN_NAME, entry.OriginalValues[key.COLUMN_NAME]);
+                                ParamsKey.Add(key.PK_ColumnName, entry.OriginalValues[key.PK_ColumnName]);
                             }
 
                             foreach (string prop in qColumnsNotKey)
@@ -777,14 +777,14 @@ namespace EntityModel.DataModel
                         }
                         else if (entry.State == EntityState.Deleted)
                         {
-                            var qColumnsKey = new List<ColumnKey>(GetColumnKeys(lstPrimaryKeys, log.TableName));
-                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.COLUMN_NAME).ToList(), entry.OriginalValues.PropertyNames.Select(x => x).ToList(), log.TableName));
+                            var qColumnsKey = new List<ColumnKey>(GetPrimaryKeys(log.TableName));
+                            var qColumnsNotKey = new List<string>(GetColumnNotKeys(qColumnsKey.Select(x => x.PK_ColumnName).ToList(), entry.OriginalValues.PropertyNames.Select(x => x).ToList(), log.TableName));
 
                             Dictionary<string, object> ParamsKey = new Dictionary<string, object>();
 
                             foreach (ColumnKey prop in qColumnsKey)
                             {
-                                ParamsKey.Add(prop.COLUMN_NAME, entry.OriginalValues[prop.COLUMN_NAME]);
+                                ParamsKey.Add(prop.PK_ColumnName, entry.OriginalValues[prop.PK_ColumnName]);
                             }
 
                             SaveDelete(log.TableName, ParamsKey);
@@ -816,11 +816,18 @@ namespace EntityModel.DataModel
             }
             else { return new Exception("CurrentAccount is null or CurrentPersonnel is null"); }
         }
-        public List<ColumnKey> GetColumnKeys(List<ColumnKey> lstPrimaryKeys, string TableName)
+        public List<ColumnKey> GetPrimaryKeys(string TableName)
         {
-            var qColumnsKey = lstPrimaryKeys.Where(x => x.TABLE_NAME.Equals(TableName)).ToList();
+            var qColumnsKey = Module.ListKeys.Where(x => x.PK_TableName.Equals(TableName)).ToList();
             return qColumnsKey ?? new List<ColumnKey>();
         }
+
+        public List<ColumnKey> GetForeignKeys(string TableName)
+        {
+            var qColumnsKey = Module.ListKeys.Where(x => x.FK_TableName.Equals(TableName)).ToList();
+            return qColumnsKey ?? new List<ColumnKey>();
+        }
+
         public List<string> GetColumnNotKeys(List<string> lstColumnKeys, List<string> lstColumns, string TableName)
         {
             var qColumnsNotKey = lstColumns.Except(lstColumnKeys).ToList();
@@ -1027,8 +1034,11 @@ namespace EntityModel.DataModel
 
     public class ColumnKey
     {
-        public string TABLE_NAME { get; set; }
-        public string COLUMN_NAME { get; set; }
-        public bool IS_IDENTITY { get; set; }
+        public string PK_TableName { get; set; }
+        public string PK_ColumnName { get; set; }
+        public bool PK_Indentity { get; set; }
+        public string FK_TableName { get; set; }
+        public string FK_ColumnName { get; set; }
+        public bool FK_Indentity { get; set; }
     }
 }
