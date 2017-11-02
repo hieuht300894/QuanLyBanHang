@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang
@@ -24,12 +25,17 @@ namespace QuanLyBanHang
         public eFormType fType;
         public List<eFormType> fTypes;
         bool IsLeaveForm = false;
+        List<ControlObject> lstControls = new List<ControlObject>();
         #endregion
 
         #region Form
         public frmBase()
         {
             InitializeComponent();
+        }
+        ~frmBase()
+        {
+            Dispose();
         }
         #endregion
 
@@ -118,11 +124,7 @@ namespace QuanLyBanHang
         }
         private void LoadControl()
         {
-            string frmMain_Name = clsService.dManageControls.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
-            if (!string.IsNullOrEmpty(frmMain_Name))
-                clsService.dManageControls.Remove(frmMain_Name);
-            else
-                clsService.dManageControls.Add(Name, new List<ControlObject>());
+            lstControls = new List<ControlObject>();
 
             List<FieldInfo> lstFieldInfoes = new List<FieldInfo>(GetType().GetRuntimeFields());
             foreach (FieldInfo fInfo in lstFieldInfoes)
@@ -130,83 +132,29 @@ namespace QuanLyBanHang
                 var Obj = fInfo.GetValue(this);
 
                 if (Obj is LayoutControl)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
                 if (Obj is TextEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (TextEdit)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
                 if (Obj is SpinEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
                 if (Obj is DateEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (DateEdit)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
                 if (Obj is LookUpEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
                 if (Obj is GridControl)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (GridControl)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
                 if (Obj is TreeList)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (TreeList)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
                 if (Obj is SearchLookUpEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
+                   lstControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
 
                 if (Obj is RepositoryItemDateEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
+                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
                 if (Obj is RepositoryItemSpinEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
+                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
                 if (Obj is RepositoryItemLookUpEdit)
-                    clsService.dManageControls[Name].Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
+                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
             }
-            //foreach (var c in Controls)
-            //{
-            //    if (c is DockPanel)
-            //    {
-            //        DockPanel dp = c as DockPanel;
-            //        foreach (var c1 in dp.Controls)
-            //        {
-            //            if (c1 is ControlContainer)
-            //            {
-            //                ControlContainer cc = (ControlContainer)c1;
-            //                foreach (var c2 in cc.Controls)
-            //                {
-            //                    if (c2 is LayoutControl)
-            //                    {
-            //                        LayoutControl lc = (LayoutControl)c2;
-            //                        foreach (var c3 in lc.Controls)
-            //                        {
-            //                            if (c3 is GridControl)
-            //                            {
-            //                                GridControl gct = (GridControl)c3;
-            //                                foreach (GridView grv in gct.ViewCollection)
-            //                                {
-            //                                    grv.ActiveFilter.Clear();
-            //                                    grv.SaveLayout(this);
-            //                                }
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    if (c is LayoutControl)
-            //    {
-            //        LayoutControl lc = (LayoutControl)c;
-            //        foreach (var c1 in lc.Controls)
-            //        {
-            //            if (c1 is GridControl)
-            //            {
-            //                GridControl gct = (GridControl)c1;
-            //                foreach (GridView grv in gct.ViewCollection)
-            //                {
-            //                    grv.ActiveFilter.Clear();
-            //                    grv.SaveLayout(this);
-            //                }
-            //            }
-            //            if (c1 is TreeList)
-            //            {
-            //                //((DevExpress.XtraTreeList.TreeList)c).SaveLayout();
-            //            }
-            //        }
-
-            //    }
-            //}
         }
         #endregion
 
@@ -245,14 +193,10 @@ namespace QuanLyBanHang
                 string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
                 if (!string.IsNullOrEmpty(threadName))
                 {
-                    foreach (var threadObj in clsService.dManageThreads[threadName])
-                    {
-                        threadObj.TokenSource.Cancel();
-                    }
+                    foreach (var threadObj in clsService.dManageThreads[threadName]) { threadObj.TokenSource.Cancel(); }
                     clsService.dManageThreads.Remove(threadName);
                 }
 
-                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
                 foreach (ControlObject ctrObj in lstControls)
                 {
                     if (ctrObj.ctrMain != null)
@@ -265,10 +209,6 @@ namespace QuanLyBanHang
                             ((SearchLookUpEdit)ctrObj.ctrMain).Properties.View.SaveLayout(this);
                     }
                 }
-
-                clsService.dManageControls.Remove(Name);
-
-                Dispose();
             }
             catch { }
         }
@@ -342,38 +282,77 @@ namespace QuanLyBanHang
         }
         private void btnFitComlum_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            try
+            Action action = new Action(() =>
             {
-                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
-                foreach (ControlObject ctrObj in lstControls)
+                try
                 {
-                    if (ctrObj.ctrMain != null)
+                    foreach (ControlObject ctrObj in lstControls)
                     {
-                        if (ctrObj.ctrMain is GridControl)
+                        if (ctrObj.ctrMain != null)
                         {
-                            foreach (GridView view in ((GridControl)ctrObj.ctrMain).ViewCollection)
+                            if (ctrObj.ctrMain is GridControl)
                             {
-                                view.BestFitColumns();
-                                view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+                                foreach (GridView view in ((GridControl)ctrObj.ctrMain).ViewCollection)
+                                {
+                                    if (ctrObj.ctrMain.InvokeRequired)
+                                    {
+                                        ctrObj.ctrMain.Invoke(new Action(() =>
+                                        {
+                                            view.BestFitMaxRowCount = Properties.Settings.Default.RowsInPage;
+                                            view.BestFitColumns();
+                                            view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+                                        }));
+                                    }
+                                    else
+                                    {
+                                        view.BestFitMaxRowCount = Properties.Settings.Default.RowsInPage;
+                                        view.BestFitColumns();
+                                        view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+                                    }
+                                }
                             }
-                        }
-                        if (ctrObj.ctrMain is TreeList)
-                        {
-                            TreeList trlMain = (TreeList)ctrObj.ctrMain;
-                            trlMain.BestFitColumns();
-                            trlMain.IndicatorWidth = TextRenderer.MeasureText(trlMain.Nodes.Count.ToString(), trlMain.Appearance.FocusedRow.Font).Width + 10;
-
-                        }
-                        if (ctrObj.ctrMain is SearchLookUpEdit)
-                        {
-                            SearchLookUpEdit slokMain = (SearchLookUpEdit)ctrObj.ctrMain;
-                            slokMain.Properties.View.BestFitColumns();
-                            slokMain.Properties.View.IndicatorWidth = TextRenderer.MeasureText(slokMain.Properties.View.RowCount.ToString(), slokMain.Properties.View.Appearance.FocusedRow.Font).Width + 10;
+                            if (ctrObj.ctrMain is TreeList)
+                            {
+                                TreeList trlMain = (TreeList)ctrObj.ctrMain;
+                                if (ctrObj.ctrMain.InvokeRequired)
+                                {
+                                    ctrObj.ctrMain.Invoke(new Action(() =>
+                                    {
+                                        trlMain.BestFitColumns();
+                                        trlMain.IndicatorWidth = TextRenderer.MeasureText(trlMain.Nodes.Count.ToString(), trlMain.Appearance.FocusedRow.Font).Width + 10;
+                                    }));
+                                }
+                                else
+                                {
+                                    trlMain.BestFitColumns();
+                                    trlMain.IndicatorWidth = TextRenderer.MeasureText(trlMain.Nodes.Count.ToString(), trlMain.Appearance.FocusedRow.Font).Width + 10;
+                                }
+                            }
+                            if (ctrObj.ctrMain is SearchLookUpEdit)
+                            {
+                                SearchLookUpEdit slokMain = (SearchLookUpEdit)ctrObj.ctrMain;
+                                if (ctrObj.ctrMain.InvokeRequired)
+                                {
+                                    ctrObj.ctrMain.Invoke(new Action(() =>
+                                    {
+                                        slokMain.Properties.View.BestFitMaxRowCount = Properties.Settings.Default.RowsInPage;
+                                        slokMain.Properties.View.BestFitColumns();
+                                        slokMain.Properties.View.IndicatorWidth = TextRenderer.MeasureText(slokMain.Properties.View.RowCount.ToString(), slokMain.Properties.View.Appearance.FocusedRow.Font).Width + 10;
+                                    }));
+                                }
+                                else
+                                {
+                                    slokMain.Properties.View.BestFitMaxRowCount = Properties.Settings.Default.RowsInPage;
+                                    slokMain.Properties.View.BestFitColumns();
+                                    slokMain.Properties.View.IndicatorWidth = TextRenderer.MeasureText(slokMain.Properties.View.RowCount.ToString(), slokMain.Properties.View.Appearance.FocusedRow.Font).Width + 10;
+                                }
+                            }
                         }
                     }
                 }
-            }
-            catch { }
+                catch { }
+            });
+            Task.Run(action);
         }
         protected virtual void grv_TopRowChanged<T>(object sender, EventArgs e, IList<T> ListData, string query, SqlParameter[] parameters) where T : class, new()
         {
@@ -520,7 +499,6 @@ namespace QuanLyBanHang
         {
             try
             {
-                List<ControlObject> lstControls = new List<ControlObject>(clsService.dManageControls[Name]);
                 foreach (ControlObject ctrObj in lstControls)
                 {
                     if (ctrObj.ctrMain != null)

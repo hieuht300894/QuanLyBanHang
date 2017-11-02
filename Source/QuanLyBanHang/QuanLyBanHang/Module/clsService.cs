@@ -13,7 +13,7 @@ namespace QuanLyBanHang.Module
     {
         public static Dictionary<string, BackgroundWorker> dThreads = new Dictionary<string, BackgroundWorker>();
         public static Dictionary<string, List<ThreadObject>> dManageThreads = new Dictionary<string, List<ThreadObject>>();
-        public static Dictionary<string, List<ControlObject>> dManageControls = new Dictionary<string, List<ControlObject>>();
+        //public static Dictionary<string, List<ControlObject>> dManageControls = new Dictionary<string, List<ControlObject>>();
     }
     public class ThreadObject
     {

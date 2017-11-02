@@ -142,7 +142,7 @@ namespace QuanLyBanHang
 
         // Hàm đọc số thành chữ
         // Hàm đọc số có 3 chữ số
-        private static string DocSo3ChuSo(int baso)
+        static string DocSo3ChuSo(int baso)
         {
             int tram, chuc, donvi;
             string KetQua = "";
@@ -513,9 +513,9 @@ namespace QuanLyBanHang
                 grvMain.Appearance.EvenRow.Options.UseBorderColor = true;
             }
 
-            grvMain.FormatColmnsGridView();
+            grvMain.FormatColumn();
             grvMain.BestFitColumns();
-            grvMain.SumResult();
+            grvMain.ShowFooter();
 
             grvMain.KeyDown -= grvMain_KeyDown;
             grvMain.KeyDown += grvMain_KeyDown;
@@ -562,7 +562,7 @@ namespace QuanLyBanHang
             catch { }
         }
 
-        public static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
+        static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
         {
             if (frmMain == null) return;
             if (string.IsNullOrEmpty(frmMain.Name)) return;
@@ -598,29 +598,7 @@ namespace QuanLyBanHang
             catch { }
         }
 
-        private static void grvMain_RowCountChanged(object sender, EventArgs e)
-        {
-            GridView view = sender as GridView;
-            view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
-        }
-
-        private static void grvMain_DataSourceChanged(object sender, EventArgs e)
-        {
-            GridView view = sender as GridView;
-            view.BestFitColumns();
-        }
-
-        static void grvMain_CalcRowHeight(object sender, RowHeightEventArgs e)
-        {
-            GridView view = sender as GridView;
-            e.RowHeight = view.Appearance.HeaderPanel.FontHeight;
-        }
-
-        static void grvMain_RowCellStyle(object sender, RowCellStyleEventArgs e)
-        {
-        }
-
-        public static void SumResult(this GridView grvMain)
+        public static void ShowFooter(this GridView grvMain)
         {
             grvMain.BeginSummaryUpdate();
             try
@@ -640,7 +618,29 @@ namespace QuanLyBanHang
 
         }
 
-        private static void grvMain_KeyDown(object sender, KeyEventArgs e)
+        static void grvMain_RowCountChanged(object sender, EventArgs e)
+        {
+            GridView view = sender as GridView;
+            view.IndicatorWidth = TextRenderer.MeasureText(view.RowCount.ToString(), view.Appearance.FocusedRow.Font).Width + 10;
+        }
+
+        static void grvMain_DataSourceChanged(object sender, EventArgs e)
+        {
+            GridView view = sender as GridView;
+            view.BestFitColumns();
+        }
+
+        static void grvMain_CalcRowHeight(object sender, RowHeightEventArgs e)
+        {
+            GridView view = sender as GridView;
+            e.RowHeight = view.Appearance.HeaderPanel.FontHeight;
+        }
+
+        static void grvMain_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+        }
+
+        static void grvMain_KeyDown(object sender, KeyEventArgs e)
         {
             GridView view = sender as GridView;
             if (e.KeyCode == Keys.Delete)
@@ -652,7 +652,7 @@ namespace QuanLyBanHang
             }
         }
 
-        private static void realColumnEdit_KeyDown(object sender, KeyEventArgs e)
+        static void realColumnEdit_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Delete)
             {
@@ -691,7 +691,7 @@ namespace QuanLyBanHang
             grvMain.OptionsSelection.EnableAppearanceHideSelection = true;
         }
 
-        public static void FormatColmnsGridView(this GridView grvMain)
+        static void FormatColumn(this GridView grvMain)
         {
             grvMain.BeginInit();
             foreach (GridColumn col in grvMain.Columns)
@@ -699,7 +699,7 @@ namespace QuanLyBanHang
                 col.OptionsFilter.FilterPopupMode = DevExpress.XtraGrid.Columns.FilterPopupMode.CheckedList;
                 col.OptionsFilter.ShowEmptyDateFilter = true;
                 col.OptionsFilter.ShowBlanksFilterItems = DefaultBoolean.True;
-                col.OptionsFilter.AutoFilterCondition = DevExpress.XtraGrid.Columns.AutoFilterCondition.Contains;//new
+                col.OptionsFilter.AutoFilterCondition = DevExpress.XtraGrid.Columns.AutoFilterCondition.Contains;
 
                 col.AppearanceHeader.TextOptions.HAlignment = HorzAlignment.Center;
                 col.AppearanceHeader.TextOptions.VAlignment = VertAlignment.Center;
@@ -707,7 +707,6 @@ namespace QuanLyBanHang
 
                 col.AppearanceCell.TextOptions.HAlignment = HorzAlignment.Default;
                 col.AppearanceCell.TextOptions.VAlignment = VertAlignment.Center;
-                //col.AppearanceCell.Font = Properties.Settings.Default.GeneralFont;
 
                 if (col.ColumnEdit != null)
                 {
@@ -738,7 +737,7 @@ namespace QuanLyBanHang
             grvMain.EndInit();
         }
 
-        private static void CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
+        static void CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
         {
             GridView view = sender as GridView;
             if (e.Info.IsRowIndicator && e.RowHandle >= 0)
@@ -750,7 +749,7 @@ namespace QuanLyBanHang
             }
         }
 
-        private static void grvMain_InvalidRowException(object sender, DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventArgs e)
+        static void grvMain_InvalidRowException(object sender, DevExpress.XtraGrid.Views.Base.InvalidRowExceptionEventArgs e)
         {
             e.ExceptionMode = ExceptionMode.Ignore;
         }
@@ -824,7 +823,7 @@ namespace QuanLyBanHang
             trlMain.NodeCellStyle += trlMain_NodeCellStyle;
         }
 
-        private static void trlMain_CalcNodeHeight(object sender, CalcNodeHeightEventArgs e)
+        static void trlMain_CalcNodeHeight(object sender, CalcNodeHeightEventArgs e)
         {
             TreeList view = sender as TreeList;
             e.NodeHeight = view.Appearance.HeaderPanel.FontHeight;
@@ -1069,7 +1068,7 @@ namespace QuanLyBanHang
             //spnMain.CustomDisplayText += spnMain_CustomDisplayText;
         }
 
-        private static void spnMain_CustomDisplayText(object sender, CustomDisplayTextEventArgs e)
+        static void spnMain_CustomDisplayText(object sender, CustomDisplayTextEventArgs e)
         {
             if (e.Value != null && !string.IsNullOrEmpty(e.Value.ToString()))
             {
@@ -1117,7 +1116,7 @@ namespace QuanLyBanHang
             rspnMain.CustomDisplayText += rspnMain_CustomDisplayText;
         }
 
-        private static void rspnMain_CustomDisplayText(object sender, CustomDisplayTextEventArgs e)
+        static void rspnMain_CustomDisplayText(object sender, CustomDisplayTextEventArgs e)
         {
             if (e.Value != null && !string.IsNullOrEmpty(e.Value.ToString()))
             {
@@ -1151,13 +1150,13 @@ namespace QuanLyBanHang
             lokMain.Properties.KeyDown += rlok_KeyDown;
 
             if (lokMain.Properties.Columns.Count == 0 && !string.IsNullOrEmpty(lokMain.Properties.DisplayMember))
-                lokMain.Properties.Columns.Add(new LookUpColumnInfo() { FieldName = lokMain.Properties.DisplayMember });
+                lokMain.Properties.Columns.Add(new LookUpColumnInfo() { FieldName = lokMain.Properties.DisplayMember, Visible = true });
 
             //lokMain.Translation();
             //lokMain.FormatColumnLookUpEdit();
         }
 
-        private static void rlok_KeyDown(object sender, KeyEventArgs e)
+        static void rlok_KeyDown(object sender, KeyEventArgs e)
         {
             if (sender is LookUpEdit)
             {
@@ -1328,7 +1327,7 @@ namespace QuanLyBanHang
             rlokMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
             if (rlokMain.Columns.Count == 0 && !string.IsNullOrEmpty(rlokMain.DisplayMember))
-                rlokMain.Columns.Add(new LookUpColumnInfo() { FieldName = rlokMain.DisplayMember });
+                rlokMain.Columns.Add(new LookUpColumnInfo() { FieldName = rlokMain.DisplayMember, Visible = true });
 
             rlokMain.KeyDown -= rlokMain_KeyDown;
             rlokMain.KeyDown += rlokMain_KeyDown;
@@ -1513,6 +1512,7 @@ namespace QuanLyBanHang
                 col.Name = $"col{slokMain.Properties.DisplayMember}";
                 col.FieldName = slokMain.Properties.DisplayMember;
                 col.OptionsColumn.AllowEdit = false;
+                col.Visible = true;
                 slokMain.Properties.View.Columns.Add(col);
             }
             slokMain.Properties.ShowFooter = false;
@@ -1526,7 +1526,7 @@ namespace QuanLyBanHang
             slokMain.Popup += lokMain_Popup;
         }
 
-        private static void lokMain_Popup(object sender, EventArgs e)
+        static void lokMain_Popup(object sender, EventArgs e)
         {
             Control f = (sender as IPopupControl).PopupWindow;
             string[] controlNames = new string[] { "btClear", "btFind" };

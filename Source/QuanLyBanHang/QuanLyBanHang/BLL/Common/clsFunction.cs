@@ -13,6 +13,7 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.BLL.Common
@@ -299,6 +300,46 @@ namespace QuanLyBanHang.BLL.Common
 
             if (!ListResult.Any())
                 timer.Enabled = true;
+        }
+
+        public async void SelectAsync_1<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        {
+            db = new aModel();
+            Timer timer = new Timer() { Interval = 1000 };
+            DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
+
+            timer.Tick += (sender, e) =>
+            {
+                if (ListResult.Any())
+                {
+                    if (gctMain.InvokeRequired)
+                    {
+                        Action action = () => { gctMain.RefreshDataSource(); };
+                        gctMain.Invoke(action);
+                    }
+                    else { gctMain.RefreshDataSource(); }
+                    timer.Enabled = false;
+                }
+            };
+
+            Task task = result.ForEachAsync((item) =>
+              {
+                  if (gctMain.InvokeRequired)
+                  {
+                      try
+                      {
+                          Action<T> action = (obj) => { ListResult.Add(obj); };
+                          gctMain.Invoke(action, item);
+                      }
+                      catch { }
+                  }
+                  else { ListResult.Add(item); }
+              });
+
+            if (!ListResult.Any())
+                timer.Enabled = true;
+
+            await task;
         }
         #endregion
 

@@ -14,8 +14,8 @@ namespace QuanLyBanHang.GUI.PER
     public partial class frmPersonnel_List : frmBase
     {
         #region Variables
-        IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
-        IList<xPersonnel> lstRepoPersonnel = new List<xPersonnel>();
+        //IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
+        //IList<xPersonnel> lstRepoPersonnel = new List<xPersonnel>();
         #endregion
 
         #region Form Events
@@ -26,6 +26,7 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
+            LoadRepository();
             LoadData();
             CustomForm();
         }
@@ -93,13 +94,16 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         private void LoadData()
         {
-            lstPersonnel = new List<xPersonnel>();
-            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 100 * from xPersonnel", new SqlParameter[] { });
+            IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
             gctPersonnelList.DataSource = lstPersonnel;
+            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 1000 * from xPersonnel", new SqlParameter[] { });
+        }
 
-            //lstRepoPersonnel = new List<xPersonnel>();
-            //clsFunction.Instance.SelectAsync(this, rlokPersonnel, lstRepoPersonnel, "select top 100 * from xPersonnel", new SqlParameter[] { });
-            //rlokPersonnel.DataSource = lstRepoPersonnel;
+        private void LoadRepository()
+        {
+            IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
+            rlokPersonnel.DataSource = lstPersonnel;
+            clsFunction.Instance.SelectAsync(this, rlokPersonnel, lstPersonnel, "select top 1000 * from xPersonnel", new SqlParameter[] { });
         }
 
         public void InsertEntry()
