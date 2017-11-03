@@ -46,6 +46,7 @@
             this.barBottom = new DevExpress.XtraBars.Bar();
             this.betPercent = new DevExpress.XtraBars.BarEditItem();
             this.rpbPercent = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
+            this.btnFitComlum = new DevExpress.XtraBars.BarButtonItem();
             this.btnLoading = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -64,7 +65,6 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
-            this.btnFitComlum = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -269,6 +269,15 @@
             this.rpbPercent.ShowTitle = true;
             this.rpbPercent.Step = 1;
             // 
+            // btnFitComlum
+            // 
+            this.btnFitComlum.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.btnFitComlum.Caption = "Fit column";
+            this.btnFitComlum.Id = 30;
+            this.btnFitComlum.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.FitToContent_16x16;
+            this.btnFitComlum.Name = "btnFitComlum";
+            this.btnFitComlum.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnFitComlum_ItemClick);
+            // 
             // btnLoading
             // 
             this.btnLoading.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
@@ -421,15 +430,6 @@
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
             // 
-            // btnFitComlum
-            // 
-            this.btnFitComlum.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.btnFitComlum.Caption = "Fit column";
-            this.btnFitComlum.Id = 30;
-            this.btnFitComlum.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.FitToContent_16x16;
-            this.btnFitComlum.Name = "btnFitComlum";
-            this.btnFitComlum.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnFitComlum_ItemClick);
-            // 
             // frmBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -444,7 +444,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmBase_FormClosing);
             this.Load += new System.EventHandler(this.frmBase_Load);
-            this.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.frmBase_ControlAdded);
             this.Enter += new System.EventHandler(this.frmBase_Enter);
             this.Leave += new System.EventHandler(this.frmBase_Leave);
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).EndInit();

@@ -33,18 +33,6 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Implement Method
-        public void Insert()
-        {
-        }
-
-        public void Update()
-        {
-        }
-
-        public void Delete()
-        {
-        }
-
         public void SelectAsync<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
@@ -344,22 +332,24 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Base Method
-        public virtual List<T> GetAll<T>() where T : class, new()
+        public async virtual Task<IList<T>> GetAll<T>() where T : class, new()
         {
             try
             {
-                db = new aModel();
-                IEnumerable<T> lstTemp = db.Set<T>().AsEnumerable();
-                List<T> lstResult = lstTemp.ToList();
+                Task<List<T>> task = Task.Run(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<T> lstTemp = db.Set<T>().ToList();
+                    return lstTemp.ToList();
+                });
+
+                List<T> lstResult = await task;
                 return lstResult;
             }
-            catch
-            {
-                return new List<T>();
-            }
+            catch { return new List<T>(); }
         }
 
-        public virtual T GetByID<T>(int KeyID) where T : class, new()
+        public virtual T GetByID<T>(object KeyID) where T : class, new()
         {
             try
             {

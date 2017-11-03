@@ -132,28 +132,28 @@ namespace QuanLyBanHang
                 var Obj = fInfo.GetValue(this);
 
                 if (Obj is LayoutControl)
-                   lstControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
                 if (Obj is TextEdit)
-                   lstControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
                 if (Obj is SpinEdit)
-                   lstControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
                 if (Obj is DateEdit)
-                   lstControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
                 if (Obj is LookUpEdit)
-                   lstControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
                 if (Obj is GridControl)
-                   lstControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
                 if (Obj is TreeList)
-                   lstControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
                 if (Obj is SearchLookUpEdit)
-                   lstControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
+                    lstControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
 
                 if (Obj is RepositoryItemDateEdit)
-                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
+                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
                 if (Obj is RepositoryItemSpinEdit)
-                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
+                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
                 if (Obj is RepositoryItemLookUpEdit)
-                   lstControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
+                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
             }
         }
         #endregion
@@ -166,10 +166,6 @@ namespace QuanLyBanHang
             SetCaptionButton();
             InitEvents();
             LoadControl();
-        }
-        private void frmBase_ControlAdded(object sender, ControlEventArgs e)
-        {
-
         }
         private void frmBase_Enter(object sender, EventArgs e)
         {
@@ -532,6 +528,31 @@ namespace QuanLyBanHang
                 }
             }
             catch { }
+        }
+        public async Task<bool> RunMethodAsync(params Func<bool>[] Funcs)
+        {
+            Funcs = Funcs ?? new Func<bool>[] { };
+
+            foreach (Func<bool> action in Funcs)
+            {
+                Task task = Task.Factory.StartNew(action);
+                await task;
+            }
+
+            Task<bool> taskTemp = Task.Factory.StartNew(() => { return true; });
+            return await taskTemp;
+        }
+        public async Task RunMethodAsync(params Action[] Acts)
+        {
+            Task taskTemp = Task.Run(() => { });
+            await taskTemp;
+
+            Acts = Acts ?? new Action[] { };
+            foreach (Action act in Acts)
+            {
+                Task task = Task.Run(() => { Invoke(act); });
+                //await task;
+            }
         }
         #endregion
         #endregion

@@ -19,16 +19,20 @@ namespace QuanLyBanHang.BLL.PERS
         #endregion
 
 
-        public IList<xPersonnel> GetAllPersonnel()
+        public async Task<IList<xPersonnel>> GetAllPersonnel()
         {
-            db = new aModel();
-            IList<xPersonnel> lstResult = new List<xPersonnel>();
-            var qResult = db.Database.SqlQuery<xPersonnel>("select top 100000 * from xPersonnel", new SqlParameter[] { });
-            foreach(xPersonnel item in qResult)
+            //db = new aModel();
+            //IList<xPersonnel> lstResult = new List<xPersonnel>();
+            //var qResult = db.Database.SqlQuery<xPersonnel>("select top 10000 * from xPersonnel", new SqlParameter[] { }).ToListAsync();
+            //return await qResult;
+
+            try
             {
-                lstResult.Add(item);
+                db = new aModel();
+                var qResult = db.Database.SqlQuery<xPersonnel>("select top 100000 * from xPersonnel", new SqlParameter[] { });
+                return await qResult.ToListAsync();
             }
-            return lstResult;
+            catch { return new List<xPersonnel>(); }
         }
     }
 }

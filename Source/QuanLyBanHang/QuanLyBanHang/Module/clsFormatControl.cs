@@ -423,10 +423,12 @@ namespace QuanLyBanHang
             grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.OptionsSelection.MultiSelect = true;
             grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
-            grvMain.OptionsView.ShowFooter = true;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
-
+            grvMain.OptionsFind.AlwaysVisible = true;
+            grvMain.OptionsFind.ShowClearButton = false;
+            grvMain.OptionsFind.ShowCloseButton = false;
+            grvMain.OptionsFind.ShowFindButton = false;
 
             grvMain.OptionsView.ShowIndicator = showIndicator;
             if (showIndicator)
@@ -437,7 +439,6 @@ namespace QuanLyBanHang
             }
 
             grvMain.OptionsSelection.EnableAppearanceFocusedCell = false;
-            //grvMain.ColumnPanelRowHeight = 25;
             grvMain.OptionsView.RowAutoHeight = true;
             grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridDefaultRow;
             grvMain.Appearance.SelectedRow.BackColor = grvMain.Appearance.SelectedRow.BackColor2 = MyColor.GridDefaultRow;
@@ -514,8 +515,6 @@ namespace QuanLyBanHang
             }
 
             grvMain.FormatColumn();
-            grvMain.BestFitColumns();
-            grvMain.ShowFooter();
 
             grvMain.KeyDown -= grvMain_KeyDown;
             grvMain.KeyDown += grvMain_KeyDown;
@@ -603,6 +602,8 @@ namespace QuanLyBanHang
             grvMain.BeginSummaryUpdate();
             try
             {
+                grvMain.OptionsView.ShowFooter = true;
+
                 foreach (GridColumn col in grvMain.VisibleColumns)
                 {
                     if (col.ColumnEdit is RepositoryItemSpinEdit)
@@ -627,6 +628,7 @@ namespace QuanLyBanHang
         static void grvMain_DataSourceChanged(object sender, EventArgs e)
         {
             GridView view = sender as GridView;
+            view.BestFitMaxRowCount = Properties.Settings.Default.RowsInPage;
             view.BestFitColumns();
         }
 
@@ -740,7 +742,7 @@ namespace QuanLyBanHang
         static void CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
         {
             GridView view = sender as GridView;
-            if (e.Info.IsRowIndicator && e.RowHandle >= 0)
+            if (e.Info.IsRowIndicator && e.RowHandle >= 0 && string.IsNullOrEmpty(e.Info.DisplayText))
             {
                 e.Appearance.TextOptions.HAlignment = HorzAlignment.Center;
                 e.Appearance.TextOptions.VAlignment = VertAlignment.Center;
@@ -1503,7 +1505,7 @@ namespace QuanLyBanHang
         }
         #endregion
 
-        #region SearchLookupedit
+        #region SearchLookupEdit
         public static void Format(this SearchLookUpEdit slokMain, bool showHeader = true, bool showIndicator = true, bool ColumnAuto = true)
         {
             if (slokMain.Properties.View.Columns.Count == 0 && !string.IsNullOrEmpty(slokMain.Properties.DisplayMember))
