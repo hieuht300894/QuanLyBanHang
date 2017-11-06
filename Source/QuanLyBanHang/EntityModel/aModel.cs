@@ -727,6 +727,15 @@ namespace EntityModel.DataModel
                                             entry.CurrentValues[key.PK_ColumnName] = KeyID.Value;
                                     }
                                 }
+                                else
+                                {
+                                    int? KeyID = SaveInsert(log.TableName, ParamsNew);
+                                    if (KeyID.HasValue)
+                                    {
+                                        if (KeyID == 0)
+                                            return new Exception($"Insert {log.TableName} not success");
+                                    }
+                                }
                             }
 
                             log.OldValue = new Dictionary<string, object>().SerializeJSON();

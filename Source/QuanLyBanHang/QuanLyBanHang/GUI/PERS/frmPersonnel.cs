@@ -60,10 +60,11 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
+        
         private async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry =await clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
+            _acEntry = await clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
@@ -75,6 +76,7 @@ namespace QuanLyBanHang.GUI.PER
             txtAddress.Text = _acEntry.Address;
             txtEmail.Text = _acEntry.Email;
             mmeDescription.Text = _acEntry.Description;
+
             if (_acEntry.KeyID == 0)
             {
                 txtCode.TabStop = true;
