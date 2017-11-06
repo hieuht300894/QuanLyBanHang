@@ -420,7 +420,7 @@ namespace QuanLyBanHang
             grvMain.OptionsMenu.EnableColumnMenu = true;
             grvMain.OptionsCustomization.AllowFilter = true;
             grvMain.OptionsCustomization.AllowSort = true;
-            grvMain.OptionsView.ShowAutoFilterRow = true;
+            //grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.OptionsSelection.MultiSelect = true;
             grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
