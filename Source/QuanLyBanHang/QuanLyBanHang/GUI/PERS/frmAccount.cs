@@ -100,6 +100,11 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         public override void CustomForm()
         {
+            lokPermission.Properties.ValueMember = "KeyID";
+            lokPermission.Properties.DisplayMember = "Name";
+            lokPersonnel.Properties.ValueMember = "KeyID";
+            lokPersonnel.Properties.DisplayMember = "FullName";
+
             base.CustomForm();
 
             txtUserName.NotUnicode(true, false);
@@ -114,21 +119,18 @@ namespace QuanLyBanHang.GUI.PER
             _acEntry = await clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
-        private void LoadPersonnel(int KeyID)
+        private async void LoadPersonnel(int KeyID)
         {
-            //lokPersonnel.Properties.DataSource = clsPersonnel.Instance.SearchNoAccount(true, KeyID);
-            lokPersonnel.Properties.ValueMember = "KeyID";
-            lokPersonnel.Properties.DisplayMember = "FullName";
+            lokPersonnel.Properties.DataSource =await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
+
             if (KeyID > 0)
                 lokPersonnel.EditValue = KeyID;
             else
                 lokPersonnel.ItemIndex = 0;
         }
-        private void LoadPermission(int KeyID)
+        private async void LoadPermission(int KeyID)
         {
-            lokPermission.Properties.DataSource = clsPermission.Instance.SearchPermission(true, KeyID);
-            lokPermission.Properties.ValueMember = "KeyID";
-            lokPermission.Properties.DisplayMember = "Name";
+            lokPermission.Properties.DataSource = await clsPermission.Instance.SearchPermission(true, KeyID);
             if (KeyID > 0)
                 lokPermission.EditValue = KeyID;
         }

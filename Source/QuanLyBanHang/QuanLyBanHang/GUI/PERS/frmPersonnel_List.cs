@@ -23,7 +23,7 @@ namespace QuanLyBanHang.GUI.PER
             base.frmBase_Load(sender, e);
 
             LoadRepository();
-            LoadData();
+            LoadData(0);
             CustomForm();
         }
         #endregion
@@ -88,10 +88,15 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private async void LoadData()
+        private async void LoadData(int KeyID)
         {
-            IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
-            await RunMethodAsync(() => { gctPersonnelList.DataSource = lstResult; });
+            IList<xPersonnel> lstResult = await clsPersonnel.Instance.SearchPersonnel();
+            await RunMethodAsync(() =>
+            {
+                gctPersonnelList.DataSource = lstResult;
+                if (KeyID > 0)
+                    grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
+            });
         }
 
         private async void LoadRepository()
@@ -201,7 +206,7 @@ namespace QuanLyBanHang.GUI.PER
         public void RefreshEntry()
         {
             LoadRepository();
-            LoadData();
+            LoadData(0);
         }
 
         public override void CustomForm()

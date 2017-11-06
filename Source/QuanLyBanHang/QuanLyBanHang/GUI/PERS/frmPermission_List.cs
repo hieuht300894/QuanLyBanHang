@@ -14,7 +14,6 @@ namespace QuanLyBanHang.GUI.PERS
     public partial class frmPermission_List : frmBase
     {
         #region Variables
-        List<xPersonnel> lstPersonel = new List<xPersonnel>();
         #endregion
 
         #region Form Events
@@ -25,6 +24,7 @@ namespace QuanLyBanHang.GUI.PERS
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
+            LoadPersonnel();
             LoadData(0);
             CustomForm();
         }
@@ -43,21 +43,6 @@ namespace QuanLyBanHang.GUI.PERS
         private void gctPersonnelList_MouseClick(object sender, MouseEventArgs e)
         {
             base.ShowGridPopup(sender, e, true, true, true, false, true, true);
-        }
-        private void grvPermission_ShownEditor(object sender, EventArgs e)
-        {
-            GridView gridView = sender as GridView;
-            if (gridView.IsFilterRow(gridView.FocusedRowHandle))
-            {
-                switch (gridView.FocusedColumn.FieldName)
-                {
-                    case "CreatedBy":
-                    case "ModifiedBy":
-                        LookUpEdit lok = gridView.ActiveEditor as LookUpEdit;
-                        lok.Properties.DataSource = lstPersonel.Where(x => x.IsEnable).ToList();
-                        break;
-                }
-            }
         }
         #endregion
 
@@ -104,20 +89,21 @@ namespace QuanLyBanHang.GUI.PERS
         #endregion
 
         #region Methods
-        private void LoadPersonnel()
+        private async void LoadPersonnel()
         {
-            //lstPersonel = new List<xPersonnel>(clsPersonnel.Instance.GetAll());
-            rlokPersonnel.DataSource = lstPersonel;
-            rlokPersonnel.ValueMember = "KeyID";
-            rlokPersonnel.DisplayMember = "FullName";
+            IList<xPersonnel> lstPersonel = await clsPersonnel.Instance.GetAllPersonnel();
+            await RunMethodAsync(() => { rlokPersonnel.DataSource = lstPersonel; });
         }
 
-        private void LoadData(int KeyID)
+        private async void LoadData(int KeyID)
         {
-            LoadPersonnel();
-            gctPermission.DataSource = clsPermission.Instance.SearchPermission(true, 0);
-            if (KeyID > 0)
-                grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
+            IList<xPermission> lstPermission = await clsPermission.Instance.SearchPermission(true, 0);
+            await RunMethodAsync(() =>
+            {
+                gctPermission.DataSource = lstPermission;
+                if (KeyID > 0)
+                    grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
+            });
         }
 
         private void InsertEntry()
@@ -177,15 +163,18 @@ namespace QuanLyBanHang.GUI.PERS
 
         private void RefreshEntry()
         {
+            LoadPersonnel();
             LoadData(0);
         }
 
         public override void CustomForm()
         {
+            rlokPersonnel.ValueMember = "KeyID";
+            rlokPersonnel.DisplayMember = "FullName";
+
             base.CustomForm();
             gctPermission.MouseClick += gctPersonnelList_MouseClick;
             grvPermission.DoubleClick += grvPermission_DoubleClick;
-            grvPermission.ShownEditor += grvPermission_ShownEditor;
         }
         #endregion
     }

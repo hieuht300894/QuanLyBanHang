@@ -32,11 +32,14 @@ namespace QuanLyBanHang.BLL.PERS
         }
         #endregion
 
-        public IList<xPermission> SearchPermission(bool IsEnable, int KeyID)
+        public async Task<IList<xPermission>> SearchPermission(bool IsEnable, int KeyID)
         {
-            db = new aModel();
-            IEnumerable<xPermission> lstTemp = db.xPermission.Where(x => x.IsEnable == IsEnable || x.KeyID == KeyID);
-            return lstTemp.ToList();
+            try
+            {
+                db = new aModel();
+                return await db.Database.SqlQuery<xPermission>("sp_xPermission_SearchPermission {0},{1}", KeyID, IsEnable).ToListAsync();
+            }
+            catch { return new List<xPermission>(); }
         }
 
         public bool InsertEntry(xPermission entry, List<xUserFeature> lstUserFeatures)

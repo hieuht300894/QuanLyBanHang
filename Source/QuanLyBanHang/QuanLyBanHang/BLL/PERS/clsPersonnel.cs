@@ -1,11 +1,8 @@
-﻿using DevExpress.Utils;
-using EntityModel.DataModel;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
 {
@@ -18,14 +15,35 @@ namespace QuanLyBanHang.BLL.PERS
         }
         #endregion
 
-
         public async Task<IList<xPersonnel>> GetAllPersonnel()
         {
             try
             {
                 db = new aModel();
-                var qResult = db.Database.SqlQuery<xPersonnel>("select top 100000 * from xPersonnel", new SqlParameter[] { });
+                var qResult = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_GetAllPersonnel", new SqlParameter[] { });
                 return await qResult.ToListAsync();
+            }
+            catch { return new List<xPersonnel>(); }
+        }
+
+        public async Task<IList<xPersonnel>> SearchPersonnel(bool IsEnable = true)
+        {
+            try
+            {
+                db = new aModel();
+                var qResult = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_SeachPersonnel {0}", IsEnable);
+                return await qResult.ToListAsync();
+            }
+            catch { return new List<xPersonnel>(); }
+        }
+
+        public async Task<IList<xPersonnel>> SeachPersonnelNoAccount(int KeyID)
+        {
+            try
+            {
+                db = new aModel();
+                var result = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_SeachPersonnelNoAccount {0}", KeyID);
+                return await result.ToListAsync();
             }
             catch { return new List<xPersonnel>(); }
         }

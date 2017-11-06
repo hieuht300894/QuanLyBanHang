@@ -308,7 +308,8 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 db = new aModel();
-                return await db.Set<T>().FindAsync(KeyID);
+                T item = await db.Set<T>().FindAsync(KeyID);
+                return item ?? new T();
             }
             catch { return new T(); }
         }
