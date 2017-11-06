@@ -425,7 +425,7 @@ namespace QuanLyBanHang
             grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
-            grvMain.OptionsFind.AlwaysVisible = true;
+            //grvMain.OptionsFind.AlwaysVisible = true;
             grvMain.OptionsFind.ShowClearButton = false;
             grvMain.OptionsFind.ShowCloseButton = false;
             grvMain.OptionsFind.ShowFindButton = false;
