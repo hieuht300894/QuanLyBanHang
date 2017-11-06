@@ -106,12 +106,11 @@ namespace QuanLyBanHang.GUI.PER
             lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
         }
 
-        private void LoadDataForm()
+        private async void LoadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
-            _acEntry = clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
-
-            SetControlValue();
+            _acEntry = await clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
+            await RunMethodAsync(() => { SetControlValue(); });
         }
 
         private void SetControlValue()

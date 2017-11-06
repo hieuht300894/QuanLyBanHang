@@ -60,22 +60,22 @@ namespace QuanLyBanHang.BLL.Common
             DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
 
             newThreadObject.Task = result.ForEachAsync((item) =>
-             {
-                 if (tokenSource.IsCancellationRequested) { return; }
-                 else
-                 {
-                     if (gctMain.InvokeRequired)
-                     {
-                         try
-                         {
-                             Action<T> action = (obj) => { ListResult.Add(obj); };
-                             gctMain.Invoke(action, item);
-                         }
-                         catch { }
-                     }
-                     else { ListResult.Add(item); }
-                 }
-             }, tokenSource.Token);
+            {
+                if (tokenSource.IsCancellationRequested) { return; }
+                else
+                {
+                    if (gctMain.InvokeRequired)
+                    {
+                        try
+                        {
+                            Action<T> action = (obj) => { ListResult.Add(obj); };
+                            gctMain.Invoke(action, item);
+                        }
+                        catch { }
+                    }
+                    else { ListResult.Add(item); }
+                }
+            }, tokenSource.Token);
 
             timer.Tick += (sender, e) =>
             {
@@ -261,25 +261,25 @@ namespace QuanLyBanHang.BLL.Common
             DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
 
             newThreadObject.Task = result.ForEachAsync((item) =>
-              {
-                  if (tokenSource.IsCancellationRequested) { return; }
-                  else if (!frmMain.IsDisposed)
-                  {
-                      if (frmMain.InvokeRequired)
-                      {
-                          try
-                          {
-                              Action<T> action = (obj) => { ListResult.Add(obj); };
-                              frmMain.Invoke(action, item);
-                          }
-                          catch { }
-                      }
-                      else
-                      {
-                          ListResult.Add(item);
-                      }
-                  }
-              }, tokenSource.Token);
+            {
+                if (tokenSource.IsCancellationRequested) { return; }
+                else if (!frmMain.IsDisposed)
+                {
+                    if (frmMain.InvokeRequired)
+                    {
+                        try
+                        {
+                            Action<T> action = (obj) => { ListResult.Add(obj); };
+                            frmMain.Invoke(action, item);
+                        }
+                        catch { }
+                    }
+                    else
+                    {
+                        ListResult.Add(item);
+                    }
+                }
+            }, tokenSource.Token);
 
             timer.Tick += (sender, e) =>
             {
@@ -289,46 +289,6 @@ namespace QuanLyBanHang.BLL.Common
             if (!ListResult.Any())
                 timer.Enabled = true;
         }
-
-        public async void SelectAsync_1<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
-        {
-            db = new aModel();
-            Timer timer = new Timer() { Interval = 1000 };
-            DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
-
-            timer.Tick += (sender, e) =>
-            {
-                if (ListResult.Any())
-                {
-                    if (gctMain.InvokeRequired)
-                    {
-                        Action action = () => { gctMain.RefreshDataSource(); };
-                        gctMain.Invoke(action);
-                    }
-                    else { gctMain.RefreshDataSource(); }
-                    timer.Enabled = false;
-                }
-            };
-
-            Task task = result.ForEachAsync((item) =>
-              {
-                  if (gctMain.InvokeRequired)
-                  {
-                      try
-                      {
-                          Action<T> action = (obj) => { ListResult.Add(obj); };
-                          gctMain.Invoke(action, item);
-                      }
-                      catch { }
-                  }
-                  else { ListResult.Add(item); }
-              });
-
-            if (!ListResult.Any())
-                timer.Enabled = true;
-
-            await task;
-        }
         #endregion
 
         #region Base Method
@@ -336,26 +296,19 @@ namespace QuanLyBanHang.BLL.Common
         {
             try
             {
-                Task<List<T>> task = Task.Run(() =>
-                {
-                    db = new aModel();
-                    IEnumerable<T> lstTemp = db.Set<T>().ToList();
-                    return lstTemp.ToList();
-                });
-
-                List<T> lstResult = await task;
-                return lstResult;
+                db = new aModel();
+                var qResult = db.Database.SqlQuery<T>($"SELECT * FROM {typeof(T).Name}", new SqlParameter[] { });
+                return await qResult.ToListAsync();
             }
             catch { return new List<T>(); }
         }
 
-        public virtual T GetByID<T>(object KeyID) where T : class, new()
+        public async virtual Task<T> GetByID<T>(object KeyID) where T : class, new()
         {
             try
             {
                 db = new aModel();
-                T entry = db.Set<T>().Find(KeyID);
-                return entry ?? new T();
+                return await db.Set<T>().FindAsync(KeyID);
             }
             catch { return new T(); }
         }
@@ -398,75 +351,6 @@ namespace QuanLyBanHang.BLL.Common
                 return false;
             }
         }
-        #endregion
-
-        #region Test
-        //public void Select<T>(XtraForm FrmMain, Object Control, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
-        //{
-        //    db = new aModel();
-        //    BackgroundWorker bWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-        //    Timer timer = new Timer() { Interval = 1000 };
-        //    bool IsComplete = false;
-
-        //    timer.Tick += (sender, e) =>
-        //    {
-        //        if (!IsComplete && ListResult.Any())
-        //        {
-        //            bWorker.ReportProgress(0);
-        //            timer.Enabled = false;
-        //        }
-        //    };
-
-        //    bWorker.DoWork += (sender, e) =>
-        //    {
-        //        try
-        //        {
-        //            DbRawSqlQuery<T> result = db.Database.SqlQuery<T>(Query, Parameters);
-        //            foreach (T item in result)
-        //            {
-        //                Action<T> action = (obj) => { ListResult.Add(obj); };
-        //                FrmMain.Invoke(action, item);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Action action = () =>
-        //            {
-        //                ListResult = new List<T>();
-        //                clsGeneral.showErrorException(ex);
-        //            };
-        //            FrmMain.BeginInvoke(action);
-        //        }
-        //        IsComplete = true;
-        //    };
-
-        //    bWorker.ProgressChanged += (sender, e) =>
-        //    {
-        //        Action action = () => { RefreshControl((Control)Control); };
-        //        FrmMain.BeginInvoke(action);
-        //    };
-
-        //    bWorker.RunWorkerCompleted += (sender, e) =>
-        //    {
-        //        Action action = () => { RefreshControl((Control)Control); };
-        //        FrmMain.BeginInvoke(action);
-
-        //        var _threadName = clsService.dThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(FrmMain.Name + "_" + (Control as Control).Name));
-        //        if (!string.IsNullOrEmpty(_threadName))
-        //            clsService.dThreads.Remove(_threadName);
-
-        //        timer.Dispose();
-        //        bWorker.Dispose();
-        //    };
-
-        //    var threadName = clsService.dThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(FrmMain.Name + "_" + (Control as Control).Name));
-        //    if (string.IsNullOrEmpty(threadName))
-        //    {
-        //        clsService.dThreads.Add(FrmMain.Name + "_" + (Control as Control).Name, bWorker);
-        //        bWorker.RunWorkerAsync();
-        //        timer.Enabled = true;
-        //    }
-        //}
         #endregion
     }
 }

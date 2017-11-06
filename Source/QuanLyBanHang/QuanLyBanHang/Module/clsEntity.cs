@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraBars;
 using QuanLyBanHang.BLL.PERS;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang
 {
@@ -151,7 +152,7 @@ namespace QuanLyBanHang
             catch { return Properties.Settings.Default.CurrentCulture.Equals("VN") ? iCaption : iName.NoSign().AutoSpace(); }
         }
 
-        public static bool Check_Role(xAccount _iAccount, string cName)
+        public async static Task<bool> Check_Role(xAccount _iAccount, string cName)
         {
             db = db ?? new aModel();
             if (_iAccount.KeyID == 0)
@@ -160,7 +161,7 @@ namespace QuanLyBanHang
                 return false;
             else
             {
-                xPermission permission = clsPermission.Instance.GetByID<xPermission>(_iAccount.IDPermission) ?? new xPermission();
+                xPermission permission = await clsPermission.Instance.GetByID<xPermission>(_iAccount.IDPermission) ?? new xPermission();
                 List<xUserFeature> lstRoles = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(permission.KeyID));
                 return lstRoles.Any(n => n.IsEnable && n.IDFeature.Contains(cName));
             }

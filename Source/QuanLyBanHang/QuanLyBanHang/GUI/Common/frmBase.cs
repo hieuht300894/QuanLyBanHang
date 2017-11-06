@@ -25,9 +25,7 @@ namespace QuanLyBanHang
         public eFormType fType;
         public List<eFormType> fTypes;
         bool IsLeaveForm = false;
-        List<Control> lstParentControls = new List<Control>();
         List<ControlObject> lstChildControls = new List<ControlObject>();
-        List<Task> lstTasks = new List<Task>();
         #endregion
 
         #region Form
@@ -122,9 +120,6 @@ namespace QuanLyBanHang
         }
         private void LoadControl()
         {
-            lstParentControls = new List<Control>();
-            foreach (Control ctr in Controls) { lstParentControls.Add(ctr); }
-
             lstChildControls = new List<ControlObject>();
 
             List<FieldInfo> lstFieldInfoes = new List<FieldInfo>(GetType().GetRuntimeFields());
@@ -185,29 +180,50 @@ namespace QuanLyBanHang
         }
         private void frmBase_FormClosing(object sender, FormClosingEventArgs e)
         {
+            clsGeneral.CallWaitForm(this);
             try
             {
-                //string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
-                //if (!string.IsNullOrEmpty(threadName))
-                //{
-                //    foreach (var threadObj in clsService.dManageThreads[threadName]) { threadObj.TokenSource.Cancel(); }
-                //    clsService.dManageThreads.Remove(threadName);
-                //}
-
                 foreach (ControlObject ctrObj in lstChildControls)
                 {
                     if (ctrObj.ctrMain != null)
                     {
                         if (ctrObj.ctrMain is GridControl)
+                        {
                             ((GridControl)ctrObj.ctrMain).ViewCollection.ToList().ForEach(x => ((GridView)x).SaveLayout(this));
+                            ((GridControl)ctrObj.ctrMain).DataSource = null;
+                        }
                         if (ctrObj.ctrMain is TreeList)
+                        {
                             ((TreeList)ctrObj.ctrMain).SaveLayout();
+                            ((TreeList)ctrObj.ctrMain).DataSource = null;
+                        }
                         if (ctrObj.ctrMain is SearchLookUpEdit)
+                        {
                             ((SearchLookUpEdit)ctrObj.ctrMain).Properties.View.SaveLayout(this);
+                            ((SearchLookUpEdit)ctrObj.ctrMain).Properties.DataSource = null;
+                        }
+                        if (ctrObj.ctrMain is LookUpEdit)
+                        {
+                            ((LookUpEdit)ctrObj.ctrMain).Properties.DataSource = null;
+                        }
+
+                        ctrObj.ctrMain = null;
+                    }
+                    else if (ctrObj.repoMain != null)
+                    {
+                        if (ctrObj.repoMain is RepositoryItemLookUpEdit)
+                            ((RepositoryItemLookUpEdit)ctrObj.repoMain).DataSource = null;
+
+                        ctrObj.repoMain = null;
                     }
                 }
+
+                lstChildControls = null;
+
+                GC.Collect();
             }
             catch { }
+            clsGeneral.CloseWaitForm();
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

@@ -1,5 +1,6 @@
 ﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
+using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
     {
         #region Variables
         IList<eTinhThanh> lstDanhSach = new List<eTinhThanh>();
-        IList<eTinhThanh> lstDanhSach1= new List<eTinhThanh>();
-        IList<eTinhThanh> lstDanhSach2 = new List<eTinhThanh>();
-        IList<eTinhThanh> lstDanhSach3 = new List<eTinhThanh>();
         #endregion
 
         #region Form Events
@@ -30,6 +28,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
+
             LoadData(0);
             CustomForm();
         }
@@ -81,27 +80,17 @@ namespace QuanLyBanHang.GUI.DanhMuc
         #endregion
 
         #region Methods
-        private void LoadData(int KeyID)
+        private async void LoadData(int KeyID)
         {
-            lstDanhSach = new List<eTinhThanh>();
-            trlDanhSach.DataSource = lstDanhSach;
-            clsFunction.Instance.SelectAsync(this, trlDanhSach, lstDanhSach, "select top 100000 * from eTinhThanh", new System.Data.SqlClient.SqlParameter[] { });
+            lstDanhSach = new List<eTinhThanh>(await clsFunction.Instance.GetAll<eTinhThanh>());
 
-            lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 1 || x.KeyID == 2).ToList();
-            lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 3 || x.KeyID == 4 || x.KeyID == 5 || x.KeyID == 6).ToList();
-            lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 7 || x.KeyID == 8 || x.KeyID == 9).ToList();
-
-            lstDanhSach1 = new List<eTinhThanh>();
-            lokTen1.Properties.DataSource = lstDanhSach1;
-            clsFunction.Instance.SelectAsync(this, lokTen1, lstDanhSach1, "select top 100000 * from eTinhThanh where IDLoai between 1 and 2", new System.Data.SqlClient.SqlParameter[] { });
-
-            lstDanhSach2 = new List<eTinhThanh>();
-            lokTen2.Properties.DataSource = lstDanhSach2;
-            clsFunction.Instance.SelectAsync(this, lokTen2, lstDanhSach2, "select top 100000 * from eTinhThanh where IDLoai between 3 and 6", new System.Data.SqlClient.SqlParameter[] { });
-
-            lstDanhSach3 = new List<eTinhThanh>();
-            lokTen3.Properties.DataSource = lstDanhSach3;
-            clsFunction.Instance.SelectAsync(this, lokTen3, lstDanhSach3, "select top 100000 * from eTinhThanh where IDLoai between 7 and 9", new System.Data.SqlClient.SqlParameter[] { });
+            await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
+            await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 1 || x.KeyID == 2).ToList(); });
+            await RunMethodAsync(() => { lokLoai2.Properties.DataSource= Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 3 || x.KeyID == 4 || x.KeyID == 5 || x.KeyID == 6).ToList(); });
+            await RunMethodAsync(() => { lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 7 || x.KeyID == 8 || x.KeyID == 9).ToList(); });
+            await RunMethodAsync(() => { lokTen1.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList(); });
+            await RunMethodAsync(() => { lokTen2.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList(); });
+            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList(); });    
         }
 
         private void InsertEntry()

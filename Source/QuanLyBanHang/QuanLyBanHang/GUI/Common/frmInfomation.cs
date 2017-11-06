@@ -2,12 +2,7 @@
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -34,10 +29,11 @@ namespace QuanLyBanHang.GUI.Common
         #endregion
 
         #region Method
-        private void loadData()
+        private async void loadData()
         {
-            _acEntry = clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
-            setControlValue();
+            _acEntry = await clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
+            await Task.Factory.StartNew(() => { setControlValue(); });
+
         }
         private void setControlValue()
         {

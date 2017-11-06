@@ -150,7 +150,7 @@ namespace QuanLyBanHang.GUI.Common
             //bsiClock.Caption = DateTime.Now.ToString(Properties.Settings.Default.DateFormat + " hh:mm:ss tt");
         }
 
-        private void addItemClick()
+        private async void addItemClick()
         {
             // Duyệt từng page trong ribbon
             try
@@ -177,7 +177,7 @@ namespace QuanLyBanHang.GUI.Common
                                 else if (bbi.Item.Name.StartsWith("frm"))
                                 {
                                     bbi.Item.Caption = clsEntity.get_Caption(bbi, bbi.Item.Name, group.Name, bbi.Item.Caption, 2);
-                                    bbi.Visible = clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
+                                    bbi.Visible =await clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
                                     if (bbi.Visible)
                                     {
                                         bbi.Item.ItemClick += bt_ItemClick;

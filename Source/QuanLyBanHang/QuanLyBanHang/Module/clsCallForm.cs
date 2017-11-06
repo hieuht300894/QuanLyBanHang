@@ -7,7 +7,7 @@ namespace QuanLyBanHang
     public class clsCallForm
     {
         public static List<FormItem> fList = null;
-        public static void InitFormCollection()
+        public async static void InitFormCollection()
         {
             fList = new List<FormItem>();
             try
@@ -21,7 +21,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (frmBase)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
+                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
@@ -31,7 +31,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (XtraForm)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
+                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
@@ -41,7 +41,7 @@ namespace QuanLyBanHang
                         if (emptyCtor != null)
                         {
                             var f = (XtraForm)emptyCtor.Invoke(new object[] { });
-                            if (clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
+                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }

@@ -60,11 +60,11 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void LoadDataForm()
+        private async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry = clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
-            SetControlValue();
+            _acEntry =await clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
+            await RunMethodAsync(() => { SetControlValue(); });
         }
 
         private void SetControlValue()

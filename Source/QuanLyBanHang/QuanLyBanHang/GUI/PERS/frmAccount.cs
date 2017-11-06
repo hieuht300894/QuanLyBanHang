@@ -108,11 +108,11 @@ namespace QuanLyBanHang.GUI.PER
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
             lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
         }
-        private void LoadDataForm()
+        private async void LoadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
-            SetControlValue();
+            _acEntry = await clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
+            await RunMethodAsync(() => { SetControlValue(); });
         }
         private void LoadPersonnel(int KeyID)
         {

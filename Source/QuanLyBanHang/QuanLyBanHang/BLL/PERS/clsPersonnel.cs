@@ -21,11 +21,6 @@ namespace QuanLyBanHang.BLL.PERS
 
         public async Task<IList<xPersonnel>> GetAllPersonnel()
         {
-            //db = new aModel();
-            //IList<xPersonnel> lstResult = new List<xPersonnel>();
-            //var qResult = db.Database.SqlQuery<xPersonnel>("select top 10000 * from xPersonnel", new SqlParameter[] { }).ToListAsync();
-            //return await qResult;
-
             try
             {
                 db = new aModel();
