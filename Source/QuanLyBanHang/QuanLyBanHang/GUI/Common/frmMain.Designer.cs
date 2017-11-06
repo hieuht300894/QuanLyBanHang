@@ -43,17 +43,17 @@
             this.bbiChangePassword = new DevExpress.XtraBars.BarButtonItem();
             this.bbiSkin = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
             this.bbiInfomation = new DevExpress.XtraBars.BarButtonItem();
+            this.frmTinhThanh_List = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgSkin = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.rbpDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.rbgDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.rbpDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.rbgDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.frmTinhThanh_List = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -81,7 +81,7 @@
             this.bbiInfomation,
             this.frmTinhThanh_List});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 220;
+            this.ribbon.MaxItemId = 221;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -181,6 +181,12 @@
             this.bbiInfomation.Name = "bbiInfomation";
             this.bbiInfomation.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiInfomation_ItemClick);
             // 
+            // frmTinhThanh_List
+            // 
+            this.frmTinhThanh_List.Caption = "Tỉnh thành";
+            this.frmTinhThanh_List.Id = 219;
+            this.frmTinhThanh_List.Name = "frmTinhThanh_List";
+            // 
             // rbpAccount
             // 
             this.rbpAccount.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -211,6 +217,19 @@
             this.rbgSkin.Name = "rbgSkin";
             this.rbgSkin.Text = "Mặc định";
             // 
+            // rbpDanhMuc
+            // 
+            this.rbpDanhMuc.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.rbgDanhMuc});
+            this.rbpDanhMuc.Name = "rbpDanhMuc";
+            this.rbpDanhMuc.Text = "Danh mục";
+            // 
+            // rbgDanhMuc
+            // 
+            this.rbgDanhMuc.ItemLinks.Add(this.frmTinhThanh_List);
+            this.rbgDanhMuc.Name = "rbgDanhMuc";
+            this.rbgDanhMuc.Text = "Danh mục chung";
+            // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.bsiClock);
@@ -238,25 +257,6 @@
             // tbvMain
             // 
             this.tbvMain.RootContainer.Element = null;
-            // 
-            // rbpDanhMuc
-            // 
-            this.rbpDanhMuc.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.rbgDanhMuc});
-            this.rbpDanhMuc.Name = "rbpDanhMuc";
-            this.rbpDanhMuc.Text = "Danh mục";
-            // 
-            // rbgDanhMuc
-            // 
-            this.rbgDanhMuc.ItemLinks.Add(this.frmTinhThanh_List);
-            this.rbgDanhMuc.Name = "rbgDanhMuc";
-            this.rbgDanhMuc.Text = "Danh mục chung";
-            // 
-            // frmTinhThanh_List
-            // 
-            this.frmTinhThanh_List.Caption = "Tỉnh thành";
-            this.frmTinhThanh_List.Id = 219;
-            this.frmTinhThanh_List.Name = "frmTinhThanh_List";
             // 
             // frmMain
             // 

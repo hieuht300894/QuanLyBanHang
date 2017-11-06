@@ -25,17 +25,15 @@ namespace QuanLyBanHang
         public eFormType fType;
         public List<eFormType> fTypes;
         bool IsLeaveForm = false;
-        List<ControlObject> lstControls = new List<ControlObject>();
+        List<Control> lstParentControls = new List<Control>();
+        List<ControlObject> lstChildControls = new List<ControlObject>();
+        List<Task> lstTasks = new List<Task>();
         #endregion
 
         #region Form
         public frmBase()
         {
             InitializeComponent();
-        }
-        ~frmBase()
-        {
-            Dispose();
         }
         #endregion
 
@@ -124,7 +122,10 @@ namespace QuanLyBanHang
         }
         private void LoadControl()
         {
-            lstControls = new List<ControlObject>();
+            lstParentControls = new List<Control>();
+            foreach (Control ctr in Controls) { lstParentControls.Add(ctr); }
+
+            lstChildControls = new List<ControlObject>();
 
             List<FieldInfo> lstFieldInfoes = new List<FieldInfo>(GetType().GetRuntimeFields());
             foreach (FieldInfo fInfo in lstFieldInfoes)
@@ -132,28 +133,28 @@ namespace QuanLyBanHang
                 var Obj = fInfo.GetValue(this);
 
                 if (Obj is LayoutControl)
-                    lstControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
                 if (Obj is TextEdit)
-                    lstControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
                 if (Obj is SpinEdit)
-                    lstControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
                 if (Obj is DateEdit)
-                    lstControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
                 if (Obj is LookUpEdit)
-                    lstControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
                 if (Obj is GridControl)
-                    lstControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
                 if (Obj is TreeList)
-                    lstControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
                 if (Obj is SearchLookUpEdit)
-                    lstControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
 
                 if (Obj is RepositoryItemDateEdit)
-                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
                 if (Obj is RepositoryItemSpinEdit)
-                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
                 if (Obj is RepositoryItemLookUpEdit)
-                    lstControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
             }
         }
         #endregion
@@ -186,14 +187,14 @@ namespace QuanLyBanHang
         {
             try
             {
-                string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
-                if (!string.IsNullOrEmpty(threadName))
-                {
-                    foreach (var threadObj in clsService.dManageThreads[threadName]) { threadObj.TokenSource.Cancel(); }
-                    clsService.dManageThreads.Remove(threadName);
-                }
+                //string threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(Name));
+                //if (!string.IsNullOrEmpty(threadName))
+                //{
+                //    foreach (var threadObj in clsService.dManageThreads[threadName]) { threadObj.TokenSource.Cancel(); }
+                //    clsService.dManageThreads.Remove(threadName);
+                //}
 
-                foreach (ControlObject ctrObj in lstControls)
+                foreach (ControlObject ctrObj in lstChildControls)
                 {
                     if (ctrObj.ctrMain != null)
                     {
@@ -282,7 +283,7 @@ namespace QuanLyBanHang
             {
                 try
                 {
-                    foreach (ControlObject ctrObj in lstControls)
+                    foreach (ControlObject ctrObj in lstChildControls)
                     {
                         if (ctrObj.ctrMain != null)
                         {
@@ -495,7 +496,7 @@ namespace QuanLyBanHang
         {
             try
             {
-                foreach (ControlObject ctrObj in lstControls)
+                foreach (ControlObject ctrObj in lstChildControls)
                 {
                     if (ctrObj.ctrMain != null)
                     {
@@ -544,14 +545,16 @@ namespace QuanLyBanHang
         }
         public async Task RunMethodAsync(params Action[] Acts)
         {
-            Task taskTemp = Task.Run(() => { });
+            if (!IsHandleCreated) return;
+
+            Task taskTemp = Task.Factory.StartNew(() => { });
             await taskTemp;
 
             Acts = Acts ?? new Action[] { };
             foreach (Action act in Acts)
             {
-                Task task = Task.Run(() => { Invoke(act); });
-                //await task;
+                Task task = Task.Factory.StartNew(() => { BeginInvoke(act); });
+                await task;
             }
         }
         #endregion

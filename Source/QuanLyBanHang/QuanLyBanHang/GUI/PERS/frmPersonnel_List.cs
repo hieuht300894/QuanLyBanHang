@@ -1,16 +1,10 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
-using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using EntityModel.DataModel;
-using QuanLyBanHang.BLL.Common;
+using QuanLyBanHang.BLL.PERS;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using System.Data.SqlClient;
-using QuanLyBanHang.BLL.PERS;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Reflection;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -24,20 +18,13 @@ namespace QuanLyBanHang.GUI.PER
         {
             InitializeComponent();
         }
-        protected async override void frmBase_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
 
-            //IList<xPersonnel> lst = await clsPersonnel.Instance.GetAllPersonnel();
-            await Task.Run(() => { });
             LoadRepository();
             LoadData();
             CustomForm();
-
-            //await RunMethodAsync(
-            //    () => { LoadRepository(); },
-            //    () => { LoadData(); },
-            //    () => { CustomForm(); });
         }
         #endregion
 
@@ -103,25 +90,14 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         private async void LoadData()
         {
-            await Task.Run(() => { });
-            //IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
-            //gctPersonnelList.DataSource = lstResult;
-
-            IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
-            gctPersonnelList.DataSource = lstPersonnel;
-            clsFunction.Instance.SelectAsync(this, gctPersonnelList, lstPersonnel, "select top 100000 * from xPersonnel", new SqlParameter[] { });
+            IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
+            await RunMethodAsync(() => { gctPersonnelList.DataSource = lstResult; });
         }
 
         private async void LoadRepository()
         {
-            await Task.Run(() => { });
-            //IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
-            //rlokPersonnel.DataSource = lstResult;
-            //searchLookUpEdit1.Properties.DataSource = lstResult;
-
-            IList<xPersonnel> lstPersonnel = new List<xPersonnel>();
-            rlokPersonnel.DataSource = lstPersonnel;
-            clsFunction.Instance.SelectAsync(this, rlokPersonnel, lstPersonnel, "select top 100000 * from xPersonnel", new SqlParameter[] { });
+            IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
+            await RunMethodAsync(() => { rlokPersonnel.DataSource = lstResult; });
         }
 
         public void InsertEntry()
@@ -224,6 +200,7 @@ namespace QuanLyBanHang.GUI.PER
 
         public void RefreshEntry()
         {
+            LoadRepository();
             LoadData();
         }
 

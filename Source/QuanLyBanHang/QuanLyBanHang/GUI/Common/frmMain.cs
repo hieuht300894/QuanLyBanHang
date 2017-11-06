@@ -9,6 +9,7 @@ using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.Common
@@ -27,95 +28,25 @@ namespace QuanLyBanHang.GUI.Common
         /// Hàm dùng chung, dùng để load form vào DocumentManager khi bấm vào menu trên ribbon menu
         /// </summary>
         /// <param name="_xtrForm"></param>
-        private void addDocument(XtraForm _xtrForm)
+        private async void addDocument(XtraForm _xtrForm)
         {
-            if (_xtrForm == null) return;
-            BaseDocument document = docManager.GetDocument(_xtrForm);
-            if (document != null)
-                tbvMain.Controller.Activate(document);
-            else
+            clsGeneral.CallWaitForm(_xtrForm);
+            await Task.Factory.StartNew(() =>
             {
-                _xtrForm.Text = _xtrForm.Text;
-                _xtrForm.Load -= (sender, e) => { };
-                //_xtrForm.FormClosing += _xtrForm_FormClosing;
-                _xtrForm.MdiParent = this;
-                _xtrForm.Show();
-            }
-        }
-
-        private void _xtrForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //try
-            //{
-            //    XtraForm cForm = (XtraForm)sender;
-            //    List<string> threadNames = new List<string>(clsService.dManageThreads.Select(x => x.Key).Where(x => x.StartsWith(cForm.Name)));
-            //    foreach (string threadName in threadNames)
-            //    {
-            //        //if (clsService.dManagerThreads[threadName].ctrMain != null)
-            //        //    clsService.dManagerThreads[threadName].ctrMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
-            //        //if (clsService.dManagerThreads[threadName].repoMain != null)
-            //        //    clsService.dManagerThreads[threadName].frmMain.EndInvoke(clsService.dManagerThreads[threadName].AsyncResult);
-            //        clsService.dManageThreads[threadName].TokenSource.Cancel();
-            //        clsService.dManageThreads.Remove(threadName);
-            //    }
-
-            //    foreach (var c in cForm.Controls)
-            //    {
-            //        if (c is DevExpress.XtraBars.Docking.DockPanel)
-            //        {
-            //            DevExpress.XtraBars.Docking.DockPanel dp = c as DevExpress.XtraBars.Docking.DockPanel;
-            //            foreach (var c1 in dp.Controls)
-            //            {
-            //                if (c1 is DevExpress.XtraBars.Docking.ControlContainer)
-            //                {
-            //                    DevExpress.XtraBars.Docking.ControlContainer cc = (DevExpress.XtraBars.Docking.ControlContainer)c1;
-            //                    foreach (var c2 in cc.Controls)
-            //                    {
-            //                        if (c2 is DevExpress.XtraLayout.LayoutControl)
-            //                        {
-            //                            DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c2;
-            //                            foreach (var c3 in lc.Controls)
-            //                            {
-            //                                if (c3 is DevExpress.XtraGrid.GridControl)
-            //                                {
-            //                                    DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c3;
-            //                                    foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
-            //                                    {
-            //                                        grv.ActiveFilter.Clear();
-            //                                        grv.SaveLayout(cForm);
-            //                                    }
-            //                                }
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        if (c is DevExpress.XtraLayout.LayoutControl)
-            //        {
-            //            DevExpress.XtraLayout.LayoutControl lc = (DevExpress.XtraLayout.LayoutControl)c;
-            //            foreach (var c1 in lc.Controls)
-            //            {
-            //                if (c1 is DevExpress.XtraGrid.GridControl)
-            //                {
-            //                    DevExpress.XtraGrid.GridControl gct = (DevExpress.XtraGrid.GridControl)c1;
-            //                    foreach (DevExpress.XtraGrid.Views.Grid.GridView grv in gct.ViewCollection)
-            //                    {
-            //                        grv.ActiveFilter.Clear();
-            //                        grv.SaveLayout(cForm);
-            //                    }
-            //                }
-            //                if (c1 is DevExpress.XtraTreeList.TreeList)
-            //                {
-            //                    //((DevExpress.XtraTreeList.TreeList)c).SaveLayout();
-            //                }
-            //            }
-
-            //        }
-            //    }
-            //    cForm.Dispose();
-            //}
-            //catch { }
+                Invoke(new Action(() =>
+                  {
+                      BaseDocument document = docManager.GetDocument(_xtrForm);
+                      if (document != null)
+                          tbvMain.Controller.Activate(document);
+                      else
+                      {
+                          _xtrForm.Text = _xtrForm.Text;
+                          _xtrForm.MdiParent = this;
+                          _xtrForm.Show();
+                      }
+                  }));
+            });
+            clsGeneral.CloseWaitForm();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -263,10 +194,15 @@ namespace QuanLyBanHang.GUI.Common
 
         private void bt_ItemClick(object sender, ItemClickEventArgs e)
         {
-            clsGeneral.CallWaitForm(this);
-            try { addDocument(clsCallForm.CreateNewForm(e.Item.Name)); }
+            //clsGeneral.CallWaitForm(this);
+            try
+            {
+                XtraForm frm = clsCallForm.CreateNewForm(e.Item.Name);
+                if (frm != null)
+                    addDocument(frm);
+            }
             catch { }
-            clsGeneral.CloseWaitForm();
+            //clsGeneral.CloseWaitForm();
         }
 
         private void bsiNhanVien_ItemClick(object sender, ItemClickEventArgs e)
