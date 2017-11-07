@@ -60,7 +60,6 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        
         private async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
@@ -70,12 +69,20 @@ namespace QuanLyBanHang.GUI.PER
 
         private void SetControlValue()
         {
-            txtCode.Text = _acEntry.Code;
-            txtFullName.Text = _acEntry.FullName;
-            txtPhone.Text = _acEntry.Phone;
-            txtAddress.Text = _acEntry.Address;
-            txtEmail.Text = _acEntry.Email;
-            mmeDescription.Text = _acEntry.Description;
+            txtCode.DataBindings.Add("EditValue", _acEntry, "Code", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtFullName.DataBindings.Add("EditValue", _acEntry, "FullName", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtPhone.DataBindings.Add("EditValue", _acEntry, "Phone", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtAddress.DataBindings.Add("EditValue", _acEntry, "Address", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtEmail.DataBindings.Add("EditValue", _acEntry, "Email", true, DataSourceUpdateMode.OnPropertyChanged);
+            mmeDescription.DataBindings.Add("EditValue", _acEntry, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
+
+
+            //txtCode.EditValue = _acEntry.Code;
+            //txtFullName.Text = _acEntry.FullName;
+            //txtPhone.Text = _acEntry.Phone;
+            //txtAddress.Text = _acEntry.Address;
+            //txtEmail.Text = _acEntry.Email;
+            //mmeDescription.Text = _acEntry.Description;
 
             if (_acEntry.KeyID == 0)
             {
@@ -136,16 +143,16 @@ namespace QuanLyBanHang.GUI.PER
         {
             bool bRe = false;
 
-            _acEntry.FullName = txtFullName.Text.Trim();
-            _acEntry.Phone = txtPhone.Text.Trim();
-            _acEntry.Address = txtAddress.Text.Trim();
-            _acEntry.Email = txtEmail.Text.Trim();
-            _acEntry.Description = mmeDescription.Text.Trim();
+            //_acEntry.FullName = txtFullName.Text.Trim();
+            //_acEntry.Phone = txtPhone.Text.Trim();
+            //_acEntry.Address = txtAddress.Text.Trim();
+            //_acEntry.Email = txtEmail.Text.Trim();
+            //_acEntry.Description = mmeDescription.Text.Trim();
 
             if (_acEntry.KeyID == 0)
             {
                 _acEntry.IsEnable = true;
-                _acEntry.Code = txtCode.Text.Trim().ToUpper();
+                //_acEntry.Code = txtCode.Text.Trim().ToUpper();
                 _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
             }
