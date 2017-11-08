@@ -19,6 +19,9 @@ namespace QuanLyBanHang.GUI.DanhMuc
     {
         #region Variables
         IList<eTinhThanh> lstDanhSach = new List<eTinhThanh>();
+        IList<eTinhThanh> lstDanhSachLoai1 = new List<eTinhThanh>();
+        IList<eTinhThanh> lstDanhSachLoai2 = new List<eTinhThanh>();
+        IList<eTinhThanh> lstDanhSachLoai3 = new List<eTinhThanh>();
         #endregion
 
         #region Form Events
@@ -84,14 +87,17 @@ namespace QuanLyBanHang.GUI.DanhMuc
         public async void LoadData(int KeyID)
         {
             lstDanhSach = new List<eTinhThanh>(await clsTinhThanh.Instance.GetAll());
-
+            lstDanhSachLoai1 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2));
+            lstDanhSachLoai2 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6));
+            lstDanhSachLoai3 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9));
+            
+            await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 1 && x.KeyID <= 2).ToList(); });
+            await RunMethodAsync(() => { lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 3 && x.KeyID <= 6).ToList(); });
+            await RunMethodAsync(() => { lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 7 && x.KeyID <= 9).ToList(); });
+            await RunMethodAsync(() => { lokTen1.Properties.DataSource = lstDanhSachLoai1; });
+            await RunMethodAsync(() => { lokTen2.Properties.DataSource = lstDanhSachLoai2; });
+            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSachLoai3; });
             await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
-            await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 1 || x.KeyID == 2).ToList(); });
-            await RunMethodAsync(() => { lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 3 || x.KeyID == 4 || x.KeyID == 5 || x.KeyID == 6).ToList(); });
-            await RunMethodAsync(() => { lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 7 || x.KeyID == 8 || x.KeyID == 9).ToList(); });
-            await RunMethodAsync(() => { lokTen1.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList(); });
-            await RunMethodAsync(() => { lokTen2.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList(); });
-            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList(); });
         }
 
         public void InsertEntry()
@@ -153,7 +159,200 @@ namespace QuanLyBanHang.GUI.DanhMuc
             lokTen3.Properties.DisplayMember = "Ten";
             trlDanhSach.ParentFieldName = "IDTinhThanh";
             trlDanhSach.KeyFieldName = "KeyID";
+
             base.CustomForm();
+
+            lokLoai1.EditValueChanged += lokLoai_EditValueChanged;
+            lokLoai2.EditValueChanged += lokLoai_EditValueChanged;
+            lokLoai3.EditValueChanged += lokLoai_EditValueChanged;
+            lokTen1.EditValueChanged += lokTen_EditValueChanged;
+            lokTen2.EditValueChanged += lokTen_EditValueChanged;
+            lokTen3.EditValueChanged += lokTen_EditValueChanged;
+
+            lokLoai1.KeyDown += lokLoai_KeyDown;
+            lokLoai2.KeyDown += lokLoai_KeyDown;
+            lokLoai3.KeyDown += lokLoai_KeyDown;
+            lokTen1.KeyDown += lokTen_KeyDown;
+            lokTen2.KeyDown += lokTen_KeyDown;
+            lokTen3.KeyDown += lokTen_KeyDown;
+
+            btnTimKiem.Click += btnTimKiem_Click;
+        }
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+            lokTen1.EditValueChanged -= lokTen_EditValueChanged;
+            lokTen2.EditValueChanged -= lokTen_EditValueChanged;
+            lokTen3.EditValueChanged -= lokTen_EditValueChanged;
+
+            var q1 = new List<eTinhThanh>(lstDanhSachLoai1);
+            var q2 = new List<eTinhThanh>(lstDanhSachLoai2);
+            var q3 = new List<eTinhThanh>(lstDanhSachLoai3);
+
+            if (lokLoai1.ToInt32() > 0)
+                q1 = q1.Where(x => x.IDLoai == lokLoai1.ToInt32()).ToList();
+            if (lokLoai2.ToInt32() > 0)
+                q2 = q2.Where(x => x.IDLoai == lokLoai2.ToInt32()).ToList();
+            if (lokLoai3.ToInt32() > 0)
+                q3 = q3.Where(x => x.IDLoai == lokLoai3.ToInt32()).ToList();
+
+            var q12 = q1.Join(q2, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+            var q23 = q12.Join(q3, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+
+            List<eTinhThanh> lstResult = new List<eTinhThanh>();
+            lstResult.AddRange(q1);
+            lstResult.AddRange(q12);
+            lstResult.AddRange(q23);
+
+
+            trlDanhSach.DataSource = lstResult;
+            lokTen1.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList();
+            lokTen2.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList();
+            lokTen3.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList();
+
+            lokTen1.EditValueChanged += lokTen_EditValueChanged;
+            lokTen2.EditValueChanged += lokTen_EditValueChanged;
+            lokTen3.EditValueChanged += lokTen_EditValueChanged;
+        }
+
+        private void lokTen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode== Keys.Enter)
+            {
+                var q1 = new List<eTinhThanh>(lstDanhSachLoai1);
+                var q2 = new List<eTinhThanh>(lstDanhSachLoai2);
+                var q3 = new List<eTinhThanh>(lstDanhSachLoai3);
+
+                if (lokLoai1.ToInt32() > 0)
+                    q1 = q1.Where(x => x.IDLoai == lokLoai1.ToInt32()).ToList();
+                if (lokLoai2.ToInt32() > 0)
+                    q2 = q2.Where(x => x.IDLoai == lokLoai2.ToInt32()).ToList();
+                if (lokLoai3.ToInt32() > 0)
+                    q3 = q3.Where(x => x.IDLoai == lokLoai3.ToInt32()).ToList();
+
+                if (lokTen1.ToInt32() > 0)
+                    q1 = q1.Where(x => x.KeyID == lokTen1.ToInt32()).ToList();
+                if (lokTen2.ToInt32() > 0)
+                    q2 = q2.Where(x => x.KeyID == lokTen2.ToInt32()).ToList();
+                if (lokTen3.ToInt32() > 0)
+                    q3 = q3.Where(x => x.KeyID == lokTen3.ToInt32()).ToList();
+
+                var q12 = q1.Join(q2, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+                var q23 = q12.Join(q3, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+
+                List<eTinhThanh> lstResult = new List<eTinhThanh>();
+                lstResult.AddRange(q1);
+                lstResult.AddRange(q12);
+                lstResult.AddRange(q23);
+
+                trlDanhSach.DataSource = lstResult;
+            }
+        }
+
+        private void lokLoai_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                lokTen1.EditValueChanged -= lokTen_EditValueChanged;
+                lokTen2.EditValueChanged -= lokTen_EditValueChanged;
+                lokTen3.EditValueChanged -= lokTen_EditValueChanged;
+
+                var q1 = new List<eTinhThanh>(lstDanhSachLoai1);
+                var q2 = new List<eTinhThanh>(lstDanhSachLoai2);
+                var q3 = new List<eTinhThanh>(lstDanhSachLoai3);
+
+                if (lokLoai1.ToInt32() > 0)
+                    q1 = q1.Where(x => x.IDLoai == lokLoai1.ToInt32()).ToList();
+                if (lokLoai2.ToInt32() > 0)
+                    q2 = q2.Where(x => x.IDLoai == lokLoai2.ToInt32()).ToList();
+                if (lokLoai3.ToInt32() > 0)
+                    q3 = q3.Where(x => x.IDLoai == lokLoai3.ToInt32()).ToList();
+
+                var q12 = q1.Join(q2, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+                var q23 = q12.Join(q3, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+
+                List<eTinhThanh> lstResult = new List<eTinhThanh>();
+                lstResult.AddRange(q1);
+                lstResult.AddRange(q12);
+                lstResult.AddRange(q23);
+
+
+                trlDanhSach.DataSource = lstResult;
+                lokTen1.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList();
+                lokTen2.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList();
+                lokTen3.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList();
+
+                lokTen1.EditValueChanged += lokTen_EditValueChanged;
+                lokTen2.EditValueChanged += lokTen_EditValueChanged;
+                lokTen3.EditValueChanged += lokTen_EditValueChanged;
+            }
+        }
+
+        private void lokLoai_EditValueChanged(object sender, EventArgs e)
+        {
+            lokTen1.EditValueChanged -= lokTen_EditValueChanged;
+            lokTen2.EditValueChanged -= lokTen_EditValueChanged;
+            lokTen3.EditValueChanged -= lokTen_EditValueChanged;
+
+            var q1 = new List<eTinhThanh>(lstDanhSachLoai1);
+            var q2 = new List<eTinhThanh>(lstDanhSachLoai2);
+            var q3 = new List<eTinhThanh>(lstDanhSachLoai3);
+
+            if (lokLoai1.ToInt32() > 0)
+                q1 = q1.Where(x => x.IDLoai == lokLoai1.ToInt32()).ToList();
+            if (lokLoai2.ToInt32() > 0)
+                q2 = q2.Where(x => x.IDLoai == lokLoai2.ToInt32()).ToList();
+            if (lokLoai3.ToInt32() > 0)
+                q3 = q3.Where(x => x.IDLoai == lokLoai3.ToInt32()).ToList();
+
+            var q12 = q1.Join(q2, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+            var q23 = q12.Join(q3, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+
+            List<eTinhThanh> lstResult = new List<eTinhThanh>();
+            lstResult.AddRange(q1);
+            lstResult.AddRange(q12);
+            lstResult.AddRange(q23);
+
+
+            trlDanhSach.DataSource = lstResult;
+            lokTen1.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList();
+            lokTen2.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList();
+            lokTen3.Properties.DataSource = lstResult.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList();
+
+            lokTen1.EditValueChanged += lokTen_EditValueChanged;
+            lokTen2.EditValueChanged += lokTen_EditValueChanged;
+            lokTen3.EditValueChanged += lokTen_EditValueChanged;
+        }
+
+        private void lokTen_EditValueChanged(object sender, EventArgs e)
+        {
+            var q1 = new List<eTinhThanh>(lstDanhSachLoai1);
+            var q2 = new List<eTinhThanh>(lstDanhSachLoai2);
+            var q3 = new List<eTinhThanh>(lstDanhSachLoai3);
+
+            if (lokLoai1.ToInt32() > 0)
+                q1 = q1.Where(x => x.IDLoai == lokLoai1.ToInt32()).ToList();
+            if (lokLoai2.ToInt32() > 0)
+                q2 = q2.Where(x => x.IDLoai == lokLoai2.ToInt32()).ToList();
+            if (lokLoai3.ToInt32() > 0)
+                q3 = q3.Where(x => x.IDLoai == lokLoai3.ToInt32()).ToList();
+
+            if (lokTen1.ToInt32() > 0)
+                q1 = q1.Where(x => x.KeyID == lokTen1.ToInt32()).ToList();
+            if (lokTen2.ToInt32() > 0)
+                q2 = q2.Where(x => x.KeyID == lokTen2.ToInt32()).ToList();
+            if (lokTen3.ToInt32() > 0)
+                q3 = q3.Where(x => x.KeyID == lokTen3.ToInt32()).ToList();
+
+            var q12 = q1.Join(q2, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+            var q23 = q12.Join(q3, x => x.KeyID, y => y.IDTinhThanh, (x, y) => y);
+
+            List<eTinhThanh> lstResult = new List<eTinhThanh>();
+            lstResult.AddRange(q1);
+            lstResult.AddRange(q12);
+            lstResult.AddRange(q23);
+
+            trlDanhSach.DataSource = lstResult;
         }
         #endregion
     }
