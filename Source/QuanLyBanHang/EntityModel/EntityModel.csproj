@@ -69,9 +69,6 @@
     <Compile Include="DataModel\xUserFeature.cs" />
     <Compile Include="DataModel\xUserLog.cs" />
     <Compile Include="DataModel\zModel.cs" />
-    <Compile Include="Method\Converter.cs" />
-    <Compile Include="Method\ObjectCopier.cs" />
-    <Compile Include="Method\ReflectionPopulator.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
