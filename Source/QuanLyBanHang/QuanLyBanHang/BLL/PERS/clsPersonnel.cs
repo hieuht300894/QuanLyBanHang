@@ -2,6 +2,7 @@
 using QuanLyBanHang.BLL.Common;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
@@ -19,9 +20,12 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                db = new aModel();
-                var qResult = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_GetAllPersonnel", new SqlParameter[] { });
-                return await qResult.ToListAsync();
+                return await Task.Factory.StartNew(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<xPersonnel> lstTemp = db.xPersonnel.ToList();
+                    return lstTemp.ToList();
+                });
             }
             catch { return new List<xPersonnel>(); }
         }
@@ -30,9 +34,12 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                db = new aModel();
-                var qResult = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_SeachPersonnel {0}", IsEnable);
-                return await qResult.ToListAsync();
+                return await Task.Factory.StartNew(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<xPersonnel> lstTemp = db.xPersonnel.Where(x => x.IsEnable == IsEnable);
+                    return lstTemp.ToList();
+                });
             }
             catch { return new List<xPersonnel>(); }
         }
@@ -41,9 +48,12 @@ namespace QuanLyBanHang.BLL.PERS
         {
             try
             {
-                db = new aModel();
-                var result = db.Database.SqlQuery<xPersonnel>("sp_xPersonnel_SeachPersonnelNoAccount {0}", KeyID);
-                return await result.ToListAsync();
+                return await Task.Factory.StartNew(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<xPersonnel> lstTemp = db.xPersonnel.Where(x => (x.IsEnable == true && !x.IsAccount) || x.KeyID == KeyID);
+                    return lstTemp.ToList();
+                });
             }
             catch { return new List<xPersonnel>(); }
         }

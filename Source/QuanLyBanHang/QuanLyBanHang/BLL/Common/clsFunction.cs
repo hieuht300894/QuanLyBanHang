@@ -33,7 +33,7 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Implement Method
-        public void SelectAsync(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
+        public void SelectAsync(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters)
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -95,7 +95,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync(XtraForm frmMain, TreeList trlMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
+        public void SelectAsync(XtraForm frmMain, TreeList trlMain, IList<T> ListResult, string Query, SqlParameter[] Parameters)
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -157,7 +157,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync(XtraForm frmMain, LookUpEdit lokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
+        public void SelectAsync(XtraForm frmMain, LookUpEdit lokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters)
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -213,7 +213,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync(XtraForm frmMain, SearchLookUpEdit slokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
+        public void SelectAsync(XtraForm frmMain, SearchLookUpEdit slokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters)
         {
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
@@ -296,9 +296,13 @@ namespace QuanLyBanHang.BLL.Common
         {
             try
             {
-                db = new aModel();
-                var qResult = db.Database.SqlQuery<T>($"SELECT * FROM {typeof(T).Name}", new SqlParameter[] { });
-                return await qResult.ToListAsync();
+                return await Task.Factory.StartNew(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<T> lstTemp = db.Set<T>().ToList();
+                    IList<T> lstResult = lstTemp.ToList();
+                    return lstResult;
+                });
             }
             catch { return new List<T>(); }
         }

@@ -32,12 +32,25 @@ namespace QuanLyBanHang.BLL.PERS
         }
         #endregion
 
+        //public async Task<IList<xPermission>> SearchPermission(bool IsEnable, int KeyID)
+        //{
+        //    try
+        //    {
+        //        db = new aModel();
+        //        return await db.Database.SqlQuery<xPermission>("sp_xPermission_SearchPermission {0},{1}", KeyID, IsEnable).ToListAsync();
+        //    }
+        //    catch { return new List<xPermission>(); }
+        //}
+
         public async Task<IList<xPermission>> SearchPermission(bool IsEnable, int KeyID)
         {
             try
             {
-                db = new aModel();
-                return await db.Database.SqlQuery<xPermission>("sp_xPermission_SearchPermission {0},{1}", KeyID, IsEnable).ToListAsync();
+                return await Task.Factory.StartNew(() => {
+                    db = new aModel();
+                    IEnumerable<xPermission> lstTemp = db.xPermission.Where(x => x.IsEnable == IsEnable || x.KeyID==KeyID);
+                    return lstTemp.ToList();
+                });
             }
             catch { return new List<xPermission>(); }
         }

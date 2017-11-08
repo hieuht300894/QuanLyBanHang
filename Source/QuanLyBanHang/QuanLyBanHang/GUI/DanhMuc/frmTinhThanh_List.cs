@@ -2,6 +2,7 @@
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
+using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmTinhThanh_List : frmBase
+    public partial class frmTinhThanh_List : frmBase, IFormList<int>
     {
         #region Variables
         IList<eTinhThanh> lstDanhSach = new List<eTinhThanh>();
@@ -29,7 +30,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         {
             base.frmBase_Load(sender, e);
 
-            LoadData();
+            LoadData(0);
             CustomForm();
         }
         #endregion
@@ -80,7 +81,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         #endregion
 
         #region Methods
-        private async void LoadData()
+        public async void LoadData(int KeyID)
         {
             lstDanhSach = new List<eTinhThanh>(await clsTinhThanh.Instance.GetAll());
 
@@ -93,7 +94,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList(); });
         }
 
-        private void InsertEntry()
+        public void InsertEntry()
         {
             //using (frmPermission _frm = new frmPermission())
             //{
@@ -104,7 +105,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             //}
         }
 
-        private void UpdateEntry()
+        public void UpdateEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
             //{
@@ -127,13 +128,13 @@ namespace QuanLyBanHang.GUI.DanhMuc
             //}
         }
 
-        private void DeleteEntry()
+        public void DeleteEntry()
         {
         }
 
-        private void RefreshEntry()
+        public void RefreshEntry()
         {
-            LoadData();
+            LoadData(0);
         }
 
         protected override void CustomForm()
