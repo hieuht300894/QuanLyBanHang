@@ -7,10 +7,12 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using DevExpress.XtraBars;
+using QuanLyBanHang.Service;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPermission : frmBase
+    public partial class frmPermission : frmBase, IFormAccess
     {
         #region Variables
         public delegate void LoadData(int KeyID);
@@ -45,19 +47,19 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Base Button Events
-        protected override void btnSave_ItemClick(object sender, ItemClickEventArgs e)
+        protected async override void btnSave_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                if (SaveData())
+                if (await SaveData())
                     DialogResult = DialogResult.OK;
             }
         }
-        protected override void btnSaveAndAdd_ItemClick(object sender, ItemClickEventArgs e)
+        protected async override void btnSaveAndAdd_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                if (SaveData())
+                if (await SaveData())
                 {
                     _iEntry = null;
                     LoadDataForm();
@@ -106,14 +108,14 @@ namespace QuanLyBanHang.GUI.PER
             lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
         }
 
-        private async void LoadDataForm()
+        public async void LoadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
             _acEntry = await clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
-        private void SetControlValue()
+        public void SetControlValue()
         {
             trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
 
@@ -156,7 +158,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        private bool ValidationForm()
+        public bool ValidationForm()
         {
             bool chk = true;
 
@@ -169,7 +171,7 @@ namespace QuanLyBanHang.GUI.PER
             return chk;
         }
 
-        private bool SaveData()
+        public async Task<bool> SaveData()
         {
             bool chk = false;
 
@@ -229,10 +231,10 @@ namespace QuanLyBanHang.GUI.PER
             if (chk && ReloadData != null)
                 ReloadData(_acEntry.KeyID);
 
-            return chk;
+            return await Task.Factory.StartNew(() => { return chk; });
         }
 
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             base.CustomForm();
             if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
@@ -253,6 +255,10 @@ namespace QuanLyBanHang.GUI.PER
             colIsExportExcel.Visible = true;
 
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
+        }
+
+        public void ResetData()
+        {
         }
         #endregion
     }

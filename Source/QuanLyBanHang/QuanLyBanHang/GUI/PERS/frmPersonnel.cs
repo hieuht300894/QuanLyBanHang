@@ -3,10 +3,12 @@ using System.Linq;
 using System.Windows.Forms;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.Service;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPersonnel : frmBase
+    public partial class frmPersonnel : frmBase, IFormAccess
     {
         #region Variables
         public delegate void LoadData(int strKey);
@@ -35,39 +37,29 @@ namespace QuanLyBanHang.GUI.PER
             LoadDataForm();
         }
 
-        protected override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected async override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
-                if (SaveData())
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
-                else
-                    clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
+                await SaveData();
+            base.btnSave_ItemClick(sender, e);
         }
 
-        protected override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected async override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
-                if (SaveData())
-                {
-                    iEntry = _acEntry = new xPersonnel() { IsEnable = true };
-                    SetControlValue();
-                    fType = eFormType.Add;
-                    this.Text = "Thêm mới nhân viên".Translation("ftxtAddPersonnel", this.Name);
-                }
-                else
-                    clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
+                await SaveData();
         }
         #endregion
 
         #region Methods
-        private async void LoadDataForm()
+        public async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
             _acEntry = await clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
-        private void SetControlValue()
+        public void SetControlValue()
         {
             txtCode.DataBindings.Add("EditValue", _acEntry, "Code", true, DataSourceUpdateMode.OnPropertyChanged);
             txtFullName.DataBindings.Add("EditValue", _acEntry, "FullName", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -139,7 +131,7 @@ namespace QuanLyBanHang.GUI.PER
             return bRe;
         }
 
-        public bool SaveData()
+        public async Task<bool> SaveData()
         {
             bool bRe = false;
 
@@ -162,7 +154,7 @@ namespace QuanLyBanHang.GUI.PER
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = clsPersonnel.Instance.AddOrUpdate(_acEntry);
+            bRe = await clsPersonnel.Instance.AddOrUpdate(_acEntry);
 
             if (bRe && ReLoadParent != null)
                 ReLoadParent(_acEntry.KeyID);
@@ -170,12 +162,16 @@ namespace QuanLyBanHang.GUI.PER
             return bRe;
         }
 
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             txtCode.NotUnicode(true, true);
             txtFullName.IsPersonName();
             txtPhone.PhoneOnly();
             base.CustomForm();
+        }
+
+        public void ResetData()
+        {
         }
         #endregion
     }

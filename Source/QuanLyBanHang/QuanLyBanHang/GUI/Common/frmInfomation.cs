@@ -61,7 +61,7 @@ namespace QuanLyBanHang.GUI.Common
             if (picLogo.Image == null)
                 picLogo.Image = Properties.Resources.default_logo;
         }
-        private void saveData()
+        private async void saveData()
         {
             _acEntry.Code = txt_Agency_Code.Text.Trim();
             _acEntry.Name = txt_Agency_Name.Text.Trim();
@@ -84,7 +84,7 @@ namespace QuanLyBanHang.GUI.Common
             }
 
             bool chk = false;
-            chk = clsAgency.Instance.AddOrUpdate(_acEntry);
+            chk = await clsAgency.Instance.AddOrUpdate(_acEntry);
             if (chk)
             {
                 clsGeneral.curAgency = _acEntry;

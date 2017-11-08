@@ -1,12 +1,14 @@
 ﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.Service;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmAccount : frmBase
+    public partial class frmAccount : frmBase, IFormAccess
     {
         #region Variables
         public delegate void LoadData(int KeyID);
@@ -73,19 +75,19 @@ namespace QuanLyBanHang.GUI.PER
             LoadDataForm();
         }
 
-        protected override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected async override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
-                if (SaveData())
+                if (await SaveData())
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 else
                     clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
         }
 
-        protected override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected async override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
-                if (SaveData())
+                if (await SaveData())
                 {
                     fType = eFormType.Add;
                     this.Text = "Thêm mới tài khoản".Translation("ftxtAddAccount", this.Name);
@@ -98,7 +100,7 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             lokPermission.Properties.ValueMember = "KeyID";
             lokPermission.Properties.DisplayMember = "Name";
@@ -113,7 +115,7 @@ namespace QuanLyBanHang.GUI.PER
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
             lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
         }
-        private async void LoadDataForm()
+        public async void LoadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
             _acEntry = await clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
@@ -121,7 +123,7 @@ namespace QuanLyBanHang.GUI.PER
         }
         private async void LoadPersonnel(int KeyID)
         {
-            lokPersonnel.Properties.DataSource =await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
+            lokPersonnel.Properties.DataSource = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
 
             if (KeyID > 0)
                 lokPersonnel.EditValue = KeyID;
@@ -134,7 +136,7 @@ namespace QuanLyBanHang.GUI.PER
             if (KeyID > 0)
                 lokPermission.EditValue = KeyID;
         }
-        private void SetControlValue()
+        public void SetControlValue()
         {
             if (fType == eFormType.Add)
             {
@@ -156,7 +158,7 @@ namespace QuanLyBanHang.GUI.PER
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
             LoadPermission(_acEntry.IDPermission);
         }
-        private bool ValidationForm()
+        public bool ValidationForm()
         {
             bool bRe = true;
             lokPersonnel.ErrorText = string.Empty;
@@ -201,35 +203,41 @@ namespace QuanLyBanHang.GUI.PER
             }
             return bRe;
         }
-        private bool SaveData()
+        public async Task<bool> SaveData()
         {
-            bool bRe = false;
+            return await Task.Factory.StartNew(() =>
+                {
+                    bool bRe = false;
 
-            _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
-            _acEntry.IDPermission = lokPermission.ToInt32();
-            _acEntry.PermissionName = lokPermission.Text;
+                    _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
+                    _acEntry.IDPermission = lokPermission.ToInt32();
+                    _acEntry.PermissionName = lokPermission.Text;
 
-            if (fType == eFormType.Add)
-            {
-                _acEntry.IsEnable = true;
-                _acEntry.KeyID = lokPersonnel.ToInt32();
-                _acEntry.PersonelName = lokPersonnel.Text;
-                _acEntry.UserName = txtUserName.Text.Trim().ToLower();
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.CreatedDate = DateTime.Now.ServerNow();
-            }
-            else
-            {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
-            }
+                    if (fType == eFormType.Add)
+                    {
+                        _acEntry.IsEnable = true;
+                        _acEntry.KeyID = lokPersonnel.ToInt32();
+                        _acEntry.PersonelName = lokPersonnel.Text;
+                        _acEntry.UserName = txtUserName.Text.Trim().ToLower();
+                        _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                        _acEntry.CreatedDate = DateTime.Now.ServerNow();
+                    }
+                    else
+                    {
+                        _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                        _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+                    }
 
-            bRe = clsAccount.Instance.AddOrUpdate(_acEntry);
+                    bRe = clsAccount.Instance.AddOrUpdate(_acEntry);
 
-            if (bRe && ReLoadParent != null)
-                ReLoadParent(_acEntry.KeyID);
+                    if (bRe && ReLoadParent != null)
+                        ReLoadParent(_acEntry.KeyID);
 
-            return bRe;
+                    return bRe;
+                });
+        }
+        public void ResetData()
+        {
         }
         #endregion
     }

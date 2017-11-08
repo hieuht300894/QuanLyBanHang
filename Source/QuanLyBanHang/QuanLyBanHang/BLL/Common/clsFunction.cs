@@ -314,16 +314,41 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new T(); }
         }
 
-        public virtual bool AddOrUpdate<T>(T entry) where T : class, new()
+        public async virtual Task<bool> AddOrUpdate<T>(T entry) where T : class, new()
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();
             try
             {
-                db.Set<T>().AddOrUpdate(entry);
-                db.SaveChanges();
-                tran.Commit();
-                return true;
+                return await Task.Factory.StartNew(() =>
+                {
+                    db.Set<T>().AddOrUpdate(entry);
+                    var res = db.SaveChangesAsync();
+                    tran.Commit();
+                    return true;
+                });
+            }
+            catch (Exception ex)
+            {
+                tran.Rollback();
+                clsGeneral.showErrorException(ex, $"Lỗi AddOrUpdate: {typeof(T).Name}");
+                return false;
+            }
+        }
+
+        public async virtual Task<bool> AddOrUpdate<T>(List<T> entries) where T : class, new()
+        {
+            db = new aModel();
+            var tran = db.Database.BeginTransaction();
+            try
+            {
+                return await Task.Factory.StartNew(() =>
+                {
+                    entries.ForEach(x => db.Set<T>().AddOrUpdate(x));
+                    var res = db.SaveChangesAsync();
+                    tran.Commit();
+                    return true;
+                });
             }
             catch (Exception ex)
             {

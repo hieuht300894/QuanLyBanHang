@@ -29,7 +29,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         {
             base.frmBase_Load(sender, e);
 
-            LoadData(0);
+            LoadData();
             CustomForm();
         }
         #endregion
@@ -80,17 +80,17 @@ namespace QuanLyBanHang.GUI.DanhMuc
         #endregion
 
         #region Methods
-        private async void LoadData(int KeyID)
+        private async void LoadData()
         {
             lstDanhSach = new List<eTinhThanh>(await clsFunction.Instance.GetAll<eTinhThanh>());
 
             await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
             await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 1 || x.KeyID == 2).ToList(); });
-            await RunMethodAsync(() => { lokLoai2.Properties.DataSource= Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 3 || x.KeyID == 4 || x.KeyID == 5 || x.KeyID == 6).ToList(); });
+            await RunMethodAsync(() => { lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 3 || x.KeyID == 4 || x.KeyID == 5 || x.KeyID == 6).ToList(); });
             await RunMethodAsync(() => { lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 7 || x.KeyID == 8 || x.KeyID == 9).ToList(); });
             await RunMethodAsync(() => { lokTen1.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList(); });
             await RunMethodAsync(() => { lokTen2.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6).ToList(); });
-            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList(); });    
+            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9).ToList(); });
         }
 
         private void InsertEntry()
@@ -133,10 +133,10 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
         private void RefreshEntry()
         {
-            LoadData(0);
+            LoadData();
         }
 
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             lokLoai1.Properties.ValueMember = "KeyID";
             lokLoai1.Properties.DisplayMember = "Ten";

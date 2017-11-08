@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPersonnel_List : frmBase
+    public partial class frmPersonnel_List : frmBase, IFormList<Int32>
     {
         #region Variables
         #endregion
@@ -88,18 +89,16 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private async void LoadData(int KeyID)
+        public async void LoadData(Int32 KeyID)
         {
             IList<xPersonnel> lstResult = await clsPersonnel.Instance.SearchPersonnel();
             await RunMethodAsync(() =>
             {
                 gctPersonnelList.DataSource = lstResult;
-                if (KeyID > 0)
-                    grvPersonnelList.FocusedRowHandle = grvPersonnelList.LocateByValue("KeyID", KeyID);
             });
         }
 
-        private async void LoadRepository()
+        public async void LoadRepository()
         {
             IList<xPersonnel> lstResult = await clsPersonnel.Instance.GetAllPersonnel();
             await RunMethodAsync(() => { rlokPersonnel.DataSource = lstResult; });
@@ -137,7 +136,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public void DeleteEntry()
+        public async void DeleteEntry()
         {
             //int[] Indexes = grvPersonnelList.GetSelectedRows();
             //List<int> lstIDNhanVien = new List<int>();
@@ -189,6 +188,7 @@ namespace QuanLyBanHang.GUI.PER
             for (int i = 0; i < Indexes.Length; i++)
             {
                 xPersonnel personnel = (xPersonnel)grvPersonnelList.GetRow(Indexes[i]);
+                personnel.Address = "ABCDEF";
                 lstNhanVien.Add(personnel);
             }
 
@@ -201,6 +201,8 @@ namespace QuanLyBanHang.GUI.PER
             //clsPersonnel.Instance.StartRun();
 
             // lstPersonnel = new List<xPersonnel>();
+
+            await clsPersonnel.Instance.AddOrUpdate(lstNhanVien);
         }
 
         public void RefreshEntry()
@@ -209,7 +211,7 @@ namespace QuanLyBanHang.GUI.PER
             LoadData(0);
         }
 
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";

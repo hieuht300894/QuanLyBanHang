@@ -11,11 +11,11 @@ using DevExpress.XtraEditors;
 using System.Data.Entity;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
-
+using QuanLyBanHang.Service;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmAccount_List : frmBase
+    public partial class frmAccount_List : frmBase,IFormList<int>
     {
         #region Variables
         #endregion
@@ -93,14 +93,14 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        private void LoadData(int KeyID)
+        public void LoadData(int KeyID)
         {
             gctAccountList.DataSource = clsAccount.Instance.SearchAccount(true, 0);
             if (KeyID > 0)
                 grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }
 
-        private void InsertEntry()
+        public void InsertEntry()
         {
             using (frmAccount _frm = new frmAccount())
             {
@@ -111,7 +111,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        private void UpdateEntry()
+        public void UpdateEntry()
         {
             if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0)
             {
@@ -134,7 +134,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        private void DeleteEntry()
+        public void DeleteEntry()
         {
             //if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -155,9 +155,13 @@ namespace QuanLyBanHang.GUI.PER
             //}
         }
 
-        private void RefreshEntry()
+        public void RefreshEntry()
         {
             LoadData(0);
+        }
+
+        public void LoadRepository()
+        {
         }
         #endregion
     }

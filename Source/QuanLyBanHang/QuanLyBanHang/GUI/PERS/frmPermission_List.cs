@@ -3,6 +3,7 @@ using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.GUI.PER;
+using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PERS
 {
-    public partial class frmPermission_List : frmBase
+    public partial class frmPermission_List : frmBase, IFormList<Int32>
     {
         #region Variables
         #endregion
@@ -24,7 +25,7 @@ namespace QuanLyBanHang.GUI.PERS
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            LoadPersonnel();
+            LoadRepository();
             LoadData(0);
             CustomForm();
         }
@@ -89,13 +90,13 @@ namespace QuanLyBanHang.GUI.PERS
         #endregion
 
         #region Methods
-        private async void LoadPersonnel()
+        public async void LoadRepository()
         {
             IList<xPersonnel> lstPersonel = await clsPersonnel.Instance.GetAllPersonnel();
             await RunMethodAsync(() => { rlokPersonnel.DataSource = lstPersonel; });
         }
 
-        private async void LoadData(int KeyID)
+        public async void LoadData(int KeyID)
         {
             IList<xPermission> lstPermission = await clsPermission.Instance.SearchPermission(true, 0);
             await RunMethodAsync(() =>
@@ -106,7 +107,7 @@ namespace QuanLyBanHang.GUI.PERS
             });
         }
 
-        private void InsertEntry()
+        public void InsertEntry()
         {
             using (frmPermission _frm = new frmPermission())
             {
@@ -117,7 +118,7 @@ namespace QuanLyBanHang.GUI.PERS
             }
         }
 
-        private void UpdateEntry()
+        public void UpdateEntry()
         {
             if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
             {
@@ -140,7 +141,7 @@ namespace QuanLyBanHang.GUI.PERS
             }
         }
 
-        private void DeleteEntry()
+        public void DeleteEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -161,13 +162,13 @@ namespace QuanLyBanHang.GUI.PERS
             //}
         }
 
-        private void RefreshEntry()
+        public void RefreshEntry()
         {
-            LoadPersonnel();
+            LoadRepository();
             LoadData(0);
         }
 
-        public override void CustomForm()
+        protected override void CustomForm()
         {
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";

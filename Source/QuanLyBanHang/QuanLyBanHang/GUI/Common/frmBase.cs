@@ -236,6 +236,7 @@ namespace QuanLyBanHang
         }
         protected virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            DialogResult = DialogResult.OK;
         }
         protected virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -472,43 +473,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region Virtual Method
-        public virtual void LoadPercent(int Percent)
-        {
-            betPercent.EditValue = Percent;
-        }
-        public virtual void LoadMessage(string Msg)
-        {
-            clsGeneral.showMessage(Msg);
-        }
-        public virtual void LoadError(Exception Ex)
-        {
-            clsGeneral.showErrorException(Ex);
-        }
-        public virtual void OpenProgress()
-        {
-            Action action = () =>
-            {
-                barBottom.Visible = true;
-                betPercent.EditValue = 0;
-                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            };
-            Invoke(action);
-        }
-        public virtual void CloseProgress()
-        {
-            Action action = () =>
-            {
-                barBottom.Visible = false;
-                betPercent.EditValue = 0;
-                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
-            };
-            Invoke(action);
-        }
-        public virtual void ShowAlert(string Title = "", string Text = "")
-        {
-            alertMsg.Show(this, Title, Text);
-        }
-        public virtual void CustomForm()
+        protected virtual void CustomForm()
         {
             try
             {
@@ -545,6 +510,42 @@ namespace QuanLyBanHang
                 }
             }
             catch { }
+        }
+        public virtual void LoadPercent(int Percent)
+        {
+            betPercent.EditValue = Percent;
+        }
+        public virtual void LoadMessage(string Msg)
+        {
+            clsGeneral.showMessage(Msg);
+        }
+        public virtual void LoadError(Exception Ex)
+        {
+            clsGeneral.showErrorException(Ex);
+        }
+        public virtual void OpenProgress()
+        {
+            Action action = () =>
+            {
+                barBottom.Visible = true;
+                betPercent.EditValue = 0;
+                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            };
+            Invoke(action);
+        }
+        public virtual void CloseProgress()
+        {
+            Action action = () =>
+            {
+                barBottom.Visible = false;
+                betPercent.EditValue = 0;
+                betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            };
+            Invoke(action);
+        }
+        public virtual void ShowAlert(string Title = "", string Text = "")
+        {
+            alertMsg.Show(this, Title, Text);
         }
         public async Task<bool> RunMethodAsync(params Func<bool>[] Funcs)
         {
