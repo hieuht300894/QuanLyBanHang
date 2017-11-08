@@ -116,6 +116,8 @@ namespace QuanLyBanHang.GUI.Common
                         ribbonStatusBar.Show();
                         clsGeneral.CloseWaitForm();
 
+                        frmBackupDatabase frm = new frmBackupDatabase();
+                        frm.ShowDialog();
                     }
                 }
             }

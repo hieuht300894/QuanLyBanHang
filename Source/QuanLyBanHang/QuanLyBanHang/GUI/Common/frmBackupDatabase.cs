@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Common;
+using System.Data.SqlClient;
 
 namespace QuanLyBanHang.GUI.Common
 {
     public partial class frmBackupDatabase : Form
     {
         Server myServer = null;
+        string _sName, _sDatabase, _sUser, _sPass;
+        bool _wAu;
+        string path = @"D:\TEST";
 
         public frmBackupDatabase()
         {
@@ -23,36 +27,68 @@ namespace QuanLyBanHang.GUI.Common
 
         private void frmBackupDatabase_Load(object sender, EventArgs e)
         {
-
+           
+            CheckServer();
+            if (myServer != null)
+            {
+                List<string> lstDB = new List<string>();
+                for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
+                lokDB.Properties.DataSource = lstDB;
+            }
+            lokDB.EditValue = _sDatabase;
+            lokDB.Format();
         }
 
         private void btnRun_Click(object sender, EventArgs e)
         {
+            lbMessage.Items.Clear();
+            pgPercent.EditValue = 0;
+
             CheckServer();
             if (myServer == null) return;
 
-            FullDatabaseBackup();
+            //FullDatabaseBackup();
+            //DifferentialDatabaseBackup();
+            //TransactionLogBackup();
+            //CompressionBackup();
 
+            //RestoreDatabase();
+            //RestoreDatabaseLog();
+            //RestoreDatabaseWithDifferentNameAndLocation();
         }
 
         private void CheckServer()
         {
-            ServerConnection conn = new ServerConnection(EntityModel.Module.dbConnectString);
-            Server myServer = new Server(conn);
+            _wAu = Properties.Settings.Default.sWinAu;
+            _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
+            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
+            _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
+            _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+
+            string _conString = "";
+            if (_wAu)
+                _conString = "data source={0};initial catalog={1};Integrated Security={2};";
+            else
+                _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};";
+
+            SqlConnection conn = new SqlConnection(string.Format(_conString, _sName, _sDatabase, _wAu, _sUser, _sPass));
+            ServerConnection server = new ServerConnection();
+            myServer = new Server(server);
         }
 
+        #region Backup
         private void FullDatabaseBackup()
         {
             Backup bkpDBFull = new Backup();
             /* Specify whether you want to back up database or files or log */
             bkpDBFull.Action = BackupActionType.Database;
             /* Specify the name of the database to back up */
-            bkpDBFull.Database = myServer.Name;
+            bkpDBFull.Database = _sDatabase;
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBFull.Devices.AddDevice(@"D:\AdventureWorksFull.bak", DeviceType.File);
-            bkpDBFull.BackupSetName = "Adventureworks database Backup";
-            bkpDBFull.BackupSetDescription = "Adventureworks database - Full Backup";
+            bkpDBFull.Devices.AddDevice($@"{path}\{_sDatabase}Full.bak", DeviceType.File);
+            bkpDBFull.BackupSetName = $"{_sDatabase} database Backup";
+            bkpDBFull.BackupSetDescription = $"{_sDatabase} database - Full Backup";
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
             bkpDBFull.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
@@ -66,13 +102,13 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBFull.Initialize = false;
 
             /* Wiring up events for progress monitoring */
-            bkpDBFull.PercentComplete += CompletionStatusInPercent;
-            bkpDBFull.Complete += Backup_Completed;
+            bkpDBFull.PercentComplete += PercentComplete;
+            bkpDBFull.Complete += (sender, e) => Completed(sender, e, "Backup");
 
             /* SqlBackup method starts to take back up
              * You can also use SqlBackupAsync method to perform the backup 
              * operation asynchronously */
-            bkpDBFull.SqlBackup(myServer);
+            bkpDBFull.SqlBackupAsync(myServer);
         }
         private void DifferentialDatabaseBackup()
         {
@@ -80,11 +116,11 @@ namespace QuanLyBanHang.GUI.Common
             /* Specify whether you want to backup database, files or log */
             bkpDBDifferential.Action = BackupActionType.Database;
             /* Specify the name of the database to backup */
-            bkpDBDifferential.Database = myServer.Name;
+            bkpDBDifferential.Database = _sDatabase;
             /* You can issue backups on several media types (disk or tape), here I am * using the File type and storing the backup on the file system */
-            bkpDBDifferential.Devices.AddDevice(@"D:\AdventureWorksDifferential.bak", DeviceType.File);
-            bkpDBDifferential.BackupSetName = "Adventureworks database Backup";
-            bkpDBDifferential.BackupSetDescription = "Adventureworks database - Differential Backup";
+            bkpDBDifferential.Devices.AddDevice($@"{path}\{_sDatabase}Differential.bak", DeviceType.File);
+            bkpDBDifferential.BackupSetName = $"{_sDatabase} database Backup";
+            bkpDBDifferential.BackupSetDescription = $"{_sDatabase} database - Differential Backup";
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
             bkpDBDifferential.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
@@ -103,13 +139,13 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBDifferential.Incremental = true;
 
             /* Wiring up events for progress monitoring */
-            bkpDBDifferential.PercentComplete += CompletionStatusInPercent;
-            bkpDBDifferential.Complete += Backup_Completed;
+            bkpDBDifferential.PercentComplete += PercentComplete;
+            bkpDBDifferential.Complete += (sender, e) => Completed(sender, e, "Backup");
 
             /* SqlBackup method starts to take back up
              * You cab also use SqlBackupAsync method to perform backup 
              * operation asynchronously */
-            bkpDBDifferential.SqlBackup(myServer);
+            bkpDBDifferential.SqlBackupAsync(myServer);
         }
         private void TransactionLogBackup()
         {
@@ -117,12 +153,12 @@ namespace QuanLyBanHang.GUI.Common
             /* Specify whether you want to back up database or files or log */
             bkpDBLog.Action = BackupActionType.Log;
             /* Specify the name of the database to back up */
-            bkpDBLog.Database = myServer.Name;
+            bkpDBLog.Database = _sDatabase;
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBLog.Devices.AddDevice(@"D:\AdventureWorksLog.bak", DeviceType.File);
-            bkpDBLog.BackupSetName = "Adventureworks database Backup";
-            bkpDBLog.BackupSetDescription = "Adventureworks database - Log Backup";
+            bkpDBLog.Devices.AddDevice($@"{path}\{_sDatabase}Log.bak", DeviceType.File);
+            bkpDBLog.BackupSetName = $"{_sDatabase} database Backup";
+            bkpDBLog.BackupSetDescription = $"{_sDatabase} database - Log Backup";
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
             bkpDBLog.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
@@ -136,29 +172,127 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBLog.Initialize = false;
 
             /* Wiring up events for progress monitoring */
-            bkpDBLog.PercentComplete += CompletionStatusInPercent;
-            bkpDBLog.Complete += Backup_Completed;
+            bkpDBLog.PercentComplete += PercentComplete;
+            bkpDBLog.Complete += (sender, e) => Completed(sender, e, "Backup");
 
             /* SqlBackup method starts to take back up
              * You cab also use SqlBackupAsync method to perform backup 
              * operation asynchronously */
-            bkpDBLog.SqlBackup(myServer);
+            bkpDBLog.SqlBackupAsync(myServer);
         }
+        private void CompressionBackup()
+        {
+            /* Apply for SQL 2008 */
+            Backup bkpDBFullWithCompression = new Backup();
 
-        private static void CompletionStatusInPercent(object sender, PercentCompleteEventArgs args)
-        {
-            Console.Clear();
-            Console.WriteLine("Percent completed: {0}%.", args.Percent);
+            /* Specify whether you want to back up database or files or log */
+            bkpDBFullWithCompression.Action = BackupActionType.Database;
+
+            /* Specify the name of the database to back up */
+            bkpDBFullWithCompression.Database = _sDatabase;
+
+            /* You can use back up compression technique of SQL Server 2008,
+             * specify CompressionOption property to On for compressed backup */
+            bkpDBFullWithCompression.CompressionOption = BackupCompressionOptions.On;
+            bkpDBFullWithCompression.Devices.AddDevice($@"{path}\{_sDatabase}FullWithCompression.bak", DeviceType.File);
+            bkpDBFullWithCompression.BackupSetName = $"{_sDatabase} database Backup";
+            bkpDBFullWithCompression.BackupSetDescription = $"{_sDatabase} database - Full With Compression Backup";
+
+            /* Wiring up events for progress monitoring */
+            bkpDBFullWithCompression.PercentComplete += PercentComplete;
+            bkpDBFullWithCompression.Complete += (sender, e) => Completed(sender, e, "Backup");
+
+            /* SqlBackup method starts to take back up
+          * You cab also use SqlBackupAsync method to perform backup 
+          * operation asynchronously */
+            bkpDBFullWithCompression.SqlBackupAsync(myServer);
         }
-        private static void Backup_Completed(object sender, ServerMessageEventArgs args)
+        #endregion
+
+        #region Restore
+        private void RestoreDatabase()
         {
-            Console.WriteLine("Hurray...Backup completed.");
-            Console.WriteLine(args.Error.Message);
+            Restore restoreDB = new Restore();
+            restoreDB.Database = _sDatabase;
+            /* Specify whether you want to restore database or files or log etc */
+            restoreDB.Action = RestoreActionType.Database;
+            restoreDB.Devices.AddDevice($@"{path}\{_sDatabase}Full.bak", DeviceType.File);
+            /* You can specify ReplaceDatabase = false (default) to not create a new image
+             * of the database, the specified database must exist on SQL Server instance.
+             * If you can specify ReplaceDatabase = true to create new database image 
+             * regardless of the existence of specified database with same name */
+            restoreDB.ReplaceDatabase = true;
+
+            /* If you have differential or log restore to be followed, you would need
+             * to specify NoRecovery = true, this will ensure no recovery is done after the 
+             * restore and subsequent restores are allowed. It means it will database
+             * in the Restoring state. */
+            restoreDB.NoRecovery = true;
+            /* Wiring up events for progress monitoring */
+            restoreDB.PercentComplete += PercentComplete;
+            restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
+            /* SqlRestore method starts to restore database
+             * You cab also use SqlRestoreAsync method to perform restore 
+             * operation asynchronously */
+            restoreDB.SqlRestoreAsync(myServer);
         }
-        private static void Restore_Completed(object sender, ServerMessageEventArgs args)
+        private void RestoreDatabaseLog()
         {
-            Console.WriteLine("Hurray...Restore completed.");
-            Console.WriteLine(args.Error.Message);
+            Restore restoreDBLog = new Restore();
+            restoreDBLog.Database = _sDatabase;
+            restoreDBLog.Action = RestoreActionType.Log;
+            restoreDBLog.Devices.AddDevice($@"{path}\{_sDatabase}Log.bak", DeviceType.File);
+            /* You can specify NoRecovery = false (default) so that transactions are
+             * rolled forward and recovered. */
+            restoreDBLog.NoRecovery = false;
+            /* Wiring up events for progress monitoring */
+            restoreDBLog.PercentComplete += PercentComplete;
+            restoreDBLog.Complete += (sender, e) => Completed(sender, e, "Restore");
+            /* SqlRestore method starts to restore database
+             * You cab also use SqlRestoreAsync method to perform restore 
+             * operation asynchronously */
+            restoreDBLog.SqlRestoreAsync(myServer);
+        }
+        private void RestoreDatabaseWithDifferentNameAndLocation()
+        {
+            Restore restoreDB = new Restore();
+            restoreDB.Database = _sDatabase + "New";
+            /* Specify whether you want to restore database or files or log etc */
+            restoreDB.Action = RestoreActionType.Database;
+            restoreDB.Devices.AddDevice($@"{path}\{_sDatabase}Full.bak", DeviceType.File);
+            /* You can specify ReplaceDatabase = false (default) to not create a new image
+             * of the database, the specified database must exist on SQL Server instance.
+             * You can specify ReplaceDatabase = true to create new database image 
+             * regardless of the existence of specified database with same name */
+            restoreDB.ReplaceDatabase = true;
+            /* If you have differential or log restore to be followed, you would need
+             * to specify NoRecovery = true, this will ensure no recovery is done after the 
+             * restore and subsequent restores are allowed. It means it will database
+             * in the Restoring state. */
+            restoreDB.NoRecovery = false;
+            /* RelocateFiles collection allows you to specify the logical file names and 
+             * physical file names (new locations) if you want to restore to a different location.*/
+            restoreDB.RelocateFiles.Add(new RelocateFile($"{_sDatabase}_Data", $@"{path}\{_sDatabase}New_Data.mdf"));
+            restoreDB.RelocateFiles.Add(new RelocateFile($"{_sDatabase}_Log", $@"{path}\{_sDatabase}New_Log.ldf"));
+            /* Wiring up events for progress monitoring */
+            restoreDB.PercentComplete += PercentComplete;
+            restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
+            /* SqlRestore method starts to restore database
+             * You cab also use SqlRestoreAsync method to perform restore 
+             * operation asynchronously */
+            restoreDB.SqlRestoreAsync(myServer);
+        }
+        #endregion
+
+        private void PercentComplete(object sender, PercentCompleteEventArgs e)
+        {
+            pgPercent.Invoke(new Action<int>((value) => { pgPercent.EditValue = value; }), e.Percent);
+            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Message);
+        }
+        private void Completed(object sender, ServerMessageEventArgs e, string Function)
+        {
+            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), $"{Function} completed");
+            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Error.Message);
         }
     }
 }
