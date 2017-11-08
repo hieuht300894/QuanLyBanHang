@@ -421,55 +421,6 @@ namespace EntityModel.DataModel
             }
             return lstObjs;
         }
-        private async void SaveLog(List<ObjectBinding> lstObjs)
-        {
-            await Task.Factory.StartNew(() => { });
-            try
-            {
-                Task task = Task.Factory.StartNew(() =>
-                 {
-                     using (zModel db = new zModel())
-                     {
-                         var dateQuery = db.Database.SqlQuery<DateTime>("SELECT GETDATE()");
-                         DateTime CurrentDate = dateQuery.AsEnumerable().First();
-                         foreach (var obj in lstObjs)
-                         {
-                             xLog log = new xLog();
-                             log.IDPersonnel = CurrentPersonnel.KeyID;
-                             log.AccessDate = CurrentDate;
-                             log.TableName = ObjectContext.GetObjectType(obj.Entity.Entity.GetType()).Name;
-                             log.State = obj.State.ToString();
-
-                             if (obj.OriginalValues != null)
-                             {
-                                 Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
-                                 foreach (string prop in obj.OriginalValues.PropertyNames) { ParamsValues.Add(prop, obj.OriginalValues[prop]); }
-                                 log.OldValue = ParamsValues.SerializeJSON();
-                             }
-                             else
-                             {
-                                 Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
-                                 log.OldValue = ParamsValues.SerializeJSON();
-                             }
-                             if (obj.CurrentValues != null)
-                             {
-                                 Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
-                                 foreach (string prop in obj.CurrentValues.PropertyNames) { ParamsValues.Add(prop, obj.CurrentValues[prop]); }
-                                 log.NewValue = ParamsValues.SerializeJSON();
-                             }
-                             else
-                             {
-                                 Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
-                                 log.NewValue = ParamsValues.SerializeJSON();
-                             }
-                             db.xLog.Add(log);
-                         }
-                         db.SaveChangesAsync();
-                     }
-                 });
-            }
-            catch { }
-        }
 
         public async override Task<int> SaveChangesAsync()
         {
@@ -477,48 +428,93 @@ namespace EntityModel.DataModel
               .Where(e => (e.Entity.GetType().Name.StartsWith("e") || e.Entity.GetType().Name.StartsWith("x")) && (e.State == EntityState.Added || e.State == EntityState.Deleted || e.State == EntityState.Modified))
               .ToList());
             var lstObjs = await AutoLogAsync(entries);
-            Task<int> task = base.SaveChangesAsync();
+            var res = await base.SaveChangesAsync();
             SaveLog(lstObjs);
-            return await task;
+            return res;
         }
         private async Task<List<ObjectBinding>> AutoLogAsync(List<DbEntityEntry> lstEntries)
         {
-            Task<List<ObjectBinding>> task = Task.Factory.StartNew(() =>
-            {
-                List<ObjectBinding> lstObjs = new List<ObjectBinding>();
-                if (CurrentAccount != null && CurrentPersonnel != null)
-                {
-                    foreach (var entry in lstEntries)
-                    {
-                        ObjectBinding obj = new ObjectBinding();
+            return await Task.Factory.StartNew(() =>
+             {
+                 List<ObjectBinding> lstObjs = new List<ObjectBinding>();
+                 if (CurrentAccount != null && CurrentPersonnel != null)
+                 {
+                     foreach (var entry in lstEntries)
+                     {
+                         ObjectBinding obj = new ObjectBinding();
 
-                        if (entry.State == EntityState.Added)
+                         if (entry.State == EntityState.Added)
+                         {
+                             obj.State = entry.State;
+                             obj.Entity = entry;
+                             obj.CurrentValues = entry.CurrentValues;
+                             lstObjs.Add(obj);
+                         }
+                         else if (entry.State == EntityState.Modified)
+                         {
+                             obj.State = entry.State;
+                             obj.Entity = entry;
+                             obj.OriginalValues = entry.OriginalValues;
+                             obj.CurrentValues = entry.CurrentValues;
+                             lstObjs.Add(obj);
+                         }
+                         else if (entry.State == EntityState.Deleted)
+                         {
+                             obj.State = entry.State;
+                             obj.Entity = entry;
+                             obj.OriginalValues = entry.OriginalValues;
+                             lstObjs.Add(obj);
+                         }
+                     }
+                 }
+                 return lstObjs;
+             });
+        }
+
+        private async void SaveLog(List<ObjectBinding> lstObjs)
+        {
+            try
+            {
+                using (zModel db = new zModel())
+                {
+                    var dateQuery = db.Database.SqlQuery<DateTime>("SELECT GETDATE()");
+                    DateTime CurrentDate = dateQuery.AsEnumerable().First();
+                    foreach (var obj in lstObjs)
+                    {
+                        xLog log = new xLog();
+                        log.IDPersonnel = CurrentPersonnel.KeyID;
+                        log.AccessDate = CurrentDate;
+                        log.TableName = ObjectContext.GetObjectType(obj.Entity.Entity.GetType()).Name;
+                        log.State = obj.State.ToString();
+
+                        if (obj.OriginalValues != null)
                         {
-                            obj.State = entry.State;
-                            obj.Entity = entry;
-                            obj.CurrentValues = entry.CurrentValues;
-                            lstObjs.Add(obj);
+                            Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
+                            foreach (string prop in obj.OriginalValues.PropertyNames) { ParamsValues.Add(prop, obj.OriginalValues[prop]); }
+                            log.OldValue = ParamsValues.SerializeJSON();
                         }
-                        else if (entry.State == EntityState.Modified)
+                        else
                         {
-                            obj.State = entry.State;
-                            obj.Entity = entry;
-                            obj.OriginalValues = entry.OriginalValues;
-                            obj.CurrentValues = entry.CurrentValues;
-                            lstObjs.Add(obj);
+                            Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
+                            log.OldValue = ParamsValues.SerializeJSON();
                         }
-                        else if (entry.State == EntityState.Deleted)
+                        if (obj.CurrentValues != null)
                         {
-                            obj.State = entry.State;
-                            obj.Entity = entry;
-                            obj.OriginalValues = entry.OriginalValues;
-                            lstObjs.Add(obj);
+                            Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
+                            foreach (string prop in obj.CurrentValues.PropertyNames) { ParamsValues.Add(prop, obj.CurrentValues[prop]); }
+                            log.NewValue = ParamsValues.SerializeJSON();
                         }
+                        else
+                        {
+                            Dictionary<string, object> ParamsValues = new Dictionary<string, object>();
+                            log.NewValue = ParamsValues.SerializeJSON();
+                        }
+                        db.xLog.Add(log);
                     }
+                    await db.SaveChangesAsync();
                 }
-                return lstObjs;
-            });
-            return await task;
+            }
+            catch { }
         }
     }
 

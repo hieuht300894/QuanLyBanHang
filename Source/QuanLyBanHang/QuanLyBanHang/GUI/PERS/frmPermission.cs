@@ -111,7 +111,7 @@ namespace QuanLyBanHang.GUI.PER
         public async void LoadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
-            _acEntry = await clsPermission.Instance.GetByID<xPermission>(_iEntry.KeyID);
+            _acEntry = await clsPermission.Instance.GetByID(_iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
@@ -226,12 +226,12 @@ namespace QuanLyBanHang.GUI.PER
                 }
             }
 
-            chk = clsPermission.Instance.AddOrUpdate(_acEntry, lstUserFeatures);
+            chk = await clsPermission.Instance.AddOrUpdate(_acEntry, lstUserFeatures);
 
             if (chk && ReloadData != null)
                 ReloadData(_acEntry.KeyID);
 
-            return await Task.Factory.StartNew(() => { return chk; });
+            return chk;
         }
 
         protected override void CustomForm()

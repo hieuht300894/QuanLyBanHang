@@ -55,7 +55,7 @@ namespace QuanLyBanHang.GUI.PER
         public async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry = await clsPersonnel.Instance.GetByID<xPersonnel>(iEntry.KeyID);
+            _acEntry = await clsPersonnel.Instance.GetByID(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 

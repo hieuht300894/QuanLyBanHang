@@ -118,7 +118,7 @@ namespace QuanLyBanHang.GUI.PER
         public async void LoadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = await clsAccount.Instance.GetByID<xAccount>(iEntry.KeyID);
+            _acEntry = await clsAccount.Instance.GetByID(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
         private async void LoadPersonnel(int KeyID)
@@ -205,36 +205,33 @@ namespace QuanLyBanHang.GUI.PER
         }
         public async Task<bool> SaveData()
         {
-            return await Task.Factory.StartNew(() =>
-                {
-                    bool bRe = false;
+            bool bRe = false;
 
-                    _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
-                    _acEntry.IDPermission = lokPermission.ToInt32();
-                    _acEntry.PermissionName = lokPermission.Text;
+            _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
+            _acEntry.IDPermission = lokPermission.ToInt32();
+            _acEntry.PermissionName = lokPermission.Text;
 
-                    if (fType == eFormType.Add)
-                    {
-                        _acEntry.IsEnable = true;
-                        _acEntry.KeyID = lokPersonnel.ToInt32();
-                        _acEntry.PersonelName = lokPersonnel.Text;
-                        _acEntry.UserName = txtUserName.Text.Trim().ToLower();
-                        _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                        _acEntry.CreatedDate = DateTime.Now.ServerNow();
-                    }
-                    else
-                    {
-                        _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                        _acEntry.ModifiedDate = DateTime.Now.ServerNow();
-                    }
+            if (fType == eFormType.Add)
+            {
+                _acEntry.IsEnable = true;
+                _acEntry.KeyID = lokPersonnel.ToInt32();
+                _acEntry.PersonelName = lokPersonnel.Text;
+                _acEntry.UserName = txtUserName.Text.Trim().ToLower();
+                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                _acEntry.CreatedDate = DateTime.Now.ServerNow();
+            }
+            else
+            {
+                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+            }
 
-                    bRe = clsAccount.Instance.AddOrUpdate(_acEntry);
+            bRe =await clsAccount.Instance.AddOrUpdate(_acEntry);
 
-                    if (bRe && ReLoadParent != null)
-                        ReLoadParent(_acEntry.KeyID);
+            if (bRe && ReLoadParent != null)
+                ReLoadParent(_acEntry.KeyID);
 
-                    return bRe;
-                });
+            return bRe;
         }
         public void ResetData()
         {

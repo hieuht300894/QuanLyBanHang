@@ -82,7 +82,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         #region Methods
         private async void LoadData()
         {
-            lstDanhSach = new List<eTinhThanh>(await clsFunction.Instance.GetAll<eTinhThanh>());
+            lstDanhSach = new List<eTinhThanh>(await clsTinhThanh.Instance.GetAll());
 
             await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
             await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID == 1 || x.KeyID == 2).ToList(); });

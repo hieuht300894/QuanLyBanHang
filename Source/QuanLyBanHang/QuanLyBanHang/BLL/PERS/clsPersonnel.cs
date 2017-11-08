@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPersonnel : clsFunction
+    public class clsPersonnel : clsFunction<xPersonnel>
     {
         #region Contructor
         public new static clsPersonnel Instance

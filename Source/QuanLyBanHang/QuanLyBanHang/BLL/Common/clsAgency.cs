@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuanLyBanHang.BLL.Common
 {
-    public class clsAgency : clsFunction
+    public class clsAgency : clsFunction<xAgency>
     {
         #region Constructor
         private static volatile clsAgency instance = null;

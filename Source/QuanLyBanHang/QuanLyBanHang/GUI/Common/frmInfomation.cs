@@ -31,7 +31,7 @@ namespace QuanLyBanHang.GUI.Common
         #region Method
         private async void loadData()
         {
-            _acEntry = await clsAgency.Instance.GetByID<xAgency>(Properties.Settings.Default.IDAgency);
+            _acEntry = await clsAgency.Instance.GetByID(Properties.Settings.Default.IDAgency);
             await Task.Factory.StartNew(() => { setControlValue(); });
 
         }

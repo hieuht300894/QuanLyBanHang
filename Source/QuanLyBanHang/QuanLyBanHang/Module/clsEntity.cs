@@ -161,7 +161,7 @@ namespace QuanLyBanHang
                 return false;
             else
             {
-                xPermission permission = await clsPermission.Instance.GetByID<xPermission>(_iAccount.IDPermission) ?? new xPermission();
+                xPermission permission = await clsPermission.Instance.GetByID(_iAccount.IDPermission) ?? new xPermission();
                 List<xUserFeature> lstRoles = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(permission.KeyID));
                 return lstRoles.Any(n => n.IsEnable && n.IDFeature.Contains(cName));
             }

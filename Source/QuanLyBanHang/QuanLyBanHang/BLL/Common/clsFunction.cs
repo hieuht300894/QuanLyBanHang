@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.BLL.Common
 {
-    public class clsFunction
+    public class clsFunction<T> where T : class, new()
     {
         #region Variables
         protected static aModel _accessModel, db;
@@ -26,14 +26,14 @@ namespace QuanLyBanHang.BLL.Common
 
         #region Contructor
         protected clsFunction() { }
-        public static clsFunction Instance
+        public static clsFunction<T> Instance
         {
-            get { return new clsFunction(); }
+            get { return new clsFunction<T>(); }
         }
         #endregion
 
         #region Implement Method
-        public void SelectAsync<T>(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync(XtraForm frmMain, GridControl gctMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -95,7 +95,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync<T>(XtraForm frmMain, TreeList trlMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync(XtraForm frmMain, TreeList trlMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -157,7 +157,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync<T>(XtraForm frmMain, LookUpEdit lokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync(XtraForm frmMain, LookUpEdit lokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -213,7 +213,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync<T>(XtraForm frmMain, SearchLookUpEdit slokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync(XtraForm frmMain, SearchLookUpEdit slokMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) 
         {
             db = new aModel();
             Timer timer = new Timer() { Interval = 1000 };
@@ -234,7 +234,7 @@ namespace QuanLyBanHang.BLL.Common
                 timer.Enabled = true;
         }
 
-        public void SelectAsync<T>(XtraForm frmMain, RepositoryItem repoMain, IList<T> ListResult, string Query, SqlParameter[] Parameters) where T : class, new()
+        public void SelectAsync(XtraForm frmMain, RepositoryItem repoMain, IList<T> ListResult, string Query, SqlParameter[] Parameters)
         {
             var threadName = clsService.dManageThreads.Select(x => x.Key).FirstOrDefault(x => x.Equals(frmMain.Name));
             if (!string.IsNullOrEmpty(threadName))
@@ -292,7 +292,7 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Base Method
-        public async virtual Task<IList<T>> GetAll<T>() where T : class, new()
+        public async virtual Task<IList<T>> GetAll()
         {
             try
             {
@@ -303,7 +303,7 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new List<T>(); }
         }
 
-        public async virtual Task<T> GetByID<T>(object KeyID) where T : class, new()
+        public async virtual Task<T> GetByID(object KeyID)
         {
             try
             {
@@ -314,7 +314,7 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new T(); }
         }
 
-        public async virtual Task<bool> AddOrUpdate<T>(T entry) where T : class, new()
+        public async virtual Task<bool> AddOrUpdate(T entry)
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();
@@ -336,7 +336,7 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
-        public async virtual Task<bool> AddOrUpdate<T>(List<T> entries) where T : class, new()
+        public async virtual Task<bool> AddOrUpdate(List<T> entries)
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();
@@ -358,7 +358,7 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
-        public virtual bool DeleteEntry<T>(T entry) where T : class, new()
+        public virtual bool DeleteEntry(T entry)
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();

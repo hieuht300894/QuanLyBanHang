@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsAccount : clsFunction
+    public class clsAccount : clsFunction<xAccount>
     {
         #region Constructor
         private static volatile clsAccount instance = null;
@@ -38,8 +39,7 @@ namespace QuanLyBanHang.BLL.PERS
             return lstResult;
         }
 
-
-        public bool AddOrUpdate(xAccount entry)
+        public async override Task<bool> AddOrUpdate(xAccount entry)
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();
@@ -47,7 +47,7 @@ namespace QuanLyBanHang.BLL.PERS
             {
                 db.xAccount.AddOrUpdate(entry);
                 db.xPersonnel.Find(entry.KeyID).IsAccount = true;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 tran.Commit();
                 return true;
             }

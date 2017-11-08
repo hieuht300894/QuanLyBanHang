@@ -9,7 +9,7 @@ using QuanLyBanHang.BLL.Common;
 
 namespace QuanLyBanHang.BLL.PERS
 {
-    public class clsPermission : clsFunction
+    public class clsPermission : clsFunction<xPermission>
     {
         #region Constructor
         private static volatile clsPermission instance = null;
@@ -42,61 +42,14 @@ namespace QuanLyBanHang.BLL.PERS
             catch { return new List<xPermission>(); }
         }
 
-        public bool InsertEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
+        public async Task<bool> AddOrUpdate(xPermission entry, List<xUserFeature> lstUserFeatures)
         {
             db = new aModel();
             var tran = db.Database.BeginTransaction();
             try
             {
                 db.xPermission.AddOrUpdate(entry);
-                db.SaveChanges();
-
-                lstUserFeatures.ForEach(x =>
-                {
-                    x.IDUserRole = entry.KeyID;
-                    db.xUserFeature.Add(x);
-                });
-
-                db.SaveChanges();
-                tran.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                tran.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi thêm mới: {typeof(xPermission).Name}");
-                return false;
-            }
-        }
-
-        public bool UpdateEntry(xPermission entry, List<xUserFeature> lstUserFeatures)
-        {
-            db = new aModel();
-            var tran = db.Database.BeginTransaction();
-            try
-            {
-                db.xPermission.AddOrUpdate(entry);
-                lstUserFeatures.ForEach(x => { db.xUserFeature.AddOrUpdate(x); });
-                db.SaveChanges();
-                tran.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                tran.Rollback();
-                clsGeneral.showErrorException(ex, $"Lỗi cập nhật: {typeof(xPermission).Name}");
-                return false;
-            }
-        }
-
-        public bool AddOrUpdate(xPermission entry, List<xUserFeature> lstUserFeatures)
-        {
-            db = new aModel();
-            var tran = db.Database.BeginTransaction();
-            try
-            {
-                db.xPermission.AddOrUpdate(entry);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 lstUserFeatures.ForEach(x =>
                 {
@@ -104,7 +57,7 @@ namespace QuanLyBanHang.BLL.PERS
                     db.xUserFeature.AddOrUpdate(x);
                 });
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 tran.Commit();
                 return true;
             }
