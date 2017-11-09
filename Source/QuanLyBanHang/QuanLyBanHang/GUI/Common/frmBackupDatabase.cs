@@ -230,6 +230,32 @@ namespace QuanLyBanHang.GUI.Common
                 db.Refresh();
             }
         }
+        private void RestoreDatabaseDifferential(Server myServer)
+        {
+            Restore restoreDB = new Restore();
+
+            /* Specify whether you want to restore database or files or log etc */
+            restoreDB.Action = RestoreActionType.Database;
+            restoreDB.Devices.AddDevice($"{bteFile.Text}", DeviceType.File);
+            DataTable dataTable = restoreDB.ReadBackupHeader(myServer);
+            if (dataTable.Rows.Count > 0)
+                restoreDB.Database = dataTable.Rows[0]["DatabaseName"].ToString();
+
+            /* If you have differential or log restore to be followed, you would need
+             * to specify NoRecovery = true, this will ensure no recovery is done after the 
+             * restore and subsequent restores are allowed. It means it will database
+             * in the Restoring state. */
+            restoreDB.NoRecovery = false;
+
+            /* Wiring up events for progress monitoring */
+            restoreDB.PercentComplete += PercentComplete;
+            restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
+
+            /* SqlRestore method starts to restore database
+             * You cab also use SqlRestoreAsync method to perform restore 
+             * operation asynchronously */
+            restoreDB.SqlRestoreAsync(myServer);
+        }
         private void RestoreDatabaseLog(Server myServer)
         {
             Restore restoreDBLog = new Restore();
@@ -435,11 +461,11 @@ namespace QuanLyBanHang.GUI.Common
                 }
                 if ((int)rgMode.EditValue == 2)
                 {
-                    RestoreDatabaseLog(myServer);
+                    RestoreDatabaseDifferential(myServer);
                 }
                 if ((int)rgMode.EditValue == 3)
                 {
-                    RestoreDatabaseWithDifferentNameAndLocation(myServer);
+                    RestoreDatabaseLog(myServer);
                 }
             }
 
