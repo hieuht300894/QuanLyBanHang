@@ -11,14 +11,14 @@ using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Common;
 using System.Data.SqlClient;
 using System.IO;
+using DevExpress.XtraEditors;
 
 namespace QuanLyBanHang.GUI.Common
 {
-    public partial class frmBackupDatabase : Form
+    public partial class frmBackupDatabase : XtraForm
     {
         #region Variable
-        Server myServer = null;
-        //string path = @"D:\TEST";
+        readonly string DBName = "QuanLyBanHang";
         #endregion
 
         #region Method
@@ -26,28 +26,32 @@ namespace QuanLyBanHang.GUI.Common
         {
             InitializeComponent();
         }
-        private void CheckServer()
+        private Server CheckServer()
         {
-            bool _wAu = Properties.Settings.Default.sWinAu;
-            string _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-            string _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
-            string _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-            string _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            txtComputerName.EditValue = string.IsNullOrEmpty(Properties.Settings.Default.ComputerName) ? Environment.MachineName : Properties.Settings.Default.ComputerName;
+            tgsIsAuth.IsOn = Properties.Settings.Default.sWinAu;
+            txtServerName.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
+            txtUsername.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
+            txtPassword.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
 
+            return CheckConnection(txtServerName.Text, "master", tgsIsAuth.IsOn, txtUsername.Text, txtPassword.Text);
+        }
+        public Server CheckConnection(string ServerName, string DatabaseName, bool IsAuth, string Username, string Password)
+        {
             string _conString = "";
-            if (_wAu)
+            if (tgsIsAuth.IsOn)
                 _conString = "data source={0};initial catalog={1};Integrated Security={2};";
             else
                 _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};";
 
-            SqlConnection conn = new SqlConnection(string.Format(_conString, _sName, "master", _wAu, _sUser, _sPass));
+            SqlConnection conn = new SqlConnection(string.Format(_conString, ServerName, DatabaseName, IsAuth, Username, Password));
             ServerConnection server = new ServerConnection();
-            myServer = new Server(server);
+            return new Server(server);
         }
         #endregion
 
         #region Backup
-        private void FullDatabaseBackup()
+        private void FullDatabaseBackup(Server myServer)
         {
             Backup bkpDBFull = new Backup();
             /* Specify whether you want to back up database or files or log */
@@ -56,7 +60,7 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBFull.Database = lokDB.Text;
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBFull.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}Full.bak", DeviceType.File);
+            bkpDBFull.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Full_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
             bkpDBFull.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBFull.BackupSetDescription = $"{ lokDB.Text} database - Full Backup";
             /* You can specify the expiration date for your backup data
@@ -80,7 +84,7 @@ namespace QuanLyBanHang.GUI.Common
              * operation asynchronously */
             bkpDBFull.SqlBackupAsync(myServer);
         }
-        private void DifferentialDatabaseBackup()
+        private void DifferentialDatabaseBackup(Server myServer)
         {
             Backup bkpDBDifferential = new Backup();
             /* Specify whether you want to backup database, files or log */
@@ -88,7 +92,7 @@ namespace QuanLyBanHang.GUI.Common
             /* Specify the name of the database to backup */
             bkpDBDifferential.Database = lokDB.Text;
             /* You can issue backups on several media types (disk or tape), here I am * using the File type and storing the backup on the file system */
-            bkpDBDifferential.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}Differential.bak", DeviceType.File);
+            bkpDBDifferential.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Differential_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
             bkpDBDifferential.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBDifferential.BackupSetDescription = $"{ lokDB.Text} database - Differential Backup";
             /* You can specify the expiration date for your backup data
@@ -117,7 +121,7 @@ namespace QuanLyBanHang.GUI.Common
              * operation asynchronously */
             bkpDBDifferential.SqlBackupAsync(myServer);
         }
-        private void TransactionLogBackup()
+        private void TransactionLogBackup(Server myServer)
         {
             Backup bkpDBLog = new Backup();
             /* Specify whether you want to back up database or files or log */
@@ -126,7 +130,7 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBLog.Database = lokDB.Text;
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBLog.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}Log.bak", DeviceType.File);
+            bkpDBLog.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Log_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
             bkpDBLog.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBLog.BackupSetDescription = $"{ lokDB.Text} database - Log Backup";
             /* You can specify the expiration date for your backup data
@@ -150,7 +154,7 @@ namespace QuanLyBanHang.GUI.Common
              * operation asynchronously */
             bkpDBLog.SqlBackupAsync(myServer);
         }
-        private void CompressionBackup()
+        private void CompressionBackup(Server myServer)
         {
             /* Apply for SQL 2008 */
             Backup bkpDBFullWithCompression = new Backup();
@@ -164,7 +168,7 @@ namespace QuanLyBanHang.GUI.Common
             /* You can use back up compression technique of SQL Server 2008,
              * specify CompressionOption property to On for compressed backup */
             bkpDBFullWithCompression.CompressionOption = BackupCompressionOptions.On;
-            bkpDBFullWithCompression.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}FullWithCompression.bak", DeviceType.File);
+            bkpDBFullWithCompression.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_FullWithCompression_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
             bkpDBFullWithCompression.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBFullWithCompression.BackupSetDescription = $"{ lokDB.Text} database - Full With Compression Backup";
 
@@ -180,7 +184,7 @@ namespace QuanLyBanHang.GUI.Common
         #endregion
 
         #region Restore
-        private void RestoreDatabase()
+        private void RestoreDatabase(Server myServer)
         {
             Restore restoreDB = new Restore();
 
@@ -191,6 +195,13 @@ namespace QuanLyBanHang.GUI.Common
             if (dataTable.Rows.Count > 0)
                 restoreDB.Database = dataTable.Rows[0]["DatabaseName"].ToString();
 
+            Database db = myServer.Databases[restoreDB.Database];
+            if (db != null)
+            {
+                db.DatabaseOptions.UserAccess = DatabaseUserAccess.Single;
+                db.Alter(TerminationClause.RollbackTransactionsImmediately);
+                db.Refresh();
+            }
             /* You can specify ReplaceDatabase = false (default) to not create a new image
              * of the database, the specified database must exist on SQL Server instance.
              * If you can specify ReplaceDatabase = true to create new database image 
@@ -211,8 +222,15 @@ namespace QuanLyBanHang.GUI.Common
              * You cab also use SqlRestoreAsync method to perform restore 
              * operation asynchronously */
             restoreDB.SqlRestoreAsync(myServer);
+
+            if (db != null)
+            {
+                db.DatabaseOptions.UserAccess = DatabaseUserAccess.Multiple;
+                db.Alter(TerminationClause.RollbackTransactionsImmediately);
+                db.Refresh();
+            }
         }
-        private void RestoreDatabaseLog()
+        private void RestoreDatabaseLog(Server myServer)
         {
             Restore restoreDBLog = new Restore();
 
@@ -235,7 +253,7 @@ namespace QuanLyBanHang.GUI.Common
              * operation asynchronously */
             restoreDBLog.SqlRestoreAsync(myServer);
         }
-        private void RestoreDatabaseWithDifferentNameAndLocation()
+        private void RestoreDatabaseWithDifferentNameAndLocation(Server myServer)
         {
             Restore restoreDB = new Restore();
 
@@ -277,43 +295,91 @@ namespace QuanLyBanHang.GUI.Common
         #region Event
         private void frmBackupDatabase_Load(object sender, EventArgs e)
         {
-            CheckServer();
+            Server myServer = CheckServer();
             if (myServer != null)
             {
                 List<string> lstDB = new List<string>();
                 for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
+                if (!lstDB.Any(x => x.Equals(DBName)))
+                    lstDB.Insert(0, DBName);
                 lokDB.Properties.DataSource = lstDB;
             }
 
             lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
             lokDB.Format();
+
             rgFunction.EditValueChanged += rgFunction_EditValueChanged;
             bteFile.Properties.ButtonClick += bteFile_ButtonClick;
             btePath.Properties.ButtonClick += btePath_ButtonClick;
             lokDB.Properties.ButtonClick += lokDB_ButtonClick;
+            btnTestConnect.Click += btnTestConnect_Click;
+            btnRun.Click += btnRun_Click;
+            btnSave.Click += btnSave_Click;
+            btnCancel.Click += btnCancel_Click;
+            tgsIsAuth.Toggled += tgsIsAuth_Toggled;
         }
-
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ComputerName = txtComputerName.Text;
+            Properties.Settings.Default.sServerName = clsGeneral.Encrypt(txtServerName.Text);
+            Properties.Settings.Default.sWinAu = tgsIsAuth.IsOn;
+            Properties.Settings.Default.sDBName = clsGeneral.Encrypt(lokDB.Text);
+            Properties.Settings.Default.sUserName = clsGeneral.Encrypt(txtUsername.Text);
+            Properties.Settings.Default.sPassword = clsGeneral.Encrypt(txtPassword.Text);
+            Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
+            DialogResult = DialogResult.OK;
+        }
+        private void tgsIsAuth_Toggled(object sender, EventArgs e)
+        {
+            if (tgsIsAuth.IsOn)
+            {
+                lciUsername.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                lciPassword.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            }
+            else
+            {
+                lciUsername.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciPassword.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+            }
+        }
+        private void btnTestConnect_Click(object sender, EventArgs e)
+        {
+            Server myServer = CheckServer();
+            if (myServer != null)
+            {
+                List<string> lstDB = new List<string>();
+                for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
+                if (!lstDB.Any(x => x.Equals(DBName)))
+                    lstDB.Insert(0, DBName);
+                lokDB.Properties.DataSource = lstDB;
+            }
+        }
         private void btePath_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
                 btePath.EditValue = dialog.SelectedPath;
         }
-
         private void lokDB_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             if (e.Button.Index == 1)
             {
-                CheckServer();
+                Server myServer = CheckServer();
                 if (myServer != null)
                 {
                     List<string> lstDB = new List<string>();
                     for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
+                    if (!lstDB.Any(x => x.Equals(DBName)))
+                        lstDB.Insert(0, DBName);
                     lokDB.Properties.DataSource = lstDB;
                 }
             }
         }
-
         private void bteFile_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -321,7 +387,6 @@ namespace QuanLyBanHang.GUI.Common
             if (dialog.ShowDialog() == DialogResult.OK)
                 bteFile.EditValue = dialog.FileName;
         }
-
         private void rgFunction_EditValueChanged(object sender, EventArgs e)
         {
             if ((int)rgFunction.EditValue == 1)
@@ -337,55 +402,48 @@ namespace QuanLyBanHang.GUI.Common
                 lciRestore.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
             }
         }
-
         private void btnRun_Click(object sender, EventArgs e)
         {
+            clsGeneral.CallWaitForm(this);
+
             lbMessage.Items.Clear();
             pgPercent.EditValue = 0;
 
-            CheckServer();
+            Server myServer = CheckServer();
             if (myServer == null) return;
 
             if ((int)rgFunction.EditValue == 1)
             {
                 if ((int)rgMode.EditValue == 1)
                 {
-                    FullDatabaseBackup();
+                    FullDatabaseBackup(myServer);
                 }
                 if ((int)rgMode.EditValue == 2)
                 {
-                    DifferentialDatabaseBackup();
+                    DifferentialDatabaseBackup(myServer);
                 }
                 if ((int)rgMode.EditValue == 3)
                 {
-                    TransactionLogBackup();
+                    TransactionLogBackup(myServer);
                 }
-
             }
             if ((int)rgFunction.EditValue == 2)
             {
                 if ((int)rgMode.EditValue == 1)
                 {
-                    RestoreDatabase();
+                    RestoreDatabase(myServer);
                 }
                 if ((int)rgMode.EditValue == 2)
                 {
-                    RestoreDatabaseLog();
+                    RestoreDatabaseLog(myServer);
                 }
                 if ((int)rgMode.EditValue == 3)
                 {
-                    RestoreDatabaseWithDifferentNameAndLocation();
+                    RestoreDatabaseWithDifferentNameAndLocation(myServer);
                 }
             }
 
-            //FullDatabaseBackup();
-            //DifferentialDatabaseBackup();
-            //TransactionLogBackup();
-            //CompressionBackup();
-
-            //RestoreDatabase();
-            //RestoreDatabaseLog();
-            //RestoreDatabaseWithDifferentNameAndLocation();
+            clsGeneral.CloseWaitForm();
         }
         private void PercentComplete(object sender, PercentCompleteEventArgs e)
         {

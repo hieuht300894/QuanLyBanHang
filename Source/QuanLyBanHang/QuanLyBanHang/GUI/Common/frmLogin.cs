@@ -94,8 +94,10 @@ namespace QuanLyBanHang.GUI.Common
 
         private void pteIcon_Click(object sender, EventArgs e)
         {
-            frmSetting _frmsetting = new frmSetting();
-            _frmsetting.ShowDialog();
+            //frmSetting _frmsetting = new frmSetting();
+            //_frmsetting.ShowDialog();
+            frmBackupDatabase frm = new frmBackupDatabase();
+            frm.ShowDialog();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

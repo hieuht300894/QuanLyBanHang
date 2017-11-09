@@ -59,73 +59,9 @@ namespace QuanLyBanHang.GUI.Common
             ribbon.Hide();
             ribbonStatusBar.Hide();
 
-            if (checkConnection())
-            {
-                clsGeneral.CallWaitForm(this);
-                string _sName, _sDatabase, _sUser, _sPass;
-                bool _wAu;
-                _wAu = Properties.Settings.Default.sWinAu;
-                _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-                _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
-                _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-                _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            #region Kiểm tra kết nối
 
-                string _conString = "";
-                if (!_wAu)
-                    _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};MultipleActiveResultSets=True;App=EntityFramework";
-                else
-                    _conString = "data source={0};initial catalog={1};Integrated Security={2};MultipleActiveResultSets=True;App=EntityFramework";
-                EntityModel.Module.dbConnectString = string.Format(_conString, _sName, _sDatabase, _wAu, _sUser, _sPass);
-
-                try
-                {
-                    EntityModel.Module.InitDefaultData();
-                    clsEntity.InitCollection();
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.CloseWaitForm();
-                    clsGeneral.showErrorException(ex, "Exception");
-                    Application.Exit();
-                }
-                clsGeneral.CloseWaitForm();
-
-                if (clsGeneral.curPersonnel.KeyID == 0)
-                {
-                    frmLogin _frm = new frmLogin();
-                    if (_frm.ShowDialog() == DialogResult.Cancel || clsGeneral.curPersonnel == null)
-                        Application.Exit();
-                    else
-                    {
-                        if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
-                        {
-                            System.Globalization.CultureInfo enCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                            System.Threading.Thread.CurrentThread.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("vi-VN");
-                            System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat = enCulture.NumberFormat;
-                        }
-                        clsGeneral.CallWaitForm(this);
-
-                        clsCallForm.InitFormCollection();
-                        bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
-                        bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + _sDatabase;
-                        bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
-                        bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
-                        addItemClick();
-                        clsEntity.UpdateFeatures();
-                        ribbon.Show();
-                        ribbonStatusBar.Show();
-                        clsGeneral.CloseWaitForm();
-
-                        frmBackupDatabase frm = new frmBackupDatabase();
-                        frm.ShowDialog();
-                    }
-                }
-            }
-        }
-
-        private bool checkConnection()
-        {
-            bool bRe = false;
+            clsGeneral.CallWaitForm(this);
             string _sName, _sDatabase, _sUser, _sPass;
             bool _wAu;
             _wAu = Properties.Settings.Default.sWinAu;
@@ -133,18 +69,92 @@ namespace QuanLyBanHang.GUI.Common
             _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
             _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
             _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
-            using (frmSetting _frm = new frmSetting())
+
+            string _conString = "";
+            if (_wAu)
+                _conString = "data source={0};initial catalog={1};Integrated Security={2};MultipleActiveResultSets=True;App=EntityFramework";
+            else
+                _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};MultipleActiveResultSets=True;App=EntityFramework";
+            EntityModel.Module.dbConnectString = string.Format(_conString, _sName, _sDatabase, _wAu, _sUser, _sPass);
+
+            try
             {
-                if (!_frm.checkConnection(_sName, _wAu, _sUser, _sPass))
-                    if (_frm.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
-                        Application.Exit();
-                    else
-                        bRe = true;
-                else
-                    bRe = true;
+                EntityModel.Module.InitDefaultData();
+                clsEntity.InitCollection();
             }
-            return bRe;
+            catch (Exception ex)
+            {
+                clsGeneral.CloseWaitForm();
+                clsGeneral.showErrorException(ex, "Exception");
+                if (clsGeneral.showConfirmMessage("Thiết lập kết nối máy chủ"))
+                {
+                    frmBackupDatabase frm = new frmBackupDatabase();
+                    frm.ShowDialog();
+                    loadDataForm();
+                }
+                else
+                {
+                    Application.Exit();
+                    return;
+                }
+            }
+            clsGeneral.CloseWaitForm();
+            #endregion
+
+            #region Thiết lập thông tin
+            if (clsGeneral.curPersonnel.KeyID == 0)
+            {
+                frmLogin frm = new frmLogin();
+                if (frm.ShowDialog() == DialogResult.Cancel || clsGeneral.curPersonnel == null)
+                {
+                    Application.Exit();
+                    return;
+                }
+                else
+                {
+                    if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
+                    {
+                        System.Globalization.CultureInfo enCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+                        System.Threading.Thread.CurrentThread.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("vi-VN");
+                        System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat = enCulture.NumberFormat;
+                    }
+
+                    clsGeneral.CallWaitForm(this);
+                    clsCallForm.InitFormCollection();
+                    bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
+                    bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
+                    bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
+                    bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
+                    addItemClick();
+                    clsEntity.UpdateFeatures();
+                    ribbon.Show();
+                    ribbonStatusBar.Show();
+                    clsGeneral.CloseWaitForm();
+                }
+            }
+            #endregion
         }
+
+        //private bool checkConnection()
+        //{
+        //    bool bRe = false;
+        //    string _sName, _sDatabase, _sUser, _sPass;
+        //    bool _wAu;
+        //    _wAu = Properties.Settings.Default.sWinAu;
+        //    _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
+        //    _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
+        //    _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
+        //    _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+
+        //    using (frmBackupDatabase _frm = new frmBackupDatabase())
+        //    {
+        //        if (_frm.CheckConnection(_sName, _sDatabase, _wAu, _sUser, _sPass) != null)
+        //            bRe = true;
+        //        else if (_frm.ShowDialog() == DialogResult.Cancel)
+        //            Application.Exit();
+        //    }
+        //    return bRe;
+        //}
 
         private void tmClock_Tick(object sender, EventArgs e)
         {
@@ -179,7 +189,7 @@ namespace QuanLyBanHang.GUI.Common
                                 else if (bbi.Item.Name.StartsWith("frm"))
                                 {
                                     bbi.Item.Caption = clsEntity.get_Caption(bbi, bbi.Item.Name, group.Name, bbi.Item.Caption, 2);
-                                    bbi.Visible =await clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
+                                    bbi.Visible = await clsEntity.Check_Role(clsGeneral.curAccount, bbi.Item.Name);
                                     if (bbi.Visible)
                                     {
                                         bbi.Item.ItemClick += bt_ItemClick;
