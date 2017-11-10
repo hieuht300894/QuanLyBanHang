@@ -95,8 +95,8 @@ namespace QuanLyBanHang.GUI.Common
                 else
                 {
                     Application.Exit();
-                    return;
                 }
+                return;
             }
             clsGeneral.CloseWaitForm();
             #endregion

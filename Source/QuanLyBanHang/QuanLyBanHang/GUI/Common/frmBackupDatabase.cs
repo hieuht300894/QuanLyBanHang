@@ -45,7 +45,7 @@ namespace QuanLyBanHang.GUI.Common
                 _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};";
 
             SqlConnection conn = new SqlConnection(string.Format(_conString, ServerName, DatabaseName, IsAuth, Username, Password));
-            ServerConnection server = new ServerConnection();
+            ServerConnection server = new ServerConnection(conn);
             return new Server(server);
         }
         #endregion
@@ -60,7 +60,12 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBFull.Database = lokDB.Text;
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBFull.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Full_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
+
+            string fileName = $@"{btePath.Text}\{ lokDB.Text}_Full_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+
+            bkpDBFull.Devices.AddDevice(fileName, DeviceType.File);
             bkpDBFull.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBFull.BackupSetDescription = $"{ lokDB.Text} database - Full Backup";
             /* You can specify the expiration date for your backup data
@@ -87,14 +92,22 @@ namespace QuanLyBanHang.GUI.Common
         private void DifferentialDatabaseBackup(Server myServer)
         {
             Backup bkpDBDifferential = new Backup();
+
             /* Specify whether you want to backup database, files or log */
             bkpDBDifferential.Action = BackupActionType.Database;
+
             /* Specify the name of the database to backup */
             bkpDBDifferential.Database = lokDB.Text;
+
+            string fileName = $@"{btePath.Text}\{ lokDB.Text}_Differential_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+
             /* You can issue backups on several media types (disk or tape), here I am * using the File type and storing the backup on the file system */
-            bkpDBDifferential.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Differential_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
+            bkpDBDifferential.Devices.AddDevice(fileName, DeviceType.File);
             bkpDBDifferential.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBDifferential.BackupSetDescription = $"{ lokDB.Text} database - Differential Backup";
+
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
             bkpDBDifferential.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
@@ -124,15 +137,19 @@ namespace QuanLyBanHang.GUI.Common
         private void TransactionLogBackup(Server myServer)
         {
             Backup bkpDBLog = new Backup();
+
             /* Specify whether you want to back up database or files or log */
             bkpDBLog.Action = BackupActionType.Log;
+
             /* Specify the name of the database to back up */
             bkpDBLog.Database = lokDB.Text;
+
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
             bkpDBLog.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Log_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
             bkpDBLog.BackupSetName = $"{ lokDB.Text} database Backup";
             bkpDBLog.BackupSetDescription = $"{ lokDB.Text} database - Log Backup";
+
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
             bkpDBLog.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
@@ -188,7 +205,6 @@ namespace QuanLyBanHang.GUI.Common
         {
             Restore restoreDB = new Restore();
 
-            /* Specify whether you want to restore database or files or log etc */
             restoreDB.Action = RestoreActionType.Database;
             restoreDB.Devices.AddDevice($"{bteFile.Text}", DeviceType.File);
             DataTable dataTable = restoreDB.ReadBackupHeader(myServer);
@@ -202,26 +218,13 @@ namespace QuanLyBanHang.GUI.Common
                 db.Alter(TerminationClause.RollbackTransactionsImmediately);
                 db.Refresh();
             }
-            /* You can specify ReplaceDatabase = false (default) to not create a new image
-             * of the database, the specified database must exist on SQL Server instance.
-             * If you can specify ReplaceDatabase = true to create new database image 
-             * regardless of the existence of specified database with same name */
+
             restoreDB.ReplaceDatabase = true;
-
-            /* If you have differential or log restore to be followed, you would need
-             * to specify NoRecovery = true, this will ensure no recovery is done after the 
-             * restore and subsequent restores are allowed. It means it will database
-             * in the Restoring state. */
             restoreDB.NoRecovery = false;
-
-            /* Wiring up events for progress monitoring */
             restoreDB.PercentComplete += PercentComplete;
             restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
-
-            /* SqlRestore method starts to restore database
-             * You cab also use SqlRestoreAsync method to perform restore 
-             * operation asynchronously */
             restoreDB.SqlRestoreAsync(myServer);
+            restoreDB.Wait();
 
             if (db != null)
             {
@@ -234,27 +237,33 @@ namespace QuanLyBanHang.GUI.Common
         {
             Restore restoreDB = new Restore();
 
-            /* Specify whether you want to restore database or files or log etc */
             restoreDB.Action = RestoreActionType.Database;
             restoreDB.Devices.AddDevice($"{bteFile.Text}", DeviceType.File);
             DataTable dataTable = restoreDB.ReadBackupHeader(myServer);
             if (dataTable.Rows.Count > 0)
                 restoreDB.Database = dataTable.Rows[0]["DatabaseName"].ToString();
 
-            /* If you have differential or log restore to be followed, you would need
-             * to specify NoRecovery = true, this will ensure no recovery is done after the 
-             * restore and subsequent restores are allowed. It means it will database
-             * in the Restoring state. */
-            restoreDB.NoRecovery = false;
+            Database db = myServer.Databases[restoreDB.Database];
+            if (db != null)
+            {
+                db.DatabaseOptions.UserAccess = DatabaseUserAccess.Single;
+                db.Alter(TerminationClause.RollbackTransactionsImmediately);
+                db.Refresh();
+            }
 
-            /* Wiring up events for progress monitoring */
+            restoreDB.ReplaceDatabase = true;
+            restoreDB.NoRecovery = true;
             restoreDB.PercentComplete += PercentComplete;
             restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
-
-            /* SqlRestore method starts to restore database
-             * You cab also use SqlRestoreAsync method to perform restore 
-             * operation asynchronously */
             restoreDB.SqlRestoreAsync(myServer);
+            restoreDB.Wait();
+
+            if (db != null)
+            {
+                db.DatabaseOptions.UserAccess = DatabaseUserAccess.Multiple;
+                db.Alter(TerminationClause.RollbackTransactionsImmediately);
+                db.Refresh();
+            }
         }
         private void RestoreDatabaseLog(Server myServer)
         {
@@ -430,56 +439,64 @@ namespace QuanLyBanHang.GUI.Common
         }
         private void btnRun_Click(object sender, EventArgs e)
         {
-            clsGeneral.CallWaitForm(this);
-
-            lbMessage.Items.Clear();
-            pgPercent.EditValue = 0;
-
-            Server myServer = CheckServer();
-            if (myServer == null) return;
-
-            if ((int)rgFunction.EditValue == 1)
+            try
             {
-                if ((int)rgMode.EditValue == 1)
+                clsGeneral.CallWaitForm(this);
+
+                lbMessage.Items.Clear();
+                pgPercent.EditValue = 0;
+
+                Server myServer = CheckServer();
+                if (myServer == null) return;
+
+                if ((int)rgFunction.EditValue == 1)
                 {
-                    FullDatabaseBackup(myServer);
+                    if ((int)rgMode.EditValue == 1)
+                    {
+                        FullDatabaseBackup(myServer);
+                    }
+                    if ((int)rgMode.EditValue == 2)
+                    {
+                        DifferentialDatabaseBackup(myServer);
+                    }
+                    if ((int)rgMode.EditValue == 3)
+                    {
+                        TransactionLogBackup(myServer);
+                    }
                 }
-                if ((int)rgMode.EditValue == 2)
+                if ((int)rgFunction.EditValue == 2)
                 {
-                    DifferentialDatabaseBackup(myServer);
+                    if ((int)rgMode.EditValue == 1)
+                    {
+                        RestoreDatabase(myServer);
+                    }
+                    if ((int)rgMode.EditValue == 2)
+                    {
+                        RestoreDatabaseDifferential(myServer);
+                    }
+                    if ((int)rgMode.EditValue == 3)
+                    {
+                        RestoreDatabaseLog(myServer);
+                    }
                 }
-                if ((int)rgMode.EditValue == 3)
-                {
-                    TransactionLogBackup(myServer);
-                }
+                clsGeneral.CloseWaitForm();
             }
-            if ((int)rgFunction.EditValue == 2)
+            catch (Exception ex)
             {
-                if ((int)rgMode.EditValue == 1)
-                {
-                    RestoreDatabase(myServer);
-                }
-                if ((int)rgMode.EditValue == 2)
-                {
-                    RestoreDatabaseDifferential(myServer);
-                }
-                if ((int)rgMode.EditValue == 3)
-                {
-                    RestoreDatabaseLog(myServer);
-                }
+                clsGeneral.CloseWaitForm();
+                clsGeneral.showErrorException(ex);
             }
 
-            clsGeneral.CloseWaitForm();
         }
         private void PercentComplete(object sender, PercentCompleteEventArgs e)
         {
-            pgPercent.Invoke(new Action<int>((value) => { pgPercent.EditValue = value; }), e.Percent);
-            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Message);
+            pgPercent.BeginInvoke(new Action<int>((value) => { pgPercent.EditValue = value; }), e.Percent);
+            lbMessage.BeginInvoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Message);
         }
         private void Completed(object sender, ServerMessageEventArgs e, string Function)
         {
-            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), $"{Function} completed");
-            lbMessage.Invoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Error.Message);
+            lbMessage.BeginInvoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), $"{Function} completed");
+            lbMessage.BeginInvoke(new Action<string>((value) => { lbMessage.Items.Add(value); }), e.Error.Message);
         }
         #endregion
     }
