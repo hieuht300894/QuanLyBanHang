@@ -14,8 +14,7 @@ namespace EntityModel
 
         private static xPersonnel _curPer = null;
         private static xAccount _curAcc = null;
-        private static List<ColumnKey> lstKeys = new List<ColumnKey>();
-        private static long _rowInPage = 100;
+        private static List<ColumnKey> lstSchemaKeys = new List<ColumnKey>();
 
         public static xPersonnel CurPer
         {
@@ -26,56 +25,6 @@ namespace EntityModel
         {
             get { return _curAcc; }
             set { _curAcc = value; }
-        }
-        public static List<ColumnKey> ListKeys
-        {
-            get { return lstKeys; }
-        }
-        public static long RowsInPage { get { return _rowInPage; } set { _rowInPage = value; } }
-
-        private class MyConfiguration : DbMigrationsConfiguration<aModel>
-        {
-            public MyConfiguration()
-            {
-                this.AutomaticMigrationDataLossAllowed = true;
-                this.AutomaticMigrationsEnabled = true;
-            }
-        }
-        public static void InitDefaultData()
-        {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<aModel, MyConfiguration>());
-
-            using (aModel db = new aModel())
-            {
-                db.Database.Initialize(false);
-
-                GetPrimaryKeys(db);
-
-                if (db.xAgency.Count() == 0)
-                {
-                    try
-                    {
-                        DateTime time = DateTime.MinValue;
-                        var dateQuery = db.Database.SqlQuery<DateTime>("SELECT GETDATE()");
-                        time = dateQuery.AsEnumerable().First();
-
-                        xAgency _eAgency = new xAgency();
-                        _eAgency.Code = "AGE0001";
-                        _eAgency.Name = "Agency 1";
-                        _eAgency.Address = "Ho Chi Minh City";
-                        _eAgency.Phone = "0123456789";
-                        _eAgency.Email = "agency1@gmail.com";
-                        _eAgency.Description = "";
-                        _eAgency.IsEnable = true;
-                        _eAgency.CreatedBy = 0;
-                        _eAgency.CreatedDate = time;
-                        db.xAgency.Add(_eAgency);
-
-                        db.SaveChanges();
-                    }
-                    catch { }
-                }
-            }
         }
         private static void GetPrimaryKeys(aModel db)
         {
@@ -120,7 +69,52 @@ namespace EntityModel
                "        WHERE " +
                "            i1.CONSTRAINT_TYPE = 'PRIMARY KEY') PT ON PT.TABLE_NAME = PK.TABLE_NAME";
 
-            lstKeys = new List<ColumnKey>(db.Database.SqlQuery<ColumnKey>(qSelectKey).ToList());
+            lstSchemaKeys = new List<ColumnKey>(db.Database.SqlQuery<ColumnKey>(qSelectKey).ToList());
+        }
+
+        private class MyConfiguration : DbMigrationsConfiguration<aModel>
+        {
+            public MyConfiguration()
+            {
+                this.AutomaticMigrationDataLossAllowed = true;
+                this.AutomaticMigrationsEnabled = true;
+            }
+        }
+        public static void InitDefaultData()
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<aModel, MyConfiguration>());
+
+            using (aModel db = new aModel())
+            {
+                db.Database.Initialize(false);
+
+                GetPrimaryKeys(db);
+
+                if (db.xAgency.Count() == 0)
+                {
+                    try
+                    {
+                        DateTime time = DateTime.MinValue;
+                        var dateQuery = db.Database.SqlQuery<DateTime>("SELECT GETDATE()");
+                        time = dateQuery.AsEnumerable().First();
+
+                        xAgency _eAgency = new xAgency();
+                        _eAgency.Code = "AGE0001";
+                        _eAgency.Name = "Agency 1";
+                        _eAgency.Address = "Ho Chi Minh City";
+                        _eAgency.Phone = "0123456789";
+                        _eAgency.Email = "agency1@gmail.com";
+                        _eAgency.Description = "";
+                        _eAgency.IsEnable = true;
+                        _eAgency.CreatedBy = 0;
+                        _eAgency.CreatedDate = time;
+                        db.xAgency.Add(_eAgency);
+
+                        db.SaveChanges();
+                    }
+                    catch { }
+                }
+            }
         }
     }
 }
