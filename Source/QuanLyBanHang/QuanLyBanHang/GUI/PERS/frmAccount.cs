@@ -1,6 +1,7 @@
 ﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.Service;
 using System;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmAccount : frmBase, IFormAccess
+    public partial class frmAccount : frmBaseEdit
     {
         #region Variables
         public delegate void LoadData(int KeyID);
@@ -115,13 +116,13 @@ namespace QuanLyBanHang.GUI.PER
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
             lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
         }
-        public async void LoadDataForm()
+        public override async void LoadDataForm()
         {
             iEntry = iEntry ?? new xAccount() { IsEnable = true };
             _acEntry = await clsAccount.Instance.GetByID(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
-        private async void LoadPersonnel(int KeyID)
+        private  async void LoadPersonnel(int KeyID)
         {
             lokPersonnel.Properties.DataSource = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
 
@@ -136,7 +137,7 @@ namespace QuanLyBanHang.GUI.PER
             if (KeyID > 0)
                 lokPermission.EditValue = KeyID;
         }
-        public void SetControlValue()
+        public override void SetControlValue()
         {
             if (fType == eFormType.Add)
             {
@@ -158,7 +159,7 @@ namespace QuanLyBanHang.GUI.PER
             btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
             LoadPermission(_acEntry.IDPermission);
         }
-        public bool ValidationForm()
+        public override bool ValidationForm()
         {
             bool bRe = true;
             lokPersonnel.ErrorText = string.Empty;
@@ -203,7 +204,7 @@ namespace QuanLyBanHang.GUI.PER
             }
             return bRe;
         }
-        public async Task<bool> SaveData()
+        public override async Task<bool> SaveData()
         {
             bool bRe = false;
 
@@ -232,9 +233,6 @@ namespace QuanLyBanHang.GUI.PER
                 ReLoadParent(_acEntry.KeyID);
 
             return bRe;
-        }
-        public void ResetData()
-        {
         }
         #endregion
     }

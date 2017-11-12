@@ -22,7 +22,5 @@ namespace EntityModel.DataModel
         public string Email { get; set; }
         public string GhiChu { get; set; }
         public byte[] HinhAnh { get; set; }
-        public int IDNhomKhachHang { get; set; }
-        public string NhomKhachHang { get; set; }
     }
 }

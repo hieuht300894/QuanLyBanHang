@@ -9,10 +9,11 @@ using System.Windows.Forms;
 using DevExpress.XtraBars;
 using QuanLyBanHang.Service;
 using System.Threading.Tasks;
+using QuanLyBanHang.GUI.Common;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPermission : frmBase, IFormAccess
+    public partial class frmPermission : frmBaseEdit
     {
         #region Variables
         public delegate void LoadData(int KeyID);
@@ -108,14 +109,14 @@ namespace QuanLyBanHang.GUI.PER
             lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
         }
 
-        public async void LoadDataForm()
+        public override async void LoadDataForm()
         {
             _iEntry = _iEntry ?? new xPermission();
             _acEntry = await clsPermission.Instance.GetByID(_iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
-        public void SetControlValue()
+        public override void SetControlValue()
         {
             trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
 
@@ -143,7 +144,7 @@ namespace QuanLyBanHang.GUI.PER
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
 
-        private void ResetCheckedNodes()
+        private  void ResetCheckedNodes()
         {
             trlFeature.GetNodeList().ToList().ForEach(x => x.CheckState = CheckState.Unchecked);
         }
@@ -158,7 +159,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public bool ValidationForm()
+        public override bool ValidationForm()
         {
             bool chk = true;
 
@@ -171,7 +172,7 @@ namespace QuanLyBanHang.GUI.PER
             return chk;
         }
 
-        public async Task<bool> SaveData()
+        public override async Task<bool> SaveData()
         {
             bool chk = false;
 
@@ -257,9 +258,6 @@ namespace QuanLyBanHang.GUI.PER
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
 
-        public void ResetData()
-        {
-        }
         #endregion
     }
 }

@@ -24,8 +24,8 @@ namespace QuanLyBanHang
         #region Variables
         public eFormType fType;
         public List<eFormType> fTypes;
+        public List<ControlObject> lstChildControls = new List<ControlObject>();
         bool IsLeaveForm = false;
-        List<ControlObject> lstChildControls = new List<ControlObject>();
         #endregion
 
         #region Form
@@ -38,6 +38,16 @@ namespace QuanLyBanHang
         #region Methods
         private void BarItemVisibility()
         {
+            btnAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+
             foreach (eFormType _fType in fTypes)
             {
                 if (_fType == eFormType.Default)
@@ -128,28 +138,30 @@ namespace QuanLyBanHang
                 var Obj = fInfo.GetValue(this);
 
                 if (Obj is LayoutControl)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (LayoutControl)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is TextEdit)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (TextEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is SpinEdit)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (SpinEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is DateEdit)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (DateEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is LookUpEdit)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (LookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is GridControl)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (GridControl)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is TreeList)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (TreeList)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
                 if (Obj is SearchLookUpEdit)
-                    lstChildControls.Add(new ControlObject() { ctrMain = (SearchLookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
+                if (Obj is MemoEdit)
+                    lstChildControls.Add(new ControlObject() { ctrMain = (Control)Obj });
 
                 if (Obj is RepositoryItemDateEdit)
-                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemDateEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItem)Obj });
                 if (Obj is RepositoryItemSpinEdit)
-                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemSpinEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItem)Obj });
                 if (Obj is RepositoryItemLookUpEdit)
-                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItemLookUpEdit)Obj });
+                    lstChildControls.Add(new ControlObject() { repoMain = (RepositoryItem)Obj });
             }
         }
         #endregion
@@ -178,7 +190,7 @@ namespace QuanLyBanHang
                 IsLeaveForm = !IsLeaveForm;
             }
         }
-        private void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        protected virtual void frmBase_FormClosing(object sender, FormClosingEventArgs e)
         {
             clsGeneral.CallWaitForm(this);
             try

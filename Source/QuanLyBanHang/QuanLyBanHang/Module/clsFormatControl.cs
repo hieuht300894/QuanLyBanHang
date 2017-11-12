@@ -1495,6 +1495,7 @@ namespace QuanLyBanHang
             if (IsCurrentDate)
                 dateEdit.DateTime = DateTime.Now.ServerNow();
             dateEdit.Properties.EditMask = fText;
+            dateEdit.Properties.ShowClear = false;
         }
         #endregion
 
@@ -1502,6 +1503,7 @@ namespace QuanLyBanHang
         public static void Format(this RepositoryItemDateEdit dateEdit, string fText = "dd/MM/yyyy")
         {
             dateEdit.EditMask = fText;
+            dateEdit.ShowClear = false;
         }
         #endregion
 

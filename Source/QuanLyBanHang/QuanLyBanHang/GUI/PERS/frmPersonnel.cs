@@ -5,10 +5,11 @@ using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Service;
 using System.Threading.Tasks;
+using QuanLyBanHang.GUI.Common;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPersonnel : frmBase, IFormAccess
+    public partial class frmPersonnel : frmBaseEdit
     {
         #region Variables
         public delegate void LoadData(int strKey);
@@ -52,14 +53,14 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        public async void LoadDataForm()
+        public override async void LoadDataForm()
         {
             iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
             _acEntry = await clsPersonnel.Instance.GetByID(iEntry.KeyID);
             await RunMethodAsync(() => { SetControlValue(); });
         }
 
-        public void SetControlValue()
+        public override void SetControlValue()
         {
             txtCode.DataBindings.Add("EditValue", _acEntry, "Code", true, DataSourceUpdateMode.OnPropertyChanged);
             txtFullName.DataBindings.Add("EditValue", _acEntry, "FullName", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -90,7 +91,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public bool ValidationForm()
+        public override bool ValidationForm()
         {
             bool bRe = true;
             txtCode.ErrorText = string.Empty;
@@ -131,7 +132,7 @@ namespace QuanLyBanHang.GUI.PER
             return bRe;
         }
 
-        public async Task<bool> SaveData()
+        public override async Task<bool> SaveData()
         {
             bool bRe = false;
 
@@ -170,9 +171,6 @@ namespace QuanLyBanHang.GUI.PER
             base.CustomForm();
         }
 
-        public void ResetData()
-        {
-        }
         #endregion
     }
 }

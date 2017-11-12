@@ -157,7 +157,6 @@
             this.btnAdd.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Add_32x32;
             this.btnAdd.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N));
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnEdit
             // 
@@ -167,7 +166,6 @@
             this.btnEdit.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Edit_32x32;
             this.btnEdit.ItemShortcut = new DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F2);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnDelete
             // 
@@ -176,7 +174,6 @@
             this.btnDelete.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Delete_16x16;
             this.btnDelete.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Delete_32x32;
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnSave
             // 
@@ -185,7 +182,6 @@
             this.btnSave.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Save_16x16;
             this.btnSave.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S));
             this.btnSave.Name = "btnSave";
-            this.btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnSaveAndAdd
             // 
@@ -195,7 +191,6 @@
             this.btnSaveAndAdd.ItemShortcut = new DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
                 | System.Windows.Forms.Keys.S));
             this.btnSaveAndAdd.Name = "btnSaveAndAdd";
-            this.btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnCancel
             // 
@@ -204,7 +199,6 @@
             this.btnCancel.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Cancel_16x16;
             this.btnCancel.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Escape));
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnRefresh
             // 
@@ -214,7 +208,6 @@
             this.btnRefresh.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Refresh_32x32;
             this.btnRefresh.ItemShortcut = new DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F5);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnPrintPreview
             // 
@@ -223,7 +216,6 @@
             this.btnPrintPreview.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Printer_16x16;
             this.btnPrintPreview.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P));
             this.btnPrintPreview.Name = "btnPrintPreview";
-            this.btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnExportExcel
             // 
@@ -233,7 +225,6 @@
             this.btnExportExcel.ItemShortcut = new DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
                 | System.Windows.Forms.Keys.E));
             this.btnExportExcel.Name = "btnExportExcel";
-            this.btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // barBottom
             // 
@@ -293,7 +284,7 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barMenu;
-            this.barDockControlTop.Size = new System.Drawing.Size(884, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(884, 26);
             // 
             // barDockControlBottom
             // 
@@ -307,17 +298,17 @@
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 26);
             this.barDockControlLeft.Manager = this.barMenu;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 358);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(884, 24);
+            this.barDockControlRight.Location = new System.Drawing.Point(884, 26);
             this.barDockControlRight.Manager = this.barMenu;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 358);
             // 
             // btnClose
             // 

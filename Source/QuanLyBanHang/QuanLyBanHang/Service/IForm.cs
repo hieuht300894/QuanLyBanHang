@@ -32,6 +32,7 @@ namespace QuanLyBanHang.Service
         void SetControlValue();
         bool ValidationForm();
         Task<bool> SaveData();
-        void ResetData();
+        void RenewData();
+        void ResetControl();
     }
 }
