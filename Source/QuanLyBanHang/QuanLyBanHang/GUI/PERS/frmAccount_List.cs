@@ -120,7 +120,7 @@ namespace QuanLyBanHang.GUI.PER
                     using (frmAccount _frm = new frmAccount())
                     {
                         xAccount _eEntry = (xAccount)grvAccountList.GetRow(grvAccountList.FocusedRowHandle);
-                        _frm.iEntry = _eEntry;
+                        _frm._iEntry = _eEntry;
                         _frm.Text = "Cập nhật tài khoản".Translation("ftxtUpdateAccount", _frm.Name);
                         _frm.fType = eFormType.Edit;
                         _frm.ReLoadParent = this.LoadData;

@@ -6,6 +6,7 @@ using QuanLyBanHang.Service;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
@@ -14,9 +15,8 @@ namespace QuanLyBanHang.GUI.PER
         #region Variables
         public delegate void LoadData(int KeyID);
         public LoadData ReLoadParent;
-
-        public xAccount iEntry;
-        xAccount _acEntry;
+        public xAccount _iEntry;
+        xAccount _aEntry;
         #endregion
 
         #region Form Events
@@ -29,6 +29,11 @@ namespace QuanLyBanHang.GUI.PER
             base.frmBase_Load(sender, e);
             LoadDataForm();
             CustomForm();
+        }
+        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            base.frmBase_FormClosing(sender, e);
+            ReLoadParent?.Invoke(0);
         }
         private void lokPersonnel_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
@@ -58,46 +63,15 @@ namespace QuanLyBanHang.GUI.PER
         }
 
         #region Show/Hide Password
-        private void txtPassword_Properties_MouseHover(object sender, EventArgs e)
+        private void btePassword_Properties_MouseDown(object sender, MouseEventArgs e)
         {
             btePassword.Properties.UseSystemPasswordChar = false;
         }
-        private void txtPassword_Properties_MouseLeave(object sender, EventArgs e)
+        private void btePassword_Properties_MouseUp(object sender, MouseEventArgs e)
         {
             btePassword.Properties.UseSystemPasswordChar = true;
         }
-
         #endregion
-        #endregion
-
-        #region Base Button Event
-        protected override void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            LoadDataForm();
-        }
-
-        protected async override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-                if (await SaveData())
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
-                else
-                    clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
-        }
-
-        protected async override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-                if (await SaveData())
-                {
-                    fType = eFormType.Add;
-                    this.Text = "Thêm mới tài khoản".Translation("ftxtAddAccount", this.Name);
-                    iEntry = _acEntry = new xAccount() { IsEnable = true };
-                    SetControlValue();
-                }
-                else
-                    clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại".Translation("msgSaveFailed", this.Name));
-        }
         #endregion
 
         #region Methods
@@ -111,18 +85,21 @@ namespace QuanLyBanHang.GUI.PER
             base.CustomForm();
 
             txtUserName.NotUnicode(true, false);
-            txtUserName.MouseHover += txtPassword_Properties_MouseHover;
-            txtUserName.MouseLeave += txtPassword_Properties_MouseLeave;
+            btePassword.Properties.MouseDown += btePassword_Properties_MouseDown;
+            btePassword.Properties.MouseUp += btePassword_Properties_MouseUp;
             lokPersonnel.Properties.ButtonClick += lokPersonnel_ButtonClick;
             lokPermission.Properties.ButtonClick += lokPermission_ButtonClick;
         }
         public override async void LoadDataForm()
         {
-            iEntry = iEntry ?? new xAccount() { IsEnable = true };
-            _acEntry = await clsAccount.Instance.GetByID(iEntry.KeyID);
-            await RunMethodAsync(() => { SetControlValue(); });
+            _iEntry = _iEntry ?? new xAccount() { IsEnable = true };
+            _aEntry = await clsAccount.Instance.GetByID(_iEntry.KeyID);
+
+            LoadPersonnel(_aEntry.KeyID);
+            LoadPermission(_aEntry.IDPermission);
+            SetControlValue();
         }
-        private  async void LoadPersonnel(int KeyID)
+        private async void LoadPersonnel(int KeyID)
         {
             lokPersonnel.Properties.DataSource = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
 
@@ -139,25 +116,31 @@ namespace QuanLyBanHang.GUI.PER
         }
         public override void SetControlValue()
         {
-            if (fType == eFormType.Add)
+            _aEntry.Password = clsGeneral.Decrypt(_aEntry.Password);
+
+            if (_aEntry.KeyID == 0)
             {
-                lokPersonnel.Properties.Buttons[1].Visible = false;
-                lokPersonnel.ReadOnly = txtUserName.ReadOnly = false;
+                lokPersonnel.Properties.Buttons[1].Visible = true;
+                lokPersonnel.Enabled = true;
+                txtUserName.Enabled = true;
                 lokPersonnel.Select();
             }
             else
             {
-                lokPersonnel.ReadOnly = txtUserName.ReadOnly = true;
+                lokPersonnel.Properties.Buttons[1].Visible = false;
+                lokPersonnel.Enabled = false;
+                txtUserName.Enabled = false;
                 btePassword.Select();
             }
 
-            //lctAccount.BesFitFormHeight();
-            this.CenterToScreen();
-
-            LoadPersonnel(_acEntry.KeyID);
-            txtUserName.Text = _acEntry.UserName;
-            btePassword.Text = clsGeneral.Decrypt(_acEntry.Password);
-            LoadPermission(_acEntry.IDPermission);
+            lokPersonnel.DataBindings.Add("EditValue", _aEntry, "KeyID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            txtUserName.DataBindings.Add("EditValue", _aEntry, "UserName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            btePassword.DataBindings.Add("EditValue", _aEntry, "Password", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            lokPermission.DataBindings.Add("EditValue", _aEntry, "IDPermission", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+        }
+        public override void RenewData()
+        {
+            _iEntry = _aEntry = null;
         }
         public override bool ValidationForm()
         {
@@ -171,30 +154,30 @@ namespace QuanLyBanHang.GUI.PER
 
             if (lokPermission.ToInt32() == 0)
             {
-                lokPermission.ErrorText = "Phân quyền không hợp lệ".Translation("msgUserRoleIncorrect", this.Name);
+                lokPermission.ErrorText = "Phân quyền không hợp lệ";
                 bRe = false; setFocusControl = lokPermission.Name;
             }
 
             if (string.IsNullOrEmpty(btePassword.Text.Trim()))
             {
-                btePassword.ErrorText = "Mật khẩu không hợp lệ".Translation("msgPasswordIsEmpty", this.Name);
+                btePassword.ErrorText = "Mật khẩu không hợp lệ";
                 bRe = false; setFocusControl = btePassword.Name;
             }
 
             if (string.IsNullOrEmpty(txtUserName.Text.Trim()))
             {
-                txtUserName.ErrorText = "Tên đăng nhập không hợp lệ".Translation("msgUsernameIsEmpty", this.Name);
+                txtUserName.ErrorText = "Tên đăng nhập không hợp lệ";
                 bRe = false; setFocusControl = txtUserName.Name;
             }
             //else if (clsAccount.Instance.checkExist(txtUserName.Text.Trim(), fType == eFormType.Add ? 0 : _acEntry.IDPersonnel))
             //{
-            //    txtUserName.ErrorText = "Tên đăng nhập đã tồn tại".Translation("msgDuplicateUsername", this.Name);
+            //    txtUserName.ErrorText = "Tên đăng nhập đã tồn tại";
             //    bRe = false; setFocusControl = txtUserName.Name;
             //}
 
             if (lokPersonnel.ToInt32() == 0)
             {
-                lokPersonnel.ErrorText = "Nhân viên không hợp lệ".Translation("msgPersonnelIsEmpty", this.Name);
+                lokPersonnel.ErrorText = "Nhân viên không hợp lệ";
                 bRe = false; setFocusControl = lokPersonnel.Name;
             }
 
@@ -206,32 +189,25 @@ namespace QuanLyBanHang.GUI.PER
         }
         public override async Task<bool> SaveData()
         {
-            bool bRe = false;
-
-            _acEntry.Password = clsGeneral.Encrypt(btePassword.Text);
-            _acEntry.IDPermission = lokPermission.ToInt32();
-            _acEntry.PermissionName = lokPermission.Text;
+            _aEntry.Password = clsGeneral.Encrypt(btePassword.Text);
+            _aEntry.PermissionName = lokPermission.Text;
 
             if (fType == eFormType.Add)
             {
-                _acEntry.IsEnable = true;
-                _acEntry.KeyID = lokPersonnel.ToInt32();
-                _acEntry.PersonelName = lokPersonnel.Text;
-                _acEntry.UserName = txtUserName.Text.Trim().ToLower();
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.CreatedDate = DateTime.Now.ServerNow();
+                _aEntry.IsEnable = true;
+                _aEntry.PersonelName = lokPersonnel.Text;
+                _aEntry.UserName = txtUserName.Text.Trim();
+                _aEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.CreatedDate = DateTime.Now.ServerNow();
             }
             else
             {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+                _aEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe =await clsAccount.Instance.AddOrUpdate(_acEntry);
-
-            if (bRe && ReLoadParent != null)
-                ReLoadParent(_acEntry.KeyID);
-
+            bool bRe = false;
+            bRe = await clsAccount.Instance.AddOrUpdate(_aEntry);
             return bRe;
         }
         #endregion

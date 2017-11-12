@@ -22,8 +22,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
         List<eTinhThanh> lstTinhThanh = new List<eTinhThanh>();
         public eKhachHang _iEntry = new eKhachHang();
         eKhachHang _aEntry = new eKhachHang();
-        eTinhThanh tinhThanh = new eTinhThanh();
-        Loai loaiGioiTinh = new Loai();
 
         public frmKhachHang()
         {
@@ -49,7 +47,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
             lstTinhThanh = new List<eTinhThanh>(await clsTinhThanh.Instance.Get63TinhThanh());
             await RunMethodAsync(() => { lokTinhThanh.Properties.DataSource = lstTinhThanh; });
         }
-
         public override async void LoadDataForm()
         {
             _iEntry = _iEntry ?? new eKhachHang();
@@ -60,12 +57,10 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
             SetControlValue();
         }
-
         public override void RenewData()
         {
             _iEntry = _aEntry = null;
         }
-
         public override async Task<bool> SaveData()
         {
             _aEntry.GioiTinh = lokGioiTinh.Text;
@@ -75,7 +70,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
             chk = await clsKhachHang.Instance.AddOrUpdate(_aEntry);
             return chk;
         }
-
         public override void SetControlValue()
         {
             //txtMaKH.DataBindings.Clear();
@@ -100,7 +94,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
             mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
             dteNgaySinh.DataBindings.Add("DateTime", _aEntry, "NgaySinh", true, DataSourceUpdateMode.OnPropertyChanged);
         }
-
         public override bool ValidationForm()
         {
             bool chk = true;
@@ -110,7 +103,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
             }
             return chk;
         }
-
         protected override void CustomForm()
         {
             lokGioiTinh.Properties.ValueMember = "KeyID";

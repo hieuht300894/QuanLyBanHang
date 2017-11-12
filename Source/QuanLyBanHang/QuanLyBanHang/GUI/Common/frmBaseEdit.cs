@@ -37,6 +37,8 @@ namespace QuanLyBanHang.GUI.Common
                 if (res)
                 {
                     clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    Text = "Thêm mới dữ liệu";
                     RenewData();
                     ResetControl();
                     LoadDataForm();
@@ -67,6 +69,8 @@ namespace QuanLyBanHang.GUI.Common
                 if (res)
                 {
                     clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    Text = "Thêm mới dữ liệu";
                     RenewData();
                     ResetControl();
                     LoadDataForm();
@@ -86,25 +90,20 @@ namespace QuanLyBanHang.GUI.Common
         public virtual void LoadDataForm()
         {
         }
-
         public async virtual Task<bool> SaveData()
         {
             return await Task<bool>.Factory.StartNew(() => { return true; });
         }
-
         public virtual void SetControlValue()
         {
         }
-
         public virtual bool ValidationForm()
         {
             return true;
         }
-
         public virtual void RenewData()
         {
         }
-
         public virtual void ResetControl()
         {
             lstChildControls.ForEach(x =>
