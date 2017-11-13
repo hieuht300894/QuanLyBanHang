@@ -1,5 +1,4 @@
-﻿using EntityModel.DataModel;
-using EntityModel.DataModel.DanhMuc;
+﻿using EntityModel.DataModel.DanhMuc;
 using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
@@ -9,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace QuanLyBanHang.BLL.DanhMuc
 {
-    class clsKhachHang : clsFunction<eKhachHang>
+    public class clsKho : clsFunction<eKho>
     {
         #region Contructor
-        protected clsKhachHang() { }
-        public new static clsKhachHang Instance
+        protected clsKho() { }
+        public new static clsKho Instance
         {
-            get { return new clsKhachHang(); }
+            get { return new clsKho(); }
         }
         #endregion
     }

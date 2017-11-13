@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmKhachHang_List : frmBaseList
+    public partial class frmKho_List : frmBaseList
     {
-        public frmKhachHang_List()
+        public frmKho_List()
         {
             InitializeComponent();
         }
@@ -26,9 +26,9 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
         public override void InsertEntry()
         {
-            using (frmKhachHang frm = new frmKhachHang())
+            using (frmKho frm = new frmKho())
             {
-                frm.Text = "Thêm mới khách hàng";
+                frm.Text = "Thêm mới kho";
                 frm.fType = eFormType.Add;
                 frm.ReloadData = LoadData;
                 frm.ShowDialog();
@@ -37,12 +37,11 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
         public override async void LoadData(object KeyID)
         {
-            IList<eKhachHang> lstKH = await clsKhachHang.Instance.GetAll();
+            IList<eKho> lstKho = await clsKho.Instance.GetAll();
             await RunMethodAsync(() =>
             {
-                gctDanhSach.DataSource = lstKH;
-                if (KeyID.GetType() == typeof(int) && (int)KeyID > 0)
-                    grvDanhSach.FocusedRowHandle = grvDanhSach.LocateByValue("KeyID", KeyID);
+                gctDanhSach.DataSource = lstKho;
+                grvDanhSach.FocusedRowHandle = grvDanhSach.LocateByValue("KeyID", KeyID);
             });
         }
 
@@ -53,10 +52,10 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
         public override void UpdateEntry()
         {
-            using (frmKhachHang frm = new frmKhachHang())
+            using (frmKho frm = new frmKho())
             {
-                frm._iEntry = (eKhachHang)grvDanhSach.GetFocusedRow();
-                frm.Text = "Cập nhật khách hàng";
+                frm._iEntry = (eKho)grvDanhSach.GetFocusedRow();
+                frm.Text = "Cập nhật kho";
                 frm.fType = eFormType.Edit;
                 frm.ReloadData = LoadData;
                 frm.ShowDialog();
