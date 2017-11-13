@@ -66,7 +66,7 @@ namespace QuanLyBanHang.BLL.PERS
 
                 lstUserFeatures.ForEach(x =>
                 {
-                    x.IDUserRole = entry.KeyID;
+                    x.IDPermission = entry.KeyID;
                     db.xUserFeature.AddOrUpdate(x);
                 });
 

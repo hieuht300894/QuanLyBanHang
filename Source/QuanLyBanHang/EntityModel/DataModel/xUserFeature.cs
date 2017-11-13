@@ -8,7 +8,7 @@ namespace EntityModel.DataModel
     {
         [Key]
         public int KeyID { get; set; }
-        public int IDUserRole { get; set; }
+        public int IDPermission { get; set; }
         [StringLength(255)]
         public string IDFeature { get; set; }
         public bool IsAdd { get; set; }

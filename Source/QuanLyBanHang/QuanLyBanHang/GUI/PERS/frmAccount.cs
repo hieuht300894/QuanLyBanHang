@@ -4,6 +4,7 @@ using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.Service;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -75,7 +76,7 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             lokPermission.Properties.ValueMember = "KeyID";
             lokPermission.Properties.DisplayMember = "Name";
@@ -101,22 +102,30 @@ namespace QuanLyBanHang.GUI.PER
         }
         private async void LoadPersonnel(int KeyID)
         {
-            lokPersonnel.Properties.DataSource = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
-
-            if (KeyID > 0)
-                lokPersonnel.EditValue = KeyID;
-            else
-                lokPersonnel.ItemIndex = 0;
+            IList<xPersonnel> lstResult = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
+            await RunMethodAsync(() =>
+            {
+                lokPersonnel.Properties.DataSource = lstResult;
+                if (KeyID > 0) lokPersonnel.EditValue = KeyID;
+                else lokPersonnel.ItemIndex = 0;
+            });
         }
-        private async void LoadPermission(int KeyID)
+        private async void LoadPermission(object KeyID)
         {
-            lokPermission.Properties.DataSource = await clsPermission.Instance.SearchPermission(true, KeyID);
-            if (KeyID > 0)
-                lokPermission.EditValue = KeyID;
+            IList<xPermission> lstResult = await clsPermission.Instance.SearchPermission(true, (int)KeyID);
+            await RunMethodAsync(() =>
+            {
+                lokPermission.Properties.DataSource = lstResult;
+                if ((int)KeyID > 0)
+                    lokPermission.EditValue = KeyID;
+            });
         }
         public override void SetControlValue()
         {
-            _aEntry.Password = clsGeneral.Decrypt(_aEntry.Password);
+            lokPersonnel.DataBindings.Add("EditValue", _aEntry, "KeyID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            txtUserName.DataBindings.Add("EditValue", _aEntry, "UserName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            btePassword.DataBindings.Add("EditValue", _aEntry, "Password", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            lokPermission.DataBindings.Add("EditValue", _aEntry, "IDPermission", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
 
             if (_aEntry.KeyID == 0)
             {
@@ -133,10 +142,7 @@ namespace QuanLyBanHang.GUI.PER
                 btePassword.Select();
             }
 
-            lokPersonnel.DataBindings.Add("EditValue", _aEntry, "KeyID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            txtUserName.DataBindings.Add("EditValue", _aEntry, "UserName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            btePassword.DataBindings.Add("EditValue", _aEntry, "Password", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
-            lokPermission.DataBindings.Add("EditValue", _aEntry, "IDPermission", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged);
+            _aEntry.Password = clsGeneral.Decrypt(_aEntry.Password);
         }
         public override void RenewData()
         {

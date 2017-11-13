@@ -2,6 +2,7 @@
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.GUI.PER;
 using QuanLyBanHang.Service;
 using System;
@@ -12,7 +13,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PERS
 {
-    public partial class frmPermission_List : frmBase, IFormList<Int32>
+    public partial class frmPermission_List : frmBaseList
     {
         #region Variables
         #endregion
@@ -47,67 +48,22 @@ namespace QuanLyBanHang.GUI.PERS
         }
         #endregion
 
-        #region Base Button Events
-        protected override void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            InsertEntry();
-        }
-
-        protected override void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            RefreshEntry();
-        }
-
-        protected override void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            UpdateEntry();
-        }
-
-        protected override void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DeleteEntry();
-        }
-
-        protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            InsertEntry();
-        }
-
-        protected override void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            UpdateEntry();
-        }
-
-        protected override void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DeleteEntry();
-        }
-
-        protected override void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            RefreshEntry();
-        }
-        #endregion
-
         #region Methods
         public async void LoadRepository()
         {
             IList<xPersonnel> lstPersonel = await clsPersonnel.Instance.GetAllPersonnel();
             await RunMethodAsync(() => { rlokPersonnel.DataSource = lstPersonel; });
         }
-
-        public async void LoadData(int KeyID)
+        public override async void LoadData(object KeyID)
         {
             IList<xPermission> lstPermission = await clsPermission.Instance.SearchPermission(true, 0);
             await RunMethodAsync(() =>
             {
                 gctPermission.DataSource = lstPermission;
-                if (KeyID > 0)
-                    grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
+                grvPermission.FocusedRowHandle = grvPermission.LocateByValue("KeyID", KeyID);
             });
         }
-
-        public void InsertEntry()
+        public override void InsertEntry()
         {
             using (frmPermission _frm = new frmPermission())
             {
@@ -117,31 +73,18 @@ namespace QuanLyBanHang.GUI.PERS
                 _frm.ShowDialog();
             }
         }
-
-        public void UpdateEntry()
+        public override void UpdateEntry()
         {
-            if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
+            using (frmPermission _frm = new frmPermission())
             {
-                try
-                {
-                    using (frmPermission _frm = new frmPermission())
-                    {
-                        xPermission _eEntry = (xPermission)grvPermission.GetRow(grvPermission.FocusedRowHandle);
-                        _frm._iEntry = _eEntry;
-                        _frm.Text = "Cập nhật quyền";
-                        _frm.fType = eFormType.Edit;
-                        _frm.ReloadData = this.LoadData;
-                        _frm.ShowDialog();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.showErrorException(ex, "Exception");
-                }
+                _frm._iEntry = (xPermission)grvPermission.GetRow(grvPermission.FocusedRowHandle);
+                _frm.Text = "Cập nhật quyền";
+                _frm.fType = eFormType.Edit;
+                _frm.ReloadData = LoadData;
+                _frm.ShowDialog();
             }
         }
-
-        public void DeleteEntry()
+        public override void DeleteEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -161,14 +104,12 @@ namespace QuanLyBanHang.GUI.PERS
             //    }
             //}
         }
-
-        public void RefreshEntry()
+        public override void RefreshEntry()
         {
             LoadRepository();
             LoadData(0);
         }
-
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";

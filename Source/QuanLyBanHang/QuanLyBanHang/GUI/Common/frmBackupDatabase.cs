@@ -384,7 +384,7 @@ namespace QuanLyBanHang.GUI.Common
         }
         private void btnTestConnect_Click(object sender, EventArgs e)
         {
-            Server myServer = CheckServer();
+            Server myServer = CheckConnection(txtServerName.Text, "master", tgsIsAuth.IsOn, txtUsername.Text, txtPassword.Text);
             if (myServer != null)
             {
                 List<string> lstDB = new List<string>();

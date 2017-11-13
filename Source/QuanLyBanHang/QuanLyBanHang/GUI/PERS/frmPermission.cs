@@ -1,27 +1,25 @@
-﻿using DevExpress.XtraTreeList.Nodes;
+﻿using DevExpress.XtraBars;
+using DevExpress.XtraTreeList.Columns;
+using DevExpress.XtraTreeList.Nodes;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
+using QuanLyBanHang.GUI.Common;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Windows.Forms;
-using DevExpress.XtraBars;
-using QuanLyBanHang.Service;
 using System.Threading.Tasks;
-using QuanLyBanHang.GUI.Common;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
     public partial class frmPermission : frmBaseEdit
     {
         #region Variables
-        public delegate void LoadData(int KeyID);
+        public delegate void LoadData(object KeyID);
         public LoadData ReloadData;
-
         public xPermission _iEntry;
-        xPermission _acEntry;
-        List<xUserFeature> lstUserFeatures = new List<xUserFeature>();
+        xPermission _aEntry;
+        IList<xUserFeature> lstUserFeatures = new List<xUserFeature>();
         #endregion
 
         #region Form Events
@@ -32,133 +30,100 @@ namespace QuanLyBanHang.GUI.PER
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
+            LoadFeature();
             LoadDataForm();
             CustomForm();
         }
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {
+            trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
+
             if (e.Column == colIsAdd || e.Column == colIsEdit || e.Column == colIsDelete ||
                 e.Column == colIsSave || e.Column == colIsPrintPreview || e.Column == colIsExportExcel)
             {
-                List<TreeListNode> lstNode = new List<TreeListNode>();
-                CheckedNode(e.Node, (bool)e.Value);
+                //List<TreeListNode> lstNode = new List<TreeListNode>();
+                CheckedNode(e.Node, e.Column, (bool)e.Value);
                 e.Node.SetValue(e.Column, e.Value);
-            }
-        }
-        #endregion
-
-        #region Base Button Events
-        protected async override void btnSave_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-            {
-                if (await SaveData())
-                    DialogResult = DialogResult.OK;
-            }
-        }
-        protected async override void btnSaveAndAdd_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-            {
-                if (await SaveData())
-                {
-                    _iEntry = null;
-                    LoadDataForm();
-                }
-            }
-        }
-        protected override void btnCancel_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            LoadDataForm();
-        }
-        #endregion
-
-        #region Methods
-        private void LoadFeature()
-        {
-            trlFeature.Nodes.Clear();
-
-            List<xFeature> list = new List<xFeature>(clsFeature.Instance.SearchFeature(true));
-            //list = list.Where(x => ((x.Level == 0 || x.Level == 1) && x.ItemCount > 0) || (x.Level == 2 && x.ItemCount == 0)).ToList();
-            trlFeature.DataSource = list;
-            trlFeature.KeyFieldName = "KeyID";
-            trlFeature.ParentFieldName = "IDGroup";
-            if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
-            {
-                colEN.Visible = false;
-                colVN.Visible = true;
-            }
-            else
-            {
-                colEN.Visible = true;
-                colVN.Visible = false;
-            }
-
-            colIsAdd.Visible = true;
-            colIsEdit.Visible = true;
-            colIsDelete.Visible = true;
-            colIsSave.Visible = true;
-            colIsPrintPreview.Visible = true;
-            colIsExportExcel.Visible = true;
-
-            ResetCheckedNodes();
-        }
-
-        private void LoadUserFeature(int IDPermission)
-        {
-            lstUserFeatures = new List<xUserFeature>(clsUserRole.Instance.GetUserFeature(IDPermission));
-        }
-
-        public override async void LoadDataForm()
-        {
-            _iEntry = _iEntry ?? new xPermission();
-            _acEntry = await clsPermission.Instance.GetByID(_iEntry.KeyID);
-            await RunMethodAsync(() => { SetControlValue(); });
-        }
-
-        public override void SetControlValue()
-        {
-            trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
-
-            txtName.Text = _acEntry.Name;
-            mmeDescription.Text = _acEntry.Description;
-
-            LoadFeature();
-            LoadUserFeature(_acEntry.KeyID);
-
-            foreach (var usr in lstUserFeatures)
-            {
-                TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
-                if (node != null)
-                {
-                    node.CheckState = CheckState.Checked;
-                    node.SetValue(colIsAdd, usr.IsAdd);
-                    node.SetValue(colIsEdit, usr.IsEdit);
-                    node.SetValue(colIsDelete, usr.IsDelete);
-                    node.SetValue(colIsSave, usr.IsSave);
-                    node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
-                    node.SetValue(colIsExportExcel, usr.IsExportExcel);
-                }
             }
 
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
+        #endregion
 
-        private  void ResetCheckedNodes()
+        #region Methods
+        private async void LoadFeature()
         {
-            trlFeature.GetNodeList().ToList().ForEach(x => x.CheckState = CheckState.Unchecked);
+            IList<xFeature> list = await clsFeature.Instance.SearchFeature(true);
+            await RunMethodAsync(() =>
+            {
+                trlFeature.Nodes.Clear();
+                trlFeature.DataSource = list;
+                ResetCheckedNodes();
+            });
         }
+        private async void LoadUserFeature(int IDPermission)
+        {
+            lstUserFeatures = await clsUserRole.Instance.SearchUserFeature(IDPermission);
+            await RunMethodAsync(() =>
+            {
+                trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
+                ResetCheckedNodes();
+                foreach (var usr in lstUserFeatures)
+                {
+                    TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
+                    if (node != null)
+                    {
+                        node.CheckState = CheckState.Checked;
+                        node.SetValue(colIsAdd, usr.IsAdd);
+                        node.SetValue(colIsEdit, usr.IsEdit);
+                        node.SetValue(colIsDelete, usr.IsDelete);
+                        node.SetValue(colIsSave, usr.IsSave);
+                        node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
+                        node.SetValue(colIsExportExcel, usr.IsExportExcel);
+                    }
+                }
 
-        private void CheckedNode(TreeListNode node, bool checkedVal)
+                foreach (TreeListColumn column in trlFeature.Columns)
+                {
+                    if (column == colIsAdd || column == colIsEdit || column == colIsDelete || column == colIsSave || column == colIsPrintPreview || column == colIsExportExcel)
+                    {
+                        foreach (var usr in lstUserFeatures)
+                        {
+                            TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
+                            if (node != null)
+                                CheckedNode(node, column, usr.IsEnable);
+                        }
+                    }
+                }
+                trlFeature.CellValueChanging += trlFeature_CellValueChanging;
+            });
+        }
+        public override async void LoadDataForm()
+        {
+            _iEntry = _iEntry ?? new xPermission();
+            _aEntry = await clsPermission.Instance.GetByID(_iEntry.KeyID);
+
+            LoadUserFeature(_aEntry.KeyID);
+            SetControlValue();
+        }
+        public override void SetControlValue()
+        {
+            txtName.DataBindings.Add("EditValue", _aEntry, "Name", true, DataSourceUpdateMode.OnPropertyChanged);
+            mmeDescription.DataBindings.Add("EditValue", _aEntry, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
+        }
+        private async void ResetCheckedNodes()
+        {
+            await RunMethodAsync(() => { trlFeature.GetNodeList().ToList().ForEach(x => x.CheckState = CheckState.Unchecked); });
+        }
+        private void CheckedNode(TreeListNode node, TreeListColumn column, bool checkedVal)
         {
             foreach (TreeListNode _node in node.Nodes)
             {
-                _node.SetValue(trlFeature.FocusedColumn, checkedVal);
+                _node.SetValue(column, checkedVal);
                 bool _checkedVal = checkedVal;
-                CheckedNode(_node, _checkedVal);
+                CheckedNode(_node, column, _checkedVal);
             }
         }
-
         public override bool ValidationForm()
         {
             bool chk = true;
@@ -171,30 +136,24 @@ namespace QuanLyBanHang.GUI.PER
             }
             return chk;
         }
-
         public override async Task<bool> SaveData()
         {
-            bool chk = false;
-
-            _acEntry.Name = txtName.Text.Trim();
-            _acEntry.Description = mmeDescription.Text.Trim();
-
-            if (_acEntry.KeyID == 0)
+            if (_aEntry.KeyID == 0)
             {
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.CreatedDate = DateTime.Now.ServerNow();
-                _acEntry.IsEnable = true;
+                _aEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.CreatedDate = DateTime.Now.ServerNow();
+                _aEntry.IsEnable = true;
             }
             else
             {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+                _aEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
             List<xFeature> lstFeature = new List<xFeature>();
             trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n))));
 
-            lstUserFeatures.ForEach(x => x.IsEnable = false);
+            lstUserFeatures.ToList().ForEach(x => x.IsEnable = false);
 
             foreach (var fe in lstFeature)
             {
@@ -222,20 +181,16 @@ namespace QuanLyBanHang.GUI.PER
                 if (usr.KeyID == 0)
                 {
                     usr.IDFeature = fe.KeyID;
-                    usr.IDUserRole = _acEntry.KeyID;
+                    usr.IDPermission = _aEntry.KeyID;
                     lstUserFeatures.Add(usr);
                 }
             }
 
-            chk = await clsPermission.Instance.AddOrUpdate(_acEntry, lstUserFeatures);
-
-            if (chk && ReloadData != null)
-                ReloadData(_acEntry.KeyID);
-
+            bool chk = false;
+            chk = await clsPermission.Instance.AddOrUpdate(_aEntry, lstUserFeatures.ToList());
             return chk;
         }
-
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             base.CustomForm();
             if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
@@ -257,7 +212,10 @@ namespace QuanLyBanHang.GUI.PER
 
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
-
+        public override void RenewData()
+        {
+            _iEntry = _aEntry = null;
+        }
         #endregion
     }
 }

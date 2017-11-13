@@ -103,7 +103,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             }
             return chk;
         }
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             lokGioiTinh.Properties.ValueMember = "KeyID";
             lokGioiTinh.Properties.DisplayMember = "Ten";

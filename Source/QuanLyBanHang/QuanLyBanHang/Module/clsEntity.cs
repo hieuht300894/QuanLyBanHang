@@ -49,7 +49,7 @@ namespace QuanLyBanHang
             };
             clsGeneral.curUserFeature = new xUserFeature()
             {
-                IDUserRole = 0,
+                IDPermission = 0,
                 IsEnable = true,
                 IsAdd = true,
                 IsEdit = true,

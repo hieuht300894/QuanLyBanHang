@@ -70,7 +70,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             }
         }
 
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             base.CustomForm();
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;

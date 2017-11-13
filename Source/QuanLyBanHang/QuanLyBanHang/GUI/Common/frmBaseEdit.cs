@@ -14,10 +14,12 @@ namespace QuanLyBanHang.GUI.Common
 {
     public partial class frmBaseEdit : frmBase, IFormAccess
     {
+        #region Method
         public frmBaseEdit()
         {
             InitializeComponent();
         }
+        #endregion
 
         #region override
         protected async override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

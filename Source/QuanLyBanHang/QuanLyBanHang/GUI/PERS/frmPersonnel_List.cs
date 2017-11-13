@@ -123,7 +123,7 @@ namespace QuanLyBanHang.GUI.PER
                     using (frmPersonnel _frm = new frmPersonnel())
                     {
                         xPersonnel _eEntry = (xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle);
-                        _frm.iEntry = _eEntry;
+                        _frm._iEntry = _eEntry;
                         _frm.Text = "Cập nhật nhân viên";
                         _frm.fType = eFormType.Edit;
                         _frm.ShowDialog();
@@ -211,7 +211,7 @@ namespace QuanLyBanHang.GUI.PER
             LoadData(0);
         }
 
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             rlokPersonnel.ValueMember = "KeyID";
             rlokPersonnel.DisplayMember = "FullName";

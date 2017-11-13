@@ -485,7 +485,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region Virtual Method
-        protected virtual void CustomForm()
+        public virtual void CustomForm()
         {
             try
             {

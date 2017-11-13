@@ -14,9 +14,8 @@ namespace QuanLyBanHang.GUI.PER
         #region Variables
         public delegate void LoadData(int strKey);
         public LoadData ReLoadParent;
-
-        public xPersonnel iEntry;
-        xPersonnel _acEntry;
+        public xPersonnel _iEntry;
+        xPersonnel _aEntry;
         #endregion
 
         #region Form Events
@@ -30,54 +29,30 @@ namespace QuanLyBanHang.GUI.PER
             LoadDataForm();
             CustomForm();
         }
-        #endregion
-
-        #region Base Button Event
-        protected override void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
         {
-            LoadDataForm();
-        }
-
-        protected async override void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-                await SaveData();
-            base.btnSave_ItemClick(sender, e);
-        }
-
-        protected async override void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            if (ValidationForm())
-                await SaveData();
+            base.frmBase_FormClosing(sender, e);
+            ReLoadParent?.Invoke(0);
         }
         #endregion
 
         #region Methods
         public override async void LoadDataForm()
         {
-            iEntry = iEntry ?? new xPersonnel() { IsEnable = true };
-            _acEntry = await clsPersonnel.Instance.GetByID(iEntry.KeyID);
-            await RunMethodAsync(() => { SetControlValue(); });
+            _iEntry = _iEntry ?? new xPersonnel() { IsEnable = true };
+            _aEntry = await clsPersonnel.Instance.GetByID(_iEntry.KeyID);
+            SetControlValue();
         }
-
         public override void SetControlValue()
         {
-            txtCode.DataBindings.Add("EditValue", _acEntry, "Code", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtFullName.DataBindings.Add("EditValue", _acEntry, "FullName", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtPhone.DataBindings.Add("EditValue", _acEntry, "Phone", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtAddress.DataBindings.Add("EditValue", _acEntry, "Address", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtEmail.DataBindings.Add("EditValue", _acEntry, "Email", true, DataSourceUpdateMode.OnPropertyChanged);
-            mmeDescription.DataBindings.Add("EditValue", _acEntry, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtCode.DataBindings.Add("EditValue", _aEntry, "Code", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtFullName.DataBindings.Add("EditValue", _aEntry, "FullName", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtPhone.DataBindings.Add("EditValue", _aEntry, "Phone", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtAddress.DataBindings.Add("EditValue", _aEntry, "Address", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtEmail.DataBindings.Add("EditValue", _aEntry, "Email", true, DataSourceUpdateMode.OnPropertyChanged);
+            mmeDescription.DataBindings.Add("EditValue", _aEntry, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
 
-
-            //txtCode.EditValue = _acEntry.Code;
-            //txtFullName.Text = _acEntry.FullName;
-            //txtPhone.Text = _acEntry.Phone;
-            //txtAddress.Text = _acEntry.Address;
-            //txtEmail.Text = _acEntry.Email;
-            //mmeDescription.Text = _acEntry.Description;
-
-            if (_acEntry.KeyID == 0)
+            if (_aEntry.KeyID == 0)
             {
                 txtCode.TabStop = true;
                 txtCode.ReadOnly = false;
@@ -90,7 +65,6 @@ namespace QuanLyBanHang.GUI.PER
                 txtFullName.Select();
             }
         }
-
         public override bool ValidationForm()
         {
             bool bRe = true;
@@ -104,19 +78,19 @@ namespace QuanLyBanHang.GUI.PER
 
             if (!string.IsNullOrEmpty(txtEmail.Text.Trim()) && !clsGeneral.CheckEmail(txtEmail.Text.Trim()))
             {
-                txtEmail.ErrorText = "Email không hợp lệ".Translation("msgIncorrectEmail", this.Name);
+                txtEmail.ErrorText = "Email không hợp lệ";
                 bRe = false; setFocusControl = txtEmail.Name;
             }
 
             if (string.IsNullOrEmpty(txtFullName.Text.Trim()))
             {
-                txtFullName.ErrorText = "Vui lòng nhập tên nhân viên".Translation("msgNameIsEmpty", this.Name);
+                txtFullName.ErrorText = "Vui lòng nhập tên nhân viên";
                 bRe = false; setFocusControl = txtFullName.Name;
             }
 
             if (string.IsNullOrEmpty(txtCode.Text.Trim()))
             {
-                txtCode.ErrorText = "Vui lòng nhập mã nhân viên".Translation("msgCodeIsEmpty", this.Name);
+                txtCode.ErrorText = "Vui lòng nhập mã nhân viên";
                 bRe = false; setFocusControl = txtCode.Name;
             }
             //else if (clsPersonnel.Instance.checkExist(txtCode.Text, _acEntry.KeyID))
@@ -131,46 +105,35 @@ namespace QuanLyBanHang.GUI.PER
             }
             return bRe;
         }
-
         public override async Task<bool> SaveData()
         {
-            bool bRe = false;
-
-            //_acEntry.FullName = txtFullName.Text.Trim();
-            //_acEntry.Phone = txtPhone.Text.Trim();
-            //_acEntry.Address = txtAddress.Text.Trim();
-            //_acEntry.Email = txtEmail.Text.Trim();
-            //_acEntry.Description = mmeDescription.Text.Trim();
-
-            if (_acEntry.KeyID == 0)
+            if (_aEntry.KeyID == 0)
             {
-                _acEntry.IsEnable = true;
-                //_acEntry.Code = txtCode.Text.Trim().ToUpper();
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.CreatedDate = DateTime.Now.ServerNow();
+                _aEntry.IsEnable = true;
+                _aEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.CreatedDate = DateTime.Now.ServerNow();
             }
             else
             {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
-                _acEntry.ModifiedDate = DateTime.Now.ServerNow();
+                _aEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
+                _aEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            bRe = await clsPersonnel.Instance.AddOrUpdate(_acEntry);
-
-            if (bRe && ReLoadParent != null)
-                ReLoadParent(_acEntry.KeyID);
-
+            bool bRe = false;
+            bRe = await clsPersonnel.Instance.AddOrUpdate(_aEntry);
             return bRe;
         }
-
-        protected override void CustomForm()
+        public override void RenewData()
+        {
+            _iEntry = _aEntry = null;
+        }
+        public override void CustomForm()
         {
             txtCode.NotUnicode(true, true);
             txtFullName.IsPersonName();
             txtPhone.PhoneOnly();
             base.CustomForm();
         }
-
         #endregion
     }
 }

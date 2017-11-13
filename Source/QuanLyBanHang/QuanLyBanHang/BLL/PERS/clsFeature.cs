@@ -32,12 +32,18 @@ namespace QuanLyBanHang.BLL.PERS
         }
         #endregion
 
-        public IList<xFeature> SearchFeature(bool IsEnable)
+        public async Task<IList<xFeature>> SearchFeature(bool IsEnable)
         {
-            db = new aModel();
-            IEnumerable<xFeature> lstTemp = db.xFeature.Where(x => x.IsEnable == IsEnable);
-
-            return lstTemp.ToList();
+            try
+            {
+                return await Task.Factory.StartNew(() =>
+                {
+                    db = new aModel();
+                    IEnumerable<xFeature> lstTemp = db.xFeature.Where(x => x.IsEnable == IsEnable);
+                    return lstTemp.ToList();
+                });
+            }
+            catch { return new List<xFeature>(); }
         }
 
         public void UpdateFeaturesCount()

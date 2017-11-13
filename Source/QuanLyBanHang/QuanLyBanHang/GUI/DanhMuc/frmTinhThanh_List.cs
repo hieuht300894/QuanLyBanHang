@@ -143,7 +143,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             LoadData(0);
         }
 
-        protected override void CustomForm()
+        public override void CustomForm()
         {
             lokLoai1.Properties.ValueMember = "KeyID";
             lokLoai1.Properties.DisplayMember = "Ten";
