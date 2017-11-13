@@ -4,6 +4,7 @@
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using EntityModel.DataModel.DanhMuc;
 
     public partial class zModel : DbContext
     {
@@ -35,6 +36,7 @@
         #region Danh mục
         public virtual DbSet<eKhachHang> eKhachHang { get; set; }
         public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
+        public virtual DbSet<eKho> eKho { get; set; }
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
