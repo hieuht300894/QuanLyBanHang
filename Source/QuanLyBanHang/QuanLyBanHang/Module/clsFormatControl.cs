@@ -784,45 +784,31 @@ namespace QuanLyBanHang
             }
         }
 
-        public static void Format(this TreeList trlMain, bool Autowidth = true, bool ShowColumnHeader = true)
+        public static void Format(this TreeList trlMain, bool Autowidth = false, bool ShowColumnHeader = true)
         {
             trlMain.OptionsView.ShowCheckBoxes = true;
             trlMain.OptionsView.ShowColumns = ShowColumnHeader;
-            trlMain.OptionsBehavior.AllowIndeterminateCheckState = false;
-            trlMain.OptionsBehavior.AllowRecursiveNodeChecking = true;
-            trlMain.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
-            trlMain.OptionsSelection.MultiSelect = false;
-            trlMain.OptionsView.ShowCaption = true;
-            trlMain.ImeMode = ImeMode.NoControl;
             trlMain.OptionsView.EnableAppearanceOddRow = true;
             trlMain.OptionsView.ShowIndicator = false;
+            trlMain.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
+            trlMain.OptionsView.ShowCaption = true;
+            trlMain.OptionsView.AutoWidth = Autowidth;
+            trlMain.OptionsBehavior.AllowIndeterminateCheckState = false;
+            trlMain.OptionsBehavior.AllowRecursiveNodeChecking = true;
+            trlMain.OptionsSelection.MultiSelect = false;
             trlMain.OptionsSelection.EnableAppearanceFocusedCell = false;
             trlMain.Appearance.FocusedRow.BackColor = trlMain.Appearance.FocusedRow.BackColor2 = MyColor.GridDefaultRow;
             trlMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
             trlMain.Appearance.HideSelectionRow.BackColor = trlMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridDefaultRow;
             trlMain.Appearance.HideSelectionRow.ForeColor = MyColor.GridForeRow;
-
             trlMain.OptionsBehavior.AutoPopulateColumns = false;
             trlMain.OptionsBehavior.PopulateServiceColumns = true;
-            trlMain.OptionsView.AutoWidth = Autowidth;
-            if (!Autowidth)
-                trlMain.BestFitColumns();
-            else
-            {
-                trlMain.NodesReloaded -= trlMain_NodesReloaded;
-                trlMain.NodesReloaded += trlMain_NodesReloaded;
-            }
-            trlMain.ColumnPanelRowHeight = 25;
 
-            //trlMain.Translation();
-            trlMain.FormatColumnTreeList();
+            trlMain.ColumnPanelRowHeight = 25;
             trlMain.BestFitColumns();
 
-            trlMain.NodeChanged -= trlMain_NodeChanged;
-            trlMain.NodeChanged += trlMain_NodeChanged;
-
+            trlMain.CalcNodeHeight -= trlMain_CalcNodeHeight;
             trlMain.CalcNodeHeight += trlMain_CalcNodeHeight;
-            trlMain.NodeCellStyle += trlMain_NodeCellStyle;
         }
 
         static void trlMain_CalcNodeHeight(object sender, CalcNodeHeightEventArgs e)

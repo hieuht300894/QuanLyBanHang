@@ -56,16 +56,16 @@ namespace QuanLyBanHang
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
-                    else if (t.BaseType == typeof(frmBaseGrid))
-                    {
-                        var emptyCtor = t.GetConstructor(Type.EmptyTypes);
-                        if (emptyCtor != null)
-                        {
-                            var f = (XtraForm)emptyCtor.Invoke(new object[] { });
-                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
-                                fList.Add(new FormItem(f.Name, f));
-                        }
-                    }
+                    //else if (t.BaseType == typeof(frmBaseGrid))
+                    //{
+                    //    var emptyCtor = t.GetConstructor(Type.EmptyTypes);
+                    //    if (emptyCtor != null)
+                    //    {
+                    //        var f = (XtraForm)emptyCtor.Invoke(new object[] { });
+                    //        if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
+                    //            fList.Add(new FormItem(f.Name, f));
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)

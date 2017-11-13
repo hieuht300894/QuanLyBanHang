@@ -19,6 +19,7 @@ namespace QuanLyBanHang.GUI.PER
         public LoadData ReloadData;
         public xPermission _iEntry;
         xPermission _aEntry;
+        IList<xFeature> lstFeatures = new List<xFeature>();
         IList<xUserFeature> lstUserFeatures = new List<xUserFeature>();
         #endregion
 
@@ -33,6 +34,11 @@ namespace QuanLyBanHang.GUI.PER
             LoadFeature();
             LoadDataForm();
             CustomForm();
+        }
+        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            base.frmBase_FormClosing(sender, e);
+            ReloadData?.Invoke(0);
         }
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {
@@ -53,11 +59,11 @@ namespace QuanLyBanHang.GUI.PER
         #region Methods
         private async void LoadFeature()
         {
-            IList<xFeature> list = await clsFeature.Instance.SearchFeature(true);
+            lstFeatures = await clsFeature.Instance.SearchFeature(true);
             await RunMethodAsync(() =>
             {
                 trlFeature.Nodes.Clear();
-                trlFeature.DataSource = list;
+                trlFeature.DataSource = lstFeatures;
                 ResetCheckedNodes();
             });
         }
@@ -68,31 +74,20 @@ namespace QuanLyBanHang.GUI.PER
             {
                 trlFeature.CellValueChanging -= trlFeature_CellValueChanging;
                 ResetCheckedNodes();
-                foreach (var usr in lstUserFeatures)
+                foreach (xUserFeature usr in lstUserFeatures)
                 {
                     TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
                     if (node != null)
                     {
-                        node.CheckState = CheckState.Checked;
-                        node.SetValue(colIsAdd, usr.IsAdd);
-                        node.SetValue(colIsEdit, usr.IsEdit);
-                        node.SetValue(colIsDelete, usr.IsDelete);
-                        node.SetValue(colIsSave, usr.IsSave);
-                        node.SetValue(colIsPrintPreview, usr.IsPrintPreview);
-                        node.SetValue(colIsExportExcel, usr.IsExportExcel);
-                    }
-                }
+                        node.Checked = usr.IsEnable;
 
-                foreach (TreeListColumn column in trlFeature.Columns)
-                {
-                    if (column == colIsAdd || column == colIsEdit || column == colIsDelete || column == colIsSave || column == colIsPrintPreview || column == colIsExportExcel)
-                    {
-                        foreach (var usr in lstUserFeatures)
-                        {
-                            TreeListNode node = trlFeature.FindNodeByKeyID(usr.IDFeature);
-                            if (node != null)
-                                CheckedNode(node, column, usr.IsEnable);
-                        }
+                        xFeature feature = (xFeature)trlFeature.GetDataRecordByNode(node);
+                        feature.IsAdd = usr.IsAdd;
+                        feature.IsEdit = usr.IsEdit;
+                        feature.IsDelete = usr.IsDelete;
+                        feature.IsSave = usr.IsSave;
+                        feature.IsPrintPreview = usr.IsPrintPreview;
+                        feature.IsExportExcel = usr.IsExportExcel;
                     }
                 }
                 trlFeature.CellValueChanging += trlFeature_CellValueChanging;
@@ -111,17 +106,28 @@ namespace QuanLyBanHang.GUI.PER
             txtName.DataBindings.Add("EditValue", _aEntry, "Name", true, DataSourceUpdateMode.OnPropertyChanged);
             mmeDescription.DataBindings.Add("EditValue", _aEntry, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
         }
-        private async void ResetCheckedNodes()
+        private void ResetCheckedNodes()
         {
-            await RunMethodAsync(() => { trlFeature.GetNodeList().ToList().ForEach(x => x.CheckState = CheckState.Unchecked); });
+            trlFeature.BeginUpdate();
+            trlFeature.GetNodeList().ForEach(x =>
+            {
+                x.SetValue(colIsAdd, false);
+                x.SetValue(colIsEdit, false);
+                x.SetValue(colIsDelete, false);
+                x.SetValue(colIsSave, false);
+                x.SetValue(colIsPrintPreview, false);
+                x.SetValue(colIsExportExcel, false);
+            });
+            trlFeature.UncheckAll();
+            trlFeature.CollapseAll();
+            trlFeature.EndUpdate();
         }
         private void CheckedNode(TreeListNode node, TreeListColumn column, bool checkedVal)
         {
             foreach (TreeListNode _node in node.Nodes)
             {
                 _node.SetValue(column, checkedVal);
-                bool _checkedVal = checkedVal;
-                CheckedNode(_node, column, _checkedVal);
+                CheckedNode(_node, column, checkedVal);
             }
         }
         public override bool ValidationForm()
@@ -150,12 +156,9 @@ namespace QuanLyBanHang.GUI.PER
                 _aEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
-            List<xFeature> lstFeature = new List<xFeature>();
-            trlFeature.GetAllCheckedNodes().ForEach(n => lstFeature.Add(((xFeature)trlFeature.GetDataRecordByNode(n))));
+            lstFeatures.ToList().ForEach(x => x.IsEnable = false);
 
-            lstUserFeatures.ToList().ForEach(x => x.IsEnable = false);
-
-            foreach (var fe in lstFeature)
+            foreach (var fe in lstFeatures)
             {
                 xUserFeature usr = lstUserFeatures.FirstOrDefault(x => x.IDFeature.Equals(fe.KeyID)) ?? new xUserFeature();
                 usr.IsEnable = true;
@@ -192,24 +195,10 @@ namespace QuanLyBanHang.GUI.PER
         }
         public override void CustomForm()
         {
-            base.CustomForm();
-            if (Properties.Settings.Default.CurrentCulture.Equals("VN"))
-            {
-                colEN.Visible = false;
-                colVN.Visible = true;
-            }
-            else
-            {
-                colEN.Visible = true;
-                colVN.Visible = false;
-            }
-            colIsAdd.Visible = true;
-            colIsEdit.Visible = true;
-            colIsDelete.Visible = true;
-            colIsSave.Visible = true;
-            colIsPrintPreview.Visible = true;
-            colIsExportExcel.Visible = true;
+            trlFeature.ParentFieldName = "IDGroup";
+            trlFeature.KeyFieldName = "KeyID";
 
+            base.CustomForm();
             trlFeature.CellValueChanging += trlFeature_CellValueChanging;
         }
         public override void RenewData()
