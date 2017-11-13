@@ -6,6 +6,7 @@ using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Service;
 using System.Threading.Tasks;
 using QuanLyBanHang.GUI.Common;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.GUI.PER
 {

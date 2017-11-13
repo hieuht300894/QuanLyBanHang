@@ -11,6 +11,7 @@ using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraBars;
 using QuanLyBanHang.BLL.PERS;
 using System.Threading.Tasks;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang
 {

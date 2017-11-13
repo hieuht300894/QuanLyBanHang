@@ -11,6 +11,8 @@ namespace QuanLyBanHang.GUI.DanhMuc
 {
     public partial class frmKho : frmBaseEdit
     {
+        public override string MsgAdd { get => base.MsgAdd; set => base.MsgAdd = "Thêm mới kho"; }
+        public override string MsgEdit { get => base.MsgEdit; set => base.MsgEdit = "Cập nhật kho"; }
         public delegate void LoadData(object KeyID);
         public LoadData ReloadData;
         public eKho _iEntry = new eKho();

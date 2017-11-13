@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.IO;
+using EntityModel.DataModel.HeThong;
 
 namespace EntityModel
 {

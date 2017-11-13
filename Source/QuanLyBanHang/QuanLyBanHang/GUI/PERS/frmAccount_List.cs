@@ -12,6 +12,7 @@ using System.Data.Entity;
 using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Service;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.GUI.PER
 {

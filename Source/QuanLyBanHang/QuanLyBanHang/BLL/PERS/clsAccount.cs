@@ -1,4 +1,5 @@
 ﻿using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,11 @@ namespace QuanLyBanHang.BLL.PERS
 {
     public class clsAccount : clsFunction<xAccount>
     {
-        #region Constructor
-        private static volatile clsAccount instance = null;
-        private static readonly object mLock = new object();
+        #region Contructor
         protected clsAccount() { }
         public new static clsAccount Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsAccount();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsAccount(); }
         }
         #endregion
 

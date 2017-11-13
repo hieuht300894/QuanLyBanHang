@@ -4,29 +4,17 @@ using EntityModel.DataModel;
 using System.Data.Entity.Migrations;
 using QuanLyBanHang.BLL.Common;
 using System.Threading.Tasks;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.BLL.PERS
 {
     public class clsUserRole : clsFunction<xUserFeature>
     {
-        #region Constructor
-        private static volatile clsUserRole instance = null;
-        private static readonly object mLock = new object();
+        #region Contructor
         protected clsUserRole() { }
         public new static clsUserRole Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsUserRole();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsUserRole(); }
         }
         #endregion
 

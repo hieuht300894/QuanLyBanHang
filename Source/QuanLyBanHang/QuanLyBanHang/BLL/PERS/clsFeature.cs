@@ -1,4 +1,5 @@
 ﻿using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,11 @@ namespace QuanLyBanHang.BLL.PERS
 {
     class clsFeature : clsFunction<xFeature>
     {
-        #region Constructor
-        private static volatile clsFeature instance = null;
-        private static readonly object mLock = new object();
+        #region Contructor
         protected clsFeature() { }
         public new static clsFeature Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsFeature();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsFeature(); }
         }
         #endregion
 

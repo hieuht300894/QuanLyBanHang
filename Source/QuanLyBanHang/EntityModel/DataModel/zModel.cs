@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using EntityModel.DataModel.DanhMuc;
+    using EntityModel.DataModel.HeThong;
 
     public partial class zModel : DbContext
     {
@@ -18,7 +19,7 @@
         {
         }
 
-        #region Common
+        #region Hệ thống
         public virtual DbSet<xAccount> xAccount { get; set; }
         public virtual DbSet<xAgency> xAgency { get; set; }
         public virtual DbSet<xPersonnel> xPersonnel { get; set; }

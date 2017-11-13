@@ -1,4 +1,4 @@
-namespace EntityModel.DataModel
+namespace EntityModel.DataModel.HeThong
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

@@ -84,7 +84,7 @@
             // 
             // bindingSource1
             // 
-            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xPermission);
+            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.HeThong.xPermission);
             // 
             // grvPermission
             // 

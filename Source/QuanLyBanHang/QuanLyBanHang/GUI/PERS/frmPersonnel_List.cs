@@ -1,5 +1,6 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.Service;
 using System;

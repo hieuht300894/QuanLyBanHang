@@ -40,7 +40,7 @@ namespace QuanLyBanHang.GUI.Common
                 {
                     clsGeneral.showMessage("Lưu dữ liệu thành công.");
                     fType = eFormType.Add;
-                    Text = "Thêm mới dữ liệu";
+                    Text = MsgAdd;
                     RenewData();
                     ResetControl();
                     LoadDataForm();
@@ -72,7 +72,7 @@ namespace QuanLyBanHang.GUI.Common
                 {
                     clsGeneral.showMessage("Lưu dữ liệu thành công.");
                     fType = eFormType.Add;
-                    Text = "Thêm mới dữ liệu";
+                    Text = MsgAdd;
                     RenewData();
                     ResetControl();
                     LoadDataForm();

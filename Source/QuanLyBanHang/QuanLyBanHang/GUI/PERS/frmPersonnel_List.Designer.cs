@@ -186,7 +186,7 @@
             // 
             // bindingSource1
             // 
-            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xPersonnel);
+            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.HeThong.xPersonnel);
             // 
             // grvPersonnelList
             // 

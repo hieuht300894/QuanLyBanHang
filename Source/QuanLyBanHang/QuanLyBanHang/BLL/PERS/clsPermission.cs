@@ -6,29 +6,17 @@ using System.Threading.Tasks;
 using EntityModel.DataModel;
 using System.Data.Entity.Migrations;
 using QuanLyBanHang.BLL.Common;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.BLL.PERS
 {
     public class clsPermission : clsFunction<xPermission>
     {
-        #region Constructor
-        private static volatile clsPermission instance = null;
-        private static readonly object mLock = new object();
+        #region Contructor
         protected clsPermission() { }
         public new static clsPermission Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsPermission();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsPermission(); }
         }
         #endregion
 

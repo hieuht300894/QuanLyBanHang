@@ -1,4 +1,5 @@
 ﻿using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -7,24 +8,11 @@ namespace QuanLyBanHang.BLL.Common
 {
     public class clsAgency : clsFunction<xAgency>
     {
-        #region Constructor
-        private static volatile clsAgency instance = null;
-        private static readonly object mLock = new object();
+        #region Contructor
         protected clsAgency() { }
         public new static clsAgency Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (mLock)
-                    {
-                        if (instance == null)
-                            instance = new clsAgency();
-                    }
-                }
-                return instance;
-            }
+            get { return new clsAgency(); }
         }
         #endregion
 

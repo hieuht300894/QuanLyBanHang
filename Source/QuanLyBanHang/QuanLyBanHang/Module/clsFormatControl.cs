@@ -28,6 +28,7 @@ using Newtonsoft.Json;
 using System.Data.SqlClient;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraLayout.Utils;
+using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang
 {

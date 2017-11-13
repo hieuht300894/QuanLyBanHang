@@ -2,6 +2,7 @@
 using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
 using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using QuanLyBanHang.BLL.PERS;
 using QuanLyBanHang.GUI.Common;
 using System;

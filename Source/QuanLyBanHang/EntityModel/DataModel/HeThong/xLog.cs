@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityModel.DataModel
+namespace EntityModel.DataModel.HeThong
 {
     [Table("xLog")]
     public class xLog

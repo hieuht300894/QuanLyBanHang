@@ -2,6 +2,7 @@
 using DevExpress.XtraEditors;
 using DevExpress.XtraSplashScreen;
 using EntityModel.DataModel;
+using EntityModel.DataModel.HeThong;
 using System;
 using System.Collections.Generic;
 using System.Data;

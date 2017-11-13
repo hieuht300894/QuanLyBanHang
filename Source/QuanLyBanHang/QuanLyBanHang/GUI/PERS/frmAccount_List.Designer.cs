@@ -87,7 +87,7 @@
             // 
             // bindingSource1
             // 
-            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xAccount);
+            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.HeThong.xAccount);
             // 
             // grvAccountList
             // 
