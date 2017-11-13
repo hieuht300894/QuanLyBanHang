@@ -64,11 +64,11 @@ namespace QuanLyBanHang.GUI.Common
             clsGeneral.CallWaitForm(this);
             string _sName, _sDatabase, _sUser, _sPass;
             bool _wAu;
-            _wAu = Properties.Settings.Default.sWinAu;
-            _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
-            _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-            _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            _wAu = Properties.Settings.Default.WinAu;
+            _sName = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
+            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.DBName);
+            _sUser = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
+            _sPass = clsGeneral.Decrypt(Properties.Settings.Default.Password);
 
             string _conString = "";
             if (_wAu)
@@ -122,7 +122,7 @@ namespace QuanLyBanHang.GUI.Common
                     clsGeneral.CallWaitForm(this);
                     clsCallForm.InitFormCollection();
                     bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
-                    bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
+                    bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.DBName);
                     bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
                     bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
                     addItemClick();

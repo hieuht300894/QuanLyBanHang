@@ -21,8 +21,8 @@ namespace QuanLyBanHang.GUI.Common
             lcMain.AllowCustomization = false;
 
             lcMain.BestFitFormHeight();
-            txtUserName.Text = Properties.Settings.Default.username;
-            txtPassword.Text = Properties.Settings.Default.password;
+            txtUserName.Text = Properties.Settings.Default.CurrentUsername;
+            txtPassword.Text = Properties.Settings.Default.CurrentPassword;
             if (Properties.Settings.Default.CurrentCulture.Equals("EN"))
                 setENCulture();
             else

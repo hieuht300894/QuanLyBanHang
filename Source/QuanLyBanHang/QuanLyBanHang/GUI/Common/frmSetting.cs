@@ -29,10 +29,10 @@ namespace QuanLyBanHang.GUI.Common
             txtTenFPT.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ftp_user);
             txtPassFTP.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ftp_pw);
 
-            txtSQLServerName.Text = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-            tsbSQLAuthentication.IsOn = !Properties.Settings.Default.sWinAu;
-            txtSQLUserName.Text = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-            txtSQLPassword.Text = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            txtSQLServerName.Text = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
+            tsbSQLAuthentication.IsOn = !Properties.Settings.Default.WinAu;
+            txtSQLUserName.Text = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
+            txtSQLPassword.Text = clsGeneral.Decrypt(Properties.Settings.Default.Password);
             cbbDatabase.Enabled = false;
             this.KeyPreview = true;
 
@@ -66,11 +66,11 @@ namespace QuanLyBanHang.GUI.Common
         private void btnLuu_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.ComputerName = txtComputerName.Text;
-            Properties.Settings.Default.sServerName = clsGeneral.Encrypt(_sqlName);
-            Properties.Settings.Default.sWinAu = !tsbSQLAuthentication.IsOn;
-            Properties.Settings.Default.sDBName = clsGeneral.Encrypt(cbbDatabase.Text);
-            Properties.Settings.Default.sUserName = clsGeneral.Encrypt(_sqlUser);
-            Properties.Settings.Default.sPassword = clsGeneral.Encrypt(_sqlPass);
+            Properties.Settings.Default.ServerName = clsGeneral.Encrypt(_sqlName);
+            Properties.Settings.Default.WinAu = !tsbSQLAuthentication.IsOn;
+            Properties.Settings.Default.DBName = clsGeneral.Encrypt(cbbDatabase.Text);
+            Properties.Settings.Default.UserName = clsGeneral.Encrypt(_sqlUser);
+            Properties.Settings.Default.Password = clsGeneral.Encrypt(_sqlPass);
 
             Properties.Settings.Default.Save();
             Properties.Settings.Default.Reload();

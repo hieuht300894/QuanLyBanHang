@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ServicePack" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1.0.0</Value>
     </Setting>
     <Setting Name="ftp" Type="System.String" Scope="User">
       <Value Profile="(Default)">EQQvlTQwQkmQmLh0Zgzt1A==</Value>
@@ -20,25 +20,25 @@
     <Setting Name="isSaveUserAndPassword" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="username" Type="System.String" Scope="User">
+    <Setting Name="CurrentUsername" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="password" Type="System.String" Scope="User">
+    <Setting Name="CurrentPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="sServerName" Type="System.String" Scope="User">
+    <Setting Name="ServerName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="sDBName" Type="System.String" Scope="User">
+    <Setting Name="DBName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="sWinAu" Type="System.Boolean" Scope="User">
+    <Setting Name="WinAu" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="sUserName" Type="System.String" Scope="User">
+    <Setting Name="UserName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="sPassword" Type="System.String" Scope="User">
+    <Setting Name="Password" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CurrentCulture" Type="System.String" Scope="User">
@@ -53,19 +53,7 @@
     <Setting Name="DecimalFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">N0</Value>
     </Setting>
-    <Setting Name="CurrentDevice" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="SkinName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="CompanyName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Address" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Phone" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PrinterName" Type="System.String" Scope="User">

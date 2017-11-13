@@ -25,7 +25,7 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0")]
         public string ServicePack {
             get {
                 return ((string)(this["ServicePack"]));
@@ -98,84 +98,84 @@ namespace QuanLyBanHang.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string username {
+        public string CurrentUsername {
             get {
-                return ((string)(this["username"]));
+                return ((string)(this["CurrentUsername"]));
             }
             set {
-                this["username"] = value;
+                this["CurrentUsername"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string password {
+        public string CurrentPassword {
             get {
-                return ((string)(this["password"]));
+                return ((string)(this["CurrentPassword"]));
             }
             set {
-                this["password"] = value;
+                this["CurrentPassword"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sServerName {
+        public string ServerName {
             get {
-                return ((string)(this["sServerName"]));
+                return ((string)(this["ServerName"]));
             }
             set {
-                this["sServerName"] = value;
+                this["ServerName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sDBName {
+        public string DBName {
             get {
-                return ((string)(this["sDBName"]));
+                return ((string)(this["DBName"]));
             }
             set {
-                this["sDBName"] = value;
+                this["DBName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool sWinAu {
+        public bool WinAu {
             get {
-                return ((bool)(this["sWinAu"]));
+                return ((bool)(this["WinAu"]));
             }
             set {
-                this["sWinAu"] = value;
+                this["WinAu"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sUserName {
+        public string UserName {
             get {
-                return ((string)(this["sUserName"]));
+                return ((string)(this["UserName"]));
             }
             set {
-                this["sUserName"] = value;
+                this["UserName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sPassword {
+        public string Password {
             get {
-                return ((string)(this["sPassword"]));
+                return ((string)(this["Password"]));
             }
             set {
-                this["sPassword"] = value;
+                this["Password"] = value;
             }
         }
         
@@ -229,18 +229,6 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int CurrentDevice {
-            get {
-                return ((int)(this["CurrentDevice"]));
-            }
-            set {
-                this["CurrentDevice"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SkinName {
             get {
@@ -248,42 +236,6 @@ namespace QuanLyBanHang.Properties {
             }
             set {
                 this["SkinName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CompanyName {
-            get {
-                return ((string)(this["CompanyName"]));
-            }
-            set {
-                this["CompanyName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Address {
-            get {
-                return ((string)(this["Address"]));
-            }
-            set {
-                this["Address"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Phone {
-            get {
-                return ((string)(this["Phone"]));
-            }
-            set {
-                this["Phone"] = value;
             }
         }
         

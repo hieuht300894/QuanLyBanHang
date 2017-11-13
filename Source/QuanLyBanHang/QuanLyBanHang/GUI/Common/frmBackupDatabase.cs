@@ -29,10 +29,10 @@ namespace QuanLyBanHang.GUI.Common
         private Server CheckServer()
         {
             txtComputerName.EditValue = string.IsNullOrEmpty(Properties.Settings.Default.ComputerName) ? Environment.MachineName : Properties.Settings.Default.ComputerName;
-            tgsIsAuth.IsOn = Properties.Settings.Default.sWinAu;
-            txtServerName.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-            txtUsername.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-            txtPassword.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            tgsIsAuth.IsOn = Properties.Settings.Default.WinAu;
+            txtServerName.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
+            txtUsername.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
+            txtPassword.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.Password);
 
             return CheckConnection(txtServerName.Text, "master", tgsIsAuth.IsOn, txtUsername.Text, txtPassword.Text);
         }
@@ -340,7 +340,7 @@ namespace QuanLyBanHang.GUI.Common
                 lokDB.Properties.DataSource = lstDB;
             }
 
-            lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
+            lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.DBName);
             lokDB.Format();
 
             rgFunction.EditValueChanged += rgFunction_EditValueChanged;
@@ -360,11 +360,11 @@ namespace QuanLyBanHang.GUI.Common
         private void btnSave_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.ComputerName = txtComputerName.Text;
-            Properties.Settings.Default.sServerName = clsGeneral.Encrypt(txtServerName.Text);
-            Properties.Settings.Default.sWinAu = tgsIsAuth.IsOn;
-            Properties.Settings.Default.sDBName = clsGeneral.Encrypt(lokDB.Text);
-            Properties.Settings.Default.sUserName = clsGeneral.Encrypt(txtUsername.Text);
-            Properties.Settings.Default.sPassword = clsGeneral.Encrypt(txtPassword.Text);
+            Properties.Settings.Default.ServerName = clsGeneral.Encrypt(txtServerName.Text);
+            Properties.Settings.Default.WinAu = tgsIsAuth.IsOn;
+            Properties.Settings.Default.DBName = clsGeneral.Encrypt(lokDB.Text);
+            Properties.Settings.Default.UserName = clsGeneral.Encrypt(txtUsername.Text);
+            Properties.Settings.Default.Password = clsGeneral.Encrypt(txtPassword.Text);
             Properties.Settings.Default.Save();
             Properties.Settings.Default.Reload();
             DialogResult = DialogResult.OK;
