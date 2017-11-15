@@ -6,6 +6,7 @@ using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
@@ -27,6 +28,10 @@ namespace QuanLyBanHang.GUI.PER
             LoadRepository();
             LoadData(0);
             CustomForm();
+
+            aModel db = new aModel();
+            List<EntityModel.DataModel.DanhMuc.eTienTe> list = new List<EntityModel.DataModel.DanhMuc.eTienTe>(db.eTienTe.ToList());
+            string json = list.SerializeJSON();
         }
         #endregion
 
