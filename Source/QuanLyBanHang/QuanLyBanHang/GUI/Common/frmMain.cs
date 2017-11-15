@@ -219,7 +219,7 @@ namespace QuanLyBanHang.GUI.Common
 
         private void bsiNhanVien_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (clsGeneral.showConfirmMessage("Xác nhận đăng xuất khỏi hệ thống".Translation("msgLogout", this.Name)))
+            if (clsGeneral.showConfirmMessage("Xác nhận đăng xuất khỏi hệ thống"))
             {
                 docManager.View.Controller.CloseAll();
                 this.Dispose();

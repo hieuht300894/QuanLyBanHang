@@ -43,7 +43,7 @@ namespace QuanLyBanHang.GUI.PER
             {
                 using (frmPersonnel _frm = new frmPersonnel())
                 {
-                    _frm.Text = "Thêm mới nhân viên".Translation("ftxtAddPersonnel", _frm.Name);
+                    _frm.Text = "Thêm mới nhân viên";
                     _frm.fType = eFormType.Add;
                     _frm.ReLoadParent = this.LoadPersonnel;
                     _frm.ShowDialog();

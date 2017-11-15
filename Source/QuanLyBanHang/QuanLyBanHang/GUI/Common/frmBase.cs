@@ -23,8 +23,9 @@ namespace QuanLyBanHang
     public partial class frmBase : XtraForm
     {
         #region Variables
-        public virtual string MsgAdd { get; set; }
-        public virtual string MsgEdit { get; set; }
+        public string MsgAdd { get; set; } = "Thêm mới dữ liệu";
+        public string MsgEdit { get; set; } = "Cập nhật dữ liệu";
+        public string MsgDelete { get; set; } = "Xóa dữ liệu";
         public eFormType fType;
         public List<eFormType> fTypes;
         public List<ControlObject> lstChildControls = new List<ControlObject>();

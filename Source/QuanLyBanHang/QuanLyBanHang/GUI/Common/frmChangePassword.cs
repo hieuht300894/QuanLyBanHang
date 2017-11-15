@@ -91,9 +91,6 @@ namespace QuanLyBanHang
         #region Methods
         private void customForm()
         {
-            this.Text = "Đổi mật khẩu".Translation("ftxtChangePassword", this.Name);
-            btnSave.Text = "Lưu".Translation("capSave", this.Name);
-            btnCancel.Text = "Hủy".Translation("capCancel", this.Name);
             bteOldPassword.Select();
             lctDoiMatKhau.BestFitFormHeight();
             lctDoiMatKhau.Format();
@@ -106,34 +103,34 @@ namespace QuanLyBanHang
             string setFocusControl = "";
             if (string.IsNullOrEmpty(bteConfirmPassword.Text.Trim()) || (!string.IsNullOrEmpty(bteNewPassword.Text.Trim()) && !bteConfirmPassword.Text.Trim().Equals(bteNewPassword.Text.Trim())))
             {
-                bteConfirmPassword.ErrorText = "Xác thực mật khẩu không hợp lệ".Translation("msgConfirmPasswordIsIncorrect", this.Name);
+                bteConfirmPassword.ErrorText = "Xác thực mật khẩu không hợp lệ";
                 bRe = false; setFocusControl = bteConfirmPassword.Name;
             }
 
             if (string.IsNullOrEmpty(bteNewPassword.Text.Trim()))
             {
-                bteNewPassword.ErrorText = "Mật khẩu mới không hợp lệ".Translation("msgNewPasswordIsIncorrect", this.Name);
+                bteNewPassword.ErrorText = "Mật khẩu mới không hợp lệ";
                 bRe = false; setFocusControl = bteNewPassword.Name;
             }
 
             if (string.IsNullOrEmpty(bteOldPassword.Text.Trim()))
             {
-                bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ".Translation("msgOldPasswordIsIncorrect", this.Name);
+                bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ";
                 bRe = false; setFocusControl = bteOldPassword.Name;
             }
             else if (!clsGeneral.Encrypt(bteOldPassword.Text.Trim()).Equals(clsGeneral.curAccount.Password))
             {
-                bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ".Translation("msgOldPasswordIsIncorrect", this.Name);
+                bteOldPassword.ErrorText = "Mật khẩu cũ không hợp lệ";
                 bRe = false; setFocusControl = bteOldPassword.Name;
             }
             if(bRe && bteOldPassword.Text.Trim().Equals(bteNewPassword.Text.Trim()))
             {
-                bteNewPassword.ErrorText = "Mật khẩu mới không hợp lệ".Translation("msgNewPasswordIsIncorrect", this.Name);
+                bteNewPassword.ErrorText = "Mật khẩu mới không hợp lệ";
                 bRe = false; setFocusControl = bteNewPassword.Name;
             }
             else if(bRe && bteNewPassword.Text.Length < 6)
             {
-                bteConfirmPassword.ErrorText = bteNewPassword.ErrorText = "Mật khẩu quá ngắn".Translation("msgPasswordTooShort", this.Name);
+                bteConfirmPassword.ErrorText = bteNewPassword.ErrorText = "Mật khẩu quá ngắn";
                 bRe = false; setFocusControl = bteNewPassword.Name;
             }
             if (!string.IsNullOrEmpty(setFocusControl))

@@ -105,7 +105,7 @@ namespace QuanLyBanHang.GUI.PER
         {
             using (frmAccount _frm = new frmAccount())
             {
-                _frm.Text = "Thêm mới tài khoản".Translation("ftxtAddAccount", _frm.Name); ;
+                _frm.Text = "Thêm mới tài khoản"; 
                 _frm.fType = eFormType.Add;
                 _frm.ReLoadParent = this.LoadData;
                 _frm.ShowDialog();
@@ -122,7 +122,7 @@ namespace QuanLyBanHang.GUI.PER
                     {
                         xAccount _eEntry = (xAccount)grvAccountList.GetRow(grvAccountList.FocusedRowHandle);
                         _frm._iEntry = _eEntry;
-                        _frm.Text = "Cập nhật tài khoản".Translation("ftxtUpdateAccount", _frm.Name);
+                        _frm.Text = "Cập nhật tài khoản";
                         _frm.fType = eFormType.Edit;
                         _frm.ReLoadParent = this.LoadData;
                         _frm.ShowDialog();
