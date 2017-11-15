@@ -56,6 +56,22 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SmoExtended, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Microsoft.SqlServer.SmoExtended.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SqlEnum, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Microsoft.SqlServer.SqlEnum.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -81,6 +97,7 @@
     <Compile Include="BLL\Common\clsAgency.cs" />
     <Compile Include="BLL\Common\clsFunction.cs" />
     <Compile Include="BLL\DanhMuc\clsKhachHang.cs" />
+    <Compile Include="BLL\DanhMuc\clsKho.cs" />
     <Compile Include="BLL\DanhMuc\clsTinhThanh.cs" />
     <Compile Include="BLL\PERS\clsAccount.cs" />
     <Compile Include="BLL\PERS\clsFeature.cs" />
@@ -88,17 +105,29 @@
     <Compile Include="BLL\PERS\clsPersonnel.cs" />
     <Compile Include="BLL\PERS\clsUserRole.cs" />
     <Compile Include="Data\InitData.cs" />
+    <Compile Include="GUI\Common\frmBackupDatabase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Common\frmBackupDatabase.Designer.cs">
+      <DependentUpon>frmBackupDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Common\frmBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\Common\frmBase.Designer.cs">
       <DependentUpon>frmBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Common\frmBaseGrid.cs">
+    <Compile Include="GUI\Common\frmBaseEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Common\frmBaseGrid.Designer.cs">
-      <DependentUpon>frmBaseGrid.cs</DependentUpon>
+    <Compile Include="GUI\Common\frmBaseEdit.Designer.cs">
+      <DependentUpon>frmBaseEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Common\frmBaseList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Common\frmBaseList.Designer.cs">
+      <DependentUpon>frmBaseList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Common\frmChangePassword.cs">
       <SubType>Form</SubType>
@@ -160,11 +189,29 @@
     <Compile Include="GUI\Common\frmWaiting.designer.cs">
       <DependentUpon>frmWaiting.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DanhMuc\frmKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmKhachHang.Designer.cs">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\DanhMuc\frmKhachHang_List.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmKhachHang_List.Designer.cs">
       <DependentUpon>frmKhachHang_List.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmKho.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmKho.Designer.cs">
+      <DependentUpon>frmKho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmKho_List.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmKho_List.Designer.cs">
+      <DependentUpon>frmKho_List.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmTinhThanh_List.cs">
       <SubType>Form</SubType>
@@ -210,7 +257,6 @@
     </Compile>
     <Compile Include="Model\Loai.cs" />
     <Compile Include="Module\clsCallForm.cs" />
-    <Compile Include="Module\clsDictionary.cs" />
     <Compile Include="Module\clsEntity.cs" />
     <Compile Include="Module\clsFormatControl.cs" />
     <Compile Include="Module\clsGeneral.cs" />
@@ -219,11 +265,12 @@
     <Compile Include="MultiLanguage\VN.Designer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\IForm.cs" />
+    <EmbeddedResource Include="GUI\Common\frmBackupDatabase.resx">
+      <DependentUpon>frmBackupDatabase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmBase.resx">
       <DependentUpon>frmBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Common\frmBaseGrid.resx">
-      <DependentUpon>frmBaseGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmChangePassword.resx">
       <DependentUpon>frmChangePassword.cs</DependentUpon>
@@ -253,8 +300,17 @@
     <EmbeddedResource Include="GUI\Common\frmWaiting.resx">
       <DependentUpon>frmWaiting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmKhachHang.resx">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmKhachHang_List.resx">
       <DependentUpon>frmKhachHang_List.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmKho.resx">
+      <DependentUpon>frmKho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmKho_List.resx">
+      <DependentUpon>frmKho_List.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmTinhThanh_List.resx">
       <DependentUpon>frmTinhThanh_List.cs</DependentUpon>
@@ -5466,6 +5522,7 @@
     <None Include="Resources\Error.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon\icon.ico" />
     <Content Include="Icon\market-store-icon.ico" />
     <Content Include="market-store-icon.ico" />
     <None Include="Resources\default-logo.png" />
