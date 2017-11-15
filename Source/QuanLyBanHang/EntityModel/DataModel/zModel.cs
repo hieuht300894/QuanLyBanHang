@@ -1,11 +1,10 @@
 ﻿namespace EntityModel.DataModel
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
+    using EntityModel.DataModel.CauHinh;
     using EntityModel.DataModel.DanhMuc;
     using EntityModel.DataModel.HeThong;
+    using EntityModel.DataModel.Ton;
+    using System.Data.Entity;
 
     public partial class zModel : DbContext
     {
@@ -18,6 +17,12 @@
             : base(conn)
         {
         }
+
+        #region Cấu hình
+        public virtual DbSet<eHienThi> eHienThi { get; set; }
+        public virtual DbSet<eQuyDoiDonVi> eQuyDoiDonVi { get; set; }
+        public virtual DbSet<eQuyDoiTienTe> eQuyDoiTienTe { get; set; }
+        #endregion
 
         #region Hệ thống
         public virtual DbSet<xAccount> xAccount { get; set; }
@@ -35,9 +40,22 @@
         #endregion
 
         #region Danh mục
+        public virtual DbSet<eDonViTinh> eDonViTinh { get; set; }
         public virtual DbSet<eKhachHang> eKhachHang { get; set; }
-        public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
         public virtual DbSet<eKho> eKho { get; set; }
+        public virtual DbSet<eNhaCungCap> eNhaCungCap { get; set; }
+        public virtual DbSet<eNhomDonViTinh> eNhomDonViTinh { get; set; }
+        public virtual DbSet<eNhomKhachHang> eNhomKhachHang { get; set; }
+        public virtual DbSet<eNhomNhaCungCap> eNhomNhaCungCap { get; set; }
+        public virtual DbSet<eNhomSanPham> eNhomSanPham { get; set; }
+        public virtual DbSet<eSanPham> eSanPham { get; set; }
+        public virtual DbSet<eTienTe> eTienTe { get; set; }
+        public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
+        #endregion
+
+        #region Ton
+        public virtual DbSet<eCongNoDauKy> eCongNoDauKy { get; set; }
+        public virtual DbSet<eTonKhoDauKy> eTonKhoDauKy { get; set; }
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

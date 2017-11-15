@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EntityModel.DataModel.DanhMuc
 {
     [Table("eDonViTinh")]
-    class eDonViTinh
+    public class eDonViTinh
     {
         [Key]
         public int KeyID { get; set; }

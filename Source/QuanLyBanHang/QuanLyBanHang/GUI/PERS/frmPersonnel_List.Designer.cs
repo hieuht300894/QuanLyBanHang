@@ -67,7 +67,6 @@
             // 
             this.btnEdit.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.Image")));
             this.btnEdit.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.LargeImage")));
-            this.btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             // 
             // barTop
             // 
@@ -79,25 +78,26 @@
             // 
             this.btnDelete.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.Image")));
             this.btnDelete.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.LargeImage")));
-            this.btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             // 
             // btnRefresh
             // 
             this.btnRefresh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.Image")));
             this.btnRefresh.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.LargeImage")));
-            this.btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             // 
             // btnSave
             // 
             this.btnSave.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.ImageOptions.Image")));
+            this.btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnCancel
             // 
             this.btnCancel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.Image")));
+            this.btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnSaveAndAdd
             // 
             this.btnSaveAndAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAndAdd.ImageOptions.Image")));
+            this.btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // bbpRefresh
             // 
@@ -118,17 +118,18 @@
             // btnPrintPreview
             // 
             this.btnPrintPreview.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPreview.ImageOptions.Image")));
+            this.btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnExportExcel
             // 
             this.btnExportExcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExportExcel.ImageOptions.Image")));
+            this.btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnAdd
             // 
             this.btnAdd.ImageOptions.DisabledLargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.DisabledLargeImage")));
             this.btnAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.Image")));
             this.btnAdd.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.LargeImage")));
-            this.btnAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             // 
             // barBottom
             // 

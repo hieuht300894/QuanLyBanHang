@@ -1,35 +1,33 @@
-﻿using DevExpress.Utils;
+﻿using DevExpress.LookAndFeel;
+using DevExpress.Utils;
+using DevExpress.Utils.Win;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraEditors.Popup;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraLayout;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
-using System.ComponentModel;
-using System.Globalization;
-using EntityModel.DataModel;
 using DevExpress.XtraTreeList.Nodes;
-using System.Reflection;
-using System.Collections;
-using DevExpress.XtraEditors.Popup;
-using DevExpress.Utils.Win;
-using DevExpress.LookAndFeel;
-using System.IO;
-using Newtonsoft.Json;
-using System.Data.SqlClient;
-using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using DevExpress.XtraLayout.Utils;
 using EntityModel.DataModel.HeThong;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang
 {
@@ -47,8 +45,6 @@ namespace QuanLyBanHang
     public static class clsFormatControl
     {
         #region Variables
-        //static aModel db = new aModel();
-
         public static string curDecimalFormat
         {
             get
@@ -405,6 +401,8 @@ namespace QuanLyBanHang
             try
             {
                 gctMain.ForceInitialize();
+                gctMain.UseEmbeddedNavigator = false;
+
                 GridView grvMain = gctMain.MainView as GridView;
                 grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
             }
@@ -418,6 +416,7 @@ namespace QuanLyBanHang
 
             grvMain.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
             grvMain.OptionsView.ShowGroupPanel = false;
+            grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
             grvMain.OptionsBehavior.Editable = true;
             grvMain.OptionsMenu.EnableColumnMenu = true;
             grvMain.OptionsCustomization.AllowFilter = true;
@@ -465,26 +464,26 @@ namespace QuanLyBanHang
             grvMain.Appearance.FocusedCell.ForeColor = MyColor.ForeColorEditing;
             grvMain.Appearance.FocusedCell.Font = new Font(grvMain.Appearance.FocusedCell.Font, FontStyle.Bold);
 
-            if (allowNewRow)
-            {
-                grvMain.GridControl.UseEmbeddedNavigator = false;
+            //if (allowNewRow)
+            //{
+            //    //grvMain.GridControl.UseEmbeddedNavigator = false;
 
-                grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
-                grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridEditRow;
-                grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridEditRow;
-                grvMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
+            //    //grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
+            //    //grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridEditRow;
+            //    //grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridEditRow;
+            //    //grvMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
 
-                grvMain.ShowingEditor -= grvMain_ShowingEditor;
-                grvMain.ShowingEditor += grvMain_ShowingEditor;
+            //    grvMain.ShowingEditor -= (sender, e) => grvMain_ShowingEditor(sender, e, allowNewRow);
+            //    grvMain.ShowingEditor += (sender, e) => grvMain_ShowingEditor(sender, e, allowNewRow);
 
-                grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
-                grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
-            }
-            else
-            {
-                grvMain.InvalidRowException -= grvMain_InvalidRowException;
-                grvMain.InvalidRowException += grvMain_InvalidRowException;
-            }
+            //    grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
+            //    grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
+            //}
+            //else
+            //{
+            //    grvMain.InvalidRowException -= grvMain_InvalidRowException;
+            //    grvMain.InvalidRowException += grvMain_InvalidRowException;
+            //}
             if (ShowLines)
             {
                 grvMain.OptionsView.ShowHorizontalLines = DefaultBoolean.True;
@@ -526,6 +525,12 @@ namespace QuanLyBanHang
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
             grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
             grvMain.CalcRowHeight += grvMain_CalcRowHeight;
+            grvMain.ShowingEditor -= (sender, e) => grvMain_ShowingEditor(sender, e);
+            grvMain.ShowingEditor += (sender, e) => grvMain_ShowingEditor(sender, e);
+            grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
+            grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
+            grvMain.InvalidRowException -= grvMain_InvalidRowException;
+            grvMain.InvalidRowException += grvMain_InvalidRowException;
         }
 
         public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
@@ -689,10 +694,14 @@ namespace QuanLyBanHang
 
         static void grvMain_ShowingEditor(object sender, CancelEventArgs e)
         {
-            GridView grvMain = (GridView)sender;
-            grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
-            grvMain.OptionsSelection.EnableAppearanceFocusedRow = true;
-            grvMain.OptionsSelection.EnableAppearanceHideSelection = true;
+            //GridView grvMain = (GridView)sender;
+            //grvMain.OptionsSelection.EnableAppearanceFocusedCell = true;
+            //grvMain.OptionsSelection.EnableAppearanceFocusedRow = true;
+            //grvMain.OptionsSelection.EnableAppearanceHideSelection = true;
+
+            //GridView grvMain = (GridView)sender;
+            //if (grvMain.IsNewItemRow(grvMain.FocusedRowHandle))
+            //    e.Cancel = !allowNewRow;
         }
 
         static void FormatColumn(this GridView grvMain)

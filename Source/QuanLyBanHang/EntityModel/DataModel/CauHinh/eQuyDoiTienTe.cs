@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EntityModel.DataModel.CauHinh
 {
     [Table("eQuyDoiTienTe")]
-    class eQuyDoiTienTe
+    public class eQuyDoiTienTe
     {
         [Key]
         public int KeyID { get; set; }
