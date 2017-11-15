@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,11 @@ namespace EntityModel.DataModel.DanhMuc
 
         public string Ten { get; set; }
 
-        public string MauSon { get; set; }
+        public Color Color { get; set; }
+
+        public int ColorHex { get; set; }
+
+        public string MauSac { get; set; }
 
         public string KichThuoc { get; set; }
 

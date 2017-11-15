@@ -1119,7 +1119,7 @@ namespace QuanLyBanHang
         {
             if (e.Value != null && !string.IsNullOrEmpty(e.Value.ToString()))
             {
-                decimal val = Convert.ToDecimal(((decimal)e.Value).ToString("0"));
+                decimal val = Convert.ToDecimal(e.Value);
                 if (val == 0)
                     e.DisplayText = "-";
             }
