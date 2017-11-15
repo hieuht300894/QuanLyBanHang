@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PERS
 {
-    public partial class frmPermission_List : frmBaseList
+    public partial class frmPermission_List : frmBase
     {
         #region Variables
         #endregion
@@ -70,7 +70,7 @@ namespace QuanLyBanHang.GUI.PERS
             {
                 _frm.Text = "Thêm mới quyền";
                 _frm.fType = eFormType.Add;
-                _frm.ReloadData = this.LoadData;
+                _frm._ReloadData = this.LoadData;
                 _frm.ShowDialog();
             }
         }
@@ -81,7 +81,7 @@ namespace QuanLyBanHang.GUI.PERS
                 _frm._iEntry = (xPermission)grvPermission.GetRow(grvPermission.FocusedRowHandle);
                 _frm.Text = "Cập nhật quyền";
                 _frm.fType = eFormType.Edit;
-                _frm.ReloadData = LoadData;
+                _frm._ReloadData = LoadData;
                 _frm.ShowDialog();
             }
         }

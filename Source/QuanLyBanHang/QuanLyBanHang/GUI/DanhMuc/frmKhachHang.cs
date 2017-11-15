@@ -16,10 +16,8 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmKhachHang : frmBaseEdit
+    public partial class frmKhachHang : frmBase
     {
-        public delegate void LoadData(object KeyID);
-        public LoadData ReloadData;
         List<eTinhThanh> lstTinhThanh = new List<eTinhThanh>();
         public eKhachHang _iEntry = new eKhachHang();
         eKhachHang _aEntry = new eKhachHang();
@@ -34,11 +32,6 @@ namespace QuanLyBanHang.GUI.DanhMuc
             LoadRepository();
             LoadDataForm();
             CustomForm();
-        }
-        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            base.frmBase_FormClosing(sender, e);
-            ReloadData?.Invoke(0);
         }
 
         async void LoadRepository()

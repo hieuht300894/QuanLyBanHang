@@ -16,7 +16,7 @@ using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmAccount_List : frmBase,IFormList<int>
+    public partial class frmAccount_List : frmBase
     {
         #region Variables
         #endregion
@@ -94,25 +94,24 @@ namespace QuanLyBanHang.GUI.PER
         #endregion
 
         #region Methods
-        public void LoadData(int KeyID)
+        public override void LoadData(object KeyID)
         {
             gctAccountList.DataSource = clsAccount.Instance.SearchAccount(true, 0);
-            if (KeyID > 0)
-                grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
+            grvAccountList.FocusedRowHandle = grvAccountList.LocateByValue("IDPersonnel", KeyID);
         }
 
-        public void InsertEntry()
+        public override void InsertEntry()
         {
             using (frmAccount _frm = new frmAccount())
             {
-                _frm.Text = "Thêm mới tài khoản"; 
+                _frm.Text = "Thêm mới tài khoản";
                 _frm.fType = eFormType.Add;
-                _frm.ReLoadParent = this.LoadData;
+                _frm._ReloadData = this.LoadData;
                 _frm.ShowDialog();
             }
         }
 
-        public void UpdateEntry()
+        public override void UpdateEntry()
         {
             if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0)
             {
@@ -124,7 +123,7 @@ namespace QuanLyBanHang.GUI.PER
                         _frm._iEntry = _eEntry;
                         _frm.Text = "Cập nhật tài khoản";
                         _frm.fType = eFormType.Edit;
-                        _frm.ReLoadParent = this.LoadData;
+                        _frm._ReloadData = this.LoadData;
                         _frm.ShowDialog();
                     }
                 }
@@ -135,7 +134,7 @@ namespace QuanLyBanHang.GUI.PER
             }
         }
 
-        public void DeleteEntry()
+        public override void DeleteEntry()
         {
             //if (grvAccountList.RowCount > 0 && grvAccountList.FocusedRowHandle >= 0 && clsGeneral.showConfirmMessage("Xác nhận xóa dữ liệu".Translation("msgConfirmDelete", this.Name)))
             //{
@@ -156,13 +155,9 @@ namespace QuanLyBanHang.GUI.PER
             //}
         }
 
-        public void RefreshEntry()
+        public override void RefreshEntry()
         {
             LoadData(0);
-        }
-
-        public void LoadRepository()
-        {
         }
         #endregion
     }

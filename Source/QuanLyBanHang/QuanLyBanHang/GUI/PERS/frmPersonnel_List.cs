@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPersonnel_List : frmBase, IFormList<Int32>
+    public partial class frmPersonnel_List : frmBase
     {
         #region Variables
         #endregion
@@ -28,10 +28,6 @@ namespace QuanLyBanHang.GUI.PER
             LoadRepository();
             LoadData(0);
             CustomForm();
-
-            aModel db = new aModel();
-            List<EntityModel.DataModel.DanhMuc.eTienTe> list = new List<EntityModel.DataModel.DanhMuc.eTienTe>(db.eTienTe.ToList());
-            string json = list.SerializeJSON();
         }
         #endregion
 
@@ -110,39 +106,33 @@ namespace QuanLyBanHang.GUI.PER
             await RunMethodAsync(() => { rlokPersonnel.DataSource = lstResult; });
         }
 
-        public void InsertEntry()
+        public override void InsertEntry()
         {
             using (frmPersonnel _frm = new frmPersonnel())
             {
                 _frm.Text = "Thêm mới nhân viên";
                 _frm.fType = eFormType.Add;
+                _frm._ReloadData = LoadData;
                 _frm.ShowDialog();
             }
         }
 
-        public void UpdateEntry()
+        public override void UpdateEntry()
         {
             if (grvPersonnelList.RowCount > 0 && grvPersonnelList.FocusedRowHandle >= 0)
             {
-                try
+                using (frmPersonnel _frm = new frmPersonnel())
                 {
-                    using (frmPersonnel _frm = new frmPersonnel())
-                    {
-                        xPersonnel _eEntry = (xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle);
-                        _frm._iEntry = _eEntry;
-                        _frm.Text = "Cập nhật nhân viên";
-                        _frm.fType = eFormType.Edit;
-                        _frm.ShowDialog();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    clsGeneral.showErrorException(ex, "Exception");
+                    _frm._iEntry = (xPersonnel)grvPersonnelList.GetRow(grvPersonnelList.FocusedRowHandle);
+                    _frm.Text = "Cập nhật nhân viên";
+                    _frm.fType = eFormType.Edit;
+                    _frm._ReloadData = LoadData;
+                    _frm.ShowDialog();
                 }
             }
         }
 
-        public async void DeleteEntry()
+        public async override void DeleteEntry()
         {
             //int[] Indexes = grvPersonnelList.GetSelectedRows();
             //List<int> lstIDNhanVien = new List<int>();
@@ -211,7 +201,7 @@ namespace QuanLyBanHang.GUI.PER
             await clsPersonnel.Instance.AddOrUpdate(lstNhanVien);
         }
 
-        public void RefreshEntry()
+        public override void RefreshEntry()
         {
             LoadRepository();
             LoadData(0);

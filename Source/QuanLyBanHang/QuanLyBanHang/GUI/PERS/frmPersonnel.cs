@@ -10,11 +10,9 @@ using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPersonnel : frmBaseEdit
+    public partial class frmPersonnel : frmBase
     {
         #region Variables
-        public delegate void LoadData(int strKey);
-        public LoadData ReLoadParent;
         public xPersonnel _iEntry;
         xPersonnel _aEntry;
         #endregion
@@ -29,11 +27,6 @@ namespace QuanLyBanHang.GUI.PER
             base.frmBase_Load(sender, e);
             LoadDataForm();
             CustomForm();
-        }
-        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            base.frmBase_FormClosing(sender, e);
-            ReLoadParent?.Invoke(0);
         }
         #endregion
 

@@ -1,22 +1,15 @@
-﻿using EntityModel.DataModel;
-using EntityModel.DataModel.DanhMuc;
-using QuanLyBanHang.BLL.Common;
+﻿using EntityModel.DataModel.DanhMuc;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
-using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmTinhThanh_List : frmBase, IFormList<int>
+    public partial class frmTinhThanh_List : frmBase
     {
         #region Variables
         IList<eTinhThanh> lstDanhSach = new List<eTinhThanh>();
@@ -101,7 +94,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
         }
 
-        public void InsertEntry()
+        public override void InsertEntry()
         {
             //using (frmPermission _frm = new frmPermission())
             //{
@@ -112,7 +105,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             //}
         }
 
-        public void UpdateEntry()
+        public override void UpdateEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
             //{
@@ -135,11 +128,11 @@ namespace QuanLyBanHang.GUI.DanhMuc
             //}
         }
 
-        public void DeleteEntry()
+        public override void DeleteEntry()
         {
         }
 
-        public void RefreshEntry()
+        public override void RefreshEntry()
         {
             LoadData(0);
         }

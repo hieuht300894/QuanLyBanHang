@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.Common
 {
-    public partial class frmBaseEdit : frmBase, IFormAccess
+    public partial class frmBaseEdit : frmBase
     {
         #region Method
         public frmBaseEdit()

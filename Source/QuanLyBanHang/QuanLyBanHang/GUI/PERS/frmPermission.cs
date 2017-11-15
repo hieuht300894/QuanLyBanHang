@@ -13,11 +13,9 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmPermission : frmBaseEdit
+    public partial class frmPermission : frmBase
     {
         #region Variables
-        public delegate void LoadData(object KeyID);
-        public LoadData ReloadData;
         public xPermission _iEntry;
         xPermission _aEntry;
         IList<xFeature> lstFeatures = new List<xFeature>();
@@ -35,11 +33,6 @@ namespace QuanLyBanHang.GUI.PER
             LoadFeature();
             LoadDataForm();
             CustomForm();
-        }
-        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            base.frmBase_FormClosing(sender, e);
-            ReloadData?.Invoke(0);
         }
         private void trlFeature_CellValueChanging(object sender, DevExpress.XtraTreeList.CellValueChangedEventArgs e)
         {

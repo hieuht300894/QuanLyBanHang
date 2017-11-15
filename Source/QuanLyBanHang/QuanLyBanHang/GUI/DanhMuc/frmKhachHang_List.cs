@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmKhachHang_List : frmBaseList
+    public partial class frmKhachHang_List : frmBase
     {
         public frmKhachHang_List()
         {
@@ -30,7 +30,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             {
                 frm.Text = "Thêm mới khách hàng";
                 frm.fType = eFormType.Add;
-                frm.ReloadData = LoadData;
+                frm._ReloadData = LoadData;
                 frm.ShowDialog();
             }
         }
@@ -58,7 +58,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
                 frm._iEntry = (eKhachHang)grvDanhSach.GetFocusedRow();
                 frm.Text = "Cập nhật khách hàng";
                 frm.fType = eFormType.Edit;
-                frm.ReloadData = LoadData;
+                frm._ReloadData = LoadData;
                 frm.ShowDialog();
             }
         }

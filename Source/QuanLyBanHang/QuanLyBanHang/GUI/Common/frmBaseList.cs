@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.Common
 {
-    public partial class frmBaseList : frmBase, IFormList<object>
+    public partial class frmBaseList : frmBase
     {
         public frmBaseList()
         {

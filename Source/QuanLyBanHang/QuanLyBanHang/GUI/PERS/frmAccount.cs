@@ -12,11 +12,9 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {
-    public partial class frmAccount : frmBaseEdit
+    public partial class frmAccount : frmBase
     {
         #region Variables
-        public delegate void LoadData(int KeyID);
-        public LoadData ReLoadParent;
         public xAccount _iEntry;
         xAccount _aEntry;
         #endregion
@@ -32,11 +30,6 @@ namespace QuanLyBanHang.GUI.PER
             LoadDataForm();
             CustomForm();
         }
-        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            base.frmBase_FormClosing(sender, e);
-            ReLoadParent?.Invoke(0);
-        }
         private void lokPersonnel_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
         {
             if (e.Button.Index == 1)
@@ -45,7 +38,7 @@ namespace QuanLyBanHang.GUI.PER
                 {
                     _frm.Text = "Thêm mới nhân viên";
                     _frm.fType = eFormType.Add;
-                    _frm.ReLoadParent = this.LoadPersonnel;
+                    _frm._ReloadData = this.LoadPersonnel;
                     _frm.ShowDialog();
                 }
             }
@@ -58,7 +51,7 @@ namespace QuanLyBanHang.GUI.PER
                 {
                     _frm.Text = "Thêm mới quyền";
                     _frm.fType = eFormType.Add;
-                    _frm.ReloadData = this.LoadPermission;
+                    _frm._ReloadData = this.LoadPermission;
                     _frm.ShowDialog();
                 }
             }
@@ -101,13 +94,13 @@ namespace QuanLyBanHang.GUI.PER
             LoadPermission(_aEntry.IDPermission);
             SetControlValue();
         }
-        private async void LoadPersonnel(int KeyID)
+        private async void LoadPersonnel(object KeyID)
         {
-            IList<xPersonnel> lstResult = await clsPersonnel.Instance.SeachPersonnelNoAccount(KeyID);
+            IList<xPersonnel> lstResult = await clsPersonnel.Instance.SeachPersonnelNoAccount((int)KeyID);
             await RunMethodAsync(() =>
             {
                 lokPersonnel.Properties.DataSource = lstResult;
-                if (KeyID > 0) lokPersonnel.EditValue = KeyID;
+                if ((int)KeyID > 0) lokPersonnel.EditValue = KeyID;
                 else lokPersonnel.ItemIndex = 0;
             });
         }

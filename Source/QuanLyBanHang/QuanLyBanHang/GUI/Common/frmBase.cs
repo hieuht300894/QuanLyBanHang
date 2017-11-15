@@ -1,8 +1,6 @@
-﻿using DevExpress.XtraBars.Docking;
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
-using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraLayout;
@@ -30,6 +28,8 @@ namespace QuanLyBanHang
         public List<eFormType> fTypes;
         public List<ControlObject> lstChildControls = new List<ControlObject>();
         bool IsLeaveForm = false;
+        public delegate void ReloadData(object KeyID);
+        public ReloadData _ReloadData;
         #endregion
 
         #region Form
@@ -199,6 +199,8 @@ namespace QuanLyBanHang
             clsGeneral.CallWaitForm(this);
             try
             {
+                _ReloadData?.Invoke(0);
+
                 foreach (ControlObject ctrObj in lstChildControls)
                 {
                     if (ctrObj.ctrMain != null)
@@ -235,7 +237,6 @@ namespace QuanLyBanHang
                 }
 
                 lstChildControls = null;
-
                 GC.Collect();
             }
             catch { }
@@ -243,25 +244,19 @@ namespace QuanLyBanHang
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            InsertEntry();
         }
         protected virtual void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            UpdateEntry();
         }
         protected virtual void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-        }
-        protected virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
-        protected virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+            DeleteEntry();
         }
         protected virtual void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            RefreshEntry();
         }
         protected virtual void btnExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -271,31 +266,89 @@ namespace QuanLyBanHang
         }
         protected virtual void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            InsertEntry();
         }
         protected virtual void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            UpdateEntry();
         }
         protected virtual void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
-        }
-        protected virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+            DeleteEntry();
         }
         protected virtual void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            RefreshEntry();
         }
         protected virtual void bbpExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
         }
         protected virtual void bbpPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+        }
+        protected async virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                    DialogResult = DialogResult.OK;
+            }
+        }
+        protected async virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    Text = MsgAdd;
+                    RenewData();
+                    ResetControl();
+                    LoadDataForm();
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ResetControl();
+            LoadDataForm();
+        }
+        protected async virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                    DialogResult = DialogResult.OK;
+            }
+        }
+        protected async virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    Text = MsgAdd;
+                    RenewData();
+                    ResetControl();
+                    LoadDataForm();
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ResetControl();
+            LoadDataForm();
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -589,6 +642,53 @@ namespace QuanLyBanHang
                 Task task = Task.Factory.StartNew(() => { BeginInvoke(act); });
                 await task;
             }
+        }
+        #endregion
+
+        #region Common Method
+        public virtual void LoadData(object KeyID)
+        {
+        }
+        public virtual void InsertEntry()
+        {
+        }
+        public virtual void UpdateEntry()
+        {
+        }
+        public virtual void DeleteEntry()
+        {
+        }
+        public virtual void RefreshEntry()
+        {
+        }    
+        public virtual void LoadDataForm()
+        {
+        }
+        public virtual void SetControlValue()
+        {
+        }
+        public virtual bool ValidationForm()
+        {
+            return true;
+        }
+        public async virtual Task<bool> SaveData()
+        {
+            return await Task<bool>.Factory.StartNew(() => { return true; });
+        }
+        public virtual void RenewData()
+        {
+        }
+        public virtual void ResetControl()
+        {
+            lstChildControls.ForEach(x =>
+            {
+                if (x.ctrMain != null)
+                {
+                    BaseEdit baseEdit = x.ctrMain as BaseEdit;
+                    if (baseEdit != null)
+                        baseEdit.DataBindings.Clear();
+                }
+            });
         }
         #endregion
         #endregion

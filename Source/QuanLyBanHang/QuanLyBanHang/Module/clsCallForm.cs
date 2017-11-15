@@ -26,26 +26,6 @@ namespace QuanLyBanHang
                                 fList.Add(new FormItem(f.Name, f));
                         }
                     }
-                   else if (t.BaseType == typeof(frmBaseList))
-                    {
-                        var emptyCtor = t.GetConstructor(Type.EmptyTypes);
-                        if (emptyCtor != null)
-                        {
-                            var f = (frmBaseList)emptyCtor.Invoke(new object[] { });
-                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
-                                fList.Add(new FormItem(f.Name, f));
-                        }
-                    }
-                    else if (t.BaseType == typeof(frmBaseEdit))
-                    {
-                        var emptyCtor = t.GetConstructor(Type.EmptyTypes);
-                        if (emptyCtor != null)
-                        {
-                            var f = (frmBaseEdit)emptyCtor.Invoke(new object[] { });
-                            if (await clsEntity.Check_Role(clsGeneral.curAccount, f.Name))
-                                fList.Add(new FormItem(f.Name, f));
-                        }
-                    }
                     else if (t.BaseType == typeof(XtraForm))
                     {
                         var emptyCtor = t.GetConstructor(Type.EmptyTypes);
