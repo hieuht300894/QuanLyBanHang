@@ -21,9 +21,9 @@ namespace QuanLyBanHang
     public partial class frmBaseGrid : XtraForm
     {
         #region Variables
-        public eFormType fType;
-        public List<eFormType> fTypes;
-        public List<ControlObject> lstChildControls = new List<ControlObject>();
+        public eFormType fType = eFormType.Default;
+        public List<eFormType> fTypes = new List<eFormType>() { eFormType.Default };
+        List<ControlObject> lstChildControls = new List<ControlObject>();
         bool IsLeaveForm = false;
         #endregion
 
@@ -49,31 +49,14 @@ namespace QuanLyBanHang
 
             foreach (eFormType _fType in fTypes)
             {
-                if (_fType == eFormType.Default)
+                if (fType == eFormType.Default)
                 {
                     btnAdd.Visibility = clsGeneral.curUserFeature.IsAdd ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                    btnEdit.Visibility = clsGeneral.curUserFeature.IsEdit ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                     btnDelete.Visibility = clsGeneral.curUserFeature.IsDelete ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                    btnSave.Visibility = (clsGeneral.curUserFeature.IsAdd || clsGeneral.curUserFeature.IsEdit) ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                     btnRefresh.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                }
-                if (_fType == eFormType.Add || _fType == eFormType.Edit)
-                {
-                    if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
-                    {
-                        btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                        btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                    }
-                    if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
-                    {
-                        btnSave.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                        btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                    }
-                    btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                }
-                if (_fType == eFormType.Print)
-                {
-                    btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-                    btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                    btnPrintPreview.Visibility = clsGeneral.curUserFeature.IsPrintPreview ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+                    btnExportExcel.Visibility = clsGeneral.curUserFeature.IsExportExcel ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 }
             }
         }
@@ -230,7 +213,6 @@ namespace QuanLyBanHang
                 }
 
                 lstChildControls = null;
-
                 GC.Collect();
             }
             catch { }
@@ -238,25 +220,19 @@ namespace QuanLyBanHang
         }
         protected virtual void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            InsertEntry();
         }
         protected virtual void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            UpdateEntry();
         }
         protected virtual void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-        }
-        protected virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
-        protected virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+            DeleteEntry();
         }
         protected virtual void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            RefreshEntry();
         }
         protected virtual void btnExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -266,31 +242,103 @@ namespace QuanLyBanHang
         }
         protected virtual void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            InsertEntry();
         }
         protected virtual void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            UpdateEntry();
         }
         protected virtual void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
-        }
-        protected virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-        }
-        protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+            DeleteEntry();
         }
         protected virtual void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            RefreshEntry();
         }
         protected virtual void bbpExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
         }
         protected virtual void bbpPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+        }
+        protected async virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    RenewData();
+                    ResetControl();
+                    LoadData(0);
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected async virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    RenewData();
+                    ResetControl();
+                    LoadData(0);
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ResetControl();
+            LoadData(0);
+        }
+        protected async virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    RenewData();
+                    ResetControl();
+                    LoadData(0);
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected async virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (ValidationForm())
+            {
+                bool res = await SaveData();
+                if (res)
+                {
+                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    fType = eFormType.Add;
+                    RenewData();
+                    ResetControl();
+                    LoadData(0);
+                }
+                else
+                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+            }
+        }
+        protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ResetControl();
+            LoadData(0);
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -427,26 +475,9 @@ namespace QuanLyBanHang
                         if (_fType == eFormType.Default)
                         {
                             bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-                            bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
                             bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
+                            bbpSave.Enabled = ((clsGeneral.curUserFeature.IsAdd && IsAdd) || (clsGeneral.curUserFeature.IsEdit && IsEdit)) && IsSave;
                             bbpRefresh.Enabled = true;
-                        }
-                        if (_fType == eFormType.Add || _fType == eFormType.Edit)
-                        {
-                            if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
-                            {
-                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            }
-                            if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
-                            {
-                                bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                                bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-                            }
-                            bbpCancel.Enabled = true;
-                        }
-                        if (_fType == eFormType.Print)
-                        {
                             bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
                             bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
                         }
@@ -456,25 +487,21 @@ namespace QuanLyBanHang
                 {
                     foreach (eFormType _fType in fTypes)
                     {
-                        if (_fType == eFormType.Default)
+                        if (_fType == eFormType.Add)
                             bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+                        if (_fType == eFormType.Default)
+                            bbpRefresh.Enabled = true;
                     }
-                    bbpEdit.Enabled = false;
                     bbpDelete.Enabled = false;
                     bbpSave.Enabled = false;
-                    bbpSaveAndAdd.Enabled = false;
-                    bbpCancel.Enabled = false;
                     bbpPrintPreview.Enabled = false;
                     bbpExportExcel.Enabled = false;
                 }
 
                 bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpSaveAndAdd.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-                bbpCancel.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
                 bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
 
@@ -484,44 +511,6 @@ namespace QuanLyBanHang
         #endregion
 
         #region Virtual Method
-        public virtual void CustomForm()
-        {
-            try
-            {
-                foreach (ControlObject ctrObj in lstChildControls)
-                {
-                    if (ctrObj.ctrMain != null)
-                    {
-                        if (ctrObj.ctrMain is LayoutControl)
-                            ((LayoutControl)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is TextEdit)
-                            ((TextEdit)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is SpinEdit)
-                            ((SpinEdit)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is DateEdit)
-                            ((DateEdit)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is LookUpEdit)
-                            ((LookUpEdit)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is GridControl)
-                            ((GridControl)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is TreeList)
-                            ((TreeList)ctrObj.ctrMain).Format();
-                        if (ctrObj.ctrMain is SearchLookUpEdit)
-                            ((SearchLookUpEdit)ctrObj.ctrMain).Format();
-                    }
-                    else if (ctrObj.repoMain != null)
-                    {
-                        if (ctrObj.repoMain is RepositoryItemDateEdit)
-                            ((RepositoryItemDateEdit)ctrObj.repoMain).Format();
-                        if (ctrObj.repoMain is RepositoryItemSpinEdit)
-                            ((RepositoryItemSpinEdit)ctrObj.repoMain).Format();
-                        if (ctrObj.repoMain is RepositoryItemLookUpEdit)
-                            ((RepositoryItemLookUpEdit)ctrObj.repoMain).Format();
-                    }
-                }
-            }
-            catch { }
-        }
         public virtual void LoadPercent(int Percent)
         {
             betPercent.EditValue = Percent;
@@ -584,6 +573,91 @@ namespace QuanLyBanHang
                 Task task = Task.Factory.StartNew(() => { BeginInvoke(act); });
                 await task;
             }
+        }
+        #endregion
+
+        #region Common Method
+        public virtual void LoadData(object KeyID)
+        {
+        }
+        public virtual void InsertEntry()
+        {
+        }
+        public virtual void UpdateEntry()
+        {
+        }
+        public virtual void DeleteEntry()
+        {
+        }
+        public virtual void RefreshEntry()
+        {
+        }
+        public virtual void LoadDataForm()
+        {
+        }
+        public virtual void SetControlValue()
+        {
+        }
+        public virtual bool ValidationForm()
+        {
+            return true;
+        }
+        public async virtual Task<bool> SaveData()
+        {
+            return await Task<bool>.Factory.StartNew(() => { return true; });
+        }
+        public virtual void RenewData()
+        {
+        }
+        public virtual void ResetControl()
+        {
+            lstChildControls.ForEach(x =>
+            {
+                if (x.ctrMain != null)
+                {
+                    BaseEdit baseEdit = x.ctrMain as BaseEdit;
+                    if (baseEdit != null)
+                        baseEdit.DataBindings.Clear();
+                }
+            });
+        }
+        public virtual void CustomForm()
+        {
+            try
+            {
+                foreach (ControlObject ctrObj in lstChildControls)
+                {
+                    if (ctrObj.ctrMain != null)
+                    {
+                        if (ctrObj.ctrMain is LayoutControl)
+                            ((LayoutControl)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is TextEdit)
+                            ((TextEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is SpinEdit)
+                            ((SpinEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is DateEdit)
+                            ((DateEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is LookUpEdit)
+                            ((LookUpEdit)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is GridControl)
+                            ((GridControl)ctrObj.ctrMain).Format(true);
+                        if (ctrObj.ctrMain is TreeList)
+                            ((TreeList)ctrObj.ctrMain).Format();
+                        if (ctrObj.ctrMain is SearchLookUpEdit)
+                            ((SearchLookUpEdit)ctrObj.ctrMain).Format();
+                    }
+                    else if (ctrObj.repoMain != null)
+                    {
+                        if (ctrObj.repoMain is RepositoryItemDateEdit)
+                            ((RepositoryItemDateEdit)ctrObj.repoMain).Format();
+                        if (ctrObj.repoMain is RepositoryItemSpinEdit)
+                            ((RepositoryItemSpinEdit)ctrObj.repoMain).Format();
+                        if (ctrObj.repoMain is RepositoryItemLookUpEdit)
+                            ((RepositoryItemLookUpEdit)ctrObj.repoMain).Format();
+                    }
+                }
+            }
+            catch { }
         }
         #endregion
         #endregion

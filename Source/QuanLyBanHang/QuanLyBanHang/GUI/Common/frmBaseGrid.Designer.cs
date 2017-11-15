@@ -284,7 +284,7 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barMenu;
-            this.barDockControlTop.Size = new System.Drawing.Size(884, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(884, 26);
             // 
             // barDockControlBottom
             // 
@@ -298,17 +298,17 @@
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 26);
             this.barDockControlLeft.Manager = this.barMenu;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 358);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(884, 24);
+            this.barDockControlRight.Location = new System.Drawing.Point(884, 26);
             this.barDockControlRight.Manager = this.barMenu;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 358);
             // 
             // btnClose
             // 
@@ -331,6 +331,7 @@
             this.bbpEdit.Id = 14;
             this.bbpEdit.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Edit_16x16;
             this.bbpEdit.Name = "bbpEdit";
+            this.bbpEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // bbpDelete
             // 
@@ -343,6 +344,7 @@
             // bbpRefresh
             // 
             this.bbpRefresh.Caption = "Làm mới";
+            this.bbpRefresh.Enabled = false;
             this.bbpRefresh.Id = 17;
             this.bbpRefresh.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Refresh_16x16;
             this.bbpRefresh.Name = "bbpRefresh";
@@ -365,6 +367,7 @@
             this.bbpCancel.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.Cancel_16x16;
             this.bbpCancel.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Reset_32x32;
             this.bbpCancel.Name = "bbpCancel";
+            this.bbpCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // bbpPrintPreview
             // 
@@ -389,6 +392,7 @@
             this.bbpSaveAndAdd.Id = 25;
             this.bbpSaveAndAdd.ImageOptions.Image = global::QuanLyBanHang.Properties.Resources.SaveAndNew_16x16;
             this.bbpSaveAndAdd.Name = "bbpSaveAndAdd";
+            this.bbpSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // bbpExportExcel
             // 
@@ -402,14 +406,14 @@
             // 
             this.popGridMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.bbpAdd),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbpEdit),
             new DevExpress.XtraBars.LinkPersistInfo(this.bbpDelete),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbpRefresh, true),
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.bbpSave, "", true, true, true, 0, null, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbpSaveAndAdd),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbpCancel),
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbpRefresh),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.bbpSave, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(this.bbpPrintPreview, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbpExportExcel)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbpExportExcel),
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbpEdit, true),
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbpSaveAndAdd),
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbpCancel)});
             this.popGridMenu.Manager = this.barMenu;
             this.popGridMenu.Name = "popGridMenu";
             // 

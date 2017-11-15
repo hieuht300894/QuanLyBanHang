@@ -473,6 +473,6 @@ namespace QuanLyBanHang
 namespace QuanLyBanHang
 {
     #region Enum
-    public enum eFormType { Default = 0, List, Add, Edit, Print };
+    public enum eFormType { Default = 0, List, Add, Edit, Delete, Print };
     #endregion
 }

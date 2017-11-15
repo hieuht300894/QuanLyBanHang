@@ -44,7 +44,9 @@
             this.bbiSkin = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
             this.bbiInfomation = new DevExpress.XtraBars.BarButtonItem();
             this.frmTinhThanh_List = new DevExpress.XtraBars.BarButtonItem();
-            this.frmKhachHang_List = new DevExpress.XtraBars.BarButtonItem();
+            this.frmKhachHang = new DevExpress.XtraBars.BarButtonItem();
+            this.frmKho = new DevExpress.XtraBars.BarButtonItem();
+            this.frmDonViTinh = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -55,7 +57,6 @@
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.frmKho_List = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -82,10 +83,11 @@
             this.bbiSkin,
             this.bbiInfomation,
             this.frmTinhThanh_List,
-            this.frmKhachHang_List,
-            this.frmKho_List});
+            this.frmKhachHang,
+            this.frmKho,
+            this.frmDonViTinh});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 223;
+            this.ribbon.MaxItemId = 224;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -191,11 +193,23 @@
             this.frmTinhThanh_List.Id = 219;
             this.frmTinhThanh_List.Name = "frmTinhThanh_List";
             // 
-            // frmKhachHang_List
+            // frmKhachHang
             // 
-            this.frmKhachHang_List.Caption = "Khách hàng";
-            this.frmKhachHang_List.Id = 221;
-            this.frmKhachHang_List.Name = "frmKhachHang_List";
+            this.frmKhachHang.Caption = "Khách hàng";
+            this.frmKhachHang.Id = 221;
+            this.frmKhachHang.Name = "frmKhachHang";
+            // 
+            // frmKho
+            // 
+            this.frmKho.Caption = "Kho";
+            this.frmKho.Id = 222;
+            this.frmKho.Name = "frmKho";
+            // 
+            // frmDonViTinh
+            // 
+            this.frmDonViTinh.Caption = "Đơn vị tính";
+            this.frmDonViTinh.Id = 223;
+            this.frmDonViTinh.Name = "frmDonViTinh";
             // 
             // rbpAccount
             // 
@@ -237,8 +251,9 @@
             // rbgDanhMuc
             // 
             this.rbgDanhMuc.ItemLinks.Add(this.frmTinhThanh_List);
-            this.rbgDanhMuc.ItemLinks.Add(this.frmKhachHang_List);
-            this.rbgDanhMuc.ItemLinks.Add(this.frmKho_List);
+            this.rbgDanhMuc.ItemLinks.Add(this.frmKhachHang);
+            this.rbgDanhMuc.ItemLinks.Add(this.frmKho);
+            this.rbgDanhMuc.ItemLinks.Add(this.frmDonViTinh);
             this.rbgDanhMuc.Name = "rbgDanhMuc";
             this.rbgDanhMuc.Text = "Danh mục chung";
             // 
@@ -269,12 +284,6 @@
             // tbvMain
             // 
             this.tbvMain.RootContainer.Element = null;
-            // 
-            // frmKho_List
-            // 
-            this.frmKho_List.Caption = "Kho";
-            this.frmKho_List.Id = 222;
-            this.frmKho_List.Name = "frmKho_List";
             // 
             // frmMain
             // 
@@ -327,7 +336,8 @@
         private DevExpress.XtraBars.BarButtonItem frmTinhThanh_List;
         private DevExpress.XtraBars.Ribbon.RibbonPage rbpDanhMuc;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgDanhMuc;
-        private DevExpress.XtraBars.BarButtonItem frmKhachHang_List;
-        private DevExpress.XtraBars.BarButtonItem frmKho_List;
+        private DevExpress.XtraBars.BarButtonItem frmKhachHang;
+        private DevExpress.XtraBars.BarButtonItem frmKho;
+        private DevExpress.XtraBars.BarButtonItem frmDonViTinh;
     }
 }

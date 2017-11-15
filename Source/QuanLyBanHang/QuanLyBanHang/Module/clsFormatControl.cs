@@ -1319,7 +1319,6 @@ namespace QuanLyBanHang
             rlokMain.AppearanceDropDownHeader.Options.UseFont = true;
             rlokMain.TextEditStyle = TextEditStyles.Standard;
             rlokMain.BestFitMode = BestFitMode.BestFitResizePopup;
-            rlokMain.Buttons.Clear();
 
             rlokMain.HighlightedItemStyle = HighlightStyle.Standard;
             rlokMain.LookAndFeel.UseDefaultLookAndFeel = false;
@@ -1493,6 +1492,8 @@ namespace QuanLyBanHang
                 dateEdit.DateTime = DateTime.Now.ServerNow();
             dateEdit.Properties.EditMask = fText;
             dateEdit.Properties.ShowClear = false;
+            dateEdit.Properties.MinValue = new DateTime(1900, 1, 1);
+            dateEdit.Properties.MaxValue = DateTime.Now.ServerNow();
         }
         #endregion
 
@@ -1501,6 +1502,8 @@ namespace QuanLyBanHang
         {
             dateEdit.EditMask = fText;
             dateEdit.ShowClear = false;
+            dateEdit.MinValue = new DateTime(1900, 1, 1);
+            dateEdit.MaxValue = DateTime.Now.ServerNow();
         }
         #endregion
 

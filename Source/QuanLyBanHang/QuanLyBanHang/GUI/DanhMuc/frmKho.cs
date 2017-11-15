@@ -1,18 +1,21 @@
 ﻿using EntityModel.DataModel.DanhMuc;
+using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
-    public partial class frmKho : frmBase
+    public partial class frmKho : frmBaseGrid
     {
-        public eKho _iEntry = new eKho();
-        eKho _aEntry = new eKho();
+        BindingList<eKho> lstEntries = new BindingList<eKho>();
+        BindingList<eKho> lstEdited = new BindingList<eKho>();
 
         public frmKho()
         {
@@ -21,46 +24,33 @@ namespace QuanLyBanHang.GUI.DanhMuc
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            MsgAdd = "Thêm mới kho";
-            MsgEdit = "Cập nhật kho";
-            MsgDelete = "Xóa kho";
-            LoadDataForm();
+            LoadData(0);
             CustomForm();
         }
-        public override async void LoadDataForm()
-        {
-            _iEntry = _iEntry ?? new eKho();
-            _aEntry = await clsKho.Instance.GetByID(_iEntry.KeyID);
 
-            SetControlValue();
-        }
-        public override void RenewData()
+        public async override void LoadData(object KeyID)
         {
-            _iEntry = _aEntry = null;
-        }
-        public override async Task<bool> SaveData()
-        {
-            if (_aEntry.KeyID == 0) { _aEntry.KichHoat = true; }
-            else { }
-
-            bool chk = true;
-            chk = await clsKho.Instance.AddOrUpdate(_aEntry);
-            return chk;
-        }
-        public override void SetControlValue()
-        {
-            txtMa.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtTen.DataBindings.Add("EditValue", _aEntry, "Ten", true, DataSourceUpdateMode.OnPropertyChanged);
-            mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
+            lstEdited = new BindingList<eKho>();
+            lstEntries = new BindingList<eKho>(await clsFunction<eKho>.Instance.GetAll());
+            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
         {
-            bool chk = true;
+            grvDanhSach.CloseEditor();
+            grvDanhSach.UpdateCurrentRow();
+            return base.ValidationForm();
+        }
+        public async override Task<bool> SaveData()
+        {
+            bool chk = false;
+            chk = await clsFunction<eKho>.Instance.AddOrUpdate(lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()
         {
             base.CustomForm();
+            gctDanhSach.MouseClick += (s, e) => { ShowGridPopup(s, e, true, false, true, true, true, true); };
+            grvDanhSach.RowUpdated += (s, e) => { if (!lstEdited.Any(x => x.KeyID == ((eKho)e.Row).KeyID)) lstEdited.Add((eKho)e.Row); };
         }
     }
 }

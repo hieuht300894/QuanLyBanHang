@@ -35,9 +35,8 @@ namespace QuanLyBanHang.Model
         public static List<Loai> LoaiGioiTinh()
         {
             List<Loai> lstResult = new List<Loai>();
-            lstResult.Add(new Loai() { KeyID = 1, Ten = "Không xác định" });
-            lstResult.Add(new Loai() { KeyID = 2, Ten = "Nam" });
-            lstResult.Add(new Loai() { KeyID = 3, Ten = "Nữ" });
+            lstResult.Add(new Loai() { KeyID = 1, Ten = "Nam" });
+            lstResult.Add(new Loai() { KeyID = 2, Ten = "Nữ" });
             return lstResult;
         }
     }
