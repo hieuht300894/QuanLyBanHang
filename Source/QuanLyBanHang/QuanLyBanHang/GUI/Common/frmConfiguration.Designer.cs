@@ -1,6 +1,6 @@
 ﻿namespace QuanLyBanHang.GUI.Common
 {
-    partial class frmInfomation
+    partial class frmConfiguration
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInfomation));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmConfiguration));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.layoutControl3 = new DevExpress.XtraLayout.LayoutControl();
             this.picLogo = new DevExpress.XtraEditors.PictureEdit();
@@ -381,7 +381,7 @@
             this.Name = "frmInfomation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin cửa hàng";
-            this.Load += new System.EventHandler(this.frmInfomation_Load);
+            this.Load += new System.EventHandler(this.frmConfiguration_Load);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl3)).EndInit();

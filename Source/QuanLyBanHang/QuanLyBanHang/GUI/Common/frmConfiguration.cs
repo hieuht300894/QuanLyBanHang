@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.Common
 {
-    public partial class frmInfomation : XtraForm
+    public partial class frmConfiguration : XtraForm
     {
         #region Variables
         //public delegate void LoadData();
@@ -18,11 +18,11 @@ namespace QuanLyBanHang.GUI.Common
         #endregion
 
         #region Form
-        public frmInfomation()
+        public frmConfiguration()
         {
             InitializeComponent();
         }
-        private void frmInfomation_Load(object sender, EventArgs e)
+        private void frmConfiguration_Load(object sender, EventArgs e)
         {
             loadData();
             customForm();

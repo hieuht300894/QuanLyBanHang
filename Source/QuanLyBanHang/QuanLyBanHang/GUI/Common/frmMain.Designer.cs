@@ -49,21 +49,21 @@
             this.frmDonViTinh = new DevExpress.XtraBars.BarButtonItem();
             this.frmSanPham = new DevExpress.XtraBars.BarButtonItem();
             this.frmNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhomDonViTinh = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhomKhachHang = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhomNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhomSanPham = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgSkin = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.rbgDanhMucNhom = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.rbgDanhMucNhom = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.frmNhomDonViTinh = new DevExpress.XtraBars.BarButtonItem();
-            this.frmNhomKhachHang = new DevExpress.XtraBars.BarButtonItem();
-            this.frmNhomNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
-            this.frmNhomSanPham = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -194,9 +194,9 @@
             // 
             // bbiInfomation
             // 
-            this.bbiInfomation.Caption = "Thông tin chung";
+            this.bbiInfomation.Caption = "Cấu hình";
             this.bbiInfomation.Id = 216;
-            this.bbiInfomation.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.information;
+            this.bbiInfomation.ImageOptions.LargeImage = global::QuanLyBanHang.Properties.Resources.Properties_32x32;
             this.bbiInfomation.Name = "bbiInfomation";
             this.bbiInfomation.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiInfomation_ItemClick);
             // 
@@ -235,6 +235,30 @@
             this.frmNhaCungCap.Caption = "Nhà cung cấp";
             this.frmNhaCungCap.Id = 225;
             this.frmNhaCungCap.Name = "frmNhaCungCap";
+            // 
+            // frmNhomDonViTinh
+            // 
+            this.frmNhomDonViTinh.Caption = "ĐVT";
+            this.frmNhomDonViTinh.Id = 226;
+            this.frmNhomDonViTinh.Name = "frmNhomDonViTinh";
+            // 
+            // frmNhomKhachHang
+            // 
+            this.frmNhomKhachHang.Caption = "KH";
+            this.frmNhomKhachHang.Id = 227;
+            this.frmNhomKhachHang.Name = "frmNhomKhachHang";
+            // 
+            // frmNhomNhaCungCap
+            // 
+            this.frmNhomNhaCungCap.Caption = "NCC";
+            this.frmNhomNhaCungCap.Id = 228;
+            this.frmNhomNhaCungCap.Name = "frmNhomNhaCungCap";
+            // 
+            // frmNhomSanPham
+            // 
+            this.frmNhomSanPham.Caption = "SP";
+            this.frmNhomSanPham.Id = 229;
+            this.frmNhomSanPham.Name = "frmNhomSanPham";
             // 
             // rbpAccount
             // 
@@ -285,6 +309,15 @@
             this.rbgDanhMuc.Name = "rbgDanhMuc";
             this.rbgDanhMuc.Text = "Danh mục chung";
             // 
+            // rbgDanhMucNhom
+            // 
+            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomDonViTinh);
+            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomKhachHang);
+            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomNhaCungCap);
+            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomSanPham);
+            this.rbgDanhMucNhom.Name = "rbgDanhMucNhom";
+            this.rbgDanhMucNhom.Text = "Nhóm danh mục";
+            // 
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.bsiClock);
@@ -312,39 +345,6 @@
             // tbvMain
             // 
             this.tbvMain.RootContainer.Element = null;
-            // 
-            // rbgDanhMucNhom
-            // 
-            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomDonViTinh);
-            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomKhachHang);
-            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomNhaCungCap);
-            this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomSanPham);
-            this.rbgDanhMucNhom.Name = "rbgDanhMucNhom";
-            this.rbgDanhMucNhom.Text = "Nhóm danh mục";
-            // 
-            // frmNhomDonViTinh
-            // 
-            this.frmNhomDonViTinh.Caption = "ĐVT";
-            this.frmNhomDonViTinh.Id = 226;
-            this.frmNhomDonViTinh.Name = "frmNhomDonViTinh";
-            // 
-            // frmNhomKhachHang
-            // 
-            this.frmNhomKhachHang.Caption = "KH";
-            this.frmNhomKhachHang.Id = 227;
-            this.frmNhomKhachHang.Name = "frmNhomKhachHang";
-            // 
-            // frmNhomNhaCungCap
-            // 
-            this.frmNhomNhaCungCap.Caption = "NCC";
-            this.frmNhomNhaCungCap.Id = 228;
-            this.frmNhomNhaCungCap.Name = "frmNhomNhaCungCap";
-            // 
-            // frmNhomSanPham
-            // 
-            this.frmNhomSanPham.Caption = "SP";
-            this.frmNhomSanPham.Id = 229;
-            this.frmNhomSanPham.Name = "frmNhomSanPham";
             // 
             // frmMain
             // 

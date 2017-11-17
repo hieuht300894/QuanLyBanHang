@@ -243,7 +243,7 @@ namespace QuanLyBanHang.GUI.Common
 
         private void bbiInfomation_ItemClick(object sender, ItemClickEventArgs e)
         {
-            using (frmInfomation _frm = new frmInfomation())
+            using (frmConfiguration _frm = new frmConfiguration())
             {
                 _frm.ShowDialog();
             }
