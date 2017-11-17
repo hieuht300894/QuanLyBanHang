@@ -96,7 +96,7 @@ namespace QuanLyBanHang.GUI.Common
         {
             //frmSetting _frmsetting = new frmSetting();
             //_frmsetting.ShowDialog();
-            frmBackupDatabase frm = new frmBackupDatabase();
+            frmDatabase frm = new frmDatabase();
             frm.ShowDialog();
         }
 

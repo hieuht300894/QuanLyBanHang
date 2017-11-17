@@ -88,7 +88,7 @@ namespace QuanLyBanHang.GUI.Common
                 clsGeneral.showErrorException(ex, "Exception");
                 if (clsGeneral.showConfirmMessage("Thiết lập kết nối máy chủ"))
                 {
-                    frmBackupDatabase frm = new frmBackupDatabase();
+                    frmDatabase frm = new frmDatabase();
                     frm.ShowDialog();
                     loadDataForm();
                 }
