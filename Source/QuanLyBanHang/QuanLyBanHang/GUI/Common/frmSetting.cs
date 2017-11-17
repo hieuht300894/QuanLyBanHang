@@ -24,20 +24,15 @@ namespace QuanLyBanHang.GUI.Common
         {
             btnLuu.Enabled = false;
             //Load giá trị mặc định cho các field
-            txtComputerName.Text = Environment.MachineName;
-            txtMayChuFTP.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ftp);
-            txtTenFPT.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ftp_user);
-            txtPassFTP.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ftp_pw);
-
             txtSQLServerName.Text = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
-            tsbSQLAuthentication.IsOn = !Properties.Settings.Default.WinAu;
+            tsbSQLAuthentication.IsOn = !Properties.Settings.Default.IsWindowAuthentication;
             txtSQLUserName.Text = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
             txtSQLPassword.Text = clsGeneral.Decrypt(Properties.Settings.Default.Password);
             cbbDatabase.Enabled = false;
             this.KeyPreview = true;
 
             loadPrinter();
-            //lokPrinter.Format(false);
+            lokPrinter.Format();
         }
 
         //Sự kiện click btnKiemTra
@@ -67,8 +62,8 @@ namespace QuanLyBanHang.GUI.Common
         {
             Properties.Settings.Default.ComputerName = txtComputerName.Text;
             Properties.Settings.Default.ServerName = clsGeneral.Encrypt(_sqlName);
-            Properties.Settings.Default.WinAu = !tsbSQLAuthentication.IsOn;
-            Properties.Settings.Default.DBName = clsGeneral.Encrypt(cbbDatabase.Text);
+            Properties.Settings.Default.IsWindowAuthentication = !tsbSQLAuthentication.IsOn;
+            Properties.Settings.Default.DatabaseName = clsGeneral.Encrypt(cbbDatabase.Text);
             Properties.Settings.Default.UserName = clsGeneral.Encrypt(_sqlUser);
             Properties.Settings.Default.Password = clsGeneral.Encrypt(_sqlPass);
 

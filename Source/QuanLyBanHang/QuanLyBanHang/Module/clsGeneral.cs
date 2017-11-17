@@ -231,60 +231,60 @@ namespace QuanLyBanHang
             bool bRe = false;
             try
             {
-                if (string.IsNullOrEmpty(Properties.Settings.Default.ServicePack))
-                {
-                    return false;
-                }
+                //if (string.IsNullOrEmpty(Properties.Settings.Default.ServicePack))
+                //{
+                //    return false;
+                //}
 
-                Int32 currentVersion = Int32.Parse(Properties.Settings.Default.ServicePack);
-                string _ftp = Decrypt(Properties.Settings.Default.ftp);
-                string _ftpUser = Decrypt(Properties.Settings.Default.ftp_user);
-                string _ftpPW = Decrypt(Properties.Settings.Default.ftp_pw);
-                string _project = Decrypt(Properties.Settings.Default.ftp_proj);
-                string ftp_dir = ("ftp://" + (_ftp + ("/" + ("LiveUpdate/" + _project))));
-                FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(new Uri(ftp_dir));
-                request.Method = WebRequestMethods.Ftp.ListDirectory;
-                request.UseBinary = true;
-                request.Credentials = new NetworkCredential(_ftpUser, _ftpPW);
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string files = "";
-                while (!reader.EndOfStream)
-                {
-                    //Application.DoEvents();
-                    files = reader.ReadLine();
-                }
+                //Int32 currentVersion = Int32.Parse(Properties.Settings.Default.ServicePack);
+                //string _ftp = Decrypt(Properties.Settings.Default.ftp);
+                //string _ftpUser = Decrypt(Properties.Settings.Default.ftp_user);
+                //string _ftpPW = Decrypt(Properties.Settings.Default.ftp_pw);
+                //string _project = Decrypt(Properties.Settings.Default.ftp_proj);
+                //string ftp_dir = ("ftp://" + (_ftp + ("/" + ("LiveUpdate/" + _project))));
+                //FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(new Uri(ftp_dir));
+                //request.Method = WebRequestMethods.Ftp.ListDirectory;
+                //request.UseBinary = true;
+                //request.Credentials = new NetworkCredential(_ftpUser, _ftpPW);
+                //FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                //StreamReader reader = new StreamReader(response.GetResponseStream());
+                //string files = "";
+                //while (!reader.EndOfStream)
+                //{
+                //    //Application.DoEvents();
+                //    files = reader.ReadLine();
+                //}
 
-                if (((files == null)
-                            || (string.IsNullOrEmpty(files)
-                            || (files == ""))))
-                {
-                    return false;
-                }
+                //if (((files == null)
+                //            || (string.IsNullOrEmpty(files)
+                //            || (files == ""))))
+                //{
+                //    return false;
+                //}
 
-                string fName = Path.GetFileName(files);
-                Int32 version = Int32.Parse(fName.Split((char)'.')[0].Substring(2));
-                if ((version > currentVersion))
-                {
-                    Process p = new Process();
-                    if ((Environment.OSVersion.Version.Major >= 6))
-                    {
-                        p.StartInfo.Verb = "runas";
-                    }
+                //string fName = Path.GetFileName(files);
+                //Int32 version = Int32.Parse(fName.Split((char)'.')[0].Substring(2));
+                //if ((version > currentVersion))
+                //{
+                //    Process p = new Process();
+                //    if ((Environment.OSVersion.Version.Major >= 6))
+                //    {
+                //        p.StartInfo.Verb = "runas";
+                //    }
 
-                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    p.StartInfo.FileName = (Application.StartupPath + "\\LiveUpdate.exe");
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardError = true;
-                    if (p.Start())
-                    {
-                        Properties.Settings.Default.ServicePack = version.ToString();
-                        Properties.Settings.Default.Save();
-                        p.WaitForExit();
-                        bRe = true;
-                    }
-                }
+                //    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //    p.StartInfo.FileName = (Application.StartupPath + "\\LiveUpdate.exe");
+                //    p.StartInfo.UseShellExecute = false;
+                //    p.StartInfo.RedirectStandardOutput = true;
+                //    p.StartInfo.RedirectStandardError = true;
+                //    if (p.Start())
+                //    {
+                //        Properties.Settings.Default.ServicePack = version.ToString();
+                //        Properties.Settings.Default.Save();
+                //        p.WaitForExit();
+                //        bRe = true;
+                //    }
+                //}
 
             }
             catch (Exception ex)

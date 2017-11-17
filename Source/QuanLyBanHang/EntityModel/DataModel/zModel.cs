@@ -53,9 +53,10 @@
         public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
         #endregion
 
-        #region Ton
+        #region Khai báo đầu kỳ
         public virtual DbSet<eCongNoDauKy> eCongNoDauKy { get; set; }
         public virtual DbSet<eTonKhoDauKy> eTonKhoDauKy { get; set; }
+        public virtual DbSet<eSoDuDauKy> eSoDuDauKy { get; set; }
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

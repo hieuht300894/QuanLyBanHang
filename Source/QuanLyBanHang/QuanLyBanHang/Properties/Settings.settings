@@ -2,22 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="QuanLyBanHang.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ServicePack" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1.0.0</Value>
-    </Setting>
-    <Setting Name="ftp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">EQQvlTQwQkmQmLh0Zgzt1A==</Value>
-    </Setting>
-    <Setting Name="ftp_user" Type="System.String" Scope="User">
-      <Value Profile="(Default)">CGddsU5xIa0RoIkYB3MNfg==</Value>
-    </Setting>
-    <Setting Name="ftp_pw" Type="System.String" Scope="User">
-      <Value Profile="(Default)">IZnn7qexBA9XbCEvktrw8g==</Value>
-    </Setting>
-    <Setting Name="ftp_proj" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ZOiYtt4REcpJy0gh1e7GfA==</Value>
-    </Setting>
-    <Setting Name="isSaveUserAndPassword" Type="System.Boolean" Scope="User">
+    <Setting Name="IsRecommend" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="CurrentUsername" Type="System.String" Scope="User">
@@ -29,10 +14,10 @@
     <Setting Name="ServerName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DBName" Type="System.String" Scope="User">
+    <Setting Name="DatabaseName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="WinAu" Type="System.Boolean" Scope="User">
+    <Setting Name="IsWindowAuthentication" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="UserName" Type="System.String" Scope="User">
@@ -50,11 +35,11 @@
     <Setting Name="DateFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">dd/MM/yyyy</Value>
     </Setting>
-    <Setting Name="DecimalFormat" Type="System.String" Scope="User">
+    <Setting Name="NumberFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">N0</Value>
     </Setting>
     <Setting Name="SkinName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Office 2010 Silver</Value>
     </Setting>
     <Setting Name="PrinterName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -64,6 +49,9 @@
     </Setting>
     <Setting Name="IDAgency" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="FontFormat" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Tahoma, 9pt</Value>
     </Setting>
   </Settings>
 </SettingsFile>

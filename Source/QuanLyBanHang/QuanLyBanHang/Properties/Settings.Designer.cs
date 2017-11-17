@@ -25,73 +25,13 @@ namespace QuanLyBanHang.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0")]
-        public string ServicePack {
-            get {
-                return ((string)(this["ServicePack"]));
-            }
-            set {
-                this["ServicePack"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("EQQvlTQwQkmQmLh0Zgzt1A==")]
-        public string ftp {
-            get {
-                return ((string)(this["ftp"]));
-            }
-            set {
-                this["ftp"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CGddsU5xIa0RoIkYB3MNfg==")]
-        public string ftp_user {
-            get {
-                return ((string)(this["ftp_user"]));
-            }
-            set {
-                this["ftp_user"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IZnn7qexBA9XbCEvktrw8g==")]
-        public string ftp_pw {
-            get {
-                return ((string)(this["ftp_pw"]));
-            }
-            set {
-                this["ftp_pw"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ZOiYtt4REcpJy0gh1e7GfA==")]
-        public string ftp_proj {
-            get {
-                return ((string)(this["ftp_proj"]));
-            }
-            set {
-                this["ftp_proj"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool isSaveUserAndPassword {
+        public bool IsRecommend {
             get {
-                return ((bool)(this["isSaveUserAndPassword"]));
+                return ((bool)(this["IsRecommend"]));
             }
             set {
-                this["isSaveUserAndPassword"] = value;
+                this["IsRecommend"] = value;
             }
         }
         
@@ -134,24 +74,24 @@ namespace QuanLyBanHang.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DBName {
+        public string DatabaseName {
             get {
-                return ((string)(this["DBName"]));
+                return ((string)(this["DatabaseName"]));
             }
             set {
-                this["DBName"] = value;
+                this["DatabaseName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool WinAu {
+        public bool IsWindowAuthentication {
             get {
-                return ((bool)(this["WinAu"]));
+                return ((bool)(this["IsWindowAuthentication"]));
             }
             set {
-                this["WinAu"] = value;
+                this["IsWindowAuthentication"] = value;
             }
         }
         
@@ -218,18 +158,18 @@ namespace QuanLyBanHang.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("N0")]
-        public string DecimalFormat {
+        public string NumberFormat {
             get {
-                return ((string)(this["DecimalFormat"]));
+                return ((string)(this["NumberFormat"]));
             }
             set {
-                this["DecimalFormat"] = value;
+                this["NumberFormat"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Office 2010 Silver")]
         public string SkinName {
             get {
                 return ((string)(this["SkinName"]));
@@ -272,6 +212,18 @@ namespace QuanLyBanHang.Properties {
             }
             set {
                 this["IDAgency"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tahoma, 9pt")]
+        public global::System.Drawing.Font FontFormat {
+            get {
+                return ((global::System.Drawing.Font)(this["FontFormat"]));
+            }
+            set {
+                this["FontFormat"] = value;
             }
         }
     }

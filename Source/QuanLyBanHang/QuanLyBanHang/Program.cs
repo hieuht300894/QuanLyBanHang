@@ -19,10 +19,8 @@ namespace QuanLyBanHang
 
             DevExpress.UserSkins.BonusSkins.Register();
             DevExpress.Skins.SkinManager.EnableFormSkins();
-            DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("Office 2010 Silver");
-            DevExpress.Utils.AppearanceObject.DefaultFont = new System.Drawing.Font("Tahoma", 9F);
-            //clsMain ls = new clsMain();
-            //if (ls.Start("WHSOFT", @"http://license.phanmemtintan.com:8000/ssposservice.asmx"))
+            DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle(Properties.Settings.Default.SkinName);
+            DevExpress.Utils.AppearanceObject.DefaultFont = Properties.Settings.Default.FontFormat;
             Application.Run(new GUI.Common.frmMain());
         }
     }

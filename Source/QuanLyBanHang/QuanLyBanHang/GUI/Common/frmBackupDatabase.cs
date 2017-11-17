@@ -29,7 +29,7 @@ namespace QuanLyBanHang.GUI.Common
         private Server CheckServer()
         {
             txtComputerName.EditValue = string.IsNullOrEmpty(Properties.Settings.Default.ComputerName) ? Environment.MachineName : Properties.Settings.Default.ComputerName;
-            tgsIsAuth.IsOn = Properties.Settings.Default.WinAu;
+            tgsIsAuth.IsOn = Properties.Settings.Default.IsWindowAuthentication;
             txtServerName.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
             txtUsername.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
             txtPassword.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.Password);
@@ -340,7 +340,7 @@ namespace QuanLyBanHang.GUI.Common
                 lokDB.Properties.DataSource = lstDB;
             }
 
-            lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.DBName);
+            lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
             lokDB.Format();
 
             rgFunction.EditValueChanged += rgFunction_EditValueChanged;
@@ -361,8 +361,8 @@ namespace QuanLyBanHang.GUI.Common
         {
             Properties.Settings.Default.ComputerName = txtComputerName.Text;
             Properties.Settings.Default.ServerName = clsGeneral.Encrypt(txtServerName.Text);
-            Properties.Settings.Default.WinAu = tgsIsAuth.IsOn;
-            Properties.Settings.Default.DBName = clsGeneral.Encrypt(lokDB.Text);
+            Properties.Settings.Default.IsWindowAuthentication = tgsIsAuth.IsOn;
+            Properties.Settings.Default.DatabaseName = clsGeneral.Encrypt(lokDB.Text);
             Properties.Settings.Default.UserName = clsGeneral.Encrypt(txtUsername.Text);
             Properties.Settings.Default.Password = clsGeneral.Encrypt(txtPassword.Text);
             Properties.Settings.Default.Save();

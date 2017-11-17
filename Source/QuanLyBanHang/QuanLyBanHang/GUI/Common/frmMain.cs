@@ -64,9 +64,9 @@ namespace QuanLyBanHang.GUI.Common
             clsGeneral.CallWaitForm(this);
             string _sName, _sDatabase, _sUser, _sPass;
             bool _wAu;
-            _wAu = Properties.Settings.Default.WinAu;
+            _wAu = Properties.Settings.Default.IsWindowAuthentication;
             _sName = clsGeneral.Decrypt(Properties.Settings.Default.ServerName);
-            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.DBName);
+            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
             _sUser = clsGeneral.Decrypt(Properties.Settings.Default.UserName);
             _sPass = clsGeneral.Decrypt(Properties.Settings.Default.Password);
 
@@ -122,7 +122,7 @@ namespace QuanLyBanHang.GUI.Common
                     clsGeneral.CallWaitForm(this);
                     clsCallForm.InitFormCollection();
                     bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
-                    bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.DBName);
+                    bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
                     bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
                     bsiClock.Caption = "Công ty phần mềm Tin Tấn © 2017";
                     addItemClick();

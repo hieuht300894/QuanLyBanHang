@@ -50,7 +50,7 @@ namespace QuanLyBanHang
             get
             {
                 Properties.Settings.Default.Reload();
-                return Properties.Settings.Default.DecimalFormat;
+                return Properties.Settings.Default.NumberFormat;
             }
         }
 
