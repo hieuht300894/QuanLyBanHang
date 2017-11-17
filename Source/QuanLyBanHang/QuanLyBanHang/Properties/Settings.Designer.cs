@@ -226,5 +226,29 @@ namespace QuanLyBanHang.Properties {
                 this["FontFormat"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-01-01")]
+        public global::System.DateTime BeginDate {
+            get {
+                return ((global::System.DateTime)(this["BeginDate"]));
+            }
+            set {
+                this["BeginDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-12-31")]
+        public global::System.DateTime EndDate {
+            get {
+                return ((global::System.DateTime)(this["EndDate"]));
+            }
+            set {
+                this["EndDate"] = value;
+            }
+        }
     }
 }

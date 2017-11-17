@@ -53,5 +53,11 @@
     <Setting Name="FontFormat" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)">Tahoma, 9pt</Value>
     </Setting>
+    <Setting Name="BeginDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2017-01-01</Value>
+    </Setting>
+    <Setting Name="EndDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2017-12-31</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
