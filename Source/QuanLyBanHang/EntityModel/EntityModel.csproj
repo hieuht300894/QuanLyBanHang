@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -54,20 +55,35 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="aModel.cs" />
-    <Compile Include="DataModel\eKhachHang.cs" />
-    <Compile Include="DataModel\eTinhThanh.cs" />
-    <Compile Include="DataModel\xAccount.cs" />
-    <Compile Include="DataModel\xAgency.cs" />
-    <Compile Include="DataModel\xLog.cs" />
-    <Compile Include="DataModel\xPersonnel.cs" />
-    <Compile Include="DataModel\xAppConfig.cs" />
-    <Compile Include="DataModel\xDisplay.cs" />
-    <Compile Include="DataModel\xFeature.cs" />
-    <Compile Include="DataModel\xLayoutItemCaption.cs" />
-    <Compile Include="DataModel\xMsgDictionary.cs" />
-    <Compile Include="DataModel\xPermission.cs" />
-    <Compile Include="DataModel\xUserFeature.cs" />
-    <Compile Include="DataModel\xUserLog.cs" />
+    <Compile Include="DataModel\CauHinh\eHienThi.cs" />
+    <Compile Include="DataModel\CauHinh\eQuyDoiDonVi.cs" />
+    <Compile Include="DataModel\CauHinh\eQuyDoiTienTe.cs" />
+    <Compile Include="DataModel\DanhMuc\eDonViTinh.cs" />
+    <Compile Include="DataModel\DanhMuc\eKhachHang.cs" />
+    <Compile Include="DataModel\DanhMuc\eKho.cs" />
+    <Compile Include="DataModel\DanhMuc\eNhaCungCap.cs" />
+    <Compile Include="DataModel\DanhMuc\eNhomDonViTinh.cs" />
+    <Compile Include="DataModel\DanhMuc\eNhomKhachHang.cs" />
+    <Compile Include="DataModel\DanhMuc\eNhomNhaCungCap.cs" />
+    <Compile Include="DataModel\DanhMuc\eNhomSanPham.cs" />
+    <Compile Include="DataModel\DanhMuc\eSanPham.cs" />
+    <Compile Include="DataModel\DanhMuc\eTienTe.cs" />
+    <Compile Include="DataModel\DanhMuc\eTinhThanh.cs" />
+    <Compile Include="DataModel\HeThong\xAccount.cs" />
+    <Compile Include="DataModel\HeThong\xAgency.cs" />
+    <Compile Include="DataModel\HeThong\xAppConfig.cs" />
+    <Compile Include="DataModel\HeThong\xDisplay.cs" />
+    <Compile Include="DataModel\HeThong\xFeature.cs" />
+    <Compile Include="DataModel\HeThong\xLayoutItemCaption.cs" />
+    <Compile Include="DataModel\HeThong\xLog.cs" />
+    <Compile Include="DataModel\HeThong\xMsgDictionary.cs" />
+    <Compile Include="DataModel\HeThong\xPermission.cs" />
+    <Compile Include="DataModel\HeThong\xPersonnel.cs" />
+    <Compile Include="DataModel\HeThong\xUserFeature.cs" />
+    <Compile Include="DataModel\HeThong\xUserLog.cs" />
+    <Compile Include="DataModel\DauKy\eCongNoDauKy.cs" />
+    <Compile Include="DataModel\DauKy\eSoDuDauKy.cs" />
+    <Compile Include="DataModel\DauKy\eTonKhoDauKy.cs" />
     <Compile Include="DataModel\zModel.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,7 +94,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
