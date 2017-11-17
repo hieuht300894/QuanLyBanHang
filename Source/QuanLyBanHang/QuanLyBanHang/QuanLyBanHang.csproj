@@ -105,29 +105,17 @@
     <Compile Include="BLL\PERS\clsPersonnel.cs" />
     <Compile Include="BLL\PERS\clsUserRole.cs" />
     <Compile Include="Data\InitData.cs" />
-    <Compile Include="GUI\Common\frmBackupDatabase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Common\frmBackupDatabase.Designer.cs">
-      <DependentUpon>frmBackupDatabase.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Common\frmBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\Common\frmBase.Designer.cs">
       <DependentUpon>frmBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Common\frmBaseEdit.cs">
+    <Compile Include="GUI\Common\frmBaseGrid.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Common\frmBaseEdit.Designer.cs">
-      <DependentUpon>frmBaseEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Common\frmBaseList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Common\frmBaseList.Designer.cs">
-      <DependentUpon>frmBaseList.cs</DependentUpon>
+    <Compile Include="GUI\Common\frmBaseGrid.Designer.cs">
+      <DependentUpon>frmBaseGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Common\frmChangePassword.cs">
       <SubType>Form</SubType>
@@ -153,11 +141,11 @@
     <Compile Include="GUI\Common\frmError.Designer.cs">
       <DependentUpon>frmError.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Common\frmInfomation.cs">
+    <Compile Include="GUI\Common\frmConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Common\frmInfomation.Designer.cs">
-      <DependentUpon>frmInfomation.cs</DependentUpon>
+    <Compile Include="GUI\Common\frmConfiguration.Designer.cs">
+      <DependentUpon>frmConfiguration.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Common\frmLogin.cs">
       <SubType>Form</SubType>
@@ -177,17 +165,17 @@
     <Compile Include="GUI\Common\frmMessage.Designer.cs">
       <DependentUpon>frmMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Common\frmSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Common\frmSetting.Designer.cs">
-      <DependentUpon>frmSetting.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Common\frmWaiting.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\Common\frmWaiting.designer.cs">
       <DependentUpon>frmWaiting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmDonViTinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmDonViTinh.Designer.cs">
+      <DependentUpon>frmDonViTinh.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmKhachHang.cs">
       <SubType>Form</SubType>
@@ -195,23 +183,47 @@
     <Compile Include="GUI\DanhMuc\frmKhachHang.Designer.cs">
       <DependentUpon>frmKhachHang.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\DanhMuc\frmKhachHang_List.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\DanhMuc\frmKhachHang_List.Designer.cs">
-      <DependentUpon>frmKhachHang_List.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\DanhMuc\frmKho.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmKho.Designer.cs">
       <DependentUpon>frmKho.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\DanhMuc\frmKho_List.cs">
+    <Compile Include="GUI\DanhMuc\frmNhaCungCap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\DanhMuc\frmKho_List.Designer.cs">
-      <DependentUpon>frmKho_List.cs</DependentUpon>
+    <Compile Include="GUI\DanhMuc\frmNhaCungCap.Designer.cs">
+      <DependentUpon>frmNhaCungCap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomDonViTinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomDonViTinh.Designer.cs">
+      <DependentUpon>frmNhomDonViTinh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomKhachHang.Designer.cs">
+      <DependentUpon>frmNhomKhachHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomNhaCungCap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomNhaCungCap.Designer.cs">
+      <DependentUpon>frmNhomNhaCungCap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomSanPham.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmNhomSanPham.Designer.cs">
+      <DependentUpon>frmNhomSanPham.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmSanPham.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmSanPham.Designer.cs">
+      <DependentUpon>frmSanPham.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmTinhThanh_List.cs">
       <SubType>Form</SubType>
@@ -266,11 +278,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\IForm.cs" />
-    <EmbeddedResource Include="GUI\Common\frmBackupDatabase.resx">
-      <DependentUpon>frmBackupDatabase.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmBase.resx">
       <DependentUpon>frmBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Common\frmBaseGrid.resx">
+      <DependentUpon>frmBaseGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmChangePassword.resx">
       <DependentUpon>frmChangePassword.cs</DependentUpon>
@@ -278,11 +290,14 @@
     <EmbeddedResource Include="GUI\Common\frmConfirm.resx">
       <DependentUpon>frmConfirm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Common\frmDatabase.resx">
+      <DependentUpon>frmDatabase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmError.resx">
       <DependentUpon>frmError.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Common\frmInfomation.resx">
-      <DependentUpon>frmInfomation.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Common\frmConfiguration.resx">
+      <DependentUpon>frmConfiguration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
@@ -294,23 +309,35 @@
     <EmbeddedResource Include="GUI\Common\frmMessage.resx">
       <DependentUpon>frmMessage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Common\frmSetting.resx">
-      <DependentUpon>frmSetting.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmWaiting.resx">
       <DependentUpon>frmWaiting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmDonViTinh.resx">
+      <DependentUpon>frmDonViTinh.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmKhachHang.resx">
       <DependentUpon>frmKhachHang.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DanhMuc\frmKhachHang_List.resx">
-      <DependentUpon>frmKhachHang_List.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmKho.resx">
       <DependentUpon>frmKho.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DanhMuc\frmKho_List.resx">
-      <DependentUpon>frmKho_List.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\DanhMuc\frmNhaCungCap.resx">
+      <DependentUpon>frmNhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmNhomDonViTinh.resx">
+      <DependentUpon>frmNhomDonViTinh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmNhomKhachHang.resx">
+      <DependentUpon>frmNhomKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmNhomNhaCungCap.resx">
+      <DependentUpon>frmNhomNhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmNhomSanPham.resx">
+      <DependentUpon>frmNhomSanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmSanPham.resx">
+      <DependentUpon>frmSanPham.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmTinhThanh_List.resx">
       <DependentUpon>frmTinhThanh_List.cs</DependentUpon>
@@ -366,7 +393,9 @@
       <Name>EntityModel</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GUI\DauKy\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\3DClusteredColumn_16x16.png" />
   </ItemGroup>
