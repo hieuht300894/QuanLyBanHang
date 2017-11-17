@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EntityModel.DataModel.Ton
+namespace EntityModel.DataModel.DauKy
 {
-    [Table("eCongNoDauKy")]
-    public class eCongNoDauKy
+    [Table("eTonKhoDauKy")]
+    public class eTonKhoDauKy
     {
         [Key]
         public int KeyID { get; set; }

@@ -3,7 +3,7 @@
     using EntityModel.DataModel.CauHinh;
     using EntityModel.DataModel.DanhMuc;
     using EntityModel.DataModel.HeThong;
-    using EntityModel.DataModel.Ton;
+    using EntityModel.DataModel.DauKy;
     using System.Data.Entity;
 
     public partial class zModel : DbContext
