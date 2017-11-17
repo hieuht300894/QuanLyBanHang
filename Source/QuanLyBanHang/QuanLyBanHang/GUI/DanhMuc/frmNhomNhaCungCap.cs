@@ -14,8 +14,8 @@ namespace QuanLyBanHang.GUI.DanhMuc
 {
     public partial class frmNhomNhaCungCap : frmBaseGrid
     {
-        BindingList<eNhomKhachHang> lstEntries = new BindingList<eNhomKhachHang>();
-        BindingList<eNhomKhachHang> lstEdited = new BindingList<eNhomKhachHang>();
+        BindingList<eNhomNhaCungCap> lstEntries = new BindingList<eNhomNhaCungCap>();
+        BindingList<eNhomNhaCungCap> lstEdited = new BindingList<eNhomNhaCungCap>();
 
         public frmNhomNhaCungCap()
         {
@@ -30,8 +30,8 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
         public async override void LoadData(object KeyID)
         {
-            lstEdited = new BindingList<eNhomKhachHang>();
-            lstEntries = new BindingList<eNhomKhachHang>(await clsFunction<eNhomKhachHang>.Instance.GetAll());
+            lstEdited = new BindingList<eNhomNhaCungCap>();
+            lstEntries = new BindingList<eNhomNhaCungCap>(await clsFunction<eNhomNhaCungCap>.Instance.GetAll());
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -43,14 +43,14 @@ namespace QuanLyBanHang.GUI.DanhMuc
         public async override Task<bool> SaveData()
         {
             bool chk = false;
-            chk = await clsFunction<eNhomKhachHang>.Instance.AddOrUpdate(lstEdited.ToList());
+            chk = await clsFunction<eNhomNhaCungCap>.Instance.AddOrUpdate(lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()
         {
             base.CustomForm();
             gctDanhSach.MouseClick += (s, e) => { ShowGridPopup(s, e, true, false, true, true, true, true); };
-            grvDanhSach.RowUpdated += (s, e) => { if (!lstEdited.Any(x => x.KeyID == ((eNhomKhachHang)e.Row).KeyID)) lstEdited.Add((eNhomKhachHang)e.Row); };
+            grvDanhSach.RowUpdated += (s, e) => { if (!lstEdited.Any(x => x.KeyID == ((eNhomNhaCungCap)e.Row).KeyID)) lstEdited.Add((eNhomNhaCungCap)e.Row); };
         }
     }
 }
