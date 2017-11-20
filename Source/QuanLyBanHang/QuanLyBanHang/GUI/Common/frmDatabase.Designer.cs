@@ -42,7 +42,7 @@
             this.btePath = new DevExpress.XtraEditors.ButtonEdit();
             this.bteFile = new DevExpress.XtraEditors.ButtonEdit();
             this.rgMode = new DevExpress.XtraEditors.RadioGroup();
-            this.lokDB = new DevExpress.XtraEditors.LookUpEdit();
+            this.lokDatabase = new DevExpress.XtraEditors.LookUpEdit();
             this.lbMessage = new DevExpress.XtraEditors.ListBoxControl();
             this.pgPercent = new DevExpress.XtraEditors.ProgressBarControl();
             this.btnRun = new DevExpress.XtraEditors.SimpleButton();
@@ -53,9 +53,9 @@
             this.layoutControlItem4 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.lciBackup = new DevExpress.XtraLayout.LayoutControlItem();
+            this.lciDatabase = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.lciRestore = new DevExpress.XtraLayout.LayoutControlItem();
+            this.lciFile = new DevExpress.XtraLayout.LayoutControlItem();
             this.lciPath = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
@@ -77,7 +77,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btePath.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bteFile.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMode.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lokDB.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lokDatabase.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbMessage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pgPercent.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgFunction.Properties)).BeginInit();
@@ -87,9 +87,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciBackup)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciDatabase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciRestore)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciFile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
@@ -116,7 +116,7 @@
             this.layoutControl1.Controls.Add(this.btePath);
             this.layoutControl1.Controls.Add(this.bteFile);
             this.layoutControl1.Controls.Add(this.rgMode);
-            this.layoutControl1.Controls.Add(this.lokDB);
+            this.layoutControl1.Controls.Add(this.lokDatabase);
             this.layoutControl1.Controls.Add(this.lbMessage);
             this.layoutControl1.Controls.Add(this.pgPercent);
             this.layoutControl1.Controls.Add(this.btnRun);
@@ -228,23 +228,23 @@
             this.rgMode.Name = "rgMode";
             this.rgMode.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
             new DevExpress.XtraEditors.Controls.RadioGroupItem(1, "Toàn bộ"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(2, "Mới nhất"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(3, "Giao dịch")});
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(2, "Mới nhất", false),
+            new DevExpress.XtraEditors.Controls.RadioGroupItem(3, "Giao dịch", false)});
             this.rgMode.Size = new System.Drawing.Size(295, 25);
             this.rgMode.StyleController = this.layoutControl1;
             this.rgMode.TabIndex = 10;
             // 
-            // lokDB
+            // lokDatabase
             // 
-            this.lokDB.Location = new System.Drawing.Point(77, 162);
-            this.lokDB.Name = "lokDB";
-            this.lokDB.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.lokDatabase.Location = new System.Drawing.Point(77, 162);
+            this.lokDatabase.Name = "lokDatabase";
+            this.lokDatabase.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, global::QuanLyBanHang.Properties.Resources.Refresh_16x16, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
-            this.lokDB.Properties.NullText = "";
-            this.lokDB.Size = new System.Drawing.Size(295, 22);
-            this.lokDB.StyleController = this.layoutControl1;
-            this.lokDB.TabIndex = 9;
+            this.lokDatabase.Properties.NullText = "";
+            this.lokDatabase.Size = new System.Drawing.Size(295, 22);
+            this.lokDatabase.StyleController = this.layoutControl1;
+            this.lokDatabase.TabIndex = 9;
             // 
             // lbMessage
             // 
@@ -298,9 +298,9 @@
             this.layoutControlItem4,
             this.emptySpaceItem1,
             this.layoutControlItem5,
-            this.lciBackup,
+            this.lciDatabase,
             this.layoutControlItem6,
-            this.lciRestore,
+            this.lciFile,
             this.lciPath,
             this.layoutControlItem1,
             this.layoutControlItem7,
@@ -364,14 +364,14 @@
             this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem5.TextVisible = false;
             // 
-            // lciBackup
+            // lciDatabase
             // 
-            this.lciBackup.Control = this.lokDB;
-            this.lciBackup.Location = new System.Drawing.Point(0, 150);
-            this.lciBackup.Name = "lciBackup";
-            this.lciBackup.Size = new System.Drawing.Size(364, 26);
-            this.lciBackup.Text = "Cơ sở dữ liệu";
-            this.lciBackup.TextSize = new System.Drawing.Size(62, 13);
+            this.lciDatabase.Control = this.lokDatabase;
+            this.lciDatabase.Location = new System.Drawing.Point(0, 150);
+            this.lciDatabase.Name = "lciDatabase";
+            this.lciDatabase.Size = new System.Drawing.Size(364, 26);
+            this.lciDatabase.Text = "Cơ sở dữ liệu";
+            this.lciDatabase.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem6
             // 
@@ -385,15 +385,15 @@
             this.layoutControlItem6.Text = "Chế độ";
             this.layoutControlItem6.TextSize = new System.Drawing.Size(62, 13);
             // 
-            // lciRestore
+            // lciFile
             // 
-            this.lciRestore.Control = this.bteFile;
-            this.lciRestore.Location = new System.Drawing.Point(0, 200);
-            this.lciRestore.Name = "lciRestore";
-            this.lciRestore.Size = new System.Drawing.Size(364, 24);
-            this.lciRestore.Text = "Tập tin";
-            this.lciRestore.TextSize = new System.Drawing.Size(62, 13);
-            this.lciRestore.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            this.lciFile.Control = this.bteFile;
+            this.lciFile.Location = new System.Drawing.Point(0, 200);
+            this.lciFile.Name = "lciFile";
+            this.lciFile.Size = new System.Drawing.Size(364, 24);
+            this.lciFile.Text = "Tập tin";
+            this.lciFile.TextSize = new System.Drawing.Size(62, 13);
+            this.lciFile.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             // 
             // lciPath
             // 
@@ -526,7 +526,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btePath.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bteFile.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMode.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lokDB.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lokDatabase.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lbMessage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pgPercent.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgFunction.Properties)).EndInit();
@@ -536,9 +536,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.emptySpaceItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciBackup)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciDatabase)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lciRestore)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lciFile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lciPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
@@ -567,12 +567,12 @@
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem1;
         private DevExpress.XtraEditors.ListBoxControl lbMessage;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem5;
-        private DevExpress.XtraEditors.LookUpEdit lokDB;
-        private DevExpress.XtraLayout.LayoutControlItem lciBackup;
+        private DevExpress.XtraEditors.LookUpEdit lokDatabase;
+        private DevExpress.XtraLayout.LayoutControlItem lciDatabase;
         private DevExpress.XtraEditors.RadioGroup rgMode;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem6;
         private DevExpress.XtraEditors.ButtonEdit bteFile;
-        private DevExpress.XtraLayout.LayoutControlItem lciRestore;
+        private DevExpress.XtraLayout.LayoutControlItem lciFile;
         private DevExpress.XtraEditors.ButtonEdit btePath;
         private DevExpress.XtraLayout.LayoutControlItem lciPath;
         private DevExpress.XtraEditors.SimpleButton btnTestConnect;

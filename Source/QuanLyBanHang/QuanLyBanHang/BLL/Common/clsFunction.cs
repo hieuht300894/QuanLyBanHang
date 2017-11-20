@@ -312,9 +312,9 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 db = new aModel();
-                Task<T> task= db.Set<T>().FindAsync(KeyID);
+                Task<T> task = db.Set<T>().FindAsync(KeyID);
                 task.Wait();
-                T item = await task; 
+                T item = await task;
                 return item ?? new T();
             }
             catch { return new T(); }
@@ -327,12 +327,13 @@ namespace QuanLyBanHang.BLL.Common
             try
             {
                 return await Task.Factory.StartNew(() =>
-                {
-                    db.Set<T>().AddOrUpdate(entry);
-                    var res = db.SaveChangesAsync();
-                    tran.Commit();
-                    return true;
-                });
+                 {
+                     db.Set<T>().AddOrUpdate(entry);
+                     Task<int> task = db.SaveChangesAsync();
+                     task.Wait();
+                     tran.Commit();
+                     return true;
+                 });
             }
             catch (Exception ex)
             {

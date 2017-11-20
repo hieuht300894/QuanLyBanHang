@@ -54,40 +54,22 @@ namespace QuanLyBanHang.GUI.Common
         private void FullDatabaseBackup(Server myServer)
         {
             Backup bkpDBFull = new Backup();
-            /* Specify whether you want to back up database or files or log */
             bkpDBFull.Action = BackupActionType.Database;
-            /* Specify the name of the database to back up */
-            bkpDBFull.Database = lokDB.Text;
-            /* You can take backup on several media type (disk or tape), here I am
-             * using File type and storing backup on the file system */
+            bkpDBFull.Database = lokDatabase.Text;
 
-            string fileName = $@"{btePath.Text}\{ lokDB.Text}_Full_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
+            string fileName = $@"{btePath.Text}\{ lokDatabase.Text}_Full_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
             if (File.Exists(fileName))
                 File.Delete(fileName);
 
             bkpDBFull.Devices.AddDevice(fileName, DeviceType.File);
-            bkpDBFull.BackupSetName = $"{ lokDB.Text} database Backup";
-            bkpDBFull.BackupSetDescription = $"{ lokDB.Text} database - Full Backup";
-            /* You can specify the expiration date for your backup data
-             * after that date backup data would not be relevant */
+            bkpDBFull.BackupSetName = $"{ lokDatabase.Text} database Backup";
+            bkpDBFull.BackupSetDescription = $"{ lokDatabase.Text} database - Full Backup";
             bkpDBFull.ExpirationDate = DateTime.Now.ServerNow().AddYears(1);
-
-            /* You can specify Initialize = false (default) to create a new 
-             * backup set which will be appended as last backup set on the media. You
-             * can specify Initialize = true to make the backup as first set on the
-             * medium and to overwrite any other existing backup sets if the all the
-             * backup sets have expired and specified backup set name matches with
-             * the name on the medium */
             bkpDBFull.Initialize = false;
-
-            /* Wiring up events for progress monitoring */
             bkpDBFull.PercentComplete += PercentComplete;
             bkpDBFull.Complete += (sender, e) => Completed(sender, e, "Backup");
-
-            /* SqlBackup method starts to take back up
-             * You can also use SqlBackupAsync method to perform the backup 
-             * operation asynchronously */
             bkpDBFull.SqlBackupAsync(myServer);
+            bkpDBFull.Wait();
         }
         private void DifferentialDatabaseBackup(Server myServer)
         {
@@ -97,16 +79,16 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBDifferential.Action = BackupActionType.Database;
 
             /* Specify the name of the database to backup */
-            bkpDBDifferential.Database = lokDB.Text;
+            bkpDBDifferential.Database = lokDatabase.Text;
 
-            string fileName = $@"{btePath.Text}\{ lokDB.Text}_Differential_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
+            string fileName = $@"{btePath.Text}\{ lokDatabase.Text}_Differential_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak";
             if (File.Exists(fileName))
                 File.Delete(fileName);
 
             /* You can issue backups on several media types (disk or tape), here I am * using the File type and storing the backup on the file system */
             bkpDBDifferential.Devices.AddDevice(fileName, DeviceType.File);
-            bkpDBDifferential.BackupSetName = $"{ lokDB.Text} database Backup";
-            bkpDBDifferential.BackupSetDescription = $"{ lokDB.Text} database - Differential Backup";
+            bkpDBDifferential.BackupSetName = $"{ lokDatabase.Text} database Backup";
+            bkpDBDifferential.BackupSetDescription = $"{ lokDatabase.Text} database - Differential Backup";
 
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
@@ -142,13 +124,13 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBLog.Action = BackupActionType.Log;
 
             /* Specify the name of the database to back up */
-            bkpDBLog.Database = lokDB.Text;
+            bkpDBLog.Database = lokDatabase.Text;
 
             /* You can take backup on several media type (disk or tape), here I am
              * using File type and storing backup on the file system */
-            bkpDBLog.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_Log_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
-            bkpDBLog.BackupSetName = $"{ lokDB.Text} database Backup";
-            bkpDBLog.BackupSetDescription = $"{ lokDB.Text} database - Log Backup";
+            bkpDBLog.Devices.AddDevice($@"{btePath.Text}\{ lokDatabase.Text}_Log_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
+            bkpDBLog.BackupSetName = $"{ lokDatabase.Text} database Backup";
+            bkpDBLog.BackupSetDescription = $"{ lokDatabase.Text} database - Log Backup";
 
             /* You can specify the expiration date for your backup data
              * after that date backup data would not be relevant */
@@ -180,14 +162,14 @@ namespace QuanLyBanHang.GUI.Common
             bkpDBFullWithCompression.Action = BackupActionType.Database;
 
             /* Specify the name of the database to back up */
-            bkpDBFullWithCompression.Database = lokDB.Text;
+            bkpDBFullWithCompression.Database = lokDatabase.Text;
 
             /* You can use back up compression technique of SQL Server 2008,
              * specify CompressionOption property to On for compressed backup */
             bkpDBFullWithCompression.CompressionOption = BackupCompressionOptions.On;
-            bkpDBFullWithCompression.Devices.AddDevice($@"{btePath.Text}\{ lokDB.Text}_FullWithCompression_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
-            bkpDBFullWithCompression.BackupSetName = $"{ lokDB.Text} database Backup";
-            bkpDBFullWithCompression.BackupSetDescription = $"{ lokDB.Text} database - Full With Compression Backup";
+            bkpDBFullWithCompression.Devices.AddDevice($@"{btePath.Text}\{ lokDatabase.Text}_FullWithCompression_{DateTime.Now.ServerNow().ToString("yyyyMMdd")}.bak", DeviceType.File);
+            bkpDBFullWithCompression.BackupSetName = $"{ lokDatabase.Text} database Backup";
+            bkpDBFullWithCompression.BackupSetDescription = $"{ lokDatabase.Text} database - Full With Compression Backup";
 
             /* Wiring up events for progress monitoring */
             bkpDBFullWithCompression.PercentComplete += PercentComplete;
@@ -292,38 +274,20 @@ namespace QuanLyBanHang.GUI.Common
         {
             Restore restoreDB = new Restore();
 
-            /* Specify whether you want to restore database or files or log etc */
             restoreDB.Action = RestoreActionType.Database;
             restoreDB.Devices.AddDevice($"{bteFile.Text}", DeviceType.File);
             DataTable dataTable = restoreDB.ReadBackupHeader(myServer);
             if (dataTable.Rows.Count > 0)
                 restoreDB.Database = dataTable.Rows[0]["DatabaseName"].ToString() + "New";
-
-            /* You can specify ReplaceDatabase = false (default) to not create a new image
-             * of the database, the specified database must exist on SQL Server instance.
-             * You can specify ReplaceDatabase = true to create new database image 
-             * regardless of the existence of specified database with same name */
             restoreDB.ReplaceDatabase = true;
-
-            /* If you have differential or log restore to be followed, you would need
-             * to specify NoRecovery = true, this will ensure no recovery is done after the 
-             * restore and subsequent restores are allowed. It means it will database
-             * in the Restoring state. */
             restoreDB.NoRecovery = false;
+            restoreDB.RelocateFiles.Add(new RelocateFile($"{ lokDatabase.Text}_Data", $@"{btePath.Text}\{ lokDatabase.Text}New_Data.mdf"));
+            restoreDB.RelocateFiles.Add(new RelocateFile($"{ lokDatabase.Text}_Log", $@"{btePath.Text}\{ lokDatabase.Text}New_Log.ldf"));
 
-            /* RelocateFiles collection allows you to specify the logical file names and 
-             * physical file names (new locations) if you want to restore to a different location.*/
-            restoreDB.RelocateFiles.Add(new RelocateFile($"{ lokDB.Text}_Data", $@"{btePath.Text}\{ lokDB.Text}New_Data.mdf"));
-            restoreDB.RelocateFiles.Add(new RelocateFile($"{ lokDB.Text}_Log", $@"{btePath.Text}\{ lokDB.Text}New_Log.ldf"));
-
-            /* Wiring up events for progress monitoring */
             restoreDB.PercentComplete += PercentComplete;
             restoreDB.Complete += (sender, e) => Completed(sender, e, "Restore");
-
-            /* SqlRestore method starts to restore database
-             * You cab also use SqlRestoreAsync method to perform restore 
-             * operation asynchronously */
             restoreDB.SqlRestoreAsync(myServer);
+            restoreDB.Wait();
         }
         #endregion
 
@@ -337,16 +301,16 @@ namespace QuanLyBanHang.GUI.Common
                 for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
                 if (!lstDB.Any(x => x.Equals(DBName)))
                     lstDB.Insert(0, DBName);
-                lokDB.Properties.DataSource = lstDB;
+                lokDatabase.Properties.DataSource = lstDB;
             }
 
-            lokDB.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
-            lokDB.Format();
+            lokDatabase.EditValue = clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
+            lokDatabase.Format();
 
             rgFunction.EditValueChanged += rgFunction_EditValueChanged;
             bteFile.Properties.ButtonClick += bteFile_ButtonClick;
             btePath.Properties.ButtonClick += btePath_ButtonClick;
-            lokDB.Properties.ButtonClick += lokDB_ButtonClick;
+            lokDatabase.Properties.ButtonClick += lokDB_ButtonClick;
             btnTestConnect.Click += btnTestConnect_Click;
             btnRun.Click += btnRun_Click;
             btnSave.Click += btnSave_Click;
@@ -362,7 +326,7 @@ namespace QuanLyBanHang.GUI.Common
             Properties.Settings.Default.ComputerName = txtComputerName.Text;
             Properties.Settings.Default.ServerName = clsGeneral.Encrypt(txtServerName.Text);
             Properties.Settings.Default.IsWindowAuthentication = tgsIsAuth.IsOn;
-            Properties.Settings.Default.DatabaseName = clsGeneral.Encrypt(lokDB.Text);
+            Properties.Settings.Default.DatabaseName = clsGeneral.Encrypt(lokDatabase.Text);
             Properties.Settings.Default.UserName = clsGeneral.Encrypt(txtUsername.Text);
             Properties.Settings.Default.Password = clsGeneral.Encrypt(txtPassword.Text);
             Properties.Settings.Default.Save();
@@ -391,7 +355,7 @@ namespace QuanLyBanHang.GUI.Common
                 for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
                 if (!lstDB.Any(x => x.Equals(DBName)))
                     lstDB.Insert(0, DBName);
-                lokDB.Properties.DataSource = lstDB;
+                lokDatabase.Properties.DataSource = lstDB;
             }
         }
         private void btePath_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
@@ -411,7 +375,7 @@ namespace QuanLyBanHang.GUI.Common
                     for (int i = 0; i < myServer.Databases.Count; i++) { lstDB.Add(myServer.Databases[i].Name); }
                     if (!lstDB.Any(x => x.Equals(DBName)))
                         lstDB.Insert(0, DBName);
-                    lokDB.Properties.DataSource = lstDB;
+                    lokDatabase.Properties.DataSource = lstDB;
                 }
             }
         }
@@ -427,14 +391,12 @@ namespace QuanLyBanHang.GUI.Common
             if ((int)rgFunction.EditValue == 1)
             {
                 lciPath.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-                lciBackup.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-                lciRestore.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                lciFile.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             }
             if ((int)rgFunction.EditValue == 2)
             {
                 lciPath.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-                lciBackup.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-                lciRestore.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciFile.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
             }
         }
         private void btnRun_Click(object sender, EventArgs e)

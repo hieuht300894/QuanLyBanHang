@@ -12,8 +12,6 @@ namespace QuanLyBanHang.GUI.Common
     public partial class frmConfiguration : XtraForm
     {
         #region Variables
-        //public delegate void LoadData();
-        //public LoadData ReloadData;
         xAgency _acEntry;
         #endregion
 
@@ -38,29 +36,32 @@ namespace QuanLyBanHang.GUI.Common
         }
         private void setControlValue()
         {
-            if (_acEntry.KeyID > 0)
+            Invoke(new Action(() =>
             {
-                lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-                lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-                btnConfirm.Select();
-            }
-            else
-            {
-                lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
-                lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
-                btnSave.Select();
-            }
+                if (_acEntry.KeyID > 0)
+                {
+                    lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                    lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                    btnConfirm.Select();
+                }
+                else
+                {
+                    lciSave.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                    lciConfirm.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                    btnSave.Select();
+                }
 
-            txt_Agency_Code.EditValue = _acEntry.Code;
-            txt_Agency_Name.EditValue = _acEntry.Name;
-            txt_Agency_Address.EditValue = _acEntry.Address;
-            txt_Agency_Phone.EditValue = _acEntry.Phone;
-            txt_Agency_Mail.EditValue = _acEntry.Email;
-            mme_Agency_Note.EditValue = _acEntry.Description;
+                txt_Agency_Code.EditValue = _acEntry.Code;
+                txt_Agency_Name.EditValue = _acEntry.Name;
+                txt_Agency_Address.EditValue = _acEntry.Address;
+                txt_Agency_Phone.EditValue = _acEntry.Phone;
+                txt_Agency_Mail.EditValue = _acEntry.Email;
+                mme_Agency_Note.EditValue = _acEntry.Description;
 
-            picLogo.Image = clsGeneral.byteArrayToImage(_acEntry.Logo);
-            if (picLogo.Image == null)
-                picLogo.Image = Properties.Resources.default_logo;
+                picLogo.Image = clsGeneral.byteArrayToImage(_acEntry.Logo);
+                if (picLogo.Image == null)
+                    picLogo.Image = Properties.Resources.default_logo;
+            }));
         }
         private async void saveData()
         {
@@ -75,12 +76,12 @@ namespace QuanLyBanHang.GUI.Common
 
             if (_acEntry.KeyID == 0)
             {
-                _acEntry.CreatedBy = 0;
+                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
             }
             else
             {
-                _acEntry.ModifiedBy = 0;
+                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
             }
 
