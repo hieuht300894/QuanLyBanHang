@@ -4,11 +4,8 @@ using DevExpress.XtraBars.Docking2010.Views;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraEditors;
-using EntityModel.DataModel;
 using QuanLyBanHang.Module;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -121,6 +118,7 @@ namespace QuanLyBanHang.GUI.Common
 
                     clsGeneral.CallWaitForm(this);
                     clsCallForm.InitFormCollection();
+                    clsInitData.TaiDuLieu();
                     bsiComputerName.Caption = "PC: " + Properties.Settings.Default.ComputerName;
                     bsiDatabaseName.Caption = "Cơ sở dữ liệu: " + clsGeneral.Decrypt(Properties.Settings.Default.DatabaseName);
                     bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
@@ -133,33 +131,6 @@ namespace QuanLyBanHang.GUI.Common
                 }
             }
             #endregion
-        }
-
-        //private bool checkConnection()
-        //{
-        //    bool bRe = false;
-        //    string _sName, _sDatabase, _sUser, _sPass;
-        //    bool _wAu;
-        //    _wAu = Properties.Settings.Default.sWinAu;
-        //    _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-        //    _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
-        //    _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-        //    _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
-
-        //    using (frmBackupDatabase _frm = new frmBackupDatabase())
-        //    {
-        //        if (_frm.CheckConnection(_sName, _sDatabase, _wAu, _sUser, _sPass) != null)
-        //            bRe = true;
-        //        else if (_frm.ShowDialog() == DialogResult.Cancel)
-        //            Application.Exit();
-        //    }
-        //    return bRe;
-        //}
-
-        private void tmClock_Tick(object sender, EventArgs e)
-        {
-            bsiNhanVien.Caption = clsGeneral.curPersonnel.FullName;
-            //bsiClock.Caption = DateTime.Now.ToString(Properties.Settings.Default.DateFormat + " hh:mm:ss tt");
         }
 
         private async void addItemClick()

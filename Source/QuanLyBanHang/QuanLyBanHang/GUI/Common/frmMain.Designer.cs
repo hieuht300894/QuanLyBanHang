@@ -53,6 +53,7 @@
             this.frmNhomKhachHang = new DevExpress.XtraBars.BarButtonItem();
             this.frmNhomNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             this.frmNhomSanPham = new DevExpress.XtraBars.BarButtonItem();
+            this.frmSoDuDauKyKhachHang = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -60,10 +61,12 @@
             this.rbpDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgDanhMuc = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbgDanhMucNhom = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.rbgKhaiBaoDauKy = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -98,9 +101,11 @@
             this.frmNhomDonViTinh,
             this.frmNhomKhachHang,
             this.frmNhomNhaCungCap,
-            this.frmNhomSanPham});
+            this.frmNhomSanPham,
+            this.frmSoDuDauKyKhachHang,
+            this.frmSoDuDauKyNhaCungCap});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 230;
+            this.ribbon.MaxItemId = 232;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -260,6 +265,12 @@
             this.frmNhomSanPham.Id = 229;
             this.frmNhomSanPham.Name = "frmNhomSanPham";
             // 
+            // frmSoDuDauKyKhachHang
+            // 
+            this.frmSoDuDauKyKhachHang.Caption = "Số dư đầu kỳ khách hàng";
+            this.frmSoDuDauKyKhachHang.Id = 230;
+            this.frmSoDuDauKyKhachHang.Name = "frmSoDuDauKyKhachHang";
+            // 
             // rbpAccount
             // 
             this.rbpAccount.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -294,7 +305,8 @@
             // 
             this.rbpDanhMuc.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.rbgDanhMuc,
-            this.rbgDanhMucNhom});
+            this.rbgDanhMucNhom,
+            this.rbgKhaiBaoDauKy});
             this.rbpDanhMuc.Name = "rbpDanhMuc";
             this.rbpDanhMuc.Text = "Danh mục";
             // 
@@ -317,6 +329,13 @@
             this.rbgDanhMucNhom.ItemLinks.Add(this.frmNhomSanPham);
             this.rbgDanhMucNhom.Name = "rbgDanhMucNhom";
             this.rbgDanhMucNhom.Text = "Nhóm danh mục";
+            // 
+            // rbgKhaiBaoDauKy
+            // 
+            this.rbgKhaiBaoDauKy.ItemLinks.Add(this.frmSoDuDauKyKhachHang);
+            this.rbgKhaiBaoDauKy.ItemLinks.Add(this.frmSoDuDauKyNhaCungCap);
+            this.rbgKhaiBaoDauKy.Name = "rbgKhaiBaoDauKy";
+            this.rbgKhaiBaoDauKy.Text = "Khai báo đầu kỳ";
             // 
             // ribbonStatusBar
             // 
@@ -345,6 +364,12 @@
             // tbvMain
             // 
             this.tbvMain.RootContainer.Element = null;
+            // 
+            // frmSoDuDauKyNhaCungCap
+            // 
+            this.frmSoDuDauKyNhaCungCap.Caption = "Số dư đầu kỳ nhà cung cấp";
+            this.frmSoDuDauKyNhaCungCap.Id = 231;
+            this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
             // 
             // frmMain
             // 
@@ -407,5 +432,8 @@
         private DevExpress.XtraBars.BarButtonItem frmNhomNhaCungCap;
         private DevExpress.XtraBars.BarButtonItem frmNhomSanPham;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgDanhMucNhom;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgKhaiBaoDauKy;
+        private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyKhachHang;
+        private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyNhaCungCap;
     }
 }

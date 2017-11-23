@@ -292,6 +292,10 @@ namespace QuanLyBanHang.BLL.Common
         #endregion
 
         #region Base Method
+        /// <summary>
+        /// Lấy dữ liệu từ database
+        /// </summary>
+        /// <returns></returns>
         public async virtual Task<IList<T>> GetAll()
         {
             try
@@ -307,6 +311,11 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new List<T>(); }
         }
 
+        /// <summary>
+        /// Tìm kiếm dữ liệu
+        /// </summary>
+        /// <param name="KeyID"></param>
+        /// <returns></returns>
         public async virtual Task<T> GetByID(object KeyID)
         {
             try
@@ -320,6 +329,11 @@ namespace QuanLyBanHang.BLL.Common
             catch { return new T(); }
         }
 
+        /// <summary>
+        /// Thêm mới hoặc cập nhật dữ liệu
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public async virtual Task<bool> AddOrUpdate(T entry)
         {
             db = new aModel();
@@ -343,6 +357,11 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
+        /// <summary>
+        /// Thêm mới hoặc cập nhật nhiều dữ liệu
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public async virtual Task<bool> AddOrUpdate(List<T> entries)
         {
             db = new aModel();
@@ -365,6 +384,11 @@ namespace QuanLyBanHang.BLL.Common
             }
         }
 
+        /// <summary>
+        /// Xóa dữ liệu
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public virtual bool DeleteEntry(T entry)
         {
             db = new aModel();

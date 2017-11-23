@@ -54,9 +54,9 @@
         #endregion
 
         #region Khai báo đầu kỳ
-        public virtual DbSet<eCongNoDauKy> eCongNoDauKy { get; set; }
         public virtual DbSet<eTonKhoDauKy> eTonKhoDauKy { get; set; }
-        public virtual DbSet<eSoDuDauKy> eSoDuDauKy { get; set; }
+        public virtual DbSet<eSoDuDauKyKhachHang> eSoDuDauKyKhachHang { get; set; }
+        public virtual DbSet<eSoDuDauKyNhaCungCap> eSoDuDauKyNhaCungCap { get; set; }
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

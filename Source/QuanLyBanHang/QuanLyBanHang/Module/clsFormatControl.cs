@@ -293,32 +293,25 @@ namespace QuanLyBanHang
                     lci.AppearanceItemCaption.ForeColor = Color.Black;
                 }
             }
-            foreach (Control _ctr in lctMain.Controls)
-            {
-                BaseEdit baseEdit = _ctr as BaseEdit;
-                if (baseEdit != null)
-                {
-                    if (baseEdit is TreeListLookUpEdit) { }
-                    else
-                    {
-                        baseEdit.LookAndFeel.Style = LookAndFeelStyle.Office2003;
-                        baseEdit.LookAndFeel.UseDefaultLookAndFeel = false;
-                    }
-
-                }
-            }
+            //foreach (Control _ctr in lctMain.Controls)
+            //{
+            //    BaseEdit baseEdit = _ctr as BaseEdit;
+            //    if (baseEdit != null)
+            //    {
+            //        if (baseEdit is TreeListLookUpEdit) { }
+            //        else
+            //        {
+            //            baseEdit.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+            //            baseEdit.LookAndFeel.UseDefaultLookAndFeel = false;
+            //        }
+            //    }
+            //}
         }
         #endregion
 
-        #region FormatTextEdit
+        #region Format TextEdit
         public static void Format(this TextEdit txtMain)
         {
-            //New
-            txtMain.Properties.MaxLength = 255;
-            if (txtMain.Name.Contains("Code"))
-                txtMain.Properties.MaxLength = 50;
-            if (txtMain.Name.Contains("Name"))
-                txtMain.Properties.MaxLength = 100;
         }
 
         public static void NotUnicode(this TextEdit txtMain, bool NoSpace = false, bool? AutoUperCase = null)

@@ -2,6 +2,7 @@
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
+using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,6 +59,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
             });
 
             bool chk = false;
+            List<eKhachHang> lstInserted = new List<eKhachHang>(lstEdited.Where(x => x.KeyID <= 0));
             chk = await clsFunction<eKhachHang>.Instance.AddOrUpdate(lstEdited.ToList());
             return chk;
         }
