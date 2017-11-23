@@ -1,23 +1,25 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel.DanhMuc;
+using EntityModel.DataModel.DauKy;
 using QuanLyBanHang.BLL.Common;
-using QuanLyBanHang.BLL.DanhMuc;
-using QuanLyBanHang.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QuanLyBanHang.GUI.DanhMuc
+namespace QuanLyBanHang.GUI.DauKy
 {
-    public partial class frmNhaCungCap : frmBaseGrid
+    public partial class frmTonKhoDauKy : frmBaseGrid
     {
-        BindingList<eNhaCungCap> lstEntries = new BindingList<eNhaCungCap>();
-        BindingList<eNhaCungCap> lstEdited = new BindingList<eNhaCungCap>();
+        BindingList<eTonKhoDauKy> lstEntries = new BindingList<eTonKhoDauKy>();
+        BindingList<eTonKhoDauKy> lstEdited = new BindingList<eTonKhoDauKy>();
 
-        public frmNhaCungCap()
+        public frmTonKhoDauKy()
         {
             InitializeComponent();
         }
@@ -29,15 +31,18 @@ namespace QuanLyBanHang.GUI.DanhMuc
             CustomForm();
         }
 
-        async void LoadRepository()
+        public async void LoadRepository()
         {
-            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsTinhThanh.Instance.Get63TinhThanh());
-            await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
+            IList<eSanPham> lstSanPham = await clsFunction<eSanPham>.Instance.GetAll();
+            await RunMethodAsync(() => { rlokSanPham.DataSource = lstSanPham; });
+
+            IList<eKho> lstKho = await clsFunction<eKho>.Instance.GetAll();
+            await RunMethodAsync(() => { rlokKho.DataSource = lstKho; });
         }
         public async override void LoadData(object KeyID)
         {
-            lstEdited = new BindingList<eNhaCungCap>();
-            lstEntries = new BindingList<eNhaCungCap>(await clsFunction<eNhaCungCap>.Instance.GetAll());
+            lstEdited = new BindingList<eTonKhoDauKy>();
+            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction<eTonKhoDauKy>.Instance.GetAll());
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -50,22 +55,32 @@ namespace QuanLyBanHang.GUI.DanhMuc
         {
             lstEdited.ToList().ForEach(x =>
             {
-                eTinhThanh tinhThanh = (eTinhThanh)rlokTinhThanh.GetDataSourceRowByKeyValue(x.IDTinhThanh) ?? new eTinhThanh();
+                eSanPham sanPham = (eSanPham)rlokSanPham.GetDataSourceRowByKeyValue(x.IDSanPham) ?? new eSanPham();
+                x.MaSanPham = sanPham.Ma;
+                x.TenSanPham = sanPham.Ten;
 
-                x.TinhThanh = tinhThanh.Ten;
+                x.IDDonViTinh = sanPham.IDDonViTinh;
+                x.MaDonViTinh = sanPham.MaDonViTinh;
+                x.TenDonViTinh = sanPham.TenDonViTinh;
+
+                eKho kho = (eKho)rlokKho.GetDataSourceRowByKeyValue(x.IDKho) ?? new eKho();
+                x.MaKho = kho.Ma;
+                x.TenKho = kho.Ten;
             });
 
             bool chk = false;
-            chk = await clsFunction<eNhaCungCap>.Instance.AddOrUpdate(lstEdited.ToList());
+            chk = await clsFunction<eTonKhoDauKy>.Instance.AddOrUpdate(lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()
         {
-            rlokTinhThanh.ValueMember = "KeyID";
-            rlokTinhThanh.DisplayMember = "Ten";
+            rlokKho.ValueMember = "KeyID";
+            rlokKho.DisplayMember = "Ten";
+
+            rlokSanPham.ValueMember = "KeyID";
+            rlokSanPham.DisplayMember = "Ten";
 
             base.CustomForm();
-
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
             grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
@@ -82,7 +97,7 @@ namespace QuanLyBanHang.GUI.DanhMuc
         }
         private void grvDanhSach_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
-            if (!lstEdited.Any(x => x.KeyID == ((eNhaCungCap)e.Row).KeyID)) lstEdited.Add((eNhaCungCap)e.Row);
+            if (!lstEdited.Any(x => x.KeyID == ((eTonKhoDauKy)e.Row).KeyID)) lstEdited.Add((eTonKhoDauKy)e.Row);
         }
     }
 }

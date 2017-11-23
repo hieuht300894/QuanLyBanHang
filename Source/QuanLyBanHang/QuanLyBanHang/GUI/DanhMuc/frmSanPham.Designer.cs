@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSanPham));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
             this.eSanPhamBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -49,7 +48,6 @@
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
@@ -61,100 +59,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.Image")));
-            this.btnEdit.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnEdit.ImageOptions.LargeImage")));
-            this.btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
-            // 
-            // barTop
-            // 
-            this.barTop.OptionsBar.DrawDragBorder = false;
-            this.barTop.OptionsBar.MultiLine = true;
-            this.barTop.OptionsBar.UseWholeRow = true;
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.Image")));
-            this.btnDelete.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnDelete.ImageOptions.LargeImage")));
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.Image")));
-            this.btnRefresh.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnRefresh.ImageOptions.LargeImage")));
-            // 
-            // btnSave
-            // 
-            this.btnSave.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.ImageOptions.Image")));
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.Image")));
-            this.btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
-            // 
-            // btnSaveAndAdd
-            // 
-            this.btnSaveAndAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAndAdd.ImageOptions.Image")));
-            this.btnSaveAndAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
-            // 
-            // bbpRefresh
-            // 
-            this.bbpRefresh.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpRefresh.ImageOptions.Image")));
-            // 
-            // bbpAdd
-            // 
-            this.bbpAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpAdd.ImageOptions.Image")));
-            // 
-            // bbpEdit
-            // 
-            this.bbpEdit.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpEdit.ImageOptions.Image")));
-            // 
-            // bbpDelete
-            // 
-            this.bbpDelete.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpDelete.ImageOptions.Image")));
-            // 
-            // btnPrintPreview
-            // 
-            this.btnPrintPreview.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPreview.ImageOptions.Image")));
-            // 
-            // btnExportExcel
-            // 
-            this.btnExportExcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExportExcel.ImageOptions.Image")));
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.ImageOptions.DisabledLargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.DisabledLargeImage")));
-            this.btnAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.Image")));
-            this.btnAdd.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.ImageOptions.LargeImage")));
-            // 
-            // barBottom
-            // 
-            this.barBottom.OptionsBar.DrawBorder = false;
-            this.barBottom.OptionsBar.DrawDragBorder = false;
-            this.barBottom.OptionsBar.MultiLine = true;
-            this.barBottom.OptionsBar.UseWholeRow = true;
-            // 
-            // bbpSave
-            // 
-            this.bbpSave.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpSave.ImageOptions.Image")));
-            // 
-            // bbpSaveAndAdd
-            // 
-            this.bbpSaveAndAdd.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpSaveAndAdd.ImageOptions.Image")));
-            // 
-            // bbpExportExcel
-            // 
-            this.bbpExportExcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpExportExcel.ImageOptions.Image")));
-            // 
-            // bbpCancel
-            // 
-            this.bbpCancel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpCancel.ImageOptions.Image")));
-            this.bbpCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bbpCancel.ImageOptions.LargeImage")));
-            // 
-            // bbpPrintPreview
-            // 
-            this.bbpPrintPreview.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bbpPrintPreview.ImageOptions.Image")));
             // 
             // layoutControl1
             // 
@@ -250,11 +154,8 @@
             // colKichThuoc
             // 
             this.colKichThuoc.Caption = "Kích thước";
-            this.colKichThuoc.ColumnEdit = this.rspnKichThuoc;
             this.colKichThuoc.FieldName = "KichThuoc";
             this.colKichThuoc.Name = "colKichThuoc";
-            this.colKichThuoc.Visible = true;
-            this.colKichThuoc.VisibleIndex = 3;
             // 
             // rspnKichThuoc
             // 
@@ -270,7 +171,7 @@
             this.colIDDonViTinh.FieldName = "IDDonViTinh";
             this.colIDDonViTinh.Name = "colIDDonViTinh";
             this.colIDDonViTinh.Visible = true;
-            this.colIDDonViTinh.VisibleIndex = 4;
+            this.colIDDonViTinh.VisibleIndex = 3;
             // 
             // rlokDVT
             // 
@@ -292,7 +193,7 @@
             this.colGhiChu.FieldName = "GhiChu";
             this.colGhiChu.Name = "colGhiChu";
             this.colGhiChu.Visible = true;
-            this.colGhiChu.VisibleIndex = 5;
+            this.colGhiChu.VisibleIndex = 4;
             // 
             // layoutControlGroup1
             // 
@@ -324,7 +225,6 @@
             this.Text = "Danh sách sản phẩm";
             this.Controls.SetChildIndex(this.layoutControl1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();

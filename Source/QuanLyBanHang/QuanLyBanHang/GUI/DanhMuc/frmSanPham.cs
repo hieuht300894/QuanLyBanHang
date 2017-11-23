@@ -1,4 +1,5 @@
-﻿using EntityModel.DataModel.DanhMuc;
+﻿using DevExpress.XtraGrid.Views.Grid;
+using EntityModel.DataModel.DanhMuc;
 using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,8 @@ namespace QuanLyBanHang.GUI.DanhMuc
             lstEdited.ToList().ForEach(x =>
             {
                 eDonViTinh dvt = (eDonViTinh)rlokDVT.GetDataSourceRowByKeyValue(x.IDDonViTinh) ?? new eDonViTinh();
-                x.DonViTinh = dvt.Ten;
+                x.MaDonViTinh = dvt.Ma;
+                x.TenDonViTinh = dvt.Ten;
 
                 x.MauSac = rpclr.ColorText.ToString();
                 x.ColorHex = x.Color.ToArgb();
@@ -73,8 +75,14 @@ namespace QuanLyBanHang.GUI.DanhMuc
 
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
+            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
 
+        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
+        {
+            GridView view = (GridView)sender;
+            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);   
+        }
         private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
         {
             ShowGridPopup(sender, e, true, false, true, true, true, true);

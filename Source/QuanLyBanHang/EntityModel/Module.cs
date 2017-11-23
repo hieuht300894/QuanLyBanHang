@@ -80,6 +80,7 @@ namespace EntityModel
 
         #endregion
 
+        #region Config
         private class MyConfiguration : DbMigrationsConfiguration<aModel>
         {
             public MyConfiguration()
@@ -88,6 +89,9 @@ namespace EntityModel
                 this.AutomaticMigrationsEnabled = true;
             }
         }
+        #endregion
+
+        #region SeedData
         public async static void InitDefaultData()
         {
             aModel db = new aModel();
@@ -145,6 +149,20 @@ namespace EntityModel
                     catch { }
                 }
             });
+
+            await Task.Factory.StartNew(() =>
+            {
+                if (db.eDonViTinh.Count() == 0)
+                {
+                    try
+                    {
+                        string Query = File.ReadAllText(@"InitData\DATA_eDonViTinh.sql");
+                        db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { }).Wait();
+                    }
+                    catch { }
+                }
+            });
         }
+        #endregion
     }
 }

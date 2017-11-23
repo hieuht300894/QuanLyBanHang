@@ -1,4 +1,5 @@
-﻿using EntityModel.DataModel.DanhMuc;
+﻿using DevExpress.XtraGrid.Views.Grid;
+using EntityModel.DataModel.DanhMuc;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {
@@ -77,18 +79,18 @@ namespace QuanLyBanHang.GUI.DanhMuc
             grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
 
-        private void gctDanhSach_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
+        {
+            GridView view = (GridView)sender;
+            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);
+        }
+        private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
         {
             ShowGridPopup(sender, e, true, false, true, true, true, true);
         }
         private void grvDanhSach_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
         {
             if (!lstEdited.Any(x => x.KeyID == ((eKhachHang)e.Row).KeyID)) lstEdited.Add((eKhachHang)e.Row);
-        }
-        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
-        {
-            if (grvDanhSach.FocusedColumn != colNgaySinh)
-                grvDanhSach.SetRowCellValue(grvDanhSach.FocusedRowHandle, colNgaySinh, new DateTime(1900, 1, 1));
         }
     }
 }

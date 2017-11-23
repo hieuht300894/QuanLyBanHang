@@ -29,7 +29,9 @@ namespace EntityModel.DataModel.DanhMuc
 
         public int IDDonViTinh { get; set; }
 
-        public string DonViTinh { get; set; }
+        public string MaDonViTinh { get; set; }
+
+        public string TenDonViTinh { get; set; }
 
         public string GhiChu { get; set; }
     }

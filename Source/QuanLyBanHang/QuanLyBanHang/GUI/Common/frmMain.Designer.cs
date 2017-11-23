@@ -54,6 +54,7 @@
             this.frmNhomNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             this.frmNhomSanPham = new DevExpress.XtraBars.BarButtonItem();
             this.frmSoDuDauKyKhachHang = new DevExpress.XtraBars.BarButtonItem();
+            this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -66,7 +67,7 @@
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmTonKhoDauKy = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -103,9 +104,10 @@
             this.frmNhomNhaCungCap,
             this.frmNhomSanPham,
             this.frmSoDuDauKyKhachHang,
-            this.frmSoDuDauKyNhaCungCap});
+            this.frmSoDuDauKyNhaCungCap,
+            this.frmTonKhoDauKy});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 232;
+            this.ribbon.MaxItemId = 233;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -271,6 +273,12 @@
             this.frmSoDuDauKyKhachHang.Id = 230;
             this.frmSoDuDauKyKhachHang.Name = "frmSoDuDauKyKhachHang";
             // 
+            // frmSoDuDauKyNhaCungCap
+            // 
+            this.frmSoDuDauKyNhaCungCap.Caption = "Số dư đầu kỳ nhà cung cấp";
+            this.frmSoDuDauKyNhaCungCap.Id = 231;
+            this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
+            // 
             // rbpAccount
             // 
             this.rbpAccount.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -334,6 +342,7 @@
             // 
             this.rbgKhaiBaoDauKy.ItemLinks.Add(this.frmSoDuDauKyKhachHang);
             this.rbgKhaiBaoDauKy.ItemLinks.Add(this.frmSoDuDauKyNhaCungCap);
+            this.rbgKhaiBaoDauKy.ItemLinks.Add(this.frmTonKhoDauKy);
             this.rbgKhaiBaoDauKy.Name = "rbgKhaiBaoDauKy";
             this.rbgKhaiBaoDauKy.Text = "Khai báo đầu kỳ";
             // 
@@ -365,11 +374,11 @@
             // 
             this.tbvMain.RootContainer.Element = null;
             // 
-            // frmSoDuDauKyNhaCungCap
+            // frmTonKhoDauKy
             // 
-            this.frmSoDuDauKyNhaCungCap.Caption = "Số dư đầu kỳ nhà cung cấp";
-            this.frmSoDuDauKyNhaCungCap.Id = 231;
-            this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
+            this.frmTonKhoDauKy.Caption = "Tồn kho";
+            this.frmTonKhoDauKy.Id = 232;
+            this.frmTonKhoDauKy.Name = "frmTonKhoDauKy";
             // 
             // frmMain
             // 
@@ -435,5 +444,6 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgKhaiBaoDauKy;
         private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyKhachHang;
         private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyNhaCungCap;
+        private DevExpress.XtraBars.BarButtonItem frmTonKhoDauKy;
     }
 }

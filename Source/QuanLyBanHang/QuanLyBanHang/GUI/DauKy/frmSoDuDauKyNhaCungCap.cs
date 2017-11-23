@@ -1,4 +1,5 @@
-﻿using EntityModel.DataModel.DanhMuc;
+﻿using DevExpress.XtraGrid.Views.Grid;
+using EntityModel.DataModel.DanhMuc;
 using EntityModel.DataModel.DauKy;
 using QuanLyBanHang.BLL.Common;
 using System;
@@ -66,9 +67,23 @@ namespace QuanLyBanHang.GUI.DauKy
             rlokNhaCungCap.DisplayMember = "Ten";
 
             base.CustomForm();
+            gctDanhSach.MouseClick += gctDanhSach_MouseClick;
+            grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
+            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
+        }
 
-            gctDanhSach.MouseClick += (s, e) => { ShowGridPopup(s, e, true, false, true, true, true, true); };
-            grvDanhSach.RowUpdated += (s, e) => { if (!lstEdited.Any(x => x.KeyID == ((eSoDuDauKyNhaCungCap)e.Row).KeyID)) lstEdited.Add((eSoDuDauKyNhaCungCap)e.Row); };
+        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
+        {
+            GridView view = (GridView)sender;
+            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);
+        }
+        private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
+        {
+            ShowGridPopup(sender, e, true, false, true, true, true, true);
+        }
+        private void grvDanhSach_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
+        {
+            if (!lstEdited.Any(x => x.KeyID == ((eSoDuDauKyNhaCungCap)e.Row).KeyID)) lstEdited.Add((eSoDuDauKyNhaCungCap)e.Row);
         }
     }
 }

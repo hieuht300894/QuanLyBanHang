@@ -1038,7 +1038,7 @@ namespace QuanLyBanHang
         #endregion
 
         #region Format SpinEdit
-        public static void Format(this SpinEdit spnMain, int DecimalScale = 0, bool LeftAlight = true, bool NotNegative = true)
+        public static void Format(this SpinEdit spnMain, int DecimalScale = 2, bool LeftAlight = true, bool NotNegative = true)
         {
             spnMain.Properties.Buttons.Clear();
             spnMain.Properties.Mask.UseMaskAsDisplayFormat = true;
@@ -1086,8 +1086,8 @@ namespace QuanLyBanHang
         }
         #endregion
 
-        #region Format RepositorySpinEdit
-        public static void Format(this RepositoryItemSpinEdit rspnMain, int DecimalScale = 0, bool LeftAlight = true, bool NotNegative = true)
+        #region Format RepositoryItemSpinEdit
+        public static void Format(this RepositoryItemSpinEdit rspnMain, int DecimalScale = 2, bool LeftAlight = true, bool NotNegative = true)
         {
             rspnMain.Buttons.Clear();
             rspnMain.Mask.UseMaskAsDisplayFormat = true;
