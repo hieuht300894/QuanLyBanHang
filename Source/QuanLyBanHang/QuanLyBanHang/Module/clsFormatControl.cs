@@ -37,9 +37,9 @@ namespace QuanLyBanHang
         public static Color GridEditRow { get { return Color.FromArgb(75, 145, 200); } }
         public static Color GridForeHeader { get { return Color.FromArgb(0, 0, 10); } }
         public static Color GridForeRow { get { return Color.White; } }
-        //public static Color BackColorEditing { get { return Color.FromArgb(232, 202, 200); } }
         public static Color BackColorEditing { get { return Color.White; } }
         public static Color ForeColorEditing { get { return Color.FromArgb(0, 0, 70); } }
+        public static Color LayoutGroupColor { get { return Color.FromArgb(192, 0, 0); } }
     }
 
     public static class clsFormatControl
@@ -285,6 +285,9 @@ namespace QuanLyBanHang
                 {
                     LayoutControlGroup lcg = item as LayoutControlGroup;
                     lcg.OptionsItemText.TextAlignMode = TextAlignModeGroup.AlignWithChildren;
+                    lcg.AppearanceItemCaption.Options.UseForeColor = true;
+                    lcg.AppearanceItemCaption.ForeColor = MyColor.LayoutGroupColor;
+                    lcg.AppearanceItemCaption.Font = new Font(lcg.AppearanceItemCaption.Font.FontFamily, lcg.AppearanceItemCaption.Font.Size, FontStyle.Bold);
                 }
                 if (item is LayoutControlItem)
                 {
@@ -293,25 +296,14 @@ namespace QuanLyBanHang
                     lci.AppearanceItemCaption.ForeColor = Color.Black;
                 }
             }
-            //foreach (Control _ctr in lctMain.Controls)
-            //{
-            //    BaseEdit baseEdit = _ctr as BaseEdit;
-            //    if (baseEdit != null)
-            //    {
-            //        if (baseEdit is TreeListLookUpEdit) { }
-            //        else
-            //        {
-            //            baseEdit.LookAndFeel.Style = LookAndFeelStyle.Office2003;
-            //            baseEdit.LookAndFeel.UseDefaultLookAndFeel = false;
-            //        }
-            //    }
-            //}
         }
         #endregion
 
         #region Format TextEdit
         public static void Format(this TextEdit txtMain)
         {
+            txtMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
+            txtMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
         }
 
         public static void NotUnicode(this TextEdit txtMain, bool NoSpace = false, bool? AutoUperCase = null)
@@ -395,6 +387,9 @@ namespace QuanLyBanHang
             {
                 gctMain.ForceInitialize();
                 gctMain.UseEmbeddedNavigator = false;
+
+                //gctMain.LookAndFeel.UseDefaultLookAndFeel = false;
+                //gctMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
                 GridView grvMain = gctMain.MainView as GridView;
                 grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
@@ -790,6 +785,9 @@ namespace QuanLyBanHang
 
         public static void Format(this TreeList trlMain, bool Autowidth = false, bool ShowColumnHeader = true)
         {
+            //trlMain.LookAndFeel.UseDefaultLookAndFeel = false;
+            //trlMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+
             trlMain.OptionsView.ShowCheckBoxes = true;
             trlMain.OptionsView.ShowColumns = ShowColumnHeader;
             trlMain.OptionsView.EnableAppearanceOddRow = true;
@@ -805,6 +803,24 @@ namespace QuanLyBanHang
             trlMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
             trlMain.Appearance.HideSelectionRow.BackColor = trlMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridDefaultRow;
             trlMain.Appearance.HideSelectionRow.ForeColor = MyColor.GridForeRow;
+
+            trlMain.OptionsView.EnableAppearanceOddRow = true;
+
+            trlMain.Appearance.OddRow.BackColor = Color.AliceBlue;
+            trlMain.Appearance.OddRow.BackColor2 = Color.AliceBlue;
+            trlMain.Appearance.OddRow.BorderColor = Color.AliceBlue;
+            trlMain.Appearance.OddRow.ForeColor = Color.Black;
+            trlMain.Appearance.OddRow.Options.UseBackColor = true;
+            trlMain.Appearance.OddRow.Options.UseBorderColor = true;
+            trlMain.Appearance.OddRow.Options.UseForeColor = true;
+
+            trlMain.Appearance.EvenRow.BackColor = Color.AliceBlue;
+            trlMain.Appearance.EvenRow.BackColor2 = Color.AliceBlue;
+            trlMain.Appearance.EvenRow.BorderColor = Color.AliceBlue;
+            trlMain.Appearance.EvenRow.ForeColor = Color.Black;
+            trlMain.Appearance.EvenRow.Options.UseBackColor = true;
+            trlMain.Appearance.EvenRow.Options.UseBorderColor = true;
+
             trlMain.OptionsBehavior.AutoPopulateColumns = false;
             trlMain.OptionsBehavior.PopulateServiceColumns = true;
 
@@ -1038,8 +1054,11 @@ namespace QuanLyBanHang
         #endregion
 
         #region Format SpinEdit
-        public static void Format(this SpinEdit spnMain, int DecimalScale = 2, bool LeftAlight = true, bool NotNegative = true)
+        public static void Format(this SpinEdit spnMain, int DecimalScale = 2, bool LeftAlight = false, bool NotNegative = true)
         {
+            spnMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
+            spnMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+
             spnMain.Properties.Buttons.Clear();
             spnMain.Properties.Mask.UseMaskAsDisplayFormat = true;
             spnMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
@@ -1087,8 +1106,11 @@ namespace QuanLyBanHang
         #endregion
 
         #region Format RepositoryItemSpinEdit
-        public static void Format(this RepositoryItemSpinEdit rspnMain, int DecimalScale = 2, bool LeftAlight = true, bool NotNegative = true)
+        public static void Format(this RepositoryItemSpinEdit rspnMain, int DecimalScale = 2, bool LeftAlight = false, bool NotNegative = true)
         {
+            rspnMain.LookAndFeel.UseDefaultLookAndFeel = false;
+            rspnMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+
             rspnMain.Buttons.Clear();
             rspnMain.Mask.UseMaskAsDisplayFormat = true;
             rspnMain.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
@@ -1156,135 +1178,6 @@ namespace QuanLyBanHang
                 if (e.KeyCode == Keys.Delete || string.IsNullOrEmpty(lok.Text.Trim()))
                     lok.EditValue = null;
             }
-        }
-
-        public static void Translation(this LookUpEdit lokMain)
-        {
-            //string fName = "";
-            //try { fName = lokMain.FindForm().Name; }
-            //catch { }
-            //if (!string.IsNullOrEmpty(fName) && lokMain != null && lokMain.Properties.Columns.Count > 0)
-            //{
-            //    db = new aModel();
-            //    List<xMsgDictionary> lstAdd = new List<xMsgDictionary>();
-            //    foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
-            //    {
-            //        string mName = string.Format("{0}_{1}", lokMain.Name, col.FieldName);
-            //        var myTrans = db.xMsgDictionaries.FirstOrDefault<xMsgDictionary>(n => n.FormName.Equals(fName) && n.MsgName.Equals(mName));
-            //        if (myTrans == null)
-            //        {
-            //            lstAdd.Add(myTrans = new xMsgDictionary()
-            //            {
-            //                FormName = fName,
-            //                MsgName = mName,
-            //                VN = col.Caption,
-            //                EN = col.FieldName.AutoSpace()
-            //            });
-
-            //        }
-            //        col.Caption = myTrans.GetStringByName(curCulture);
-            //    }
-            //    if (lstAdd != null && lstAdd.Count() > 0)
-            //    {
-            //        try
-            //        {
-            //            db.xMsgDictionaries.AddRange(lstAdd);
-            //            db.SaveChanges();
-            //        }
-            //        catch { }
-            //    }
-            //}
-        }
-
-        public static void FormatColumnLookUpEdit(this LookUpEdit lokMain, string fName = "")
-        {
-            //if (string.IsNullOrEmpty(fName))
-            //{
-            //    try { fName = lokMain.FindForm().Name; }
-            //    catch { }
-            //}
-            //if (string.IsNullOrEmpty(fName) || lokMain.Properties.Columns.Count == 0 || !lokMain.Properties.ShowHeader) return;
-
-            //db = new aModel();
-            //List<xDisplay> lstAdd = new List<xDisplay>();
-
-            //bool addCol = false;
-            //foreach (LookUpColumnInfo col in lokMain.Properties.Columns)
-            //{
-            //    addCol = false;
-            //    xDisplay myDisplay = null;
-            //    try
-            //    {
-            //        myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(n => n.ParentName.Equals(fName) && n.Group.Equals(lokMain.Name) && n.ColumnName.Equals(col.FieldName));
-
-            //        addCol = (myDisplay == null);
-            //    }
-            //    catch { addCol = true; }
-            //    finally
-            //    {
-            //        if (addCol && lokMain.Properties.DataSource != null)
-            //        {
-            //            myDisplay = new xDisplay();
-            //            myDisplay.ParentName = fName;
-            //            myDisplay.Group = lokMain.Name;
-            //            myDisplay.ColumnName = col.FieldName;
-            //            myDisplay.FieldName = col.FieldName;
-            //            myDisplay.Showing = col.Visible;
-
-            //            string cType = "None";
-            //            string cAlign = "Default";
-            //            if (col.FormatType == FormatType.DateTime)
-            //            {
-            //                cType = "DateTime"; cAlign = "Center";
-            //            }
-            //            else if (col.FormatType == FormatType.Numeric)
-            //            {
-            //                cType = "Numeric"; cAlign = "Far";
-            //            }
-            //            else
-            //            {
-            //                cType = "Custom"; cAlign = "Near";
-            //            }
-
-            //            myDisplay.Type = cType;
-            //            myDisplay.TextAlign = cAlign;
-            //            myDisplay.EnableEdit = false;
-            //            lstAdd.Add(myDisplay);
-            //        }
-            //        else if (myDisplay == null)
-            //            myDisplay = db.xDisplays.FirstOrDefault<xDisplay>(hts => hts.ParentName.Equals(fName) && hts.Group.Equals(lokMain.Name) && hts.ColumnName.Equals(col.FieldName));
-
-            //        if (myDisplay != null)
-            //        {
-            //            col.Visible = myDisplay.Showing;
-            //            col.FieldName = myDisplay.FieldName;
-            //            if (myDisplay.Type != null)
-            //            {
-            //                if (lokMain.Properties.DataSource != null)
-            //                    lokMain.Properties.AppearanceDropDownHeader.ForeColor = MyColor.GridForeHeader;
-
-            //                col.FormatType = (FormatType)Enum.Parse(typeof(FormatType), myDisplay.Type);
-            //                col.Alignment = (HorzAlignment)Enum.Parse(typeof(HorzAlignment), myDisplay.TextAlign);
-
-            //                if (myDisplay.Type.Equals("Numeric") && curDecimalFormat != null && string.IsNullOrEmpty(col.FormatString))
-            //                    col.FormatString = curDecimalFormat;
-            //                else if (myDisplay.Type.Equals("DateTime") && curDateFormat != null && string.IsNullOrEmpty(col.FormatString))
-            //                    col.FormatString = curDateFormat;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //if (lstAdd != null && lstAdd.Count > 0)
-            //{
-            //    try
-            //    {
-            //        db = new aModel();
-            //        db.xDisplays.AddRange(lstAdd);
-            //        db.SaveChanges();
-            //    }
-            //    catch { }
-            //}
         }
 
         public static int ToInt32(this LookUpEdit lokMain)
@@ -1479,24 +1372,30 @@ namespace QuanLyBanHang
         #endregion
 
         #region DateEdit
-        public static void Format(this DateEdit dateEdit, string fText = "dd/MM/yyyy", bool IsCurrentDate = false)
+        public static void Format(this DateEdit dteMain, string fText = "dd/MM/yyyy", bool IsCurrentDate = false)
         {
             if (IsCurrentDate)
-                dateEdit.DateTime = DateTime.Now.ServerNow();
-            dateEdit.Properties.EditMask = fText;
-            dateEdit.Properties.ShowClear = false;
-            dateEdit.Properties.MinValue = new DateTime(1900, 1, 1);
-            dateEdit.Properties.MaxValue = DateTime.Now.ServerNow();
+                dteMain.DateTime = DateTime.Now.ServerNow();
+            dteMain.Properties.EditMask = fText;
+            dteMain.Properties.ShowClear = false;
+            dteMain.Properties.MinValue = new DateTime(1900, 1, 1);
+            dteMain.Properties.MaxValue = DateTime.Now.ServerNow();
+
+            dteMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
+            dteMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
         }
         #endregion
 
         #region RepositoryDateEdit
-        public static void Format(this RepositoryItemDateEdit dateEdit, string fText = "dd/MM/yyyy")
+        public static void Format(this RepositoryItemDateEdit rdteMain, string fText = "dd/MM/yyyy")
         {
-            dateEdit.EditMask = fText;
-            dateEdit.ShowClear = false;
-            dateEdit.MinValue = new DateTime(1900, 1, 1);
-            dateEdit.MaxValue = DateTime.Now.ServerNow();
+            rdteMain.EditMask = fText;
+            rdteMain.ShowClear = false;
+            rdteMain.MinValue = new DateTime(1900, 1, 1);
+            rdteMain.MaxValue = DateTime.Now.ServerNow();
+
+            rdteMain.LookAndFeel.UseDefaultLookAndFeel = false;
+            rdteMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
         }
         #endregion
 
@@ -1514,6 +1413,9 @@ namespace QuanLyBanHang
             }
             slokMain.Properties.ShowFooter = false;
             slokMain.Properties.ShowClearButton = false;
+
+            slokMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
+            slokMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
             slokMain.Properties.View.Format(false, showIndicator, ColumnAuto, false);
             slokMain.Properties.View.OptionsView.ShowColumnHeaders = showHeader;

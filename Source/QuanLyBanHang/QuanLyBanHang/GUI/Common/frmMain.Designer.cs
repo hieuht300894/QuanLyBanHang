@@ -55,6 +55,7 @@
             this.frmNhomSanPham = new DevExpress.XtraBars.BarButtonItem();
             this.frmSoDuDauKyKhachHang = new DevExpress.XtraBars.BarButtonItem();
             this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmTonKhoDauKy = new DevExpress.XtraBars.BarButtonItem();
             this.rbpAccount = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rbgStaff = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rbpConfig = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -67,7 +68,9 @@
             this.dlafSkin = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.frmTonKhoDauKy = new DevExpress.XtraBars.BarButtonItem();
+            this.rbpChucNang = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.rbgNhapXuat = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.frmNhapHangNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -105,18 +108,20 @@
             this.frmNhomSanPham,
             this.frmSoDuDauKyKhachHang,
             this.frmSoDuDauKyNhaCungCap,
-            this.frmTonKhoDauKy});
+            this.frmTonKhoDauKy,
+            this.frmNhapHangNhaCungCap});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 233;
+            this.ribbon.MaxItemId = 234;
             this.ribbon.Name = "ribbon";
             this.ribbon.PageHeaderItemLinks.Add(this.bsiNhanVien);
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.rbpAccount,
             this.rbpConfig,
-            this.rbpDanhMuc});
+            this.rbpDanhMuc,
+            this.rbpChucNang});
             this.ribbon.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonControlStyle.Office2013;
             this.ribbon.ShowToolbarCustomizeItem = false;
-            this.ribbon.Size = new System.Drawing.Size(1008, 144);
+            this.ribbon.Size = new System.Drawing.Size(884, 144);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             this.ribbon.Toolbar.ShowCustomizeItem = false;
             // 
@@ -279,6 +284,12 @@
             this.frmSoDuDauKyNhaCungCap.Id = 231;
             this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
             // 
+            // frmTonKhoDauKy
+            // 
+            this.frmTonKhoDauKy.Caption = "Tồn kho";
+            this.frmTonKhoDauKy.Id = 232;
+            this.frmTonKhoDauKy.Name = "frmTonKhoDauKy";
+            // 
             // rbpAccount
             // 
             this.rbpAccount.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -356,7 +367,7 @@
             this.ribbonStatusBar.Location = new System.Drawing.Point(0, 417);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
-            this.ribbonStatusBar.Size = new System.Drawing.Size(1008, 32);
+            this.ribbonStatusBar.Size = new System.Drawing.Size(884, 32);
             // 
             // dlafSkin
             // 
@@ -374,17 +385,30 @@
             // 
             this.tbvMain.RootContainer.Element = null;
             // 
-            // frmTonKhoDauKy
+            // rbpChucNang
             // 
-            this.frmTonKhoDauKy.Caption = "Tồn kho";
-            this.frmTonKhoDauKy.Id = 232;
-            this.frmTonKhoDauKy.Name = "frmTonKhoDauKy";
+            this.rbpChucNang.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.rbgNhapXuat});
+            this.rbpChucNang.Name = "rbpChucNang";
+            this.rbpChucNang.Text = "Chức năng";
+            // 
+            // rbgNhapXuat
+            // 
+            this.rbgNhapXuat.ItemLinks.Add(this.frmNhapHangNhaCungCap);
+            this.rbgNhapXuat.Name = "rbgNhapXuat";
+            this.rbgNhapXuat.Text = "Nhập hàng - trả hàng";
+            // 
+            // frmNhapHangNhaCungCap
+            // 
+            this.frmNhapHangNhaCungCap.Caption = "Nhập hàng";
+            this.frmNhapHangNhaCungCap.Id = 233;
+            this.frmNhapHangNhaCungCap.Name = "frmNhapHangNhaCungCap";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 449);
+            this.ClientSize = new System.Drawing.Size(884, 449);
             this.Controls.Add(this.ribbonStatusBar);
             this.Controls.Add(this.ribbon);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -445,5 +469,8 @@
         private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyKhachHang;
         private DevExpress.XtraBars.BarButtonItem frmSoDuDauKyNhaCungCap;
         private DevExpress.XtraBars.BarButtonItem frmTonKhoDauKy;
+        private DevExpress.XtraBars.BarButtonItem frmNhapHangNhaCungCap;
+        private DevExpress.XtraBars.Ribbon.RibbonPage rbpChucNang;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup rbgNhapXuat;
     }
 }
