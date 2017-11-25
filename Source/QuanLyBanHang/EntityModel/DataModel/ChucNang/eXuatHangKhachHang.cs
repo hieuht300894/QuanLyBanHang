@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntityModel.DataModel.ChucNang
 {
-    class eNhapHang
+    public class eXuatHangKhachHang
     {
     }
 }
