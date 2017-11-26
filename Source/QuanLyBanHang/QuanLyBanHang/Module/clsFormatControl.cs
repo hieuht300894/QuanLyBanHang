@@ -13,6 +13,7 @@ using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
+using EntityModel.DataModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -27,7 +28,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using EntityModel.DataModel;
 
 namespace QuanLyBanHang
 {
@@ -1377,7 +1377,7 @@ namespace QuanLyBanHang
             if (IsCurrentDate)
                 dteMain.DateTime = DateTime.Now.ServerNow();
             dteMain.Properties.EditMask = fText;
-            dteMain.Properties.ShowClear = false;
+            dteMain.Properties.DisplayFormat.FormatString = fText;
             dteMain.Properties.MinValue = new DateTime(1900, 1, 1);
             dteMain.Properties.MaxValue = DateTime.Now.ServerNow();
 
@@ -1389,8 +1389,9 @@ namespace QuanLyBanHang
         #region RepositoryDateEdit
         public static void Format(this RepositoryItemDateEdit rdteMain, string fText = "dd/MM/yyyy")
         {
+            rdteMain.AllowNullInput = DefaultBoolean.True;
             rdteMain.EditMask = fText;
-            rdteMain.ShowClear = false;
+            rdteMain.DisplayFormat.FormatString = fText;
             rdteMain.MinValue = new DateTime(1900, 1, 1);
             rdteMain.MaxValue = DateTime.Now.ServerNow();
 

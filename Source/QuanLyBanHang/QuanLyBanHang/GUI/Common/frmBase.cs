@@ -669,6 +669,8 @@ namespace QuanLyBanHang
         public virtual void SetControlValue()
         {
         }
+        public virtual void SetDataSource() {
+        }
         public virtual bool ValidationForm()
         {
             return true;

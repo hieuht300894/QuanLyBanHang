@@ -22,6 +22,12 @@ namespace EntityModel.DataModel
 
         public string TenSanPham { get; set; }
 
+        public int IDNhomSanPham { get; set; }
+
+        public string MaNhomSanPham { get; set; }
+
+        public string TenNhomSanPham { get; set; }
+
         public int IDDonViTinh { get; set; }
 
         public string MaDonViTinh { get; set; }
