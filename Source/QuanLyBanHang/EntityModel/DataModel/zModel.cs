@@ -1,12 +1,6 @@
 ﻿namespace EntityModel.DataModel
 {
-    using EntityModel.DataModel.CauHinh;
-    using EntityModel.DataModel.DanhMuc;
-    using EntityModel.DataModel.HeThong;
-    using EntityModel.DataModel.DauKy;
     using System.Data.Entity;
-    using EntityModel.DataModel.CongNo;
-    using EntityModel.DataModel.ChucNang;
 
     public partial class zModel : DbContext
     {

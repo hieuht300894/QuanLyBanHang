@@ -1,13 +1,10 @@
 ﻿using EntityModel.DataModel;
-using System;
-using System.Data.Entity;
-using System.Linq;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.IO;
-using EntityModel.DataModel.HeThong;
 using System.Data.SqlClient;
-using System.Reflection;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EntityModel
