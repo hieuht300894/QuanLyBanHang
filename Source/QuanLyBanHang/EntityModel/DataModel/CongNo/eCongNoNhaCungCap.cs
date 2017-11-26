@@ -28,6 +28,8 @@ namespace EntityModel.DataModel.CongNo
 
         public decimal ConLai { get; set; }
 
+        public decimal NoCu { get; set; }
+
         public bool IsSoDuDauKy { get; set; }
 
         public bool IsNhapHang { get; set; }

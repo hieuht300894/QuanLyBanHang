@@ -68,6 +68,7 @@
         #region Chức năng
         public virtual DbSet<eNhapHangNhaCungCap> eNhapHangNhaCungCap { get; set; }
         public virtual DbSet<eNhapHangNhaCungCapChiTiet> eNhapHangNhaCungCapChiTiet { get; set; }
+        public virtual DbSet<eTonKho> eTonKho { get; set; }
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
