@@ -1,9 +1,5 @@
 ﻿using EntityModel.DataModel;
-using EntityModel.DataModel.HeThong;
-using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.PERS;
-using QuanLyBanHang.GUI.Common;
-using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;

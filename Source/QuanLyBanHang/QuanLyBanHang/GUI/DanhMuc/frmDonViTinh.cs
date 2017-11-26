@@ -1,16 +1,11 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
-using EntityModel.DataModel.DanhMuc;
 using QuanLyBanHang.BLL.Common;
-using QuanLyBanHang.GUI.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EntityModel.DataModel;
 
 namespace QuanLyBanHang.GUI.DanhMuc
 {

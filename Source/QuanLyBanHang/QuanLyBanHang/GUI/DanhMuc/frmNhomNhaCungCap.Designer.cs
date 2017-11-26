@@ -202,7 +202,7 @@
             // 
             // eNhomNhaCungCapBindingSource
             // 
-            this.eNhomNhaCungCapBindingSource.DataSource = typeof(EntityModel.DataModel.DanhMuc.eNhomNhaCungCap);
+            this.eNhomNhaCungCapBindingSource.DataSource = typeof(EntityModel.DataModel.eNhomNhaCungCap);
             // 
             // colKeyID
             // 

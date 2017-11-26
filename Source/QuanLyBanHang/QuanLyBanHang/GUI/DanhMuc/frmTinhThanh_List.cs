@@ -1,4 +1,4 @@
-﻿using EntityModel.DataModel.DanhMuc;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.DanhMuc;
 using QuanLyBanHang.Model;
 using System;

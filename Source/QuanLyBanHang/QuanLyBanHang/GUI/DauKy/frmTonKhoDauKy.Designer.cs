@@ -130,7 +130,7 @@
             // 
             // eTonKhoDauKyBindingSource
             // 
-            this.eTonKhoDauKyBindingSource.DataSource = typeof(EntityModel.DataModel.DauKy.eTonKhoDauKy);
+            this.eTonKhoDauKyBindingSource.DataSource = typeof(EntityModel.DataModel.eTonKhoDauKy);
             // 
             // colKeyID
             // 

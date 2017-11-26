@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-using EntityModel.DataModel;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
-using QuanLyBanHang.Service;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using QuanLyBanHang.GUI.Common;
-using EntityModel.DataModel.HeThong;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {

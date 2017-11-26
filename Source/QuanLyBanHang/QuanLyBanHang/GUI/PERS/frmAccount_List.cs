@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DevExpress.XtraEditors;
-using System.Data.Entity;
-using EntityModel.DataModel;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
-using QuanLyBanHang.Service;
-using EntityModel.DataModel.HeThong;
+using System;
+using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PER
 {

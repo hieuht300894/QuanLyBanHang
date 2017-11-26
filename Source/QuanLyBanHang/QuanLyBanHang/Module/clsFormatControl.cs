@@ -13,7 +13,6 @@ using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
-using EntityModel.DataModel.HeThong;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -28,6 +27,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using EntityModel.DataModel;
 
 namespace QuanLyBanHang
 {

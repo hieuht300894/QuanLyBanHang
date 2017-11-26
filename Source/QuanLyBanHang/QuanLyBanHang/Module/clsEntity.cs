@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using EntityModel.DataModel;
-using System.Data.Entity.Migrations;
-using QuanLyBanHang.GUI.Common;
-using QuanLyBanHang.BLL.Common;
-using System.Windows.Forms;
+﻿using DevExpress.XtraBars;
 using DevExpress.XtraBars.Ribbon;
-using DevExpress.XtraBars;
+using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
-using EntityModel.DataModel.HeThong;
 
 namespace QuanLyBanHang
 {

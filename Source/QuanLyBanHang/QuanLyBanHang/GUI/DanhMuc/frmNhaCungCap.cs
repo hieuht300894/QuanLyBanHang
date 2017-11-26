@@ -1,8 +1,7 @@
 ﻿using DevExpress.XtraGrid.Views.Grid;
-using EntityModel.DataModel.DanhMuc;
+using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
 using QuanLyBanHang.BLL.DanhMuc;
-using QuanLyBanHang.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

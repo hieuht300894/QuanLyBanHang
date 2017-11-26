@@ -1,15 +1,8 @@
-﻿using DevExpress.XtraEditors;
-using DevExpress.XtraGrid.Views.Grid;
-using EntityModel.DataModel;
-using EntityModel.DataModel.HeThong;
+﻿using EntityModel.DataModel;
 using QuanLyBanHang.BLL.PERS;
-using QuanLyBanHang.GUI.Common;
 using QuanLyBanHang.GUI.PER;
-using QuanLyBanHang.Service;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuanLyBanHang.GUI.PERS

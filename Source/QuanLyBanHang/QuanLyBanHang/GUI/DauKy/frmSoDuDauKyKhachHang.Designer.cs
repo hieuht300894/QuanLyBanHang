@@ -88,7 +88,7 @@
             // 
             // eSoDuDauKyKhachHangBindingSource
             // 
-            this.eSoDuDauKyKhachHangBindingSource.DataSource = typeof(EntityModel.DataModel.DauKy.eSoDuDauKyKhachHang);
+            this.eSoDuDauKyKhachHangBindingSource.DataSource = typeof(EntityModel.DataModel.eSoDuDauKyKhachHang);
             // 
             // grvDanhSach
             // 

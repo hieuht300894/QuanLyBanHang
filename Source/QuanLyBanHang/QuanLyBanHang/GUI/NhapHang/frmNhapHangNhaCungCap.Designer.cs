@@ -690,11 +690,11 @@
             // 
             // eTonKhoBindingSource
             // 
-            this.eTonKhoBindingSource.DataSource = typeof(EntityModel.DataModel.ChucNang.eTonKho);
+            this.eTonKhoBindingSource.DataSource = typeof(EntityModel.DataModel.eTonKho);
             // 
             // eNhapHangNhaCungCapChiTietBindingSource
             // 
-            this.eNhapHangNhaCungCapChiTietBindingSource.DataSource = typeof(EntityModel.DataModel.ChucNang.eNhapHangNhaCungCapChiTiet);
+            this.eNhapHangNhaCungCapChiTietBindingSource.DataSource = typeof(EntityModel.DataModel.eNhapHangNhaCungCapChiTiet);
             // 
             // gridColumn1
             // 

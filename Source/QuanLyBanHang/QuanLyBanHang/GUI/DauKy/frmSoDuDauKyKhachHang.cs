@@ -1,9 +1,6 @@
-﻿using DevExpress.XtraBars;
-using DevExpress.XtraGrid.Views.Grid;
-using EntityModel.DataModel.DanhMuc;
-using EntityModel.DataModel.DauKy;
+﻿using DevExpress.XtraGrid.Views.Grid;
+using EntityModel.DataModel;
 using QuanLyBanHang.BLL.Common;
-using QuanLyBanHang.Module;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

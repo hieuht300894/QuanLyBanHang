@@ -174,7 +174,7 @@
             // 
             // eKhoBindingSource
             // 
-            this.eKhoBindingSource.DataSource = typeof(EntityModel.DataModel.DanhMuc.eKho);
+            this.eKhoBindingSource.DataSource = typeof(EntityModel.DataModel.eKho);
             // 
             // grvDanhSach
             // 

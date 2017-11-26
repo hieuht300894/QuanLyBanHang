@@ -180,7 +180,7 @@
             // 
             // eNhaCungCapBindingSource
             // 
-            this.eNhaCungCapBindingSource.DataSource = typeof(EntityModel.DataModel.DanhMuc.eNhaCungCap);
+            this.eNhaCungCapBindingSource.DataSource = typeof(EntityModel.DataModel.eNhaCungCap);
             // 
             // grvDanhSach
             // 

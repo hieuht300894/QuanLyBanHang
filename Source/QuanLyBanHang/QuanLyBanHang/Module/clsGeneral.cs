@@ -1,19 +1,13 @@
-﻿using DevExpress.XtraBars.Alerter;
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraSplashScreen;
 using EntityModel.DataModel;
-using EntityModel.DataModel.HeThong;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 

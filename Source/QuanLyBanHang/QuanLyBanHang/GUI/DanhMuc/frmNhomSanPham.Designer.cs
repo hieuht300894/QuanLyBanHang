@@ -171,7 +171,7 @@
             // 
             // eNhomSanPhamBindingSource
             // 
-            this.eNhomSanPhamBindingSource.DataSource = typeof(EntityModel.DataModel.DanhMuc.eNhomSanPham);
+            this.eNhomSanPhamBindingSource.DataSource = typeof(EntityModel.DataModel.eNhomSanPham);
             // 
             // grvDanhSach
             // 

@@ -310,7 +310,7 @@
             // 
             // bindingSource1
             // 
-            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.HeThong.xFeature);
+            this.bindingSource1.DataSource = typeof(EntityModel.DataModel.xFeature);
             // 
             // layoutControlGroup1
             // 

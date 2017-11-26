@@ -89,7 +89,7 @@
             // 
             // eSanPhamBindingSource
             // 
-            this.eSanPhamBindingSource.DataSource = typeof(EntityModel.DataModel.DanhMuc.eSanPham);
+            this.eSanPhamBindingSource.DataSource = typeof(EntityModel.DataModel.eSanPham);
             // 
             // grvDanhSach
             // 

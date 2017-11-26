@@ -1,5 +1,4 @@
 ﻿using EntityModel.DataModel;
-using EntityModel.DataModel.HeThong;
 using QuanLyBanHang.BLL.Common;
 using System;
 using System.Collections.Generic;
